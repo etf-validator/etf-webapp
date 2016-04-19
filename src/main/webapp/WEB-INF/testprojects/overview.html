@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org"
+      lang="en">
+
+<head>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- This <head> section is only used for static prototyping purposes. At runtime, -->
+    <!-- Tiles will only use the body fragment defined with tiles:fragment="content",  -->
+    <!-- as specified at the corresponding views.xml file.                             -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+    <title>Testproject overview</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+    <!-- Some styles and scripts are served from spring-js-resources-{ver}.jar at -->
+    <!-- runtime. Therefore not available for static prototyping. See the         -->
+    <!-- layouts/standard.html template file for detail.                          -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+</head>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- START of the content to be included in the execution result.  -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- Only the markup inside this <body> would be required in this  -->
+<!-- template if no static prototyping was intended.               -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<body tiles:fragment="content">
+
+
+<h1 th:text="#{l.Testprojects}">Testprojects</h1>
+
+<div id="testprojectlist">
+    <ul id="testprojectlistview" data-role="listview" data-inset="true" class="ui-listview-outer" data-filter="true" data-autodividers="true">
+
+        <!-- use li to enable autodividers and a special class for a div collapsibles like formatting -->
+        <li class="ii-collapsible-li" data-role="collapsible" data-iconpos="right" data-shadow="false" data-corners="false" th:each="p : ${testprojects}">
+            <h2 th:text="${p.label}">Item</h2>
+
+            <div th:if="${p.description != null and not #strings.isEmpty(p.description) }">
+                <h3><span th:text="#{l.Description}">Description</span>:</h3>
+                <span th:text="${p.description}">description</span>
+            </div>
+
+            <div class="testRunProperties" th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).hasTestRunParams(p)}">
+                <h3><span th:text="#{l.Parameters}">Parameters</span>:</h3>
+                <ul th:each="prop: ${T(de.interactive_instruments.etf.webapp.helpers.View).getTestRunParams(p)}">
+                    <li>
+                        <div class="property">
+                            <span class="propertyKey" th:text="${prop.key}">Parameter</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="metaProperties" th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).hasMetaDataProperties(p)}">
+                <h3><span th:text="#{l.Additional.properties}">Addditional properties</span>:</h3>
+                <ul th:each="prop: ${T(de.interactive_instruments.etf.webapp.helpers.View).getMetaDataProperties(p)}">
+                    <li>
+                        <div class="property">
+                            <span class="propertyKey" th:text="${prop.key}">KEY</span>: <span class="propertyValue" th:text="${prop.value}">Value</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <p>
+                <a th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).workflowType == 'simplified'}"
+                   data-transition="flow" data-icon="arrow-r" data-role="button" data-inline="true" data-mini="true" data-iconpos="right"
+                   href="#" th:href="@{'/testruns/create-direct?testProjectId=' + ${p.id} }" >Start</a>
+            </p>
+        </li>
+
+    </ul>
+</div>
+
+
+<script type="application/javascript" th:inline="javascript">
+
+    $(document).ready(function() {
+
+        var testprojectlistview = $('#testprojectlistview');
+        var testprojectlistviewItems = testprojectlistview.children('li');
+
+        testprojectlistviewItems.detach().sort(function (a, b) {
+            var aData = $(a).find('.propertyKey:contains("TestDomain")').next('.propertyValue');
+            var aText = "";
+            if ( aData.length ) {
+                aText = aData.text();
+            }
+            var bData = $(b).find('.propertyKey:contains("TestDomain")').next('.propertyValue');
+            var bText = "";
+            if ( bData.length ) {
+                bText = bData.text();
+            }
+            return (aText > bText) ? 1 : -1;
+        });
+        testprojectlistview.append(testprojectlistviewItems);
+
+        $('#testprojectlistview').listview({
+            autodividers: true,
+            autodividersSelector: function (li) {
+                var testDomain = $(li).find('.propertyKey:contains("TestDomain")').next('.propertyValue');
+                console.log(testDomain);
+                if ( testDomain.length ) {
+                    return testDomain.text();
+                }else{
+                    return "";
+                }
+            }
+        });
+        $('#testprojectlistview').listview('refresh');
+    });
+
+</script>
+
+
+</body>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- END of the content to be included in the execution result -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+</html>
