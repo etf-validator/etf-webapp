@@ -1,0 +1,21 @@
+// Repositories and dependencies for SoapUI
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+		// Get libs for SoapUI: workaround for wrong SoapUI POM in the SoapUI repository...
+		compile group: 'cajo', name: 'cajo', version:'1.142'
+		compile group: 'gnu.cajo', name: 'cajo', version:'1.142'
+		// compile group: 'jtidy', name: 'jtidy', version:'r872'
+
+		compile group: 'com.smartbear.soapui', name: 'soapui', version:'4.6.4'
+		compile group: 'com.smartbear.soapui', name: 'soapui-maven-plugin', version:'4.6.4'
+}
+
+configurations {
+	// jms is pulled in via several soapui dependencies but gradle denies to fetch
+	// it. So just block it.
+	all*.exclude group: 'javax.jms', module: 'jms'
+}
