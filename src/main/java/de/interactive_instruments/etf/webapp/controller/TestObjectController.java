@@ -32,8 +32,10 @@ import javax.servlet.ServletContext;
 import javax.validation.Valid;
 import javax.xml.bind.JAXBException;
 
+import de.interactive_instruments.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
+import org.apache.tika.mime.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +48,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import de.interactive_instruments.Credentials;
-import de.interactive_instruments.IFile;
-import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.etf.dal.basex.dao.BasexTestObjectDao;
 import de.interactive_instruments.etf.dal.dao.TestObjectDao;
 import de.interactive_instruments.etf.dal.dto.item.VersionDataDto;
@@ -235,6 +234,18 @@ public class TestObjectController {
 		return "redirect:/testobjects";
 	}
 
+	private String getSimpleRandomNumber(final int length) {
+		// Create new directory in testDataDir with a short random suffix
+		final char[] chars = "1234567890".toCharArray();
+		final StringBuilder sb = new StringBuilder();
+		final Random random = new Random();
+		for (int i = 0; i < length; i++) {
+			char c = chars[random.nextInt(chars.length)];
+			sb.append(c);
+		}
+		return sb.toString();
+	}
+
 	// Todo: use same create method and allow upload via seperate dialog
 	@RequestMapping(value = "/testobjects/add-file-to", method = RequestMethod.POST)
 	public String addFileTestData(
@@ -242,6 +253,10 @@ public class TestObjectController {
 			BindingResult result,
 			MultipartHttpServletRequest request,
 			Model model) throws IOException, URISyntaxException, StoreException, ParseException, NoSuchAlgorithmException {
+		if(SUtils.isNullOrEmpty(testObject.getLabel())) {
+			throw new IllegalArgumentException("Label is empty");
+		}
+
 		if (result.hasErrors()) {
 			return showCreateDoc(model, testObject);
 		}
@@ -255,39 +270,50 @@ public class TestObjectController {
 		}
 
 		// Transfer uploaded data
-		MultipartFile multipartFile = request.getFile("testObjFile");
+		final MultipartFile multipartFile = request.getFile("testObjFile");
 		if (multipartFile != null && !multipartFile.isEmpty()) {
-			final IFile testObjZippedFile = this.tmpUploadDir.secureExpandPathDown(
+			// Transfer file to tmpUploadDir
+			final IFile testObjFile = this.tmpUploadDir.secureExpandPathDown(
 					testObject.getLabel() + "_" + multipartFile.getName());
-			testObjZippedFile.expectFileIsWritable();
-			multipartFile.transferTo(testObjZippedFile);
-			// Create new directory in testDataDir with a short random suffix
-			final char[] chars = "1234567890".toCharArray();
-			final StringBuilder sb = new StringBuilder();
-			final Random random = new Random();
-			for (int i = 0; i < 4; i++) {
-				char c = chars[random.nextInt(chars.length)];
-				sb.append(c);
-			}
-			final IFile testObjectDir = testDataDir.secureExpandPathDown(
-					testObject.getLabel() + ".upl." + sb.toString());
-
-			testObjectDir.ensureDir();
-			// Unzip files
+			testObjFile.expectFileIsWritable();
+			multipartFile.transferTo(testObjFile);
+			final String type;
 			try {
-				testObjZippedFile.unzipTo(testObjectDir, filter);
-			} catch (IOException e) {
-				try {
-					testObjectDir.delete();
-				} catch (Exception de) {
-					ExcUtils.supress(de);
+				type = MimeTypeUtils.detectMimeType(testObjFile);
+				if (!type.equals("application/xml") && !type.equals("application/zip")) {
+					throw new IllegalArgumentException(type + "is not supported");
 				}
-				result.reject("testObject.res.invalid", new Object[]{e.getMessage()},
-						"Unable to decompress file: {0}");
+			} catch (Exception e) {
+				result.reject("l.upload.invalid", new Object[]{e.getMessage()},
+						"Unable to use file: {0}");
 				return showCreateDoc(model, testObject);
-			} finally {
-				// delete zip file
-				testObjZippedFile.delete();
+			}
+
+			// Create directory for test data file
+			final IFile testObjectDir = testDataDir.secureExpandPathDown(
+					testObject.getLabel() + ".upl." + getSimpleRandomNumber(4));
+			testObjectDir.ensureDir();
+
+			if (type.equals("application/zip")) {
+				// Unzip files to test directory
+				try {
+					testObjFile.unzipTo(testObjectDir, filter);
+				} catch (IOException e) {
+					try {
+						testObjectDir.delete();
+					} catch (Exception de) {
+						ExcUtils.supress(de);
+					}
+					result.reject("l.decompress.failed", new Object[]{e.getMessage()},
+							"Unable to decompress file: {0}");
+					return showCreateDoc(model, testObject);
+				} finally {
+					// delete zip file
+					testObjFile.delete();
+				}
+			} else {
+				// Move XML to test directory
+				testObjFile.copyTo(testObjectDir.getPath() + File.separator + multipartFile.getOriginalFilename());
 			}
 			testObject.addResource("data", testObjectDir.toURI());
 			testObject.getProperties().setProperty("uploaded", "true");

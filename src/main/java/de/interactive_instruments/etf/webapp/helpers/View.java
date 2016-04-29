@@ -82,4 +82,8 @@ public class View {
 		return EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_REPORT_COMPARISON);
 	}
 
+	public static String getSubmitAnalysisData() {
+		return EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SUBMIT_ERRORS);
+	}
+
 }

@@ -10,7 +10,8 @@
     <title>etf WebApp</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-    <script src="https://d3tvtfb6518e3e.cloudfront.net/1/opbeat.min.js"
+    <script th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).submitAnalysisData == 'true'}"
+            src="https://d3tvtfb6518e3e.cloudfront.net/1/opbeat.min.js"
             data-org-id="51578fc580a94ef3a79e0d4f94769114"
             data-app-id="9daa0774d1">
     </script>
@@ -46,12 +47,17 @@
             $.ajaxSetup({ cache: false });
 	    });
     </script>
-    <script th:inline="javascript">
+    <script th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).submitAnalysisData == 'true'}"
+            th:inline="javascript">
         /*<![CDATA[*/
 
         _opbeat = window._opbeat || function() {
                     (window._opbeat.q = window._opbeat.q || []).push(arguments)
                 };
+        /*]]>*/
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
 
         ( function( $ ) {
 

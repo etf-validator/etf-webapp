@@ -78,8 +78,8 @@
         </div>
 
         <div th:if="*{testProject.supportedResourceTypeIds[0] == 'data'}" id="uploadTestObj" data-role="fieldcontain">
-            <label for="testObjFile">ZIP File</label>
-            <input class="testObjectResourceInput" type="file" accept="application/zip" id="testObjFile" name="testObjFile" />
+            <label th:text="#{l.ZipOrXmlFile}" for="testObjFile">ZIP or XML file</label>
+            <input class="testObjectResourceInput" type="file" accept="application/zip,text/xml" id="testObjFile" name="testObjFile" />
         </div>
 
         <div data-role="none" style="display:none;">

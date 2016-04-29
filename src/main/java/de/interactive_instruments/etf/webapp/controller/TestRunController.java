@@ -224,13 +224,17 @@ public class TestRunController implements TaskStateEventListener {
 					throws ConfigurationException, IOException, StoreException, ParseException, NoSuchAlgorithmException,
 					URISyntaxException, ComponentNotLoadedException, ObjectWithIdNotFoundException, InitializationException,
 					InvalidStateTransitionException {
-		final MultipartFile multipartFile = request.getFile("testObjFile");
 		testRun.getTestObject().setProperty("expires", "true");
 		testRun.getTestObject().setProperty("tempObject", "true");
 		testRun.getTestObject().setId(EidFactory.getDefault().createRandomUuid());
 		testRun.getTestObject().setLabel("temporary-" + testRun.getTestObject().getId());
 
-		if (multipartFile != null && !multipartFile.isEmpty()) {
+		final MultipartFile multipartFile = request.getFile("testObjFile");
+		if (multipartFile != null) {
+			if(multipartFile.isEmpty()) {
+				testObjectBindingResult.reject("l.upload.invalid", new Object[]{"File is empty or corrupt"},
+						"Unable to use file: {0}");
+			}
 			testObjectController.addFileTestData(testRun.getTestObject(), testObjectBindingResult, request, model);
 		}
 

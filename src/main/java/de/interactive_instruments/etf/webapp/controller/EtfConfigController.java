@@ -66,6 +66,8 @@ public class EtfConfigController implements PropertyHolder {
 	public static final String ETF_BSX_RECREATE_CONFIG = "etf.bsx.recreate.config";
 	public static final String ETF_HELP_PAGE_URL = "etf.help.page";
 
+	public static final String ETF_SUBMIT_ERRORS = "etf.errors.autoreport";
+
 	@Autowired
 	private ServletContext servletContext;
 
@@ -103,6 +105,7 @@ public class EtfConfigController implements PropertyHolder {
 			put(EtfConstants.ETF_BACKUP_DIR, "bak");
 			put(ETF_TESTDATA_DIR, "testdata");
 			put(ETF_TESTDATA_UPLOAD_DIR, "http_uploads");
+			put(ETF_SUBMIT_ERRORS, "false");
 		}
 	});
 
