@@ -1,7 +1,7 @@
 # etf Web Application
 
 [![Apache License 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
-[![Latest version](http://img.shields.io/badge/latest%20version-1.7.5-blue.svg)](https://services.interactive-instruments.de/etfdev-af/etf-public-releases/de/interactive_instruments/etf/etf-webapp/1.0.7.4/etf-webapp-1.0.7.4.war)
+[![Latest version](http://img.shields.io/badge/latest%20version-1.0.8.0-blue.svg)](http://services.interactive-instruments.de/etfdev-af/release/de/interactive_instruments/etf/etf-webapp/1.0.8.0/etf-webapp-1.0.8.0.war)
 
 Please report issues [here](https://github.com/interactive-instruments/etf-webapp/issues).
 See the [wiki](https://github.com/interactive-instruments/etf-webapp/wiki) for further documentation.

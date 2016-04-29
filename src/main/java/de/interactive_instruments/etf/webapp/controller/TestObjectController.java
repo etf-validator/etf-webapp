@@ -32,7 +32,6 @@ import javax.servlet.ServletContext;
 import javax.validation.Valid;
 import javax.xml.bind.JAXBException;
 
-import de.interactive_instruments.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.tika.mime.MediaType;
@@ -48,6 +47,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import de.interactive_instruments.*;
 import de.interactive_instruments.etf.dal.basex.dao.BasexTestObjectDao;
 import de.interactive_instruments.etf.dal.dao.TestObjectDao;
 import de.interactive_instruments.etf.dal.dto.item.VersionDataDto;
@@ -253,7 +253,7 @@ public class TestObjectController {
 			BindingResult result,
 			MultipartHttpServletRequest request,
 			Model model) throws IOException, URISyntaxException, StoreException, ParseException, NoSuchAlgorithmException {
-		if(SUtils.isNullOrEmpty(testObject.getLabel())) {
+		if (SUtils.isNullOrEmpty(testObject.getLabel())) {
 			throw new IllegalArgumentException("Label is empty");
 		}
 

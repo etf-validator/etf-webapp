@@ -151,7 +151,7 @@ public class StatusController {
 		return new ResponseEntity(serviceStatusHeaders.get(), HttpStatus.NO_CONTENT);
 	}
 
-	@PreAuthorize("#oauth2.clientHasRole('ROLE_ADMIN')")
+	// @PreAuthorize("#oauth2.clientHasRole('ROLE_ADMIN')")
 	@RequestMapping(value = "/v0/admin/status", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Map<String, Object> getStatus() {
 		return serviceStatus.get();
