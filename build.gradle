@@ -35,7 +35,7 @@ import groovy.json.JsonSlurper
 
 ext.springSecurityVersion = "4.0.4.RELEASE"
 ext.springSecurityOAuth2Version = "2.0.9.RELEASE"
-ext.springVersion = "4.2.4.RELEASE"
+ext.springVersion = "4.2.5.RELEASE"
 
 configurations {
     compile.exclude group:'xalan'
@@ -59,11 +59,11 @@ dependencies {
     compile group: 'commons-codec', name: 'commons-codec', version: etf_commonsCodecVersion
     compile group: 'commons-fileupload', name: 'commons-fileupload', version:'1.3.1'
     compile group: 'commons-io', name: 'commons-io', version: etf_commonsIoVersion
-    compile group: 'commons-lang', name: 'commons-lang', version:'2.4'
+    compile group: 'commons-lang', name: 'commons-lang', version:'2.6'
 
-    compile 'org.codehaus.groovy:groovy-all:2.4.3'
+    compile 'org.codehaus.groovy:groovy-all:2.4.6'
 
-    compile group: 'org.jsoup', name: 'jsoup', version: '1.8.3'
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.9.1'
 
     compile group: 'org.slf4j', name: 'slf4j-api', version: etf_slf4jApiVersion
 
@@ -78,9 +78,9 @@ dependencies {
 	//////////////////////////////////
 
     // JSON
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.5.4'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.5.4'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.5.4'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.3'
 
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.4.0'
 
@@ -88,8 +88,8 @@ dependencies {
         exclude(module: 'commons-logging')
     }
 
-    // Important to include nekohtml for thymeleaf and to exclude f$ng xerces
-    compile('net.sourceforge.nekohtml:nekohtml:1.9.21') {
+    // Include nekohtml for thymeleaf
+    compile('net.sourceforge.nekohtml:nekohtml:1.9.22') {
         exclude group: 'xerces', module: 'xercesImpl'
     }
 
@@ -98,9 +98,7 @@ dependencies {
             "org.springframework.security.oauth:spring-security-oauth2:$springSecurityOAuth2Version",
 
             "javax.servlet:jstl:1.2",
-            "javax.validation:validation-api:1.0.0.GA",
-            "org.hibernate:hibernate-validator:4.3.0.Final",
-
+            "javax.validation:validation-api:1.1.0.Final",
 
             "org.thymeleaf:thymeleaf-spring4:2.1.4.RELEASE",
             "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE",
@@ -110,10 +108,10 @@ dependencies {
         exclude group: "org.slf4j", module: "jcl-over-slf4j"
     }
 
-    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.0.1'
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.1.0'
     providedCompile group: 'javax.servlet.jsp', name: 'jsp-api', version:'2.2'
     compile group: 'javax.servlet', name: 'jstl', version:'1.2'
-    compile group: 'joda-time', name: 'joda-time', version:'2.3'
+    compile group: 'joda-time', name: 'joda-time', version:'2.9.3'
     runtime group: 'joda-time', name: 'joda-time-jsptags', version:'1.1.1'
 
     // Web testing
