@@ -231,7 +231,7 @@ public class TestRunController implements TaskStateEventListener {
 
 		final MultipartFile multipartFile = request.getFile("testObjFile");
 		if (multipartFile != null) {
-			if(multipartFile.isEmpty()) {
+			if (multipartFile.isEmpty()) {
 				testObjectBindingResult.reject("l.upload.invalid", new Object[]{"File is empty or corrupt"},
 						"Unable to use file: {0}");
 			}

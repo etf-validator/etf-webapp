@@ -281,7 +281,7 @@ public class TestObjectController {
 			try {
 				type = MimeTypeUtils.detectMimeType(testObjFile);
 				if (!type.equals("application/xml") && !type.equals("application/zip")) {
-					throw new IllegalArgumentException(type + "is not supported");
+					throw new IllegalArgumentException(type + " is not supported");
 				}
 			} catch (Exception e) {
 				result.reject("l.upload.invalid", new Object[]{e.getMessage()},
