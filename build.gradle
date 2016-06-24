@@ -35,7 +35,6 @@ description = 'ETF Presentation and Controller Layer'
 
 apply plugin: 'war'
 apply plugin: 'jetty'
-apply plugin: 'webpack'
 import groovy.json.JsonSlurper
 
 ext.springSecurityVersion = "4.0.4.RELEASE"
