@@ -11,12 +11,19 @@ buildscript {
             credentials {
                 username 'ii-bda'
                 password '6ozhS683'
-            }}
-        mavenCentral()
+            }
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+
     }
     dependencies {
         classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.22'
-        classpath "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
+        classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
+        classpath 'com.netflix.nebula:webpack:1.12.+'
+        classpath 'com.moowork.gradle:gradle-node-plugin:0.12'
+
     }
     dependencies {
         ant.unjar src: configurations.classpath.files.find {it.path.contains('etf')}, dest: 'build/gradle'
@@ -31,6 +38,7 @@ description = 'ETF Presentation and Controller Layer'
 
 apply plugin: 'war'
 apply plugin: 'jetty'
+apply plugin: 'webpack'
 import groovy.json.JsonSlurper
 
 ext.springSecurityVersion = "4.0.4.RELEASE"
@@ -44,7 +52,7 @@ dependencies {
 
     compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.7.0-4'
 
-    compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'1.2.6'+project.snapshotSuffix
+    compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'1.2.7'+project.snapshotSuffix
     compile group: 'de.interactive_instruments.etf', name: 'etf-model', version:'0.5.8'+project.snapshotSuffix
     compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version:'1.0.8.1'+project.snapshotSuffix
 
