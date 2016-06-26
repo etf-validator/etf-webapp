@@ -165,7 +165,7 @@ public class TestRunController implements TaskStateEventListener {
 						logger.error("Unable to update report of test run task " + testRunTask.getID());
 					}
 					try {
-						Thread.sleep(000);
+						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						ExcUtils.supress(e);
 					}
