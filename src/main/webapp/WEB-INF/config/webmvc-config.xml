@@ -51,7 +51,7 @@
         <property name="viewClass" value="org.thymeleaf.extras.tiles2.spring4.web.view.ThymeleafTilesView"/>
         <property name="templateEngine" ref="templateEngine" />
     </bean>
-  
+
 	<!-- Configures the Tiles layout system using a specific thymeleaf-enabled Tiles Configurer -->
 	<bean id="tilesConfigurer" class="org.thymeleaf.extras.tiles2.spring4.web.configurer.ThymeleafTilesConfigurer">
 		<property name="definitions">
@@ -67,7 +67,7 @@
     </bean>
 
 	<util:properties id="etfConfigProperties" location="classpath:/etf-config.properties"/>
-	<util:properties id="etfSecurityProperties" location="classpath:/etf-security.properties"/>
+	<!--util:properties id="etfSecurityProperties" location="classpath:/etf-security.properties"/-->
 
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="messages" />

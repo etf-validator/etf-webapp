@@ -75,9 +75,9 @@ public class EtfConfigController implements PropertyHolder {
 	@Qualifier("etfConfigProperties")
 	private Properties configProperties;
 
-	@Autowired
-	@Qualifier("etfSecurityProperties")
-	private Properties secProperties;
+	// @Autowired
+	// @Qualifier("etfSecurityProperties")
+	// private Properties secProperties;
 
 	private IFile etfDir;
 
