@@ -48,7 +48,7 @@ dependencies {
 
     compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.7.0-4'
 
-    compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'1.2.7'+project.snapshotSuffix
+    compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'1.2.9'+project.snapshotSuffix
     compile group: 'de.interactive_instruments.etf', name: 'etf-model', version:'0.5.8'+project.snapshotSuffix
     compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version:'1.0.8.1'+project.snapshotSuffix
 
