@@ -177,6 +177,7 @@
 
 
 <body>
+
 <div data-role="page">
     <div data-role="header">
         <h1 th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText != null }"
@@ -193,6 +194,7 @@
                 <li><a href="#" th:href="@{/reports}" th:text="#{l.Testreports}" data-icon="eye" >Testreports</a></li>
                 <li><a href="#" th:href="@{/testruns/status}" th:text="#{l.Status}" data-icon="calendar" >Status</a></li>
                 <li><a href="#" th:href="${T(de.interactive_instruments.etf.webapp.helpers.View).helpPageURL}" th:text="#{l.Help}" data-icon="forward" target="_blank">Help</a></li>
+                <li th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText != null }"><a href="#disclaimer" data-icon="info">Disclaimer</a></li>
             </ul>
         </div>
     </div>
@@ -206,6 +208,7 @@
             <li><a href="#" th:href="@{/reports}" th:text="#{l.Testreports}" data-icon="eye" >Testreports</a></li>
             <li><a href="#" th:href="@{/testprojects}" th:text="#{l.Testprojects}" data-icon="gear" >Testprojekte</a></li>
             <li><a href="#" th:href="${T(de.interactive_instruments.etf.webapp.helpers.View).helpPageURL}" th:text="#{l.Help}" data-icon="forward" target="_blank">Help</a></li>
+            <li th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText != null }"><a href="#disclaimer">Disclaimer</a></li>
         </ul>
     </div>
 
@@ -229,6 +232,15 @@
 
     <div data-role="footer">
         <h1>etf WebApp <span th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).version}">v1.0.6</span> &copy; 2013-2015 interactive instruments</h1>
+    </div>
+</div>
+
+<div th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText != null }" id="disclaimer" data-role="dialog">
+    <div data-role="header">
+        <h3>Disclaimer</h3>
+    </div>
+    <div data-role="content">
+        <p th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText}"></p>
     </div>
 </div>
 

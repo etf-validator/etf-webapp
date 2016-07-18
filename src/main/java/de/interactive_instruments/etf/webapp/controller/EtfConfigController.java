@@ -65,6 +65,7 @@ public class EtfConfigController implements PropertyHolder {
 	public static final String ETF_DIR = "etf.dir";
 	public static final String ETF_BSX_RECREATE_CONFIG = "etf.bsx.recreate.config";
 	public static final String ETF_HELP_PAGE_URL = "etf.help.page";
+	public static final String ETF_DISCLAIMER_TEXT = "etf.disclaimer.text";
 
 	public static final String ETF_SUBMIT_ERRORS = "etf.errors.autoreport";
 
@@ -90,6 +91,7 @@ public class EtfConfigController implements PropertyHolder {
 		{
 			put(ETF_WEBAPP_BASE_URL, "http://localhost:8080/etf-webapp");
 			put(ETF_BRANDING_TEXT, "");
+			put(ETF_DISCLAIMER_TEXT, "");
 			put(ETF_TESTOBJECT_ALLOW_PRIVATENET_ACCESS, "false");
 			put(ETF_REPORT_COMPARISON, "false");
 			put(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION, "360");

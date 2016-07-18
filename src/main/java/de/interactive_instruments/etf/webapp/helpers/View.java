@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import de.interactive_instruments.SUtils;
 import de.interactive_instruments.etf.EtfConstants;
 import de.interactive_instruments.etf.dal.dto.plan.TestProjectDto;
 import de.interactive_instruments.etf.webapp.controller.EtfConfigController;
@@ -68,6 +69,11 @@ public class View {
 
 	public static String getBrandingText() {
 		return EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_BRANDING_TEXT);
+	}
+
+	public static String getDisclaimerText() {
+		final String disclaimer = EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_DISCLAIMER_TEXT);
+		return SUtils.isNullOrEmpty(disclaimer) ? null : disclaimer;
 	}
 
 	public static String getHelpPageURL() {
