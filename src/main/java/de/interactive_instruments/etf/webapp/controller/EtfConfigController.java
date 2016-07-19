@@ -167,7 +167,7 @@ public class EtfConfigController implements PropertyHolder {
 		}
 		try {
 			Integer.parseInt(propertyFileVersion);
-		}catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			throw new RuntimeException("Required \"etf.config.properties.version\" is not an integer!");
 		}
 
@@ -175,10 +175,9 @@ public class EtfConfigController implements PropertyHolder {
 			logger.warn("Please upgrade your etf configuration file to version 2!");
 		}
 
-		if (Integer.parseInt(propertyFileVersion)>2) {
+		if (Integer.parseInt(propertyFileVersion) > 2) {
 			throw new RuntimeException("Config Property file version not supported");
 		}
-
 
 		// Environment variable ETF_DIR will overwrite the java property
 		// etf.dir
@@ -237,7 +236,7 @@ public class EtfConfigController implements PropertyHolder {
 		instance = this;
 
 		// Add information if Opbeat is activated but no privacy statement set
-		if("true".equals(configProperties.getProperty(ETF_SUBMIT_ERRORS,"false")) &&
+		if ("true".equals(configProperties.getProperty(ETF_SUBMIT_ERRORS, "false")) &&
 				SUtils.isNullOrEmpty(configProperties.getProperty(ETF_META_PRIVACYSTATEMENT_TEXT))) {
 			configProperties.setProperty(ETF_META_PRIVACYSTATEMENT_TEXT,
 					"The administrator of this ETF web application instance activated Opbeat "
