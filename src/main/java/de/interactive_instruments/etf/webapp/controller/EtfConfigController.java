@@ -65,7 +65,11 @@ public class EtfConfigController implements PropertyHolder {
 	public static final String ETF_DIR = "etf.dir";
 	public static final String ETF_BSX_RECREATE_CONFIG = "etf.bsx.recreate.config";
 	public static final String ETF_HELP_PAGE_URL = "etf.help.page";
-	public static final String ETF_DISCLAIMER_TEXT = "etf.disclaimer.text";
+
+	public static final String ETF_META_CONTACT_TEXT = "etf.meta.contact.text";
+	public static final String ETF_META_DISCLAIMER_TEXT = "etf.meta.legalnotice.disclaimer.text";
+	public static final String ETF_META_COPYRIGHT_TEXT = "etf.meta.legalnotice.copyrightnotice.text";
+	public static final String ETF_META_PRIVACYSTATEMENT_TEXT = "etf.meta.privacystatement.text";
 
 	public static final String ETF_SUBMIT_ERRORS = "etf.errors.autoreport";
 
@@ -91,7 +95,10 @@ public class EtfConfigController implements PropertyHolder {
 		{
 			put(ETF_WEBAPP_BASE_URL, "http://localhost:8080/etf-webapp");
 			put(ETF_BRANDING_TEXT, "");
-			put(ETF_DISCLAIMER_TEXT, "");
+			put(ETF_META_CONTACT_TEXT, "");
+			put(ETF_META_DISCLAIMER_TEXT, "");
+			put(ETF_META_COPYRIGHT_TEXT, "");
+			put(ETF_META_PRIVACYSTATEMENT_TEXT, "");
 			put(ETF_TESTOBJECT_ALLOW_PRIVATENET_ACCESS, "false");
 			put(ETF_REPORT_COMPARISON, "false");
 			put(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION, "360");
@@ -158,9 +165,20 @@ public class EtfConfigController implements PropertyHolder {
 		if (propertyFileVersion == null) {
 			throw new RuntimeException("Required \"etf.config.properties.version\" property not found!");
 		}
-		if (!"1".equals(propertyFileVersion)) {
+		try {
+			Integer.parseInt(propertyFileVersion);
+		}catch (NumberFormatException e) {
+			throw new RuntimeException("Required \"etf.config.properties.version\" is not an integer!");
+		}
+
+		if ("1".equals(propertyFileVersion)) {
+			logger.warn("Please upgrade your etf configuration file to version 2!");
+		}
+
+		if (Integer.parseInt(propertyFileVersion)>2) {
 			throw new RuntimeException("Config Property file version not supported");
 		}
+
 
 		// Environment variable ETF_DIR will overwrite the java property
 		// etf.dir
@@ -217,6 +235,17 @@ public class EtfConfigController implements PropertyHolder {
 		});
 
 		instance = this;
+
+		// Add information if Opbeat is activated but no privacy statement set
+		if("true".equals(configProperties.getProperty(ETF_SUBMIT_ERRORS,"false")) &&
+				SUtils.isNullOrEmpty(configProperties.getProperty(ETF_META_PRIVACYSTATEMENT_TEXT))) {
+			configProperties.setProperty(ETF_META_PRIVACYSTATEMENT_TEXT,
+					"The administrator of this ETF web application instance activated Opbeat "
+							+ "(https://opbeat.com) which helps interactive instruments to reproduce issues in the "
+							+ "user interface and improve the ETF web application. Therefore, the last user action, "
+							+ "an error message and parts of the stacktrace are transferred to Opbeat in case of "
+							+ "an issue.");
+		}
 	}
 
 	public static EtfConfigController getInstance() {

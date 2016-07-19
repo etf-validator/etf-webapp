@@ -179,7 +179,7 @@
 <body>
 
 <div data-role="page">
-    <div data-role="header">
+    <div data-role="header" data-position="fixed">
         <h1 th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText != null }"
             th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}">BRANDING TEXT</h1>
         <h1 th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText == null }">etf WebApp</h1>
@@ -194,7 +194,6 @@
                 <li><a href="#" th:href="@{/reports}" th:text="#{l.Testreports}" data-icon="eye" >Testreports</a></li>
                 <li><a href="#" th:href="@{/testruns/status}" th:text="#{l.Status}" data-icon="calendar" >Status</a></li>
                 <li><a href="#" th:href="${T(de.interactive_instruments.etf.webapp.helpers.View).helpPageURL}" th:text="#{l.Help}" data-icon="forward" target="_blank">Help</a></li>
-                <li th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText != null }"><a href="#disclaimer" data-icon="info">Disclaimer</a></li>
             </ul>
         </div>
     </div>
@@ -208,7 +207,6 @@
             <li><a href="#" th:href="@{/reports}" th:text="#{l.Testreports}" data-icon="eye" >Testreports</a></li>
             <li><a href="#" th:href="@{/testprojects}" th:text="#{l.Testprojects}" data-icon="gear" >Testprojekte</a></li>
             <li><a href="#" th:href="${T(de.interactive_instruments.etf.webapp.helpers.View).helpPageURL}" th:text="#{l.Help}" data-icon="forward" target="_blank">Help</a></li>
-            <li th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText != null }"><a href="#disclaimer">Disclaimer</a></li>
         </ul>
     </div>
 
@@ -230,17 +228,49 @@
         </div>
     </div>
 
-    <div data-role="footer">
-        <h1>etf WebApp <span th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).version}">v1.0.6</span> &copy; 2013-2015 interactive instruments</h1>
+    <div data-role="footer" data-position="fixed">
+        <h1>etf WebApp <span th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).version}">X.Y.Z</span> &copy; 2013-2016 interactive instruments</h1>
+        <div align="center" data-role="controlgroup" data-type="horizontal">
+        <a th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).contactText != null }"
+           data-mini="true" data-role="button" href="#contactDialog" th:text="#{l.Contact}">Contact</a>
+        <a th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText != null }"
+           data-mini="true" data-role="button" href="#legalNoticeDialog" th:text="#{l.LegalNotice}">Legal Notice</a>
+        <a th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).privacyStatementText != null }"
+           data-mini="true" data-role="button" href="#privacyDialog" th:text="#{l.PrivacyStatement}">Privacy Statement</a>
+        </div>
+
     </div>
 </div>
 
-<div th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText != null }" id="disclaimer" data-role="dialog">
+<div th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).contactText != null }" id="contactDialog" data-role="dialog">
     <div data-role="header">
-        <h3>Disclaimer</h3>
+        <h3 th:text="#{l.Contact}">Contact</h3>
     </div>
     <div data-role="content">
-        <p th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText}"></p>
+        <p th:utext="${T(de.interactive_instruments.etf.webapp.helpers.View).contactText}">Contact Text</p>
+    </div>
+</div>
+
+<div th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText != null }" id="legalNoticeDialog" data-role="dialog">
+    <div data-role="header">
+        <h3 th:text="#{l.LegalNotice}">Legal notice</h3>
+    </div>
+    <div data-role="content">
+        <h3 th:text="#{l.Disclaimer}">Disclaimer</h3>
+        <p th:utext="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText}">Disclaimer Text</p>
+        <h3 th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).copyrightText != null }" th:text="#{l.Copyright}">Copyright</h3>
+        <p th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).copyrightText != null }"
+           th:utext="${T(de.interactive_instruments.etf.webapp.helpers.View).copyrightText}">Copyright</p>
+    </div>
+</div>
+
+<div th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).privacyStatementText != null }" id="privacyDialog" data-role="dialog">
+    <div data-role="header">
+        <h3 th:text="#{l.PrivacyStatement}">Privacy statement</h3>
+    </div>
+    <div data-role="content">
+        <p th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).privacyStatementText != null }"
+           th:utext="${T(de.interactive_instruments.etf.webapp.helpers.View).privacyStatementText}">Privacy statement</p>
     </div>
 </div>
 

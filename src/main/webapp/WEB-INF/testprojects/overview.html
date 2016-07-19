@@ -40,7 +40,7 @@
     <ul id="testprojectlistview" data-role="listview" data-inset="true" class="ui-listview-outer" data-filter="true" data-autodividers="true">
 
         <!-- use li to enable autodividers and a special class for a div collapsibles like formatting -->
-        <li class="ii-collapsible-li" data-role="collapsible" data-iconpos="right" data-shadow="false" data-corners="false" th:each="p : ${testprojects}">
+        <li class="ii-collapsible-li" data-role="collapsible" data-iconpos="left" data-shadow="false" data-corners="false" th:each="p : ${testprojects}">
             <h2 th:text="${p.label}">Item</h2>
 
             <div th:if="${p.description != null and not #strings.isEmpty(p.description) }">

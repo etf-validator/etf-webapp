@@ -71,9 +71,24 @@ public class View {
 		return EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_BRANDING_TEXT);
 	}
 
-	public static String getDisclaimerText() {
-		final String disclaimer = EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_DISCLAIMER_TEXT);
+	public static String getContactText() {
+		final String disclaimer = EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_META_CONTACT_TEXT);
 		return SUtils.isNullOrEmpty(disclaimer) ? null : disclaimer;
+	}
+
+	public static String getDisclaimerText() {
+		final String legalNotice = EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_META_DISCLAIMER_TEXT);
+		return SUtils.isNullOrEmpty(legalNotice) ? null : legalNotice;
+	}
+
+	public static String getCopyrightText() {
+		final String disclaimer = EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_META_COPYRIGHT_TEXT);
+		return SUtils.isNullOrEmpty(disclaimer) ? null : disclaimer;
+	}
+
+	public static String getPrivacyStatementText() {
+		final String legalNotice = EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_META_PRIVACYSTATEMENT_TEXT);
+		return SUtils.isNullOrEmpty(legalNotice) ? null : legalNotice;
 	}
 
 	public static String getHelpPageURL() {
