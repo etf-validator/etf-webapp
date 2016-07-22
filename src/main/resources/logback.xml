@@ -39,7 +39,13 @@
         <appender-ref ref="FILE"/>
         <appender-ref ref="STD"/>
     </logger>
+    
+    <logger name="org.apache.commons.jcs" level="ERROR" additivity="false">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STD"/>
+    </logger>
 
+    <!-- Enable debug output by setting the Java property spring.profiles.active to dev: -Dspring.profiles.active=dev -->
     <if condition='property("spring.profiles.active").contains("dev")'>
         <then>
             <logger name="de.interactive_instruments.etf" level="DEBUG" additivity="false">
