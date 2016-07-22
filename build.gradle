@@ -19,7 +19,7 @@ buildscript {
 
     }
     dependencies {
-        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.22'
+        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.23'
         classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
     }
     dependencies {
