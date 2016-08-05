@@ -274,7 +274,7 @@ public class TestObjectController {
 		if (multipartFile != null && !multipartFile.isEmpty()) {
 			// Transfer file to tmpUploadDir
 			final IFile testObjFile = this.tmpUploadDir.secureExpandPathDown(
-					testObject.getLabel() + "_" + multipartFile.getName());
+					testObject.getLabel() + "_" + multipartFile.getOriginalFilename());
 			testObjFile.expectFileIsWritable();
 			multipartFile.transferTo(testObjFile);
 			final String type;
