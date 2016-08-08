@@ -207,7 +207,7 @@ public class TestRunController implements TaskStateEventListener {
 	public String configureTransientTestObject(
 			@RequestParam(required = true) String testProjectId,
 			Model model)
-					throws ConfigurationException, IOException, StoreException {
+			throws ConfigurationException, IOException, StoreException {
 		model.addAttribute(TESPROJECT_ID_KEY, testProjectId);
 		return configureModelAndRedirectDirect(model);
 	}
@@ -221,9 +221,9 @@ public class TestRunController implements TaskStateEventListener {
 			RedirectAttributes redirectAttributes,
 			MultipartHttpServletRequest request,
 			Model model)
-					throws ConfigurationException, IOException, StoreException, ParseException, NoSuchAlgorithmException,
-					URISyntaxException, ComponentNotLoadedException, ObjectWithIdNotFoundException, InitializationException,
-					InvalidStateTransitionException {
+			throws ConfigurationException, IOException, StoreException, ParseException, NoSuchAlgorithmException,
+			URISyntaxException, ComponentNotLoadedException, ObjectWithIdNotFoundException, InitializationException,
+			InvalidStateTransitionException {
 		testRun.getTestObject().setProperty("expires", "true");
 		testRun.getTestObject().setProperty("tempObject", "true");
 		testRun.getTestObject().setId(EidFactory.getDefault().createRandomUuid());
@@ -273,7 +273,7 @@ public class TestRunController implements TaskStateEventListener {
 	@RequestMapping(value = "/testruns/create", method = RequestMethod.GET)
 	public String configure(
 			Model model)
-					throws ConfigurationException, IOException, StoreException {
+			throws ConfigurationException, IOException, StoreException {
 		return configureModelAndRedirect(model);
 	}
 

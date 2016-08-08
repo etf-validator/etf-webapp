@@ -75,7 +75,7 @@ public class TestProjectController {
 	public Set<Map.Entry<String, String>> read(
 			@PathVariable String componentType,
 			@PathVariable String id)
-					throws ConfigurationException, IOException, ObjectWithIdNotFoundException {
+			throws ConfigurationException, IOException, ObjectWithIdNotFoundException {
 		for (TestRunTaskFactory testRunTaskFactory : taskFactory.getFactories()) {
 			try {
 				return testRunTaskFactory.getTestProjectStore().getById(EidFactory.getDefault().createFromStrAsStr(id)).namePropertyPairs();
@@ -92,7 +92,7 @@ public class TestProjectController {
 			@CookieValue(value = WebAppConstants.TESTDOMAIN_PARAM, defaultValue = "") String testDomainCookie,
 			HttpServletResponse response,
 			Model model)
-					throws ConfigurationException, StoreException {
+			throws ConfigurationException, StoreException {
 		final String testDomain;
 		if (testDomainParam == null) {
 			testDomain = testDomainCookie;

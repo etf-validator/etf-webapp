@@ -171,7 +171,7 @@ public class TestReportController {
 	public String overview(
 			@CookieValue(value = WebAppConstants.TESTDOMAIN_PARAM, defaultValue = "") String testDomain,
 			Model model)
-					throws ConfigurationException, StoreException {
+			throws ConfigurationException, StoreException {
 		if (SUtils.isNullOrEmpty(testDomain)) {
 			model.addAttribute("reports", this.store.getAll());
 		} else {

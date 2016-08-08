@@ -313,7 +313,7 @@ public class EtfConfigController implements PropertyHolder {
 	@RequestMapping(value = "/v0/configuration", method = RequestMethod.POST, produces = "application/json")
 	private @ResponseBody Set<Map.Entry<String, String>> getConfiguration(
 			@RequestBody Set<Map.Entry<String, String>> newConfiguration)
-					throws InvalidPropertyException {
+			throws InvalidPropertyException {
 
 		// No path properties are allowed
 		for (Map.Entry<String, String> e : newConfiguration) {
