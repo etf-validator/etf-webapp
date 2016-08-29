@@ -13,25 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.etf.webapp.dto;
+package de.interactive_instruments.etf.webapp.converters;
 
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
+import org.springframework.format.FormatterRegistrar;
+import org.springframework.format.FormatterRegistry;
 
-public class TestRunValidator implements Validator {
-
-	@Override
-	public boolean supports(Class<?> clasz) {
-		// return TestRunDto.class.isAssignableFrom(clasz);
-		return true;
-	}
+/**
+ * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ */
+public class WebAppFormatterRegistrar implements FormatterRegistrar {
 
 	@Override
-	public void validate(Object target, Errors errors) {
-
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "label",
-				"l.enter.label", "Please enter a label!");
+	public void registerFormatters(final FormatterRegistry registry) {
+		registry.addFormatter(new EidTypeFormatter());
 	}
-
 }

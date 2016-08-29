@@ -7,7 +7,11 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
-    <title>etf WebApp</title>
+
+    <title th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText != null }"
+           th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}">BRANDING TEXT</title>
+    <title th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText == null }">etf WebApp</title>
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <script th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).submitAnalysisData == 'true'}"
@@ -225,7 +229,7 @@
     </div>
 
     <div data-role="footer">
-        <h1>etf WebApp <span th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).version}">v1.0.6</span> &copy; 2013-2015 interactive instruments</h1>
+        <h1>etf WebApp <span th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).version}">v1.0.6</span></h1>
     </div>
 </div>
 

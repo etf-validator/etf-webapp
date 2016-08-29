@@ -15,12 +15,15 @@
  */
 package de.interactive_instruments.etf.webapp.helpers;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import de.interactive_instruments.etf.EtfConstants;
-import de.interactive_instruments.etf.dal.dto.plan.TestProjectDto;
+import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
+import de.interactive_instruments.etf.model.EID;
+import de.interactive_instruments.etf.model.EidFactory;
 import de.interactive_instruments.etf.webapp.controller.EtfConfigController;
 
 /**
@@ -33,33 +36,12 @@ public class View {
 
 	}
 
-	public static Set<Map.Entry<String, String>> getTestRunParams(final TestProjectDto dto) {
-		final Map<String, String> map = new HashMap<>();
-		dto.getProperties().forEach(e -> {
-			if (!EtfConstants.ETF_PROPERTY_KEYS.contains(e.getKey())) {
-				map.put(e.getKey(), e.getValue());
-			}
-		});
-		return map.entrySet();
+	public static Collection<String[]> getTestRunParams(final ExecutableTestSuiteDto ets) {
+		return ets.getParameters().asNameDefaultValuePairs();
 	}
 
-	public static boolean hasTestRunParams(final TestProjectDto dto) {
-		return !getTestRunParams(dto).isEmpty();
-	}
-
-	public static Set<Map.Entry<String, String>> getMetaDataProperties(final TestProjectDto dto) {
-		final Map<String, String> map = new HashMap<>();
-		dto.getProperties().forEach(e -> {
-			if (!EtfConstants.ETF_IGNORE_PROPERTIES_PK.equals(e.getKey()) &&
-					EtfConstants.ETF_PROPERTY_KEYS.contains(e.getKey())) {
-				map.put(e.getKey().replace("etf.", ""), e.getValue());
-			}
-		});
-		return map.entrySet();
-	}
-
-	public static boolean hasMetaDataProperties(final TestProjectDto dto) {
-		return !getMetaDataProperties(dto).isEmpty();
+	public static boolean hasTestRunParams(final ExecutableTestSuiteDto ets) {
+		return !ets.getParameters().isEmpty();
 	}
 
 	public static String getWorkflowType() {

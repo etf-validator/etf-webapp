@@ -9,7 +9,7 @@ div.ui-input-text +input[type="hidden"] {
 }
 
 .ii-collapsible-li .ui-collapsible-content span {
-    white-space: nowrap;
+    white-space: normal;
 }
 
 .ii-collapsible-li +li {
@@ -29,4 +29,46 @@ div.ui-input-text +input[type="hidden"] {
 
 .ii-warn-bg {
     background-color: #F08080 !important;
+}
+
+span.question {
+    cursor: pointer;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-color: #89A4CC;
+    line-height: 16px;
+    color: White;
+    font-size: 13px !important;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+}
+span.question:hover { background-color: #3D6199; }
+div.tooltip {
+    background-color: #e9e9e9;
+    color: #333;
+    position: absolute;
+    letter-spacing:2px;
+    left: 25px;
+    top: -25px;
+    min-width: 250px;
+    z-index: 1000000;
+    border-radius: 7px;
+}
+div.tooltip:before {
+    content: "";
+    border: 6px solid transparent;
+    border-right-color: #e9e9e9;
+    border-left-width: 0px;
+    display: block;
+    height: 0;
+    width: 0;
+    line-height: 0;
+    position: absolute;
+    top: 40%;
+}
+div.tooltip p {
+    margin: 10px;
+    color: #333;
 }

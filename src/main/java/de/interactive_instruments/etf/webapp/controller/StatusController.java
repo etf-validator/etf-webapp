@@ -28,6 +28,8 @@ import javax.xml.bind.JAXBException;
 
 import com.sun.management.OperatingSystemMXBean;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.interactive_instruments.IFile;
 import de.interactive_instruments.exceptions.config.MissingPropertyException;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * Controller for reporting the service status
@@ -56,10 +59,13 @@ public class StatusController {
 
 	private IFile tdDir;
 
+	private final Logger logger = LoggerFactory.getLogger(StatusController.class);
+
 	@PostConstruct
 	public void init() throws IOException, JAXBException, MissingPropertyException {
 		tdDir = config.getPropertyAsFile(EtfConfigController.ETF_TESTDATA_DIR);
 		mbean = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+		logger.info("Status controller initialized!");
 	}
 
 	private final AtomicReference<HttpHeaders> serviceStatusHeaders = new AtomicReference<>(
@@ -146,13 +152,15 @@ public class StatusController {
 		serviceStatus.set(updatedServiceStatus);
 	}
 
-	@RequestMapping(value = "/v0/heartbeat", method = RequestMethod.HEAD)
+	@ApiOperation(value = "Get simple service status", tags = {"Service Status"})
+	@RequestMapping(value = "/v2/heartbeat", method = RequestMethod.HEAD)
 	public ResponseEntity<String> simpleHeartbeat() {
 		return new ResponseEntity(serviceStatusHeaders.get(), HttpStatus.NO_CONTENT);
 	}
 
 	// @PreAuthorize("#oauth2.clientHasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/v0/admin/status", method = RequestMethod.GET, produces = "application/json")
+	@ApiOperation(value = "Get extended service status", tags = {"Service Status"})
+	@RequestMapping(value = "/v0/status", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Map<String, Object> getStatus() {
 		return serviceStatus.get();
 	}

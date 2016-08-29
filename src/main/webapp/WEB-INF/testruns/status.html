@@ -38,15 +38,14 @@
 
 <h1 th:text="#{l.Running.tests}">Running tests</h1>
 
-<div  th:if="${tasks == null or tasks.isEmpty()}">
+<div  th:if="${testRuns == null or testRuns.isEmpty()}">
     <p th:text="#{l.no.testruns}">Keine laufenden Tests</p>
 </div>
 
-<div th:if="${tasks != null and not tasks.isEmpty()}" id="taskStatus">
+<div th:if="${testRuns != null and not testRuns.isEmpty()}" id="taskStatus">
     <ul data-role="listview" data-inset="true" class="ui-listview-outer">
-        <li data-iconpos="right" data-shadow="false" data-corners="false" th:each="t : ${tasks}">
-            <a th:if="${t.testRun != null and t.taskProgress == null}" href="#" th:href="@{'/testruns/' + ${t.iD}}" th:text="${t.testRun.label}">Item</a>
-            <a th:if="${t.testRun != null and t.taskProgress != null }" href="#" th:href="@{'/testruns/' + ${t.iD}}" th:text="${t.testRun.label} + '  -  ' + ${t.taskProgress.state}">Item</a>
+        <li data-iconpos="right" data-shadow="false" data-corners="false" th:each="t : ${testRuns}">
+            <a href="#" th:href="@{'/testruns/' + ${t.id}}" th:text="${t.label}">Item</a>
         </li>
     </ul>
     <p th:text="#{l.term.testruns.are.removed}">Finalizing test runs will be removed automatically from this view.</p>
@@ -60,7 +59,7 @@
 <div th:if="${testDriversInfo != null}">
     <h1 th:text="#{l.Loaded.components}">Loaded components</h1>
     <ul th:each="i : ${testDriversInfo}">
-        <li th:title="${i.description}" th:text="${i.name} + ' ' + ${i.version}">Name</li>
+        <li th:title="${i.description}" th:text="${i.label} + ' ' + ${i.version}">Name</li>
     </ul>
 </div>
 

@@ -17,7 +17,7 @@ package de.interactive_instruments.etf.webapp.dto;
 
 import java.util.UUID;
 
-import de.interactive_instruments.etf.model.item.EID;
+import de.interactive_instruments.etf.model.EID;
 
 /**
  * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )

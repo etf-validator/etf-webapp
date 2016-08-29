@@ -15,6 +15,8 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
+import static de.interactive_instruments.etf.webapp.controller.WebAppUtils.API_BASE_URL;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
@@ -34,53 +36,48 @@ import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import de.interactive_instruments.IFile;
+import de.interactive_instruments.SUtils;
 import de.interactive_instruments.TimedExpiredItemsRemover;
-import de.interactive_instruments.concurrent.*;
 import de.interactive_instruments.etf.EtfConstants;
 import de.interactive_instruments.etf.component.ComponentNotLoadedException;
-import de.interactive_instruments.etf.dal.assembler.AssemblerException;
-import de.interactive_instruments.etf.dal.dto.plan.*;
-import de.interactive_instruments.etf.dal.dto.result.TestReportDto;
-import de.interactive_instruments.etf.driver.AbstractTestRunTask;
-import de.interactive_instruments.etf.driver.TestRunTask;
-import de.interactive_instruments.etf.model.item.EID;
-import de.interactive_instruments.etf.model.item.EidFactory;
-import de.interactive_instruments.etf.model.plan.TestObject;
-import de.interactive_instruments.etf.model.result.TestReport;
-import de.interactive_instruments.etf.webapp.dto.TestRunValidator;
-import de.interactive_instruments.exceptions.ExcUtils;
-import de.interactive_instruments.exceptions.InitializationException;
-import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
-import de.interactive_instruments.exceptions.StoreException;
+import de.interactive_instruments.etf.dal.dto.IncompleteDtoException;
+import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
+import de.interactive_instruments.etf.dal.dto.run.TestRunDto;
+import de.interactive_instruments.etf.dal.dto.run.TestTaskDto;
+import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
+import de.interactive_instruments.etf.model.EidFactory;
+import de.interactive_instruments.etf.model.Parameterizable;
+import de.interactive_instruments.etf.testdriver.*;
+import de.interactive_instruments.etf.webapp.helpers.View;
+import de.interactive_instruments.exceptions.*;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * Test run controller for starting and monitoring test runs
  */
 @Controller
-public class TestRunController implements TaskStateEventListener {
+public class TestRunController implements TestRunEventListener {
 
 	@Autowired
 	private ServletContext servletContext;
 	@Autowired
 	private TestReportController store;
 	@Autowired
-	private TestRunTaskFactoryService taskFactory;
+	private TestDriverService testDriverService;
 	@Autowired
 	private TestObjectController testObjectController;
 	@Autowired
-	private TestReportController testReportDao;
+	private TestReportController testReportController;
 	private Timer timer;
 	@Autowired
 	private EtfConfigController etfConfig;
@@ -91,14 +88,16 @@ public class TestRunController implements TaskStateEventListener {
 
 	public static final String TESTRUNS_CREATE_QUICK = "testruns/create-direct";
 
+	/*
 	@InitBinder
 	private void initBinder(WebDataBinder binder) {
 		binder.setValidator(new TestRunValidator());
 	}
+	*/
 
 	public final static int MAX_PARALLEL_RUNS = Runtime.getRuntime().availableProcessors();
 
-	private final TaskPoolRegistry<TestReport> taskPoolRegistry = new TaskPoolRegistry<TestReport>(MAX_PARALLEL_RUNS, MAX_PARALLEL_RUNS);
+	private final TaskPoolRegistry<TestRunDto> taskPoolRegistry = new TaskPoolRegistry<>(MAX_PARALLEL_RUNS, MAX_PARALLEL_RUNS);
 	// private final ConsoleAppender ca;
 	private IFile tmpDir;
 	private final Logger logger = LoggerFactory.getLogger(TestRunController.class);
@@ -111,9 +110,8 @@ public class TestRunController implements TaskStateEventListener {
 	public TestRunController() {}
 
 	@PostConstruct
-	public void init() throws ParseException, ConfigurationException, IOException, StoreException {
+	public void init() throws ParseException, ConfigurationException, IOException, StorageException {
 		logger.info(Runtime.getRuntime().availableProcessors() + " cores available.");
-		logger.info(this.getClass().getName() + " initialized!");
 
 		// SEL dir
 		System.setProperty("ETF_SEL_GROOVY",
@@ -123,9 +121,11 @@ public class TestRunController implements TaskStateEventListener {
 		timer = new Timer(true);
 		// Trigger every 30 Minutes
 		TimedExpiredItemsRemover timedExpiredItemsRemover = new TimedExpiredItemsRemover();
-		timedExpiredItemsRemover.addExpirationItemHolder(this.testObjectController.getTestObjStore(), 1, TimeUnit.HOURS);
+		timedExpiredItemsRemover.addExpirationItemHolder(this.testObjectController, 1, TimeUnit.HOURS);
 		timedExpiredItemsRemover.addExpirationItemHolder((l, timeUnit) -> taskPoolRegistry.removeDone(), 0, TimeUnit.HOURS);
 		timer.scheduleAtFixedRate(timedExpiredItemsRemover, 0, 30 * 60 * 1000);
+
+		logger.info("Test Run controller initialized!");
 	}
 
 	@PreDestroy
@@ -136,6 +136,7 @@ public class TestRunController implements TaskStateEventListener {
 		}
 	}
 
+	/*
 	@Override
 	public void taskStateChangedEvent(TaskWithProgressIndication task, TaskState.STATE state, TaskState.STATE state1) {
 		if (task != null && state != null) {
@@ -158,7 +159,7 @@ public class TestRunController implements TaskStateEventListener {
 						try {
 							logger.info("Saving report of task " + task.getID());
 							this.store.updateReport(testRunTask.getTestRun().getReport());
-						} catch (ObjectWithIdNotFoundException | StoreException | AssemblerException e) {
+						} catch (ObjectWithIdNotFoundException | StorageException | AssemblerException e) {
 							logger.error("Unable to update report of test run task " + testRunTask.getID(), e);
 						}
 					} else {
@@ -174,17 +175,30 @@ public class TestRunController implements TaskStateEventListener {
 			}
 		}
 	}
+	*/
 
-	private String configureModelAndRedirectDirect(final Model model) throws StoreException, ConfigurationException {
-		final List<TestProjectDto> testProjs = taskFactory.getAvailableProjects();
-
-		final String projectId;
+	private String configureModelAndRedirectDirect(final Model model) throws ObjectWithIdNotFoundException, StorageException {
+		// TODO multiple ets IDs
+		final String etsId;
 		if (model.containsAttribute(TESPROJECT_ID_KEY)) {
-			projectId = (String) model.asMap().get(TESPROJECT_ID_KEY);
+			etsId = (String) model.asMap().get(TESPROJECT_ID_KEY);
 		} else {
-			projectId = ((TestRunDto) model.asMap().get("testRun")).getTestProject().getId().toString();
+			etsId = ((TestRunDto) model.asMap().get("testRun")).getTestTasks().get(0).getExecutableTestSuite().getId().toString();
 		}
 
+		final ExecutableTestSuiteDto executableTestSuite = testDriverService.getExecutableTestSuiteById(WebAppUtils.toEid(etsId));
+		final TestRunDto testRunDto = new TestRunDto();
+		final TestTaskDto testTaskDto = new TestTaskDto();
+		testTaskDto.setExecutableTestSuite(executableTestSuite);
+		testTaskDto.setTestObject(new TestObjectDto());
+		testRunDto.addTestTask(testTaskDto);
+		testRunDto.setId(EidFactory.getDefault().createRandomId());
+		model.addAttribute("testRun", testRunDto);
+		model.addAttribute("executableTestSuiteId", executableTestSuite.getId());
+		model.addAttribute("executableTestSuite", executableTestSuite);
+		model.addAttribute("simplifiedTestObjectType", "data");
+
+		/*
 		for (final TestProjectDto testProj : testProjs) {
 			if (testProj.getId().equals(projectId)) {
 				final TestRunDtoBuilder testRunDtoBuilder = new TestRunDtoBuilder().setTestProject(testProj);
@@ -200,6 +214,8 @@ public class TestRunController implements TaskStateEventListener {
 				break;
 			}
 		}
+		*/
+
 		return TESTRUNS_CREATE_QUICK;
 	}
 
@@ -207,35 +223,51 @@ public class TestRunController implements TaskStateEventListener {
 	public String configureTransientTestObject(
 			@RequestParam(required = true) String testProjectId,
 			Model model)
-					throws ConfigurationException, IOException, StoreException {
+			throws ConfigurationException, IOException, StorageException, ObjectWithIdNotFoundException {
 		model.addAttribute(TESPROJECT_ID_KEY, testProjectId);
 		return configureModelAndRedirectDirect(model);
 	}
 
 	@RequestMapping(value = "/testruns/start-direct", method = RequestMethod.POST)
 	public String startDirect(
-			@ModelAttribute("testRun") @Valid TestRunDto testRun,
+			@ModelAttribute("testRun") @Valid TestRunDto testRunDto,
+			@ModelAttribute("executableTestSuiteId") @Valid String etsId,
 			BindingResult testRunBindingResult,
-			@ModelAttribute("testObject") @Valid TestObjectDto testObject,
+			// @ModelAttribute("testObject") @Valid TestObjectDto testObject,
 			BindingResult testObjectBindingResult,
 			RedirectAttributes redirectAttributes,
 			MultipartHttpServletRequest request,
-			Model model)
-					throws ConfigurationException, IOException, StoreException, ParseException, NoSuchAlgorithmException,
-					URISyntaxException, ComponentNotLoadedException, ObjectWithIdNotFoundException, InitializationException,
-					InvalidStateTransitionException {
-		testRun.getTestObject().setProperty("expires", "true");
-		testRun.getTestObject().setProperty("tempObject", "true");
-		testRun.getTestObject().setId(EidFactory.getDefault().createRandomUuid());
-		testRun.getTestObject().setLabel("temporary-" + testRun.getTestObject().getId());
+			Model model) throws IncompleteDtoException, URISyntaxException, StorageException, NoSuchAlgorithmException, ParseException, IOException, ObjectWithIdNotFoundException, ConfigurationException, ComponentLoadingException, TestRunInitializationException {
+
+		final ExecutableTestSuiteDto executableTestSuite = testDriverService.getExecutableTestSuiteById(
+				WebAppUtils.toEid(request.getParameterMap().get("properties.asMap[etsId]")[0]));
+
+		final TestTaskDto testTaskDto = new TestTaskDto();
+		for (final Parameterizable.Parameter parameter : executableTestSuite.getParameters().getParameters()) {
+			final String value = request.getParameterMap().get("properties.asMap[" + parameter.getName() + "]")[0];
+			testTaskDto.getArguments().setValue(parameter.getName(), value);
+		}
+
+		final TestObjectDto testObjectDto = new TestObjectDto();
+		testObjectDto.setId(EidFactory.getDefault().createRandomId());
+		testObjectDto.setTestObjectTypes(executableTestSuite.getSupportedTestObjectTypes());
+		testTaskDto.setExecutableTestSuite(executableTestSuite);
+		testTaskDto.setTestObject(testObjectDto);
+		testRunDto.addTestTask(testTaskDto);
+		testRunDto.setId(EidFactory.getDefault().createRandomId());
+
+		testObjectDto.properties().setProperty("expires", "true");
+		testObjectDto.properties().setProperty("tempObject", "true");
+		testObjectDto.setId(EidFactory.getDefault().createRandomId());
 
 		final MultipartFile multipartFile = request.getFile("testObjFile");
+		testObjectDto.setLabel(multipartFile.getOriginalFilename());
 		if (multipartFile != null) {
-			if(multipartFile.isEmpty()) {
+			if (multipartFile.isEmpty()) {
 				testObjectBindingResult.reject("l.upload.invalid", new Object[]{"File is empty or corrupt"},
 						"Unable to use file: {0}");
 			}
-			testObjectController.addFileTestData(testRun.getTestObject(), testObjectBindingResult, request, model);
+			testObjectController.addFileTestData(testObjectDto, testObjectBindingResult, request, model);
 		}
 
 		if (testObjectBindingResult.hasErrors() || testRunBindingResult.hasErrors()) {
@@ -243,19 +275,21 @@ public class TestRunController implements TaskStateEventListener {
 			model.addAttribute(BindingResult.class.getName() + ".testRun", testRunBindingResult);
 			return configureModelAndRedirectDirect(model);
 		}
-		return start(testRun, testRunBindingResult, redirectAttributes, model);
+		return start(testRunDto, testRunBindingResult, redirectAttributes, model);
 	}
 
-	private TestRunTask initAndSubmit(TestRunDto testRunDto)
-			throws StoreException, ComponentNotLoadedException, ObjectWithIdNotFoundException,
-			ConfigurationException, InvalidStateTransitionException, InitializationException {
-		final TestRunTask testRunTask = taskFactory.create(testRunDto, this);
-		if (testRunTask == null) {
+	private TestRun initAndSubmit(TestRunDto testRunDto)
+			throws StorageException, ComponentNotLoadedException, ObjectWithIdNotFoundException,
+			ConfigurationException, InvalidStateTransitionException, InitializationException, ComponentLoadingException, TestRunInitializationException, IncompleteDtoException {
+		final TestRun testRun = testDriverService.create(testRunDto);
+		if (testRun == null) {
 			throw new ConfigurationException("Unable to create a new test run task");
 		}
+		testRun.addTestRunEventListener(this);
 
-		testRunTask.init();
+		testRun.init();
 
+		/*
 		// Check if the test object has changed since the last run
 		// and update the test object
 		final TestObject tO = testRunTask.getTestRun().getTestObject();
@@ -263,92 +297,98 @@ public class TestRunController implements TaskStateEventListener {
 				testObjectController.getTestObjStore().exists(tO.getId())) {
 			testObjectController.getTestObjStore().update(tO);
 		}
+		*/
 
-		logger.info("TestRun " + testRunDto.getLabel() + "." + testRunDto.getId() + " prepared");
-		taskPoolRegistry.submitTask(testRunTask);
+		testReportController.storeTestRun(testRunDto);
 
-		return testRunTask;
+		logger.info("TestRun " + testRunDto.getLabel() + "." + testRunDto.getId() + " initialized");
+
+		taskPoolRegistry.submitTask(testRun);
+
+		return testRun;
 	}
 
 	@RequestMapping(value = "/testruns/create", method = RequestMethod.GET)
 	public String configure(
 			Model model)
-					throws ConfigurationException, IOException, StoreException {
+			throws ConfigurationException, IOException, StorageException, ObjectWithIdNotFoundException {
 		return configureModelAndRedirect(model);
 	}
 
-	private String configureModelAndRedirect(final Model model) throws StoreException, ConfigurationException {
+	private String configureModelAndRedirect(final Model model) throws StorageException, ConfigurationException, ObjectWithIdNotFoundException {
 		if ("simplified".equals(etfConfig.getProperty("etf.workflows"))) {
 			return configureModelAndRedirectDirect(model);
 		}
 
-		final List<TestProjectDto> testProjs = taskFactory.getAvailableProjects();
+		final Collection<ExecutableTestSuiteDto> executableTestSuites = testDriverService.getExecutableTestSuites();
 
 		if (!model.containsAttribute("testRun")) {
 			final TestRunDto testRun = new TestRunDto();
-			testRun.setTestObject(new TestObjectDtoBuilder().createTestObjectDto());
+			final TestTaskDto testTask = new TestTaskDto();
+			testTask.setTestObject(new TestObjectDto());
+			testRun.addTestTask(testTask);
 			model.addAttribute("testRun", testRun);
 		}
+		// Set currently used test objects
 		final HashSet<String> blockedTestObjects = new HashSet<>();
-		for (TaskWithProgressIndication<TestReport> t : taskPoolRegistry.getTasks()) {
-			if (!t.getTaskProgress().getState().isCompletedFailedCanceledOrFinalizing()) {
-				blockedTestObjects.add(((TestRunTask) t).getTestRun().getTestObject().getId().toString());
+		for (final TaskWithProgress<TestRunDto> testRun : taskPoolRegistry.getTasks()) {
+			if (!testRun.getTaskProgress().getState().isCompletedFailedCanceledOrFinalizing()) {
+				testRun.getResult().getTestTasks().forEach(task -> blockedTestObjects.add(task.getTestObject().getId().toString()));
 			}
 		}
-		// Set currently used test objects
 		final List<TestObjectDto> unusedTestObjects = testObjectController.getTestObjects().stream().filter(tO -> !blockedTestObjects.contains(tO.getId().toString())).collect(Collectors.toList());
 		model.addAttribute("allTestObjectsInUse", unusedTestObjects.isEmpty() && !blockedTestObjects.isEmpty());
 		model.addAttribute("noTestObjectsCreated", blockedTestObjects.isEmpty() && unusedTestObjects.isEmpty());
 		model.addAttribute("testObjects", unusedTestObjects);
 
-		model.addAttribute("testProjects", testProjs);
-		model.addAttribute("noProjectsAvailable", testProjs.isEmpty());
+		model.addAttribute("testProjects", executableTestSuites);
+		model.addAttribute("noProjectsAvailable", executableTestSuites.isEmpty());
 
 		return "testruns/create";
 	}
 
 	@RequestMapping(value = "/testruns/start", method = RequestMethod.POST)
 	public synchronized String start(
-			@Valid @ModelAttribute("testRun") TestRunDto testRun, BindingResult result,
+			@Valid @ModelAttribute("testRun") TestRunDto testRunDto, BindingResult result,
 			RedirectAttributes redirectAttributes,
-			Model model) throws StoreException, ObjectWithIdNotFoundException, ConfigurationException {
+			Model model) throws ObjectWithIdNotFoundException, StorageException, ConfigurationException, TestRunInitializationException, IncompleteDtoException, ComponentLoadingException {
 		if (result.hasErrors()) {
 			return configureModelAndRedirect(model);
 		}
 		// Remove finished test runs
 		taskPoolRegistry.removeDone();
 
-		testRun.setId(EidFactory.getDefault().createRandomUuid());
+		testRunDto.setId(EidFactory.getDefault().createRandomId());
 		final TestObjectDto to;
-		if (Objects.equals("true", testRun.getTestObject().getProperty("tempObject"))) {
-			to = testRun.getTestObject();
+		if (Objects.equals("true", testRunDto.getTestObjects().get(0).properties().getProperty("tempObject"))) {
+			to = testRunDto.getTestObjects().get(0);
 		} else {
-			to = testObjectController.getTestObjStore().getDtoById(testRun.getTestObject().getId());
+			to = testObjectController.getTestObjectById(testRunDto.getTestObjects().get(0).getId());
 		}
 
 		// Check if test object is already in usage
-		for (TaskWithProgressIndication<TestReport> t : taskPoolRegistry.getTasks()) {
-			if (!t.getTaskProgress().getState().isCompletedFailedCanceledOrFinalizing() &&
-					to.getId().equals(((TestRunTask) t).getTestRun().getTestObject().getId())) {
+		for (final TaskWithProgress<TestRunDto> testRun : taskPoolRegistry.getTasks()) {
+			if (!testRun.getTaskProgress().getState().isCompletedFailedCanceledOrFinalizing() &&
+					to.getId().equals(testRun.getResult().getTestObjects().get(0).getId())) {
 				logger.info("Rejecting test start, test object " +
 						to.getId() + " is in use");
 				result.reject("testObject.lock",
-						"Das Testobject \"" + to.getLabel() +
-								"\" wird bereits im Testlauf \"" +
-								((TestRunTask) t).getTestRun().getLabel() + "\" benutzt " +
-								"und ist gesperrt, bis dieser beendet wurde.");
+						"Test Object \"" + to.getLabel() +
+								"\" is already used in Test Run \"" +
+								testRun.getResult().getLabel() + "\"" +
+								"and is locked until the Test Run will be finished.");
 				model.addAttribute(BindingResult.class.getName() + ".testRun", result);
 				return configureModelAndRedirect(model);
 			}
 		}
 
-		testRun.setTestObject(to);
-		testRun.setTestReport(testReportDao.createReport(testRun.getLabel(), to));
+		testRunDto.getTestTasks().get(0).setTestObject(to);
+		// testRun.setTestReport(testReportController.createReport(testRun.getLabel(), to));
 
-		final TestRunTask testRunTask;
+		final TestRun testRun;
 		try {
-			testRunTask = initAndSubmit(testRun);
-		} catch (StoreException | ComponentNotLoadedException | ObjectWithIdNotFoundException | InvalidStateTransitionException | InitializationException | ConfigurationException e) {
+			testRun = initAndSubmit(testRunDto);
+		} catch (StorageException | ComponentNotLoadedException | ObjectWithIdNotFoundException | InvalidStateTransitionException | InitializationException | ConfigurationException e) {
 			result.reject("testRun.failed.startup", "Startup failed: " + e.getMessage());
 			model.addAttribute(BindingResult.class.getName() + ".testRun", result);
 			model.addAttribute(BindingResult.class.getName() + ".testRunDto", result);
@@ -356,28 +396,34 @@ public class TestRunController implements TaskStateEventListener {
 			return configureModelAndRedirect(model);
 		}
 
-		redirectAttributes.addAttribute("id", testRunTask.getID()).addFlashAttribute("message", "Test started");
+		redirectAttributes.addAttribute("id", testRun.getId().toString()).addFlashAttribute("message", "Test started");
 
 		return "redirect:/testruns/{id}";
 	}
 
 	@RequestMapping(value = "/testruns/{id}", method = RequestMethod.GET)
-	public String show(@PathVariable UUID id, Model model) throws Exception {
-		final TestRunTask testRunTask;
+	public String show(@PathVariable String id, Model model) throws Exception {
+		TaskWithProgress<TestRunDto> testRun = null;
 		try {
-			testRunTask = (TestRunTask) taskPoolRegistry.getTaskById(id);
+			testRun = taskPoolRegistry.getTaskById(WebAppUtils.toEid(id));
 		} catch (ObjectWithIdNotFoundException e) {
-			throw new ObjectWithIdNotFoundException("Testrun not found or already completed");
+			// throw new ObjectWithIdNotFoundException("Testrun not found or already completed");
 		}
+		if (testRun == null) {
+			return "redirect:/testruns/{id}/result";
+		}
+		model.addAttribute("testRun", testRun);
 
-		if (testRunTask != null) {
-			if (testRunTask.getTaskProgress().getState() == TaskState.STATE.COMPLETED) {
+		/*
+		if (testRun != null) {
+			if (testRun.getTaskProgress().getState() == TaskState.STATE.COMPLETED) {
 				logger.info("TestRun already finished, redirecting to results");
 				return "redirect:/testruns/{id}/result";
 			}
 			logger.info("Presenting TestRun status");
-			model.addAttribute("testRunTask", testRunTask);
+			model.addAttribute("testRunTask", testRun);
 		}
+		*/
 		return "testruns/show";
 	}
 
@@ -388,21 +434,20 @@ public class TestRunController implements TaskStateEventListener {
 
 	@RequestMapping(value = "/testruns/status", method = RequestMethod.GET)
 	public String status(Model model) {
-		model.addAttribute("tasks", taskPoolRegistry.getTasks());
-		model.addAttribute("testDriversInfo", taskFactory.getTestDriverInfo());
+		model.addAttribute("testRuns", taskPoolRegistry.getTasks());
+		model.addAttribute("testDriversInfo", testDriverService.getTestDriverInfo());
 		return "testruns/status";
 	}
 
 	@RequestMapping(value = "/testruns/{id}/cancel", method = RequestMethod.GET)
-	public String cancel(@PathVariable String id, @RequestParam Map<String, String> allRequestParams, Model model) {
+	public String cancel(@PathVariable String id) {
 		try {
-			final UUID _id = UUID.fromString(id);
-			logger.info("Killing testrun " + id);
+			logger.info("Killing Test Run " + id);
 			Thread.sleep(1000);
-			taskPoolRegistry.cancelTask(_id);
+			taskPoolRegistry.cancelTask(WebAppUtils.toEid(id));
 		} catch (Exception e) {
-			logger.info("Killin of testrun " + id + " failed ", e);
-			ExcUtils.supress(e);
+			logger.info("Killin Test Run " + id + " failed ", e);
+			ExcUtils.suppress(e);
 		}
 		return "redirect:/testruns/status";
 	}
@@ -411,20 +456,37 @@ public class TestRunController implements TaskStateEventListener {
 	 * Cleanup and redirect to the ReportStoreController
 	 */
 	@RequestMapping(value = "/testruns/{id}/result", method = RequestMethod.GET)
-	public String showResult(@PathVariable UUID id, Model model, RedirectAttributes redirectAttributes) {
+	public String showResult(@PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
 		try {
 			// Future call!
-			final TestReport testReport = taskPoolRegistry.getTaskById(id).getTaskProgress().waitForResult();
+			final TestRunDto testRunDto = ((TestRun) taskPoolRegistry.getTaskById(WebAppUtils.toEid(id))).waitForResult();
 			logger.info("Releasing testrun " + id +
-					", persisting and redirecting to report results " + testReport.getId());
+					", persisting and redirecting to report results ");
 
-			taskPoolRegistry.release(id);
-			redirectAttributes.addAttribute("id", testReport.getId().toString());
-			return "redirect:/reports/{id}";
+			taskPoolRegistry.release(WebAppUtils.toEid(id));
+			redirectAttributes.addAttribute("id", id.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return "redirect:/reports/{id}";
+	}
+
+	@Override
+	public void taskStateChangedEvent(final TestTask testTask, final TaskState.STATE current, final TaskState.STATE old) {
+		logger.trace("TaskStateChanged event received: {} {} -> {} " + testTask.getId(), old, current);
+	}
+
+	@Override
+	public void taskRunChangedEvent(final TestRun testRun, final TaskState.STATE current, final TaskState.STATE old) {
+		logger.trace("TaskStateChanged event received: {} ({}) {} -> {} " + testRun.getLabel(), testRun.getId(), old, current);
+		if (current.isCompleted()) {
+			try {
+				testReportController.updateTestRun(testRun);
+			} catch (StorageException | ObjectWithIdNotFoundException e) {
+				final String identifier = testRun != null ? testRun.getLabel() : "";
+				logger.error("Test Run " + identifier + " could not be updated");
+			}
+		}
 	}
 
 	//
@@ -446,8 +508,9 @@ public class TestRunController implements TaskStateEventListener {
 
 		public TaskProgressDto() {}
 
-		static TaskProgressDto createCompletedMsg(TaskProgress p) {
-			return new TaskProgressDto(String.valueOf(p.getMaxSteps()), p.getLastMessages());
+		static TaskProgressDto createCompletedMsg(Progress p) {
+			return new TaskProgressDto(
+					String.valueOf(p.getMaxSteps()), new ArrayList<>());
 		}
 
 		static TaskProgressDto createTerminateddMsg(int max) {
@@ -459,13 +522,13 @@ public class TestRunController implements TaskStateEventListener {
 		}
 
 		// Still running
-		private TaskProgressDto(TaskProgress p) {
+		private TaskProgressDto(final Progress p, final long pos) {
 			this.val = String.valueOf(p.getCurrentStepsCompleted());
 			if (p.getCurrentStepsCompleted() >= p.getMaxSteps()) {
 				this.max = String.valueOf(p.getMaxSteps() + p.getCurrentStepsCompleted());
 			}
 			this.max = String.valueOf(p.getMaxSteps());
-			this.log = p.getLastMessages();
+			this.log = p.getLogger().getLogMessages(pos);
 		}
 
 		public String getVal() {
@@ -481,21 +544,31 @@ public class TestRunController implements TaskStateEventListener {
 		}
 	}
 
-	@RequestMapping(value = "/rest/testruns/{id}/progress", method = RequestMethod.GET, produces = "application/json")
+	@ApiOperation(value = "Get the Test Run progress by ID", tags = {"Test Runs"})
+	@RequestMapping(value = API_BASE_URL + "/TestRuns/{id}.json", params = "view=progress", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public TaskProgressDto progressLog(@PathVariable UUID id) throws ObjectWithIdNotFoundException {
+	public TaskProgressDto progressLog(
+			@PathVariable String id,
+			@RequestParam(value = "pos", required = false) String strPos) throws ObjectWithIdNotFoundException {
 
-		TaskProgress<TestReport> taskProgress = taskPoolRegistry.getTaskById(id).getTaskProgress();
+		long position = 0;
+		if (!SUtils.isNullOrEmpty(strPos)) {
+			position = Long.valueOf(strPos);
+			if (position < 0) {
+				position = 0;
+			}
+		}
 
-		TaskState.STATE state = taskProgress.getState();
+		final TaskWithProgress<TestRunDto> testRun = taskPoolRegistry.getTaskById(WebAppUtils.toEid(id));
+		final TaskState.STATE state = testRun.getState();
 
 		if (state == TaskState.STATE.FAILED || state == TaskState.STATE.CANCELED) {
 			// Log the internal error and release the task
 			try {
-				taskProgress.waitForResult();
+				((TestRun) testRun).waitForResult();
 			} catch (Exception e) {
 				logger.error("TestRun failed with an internal error", e);
-				taskPoolRegistry.release(id);
+				taskPoolRegistry.release(WebAppUtils.toEid(id));
 			}
 		} else if (state.isCompleted() || state.isFinalizing()) {
 			// The Client should already be informed, that the task finished, but just send again
@@ -506,9 +579,9 @@ public class TestRunController implements TaskStateEventListener {
 				e.printStackTrace();
 			}
 			logger.info("Notifying web client");
-			return TaskProgressDto.createCompletedMsg(taskProgress);
-		} else if (taskProgress.isStateChanged()) {
-			return new TaskProgressDto(taskProgress);
+			return TaskProgressDto.createCompletedMsg(testRun.getTaskProgress());
+		} else {
+			return new TaskProgressDto(testRun.getTaskProgress(), position);
 		}
 
 		// The task is running, but does not provide any new information, so just respond
@@ -516,66 +589,28 @@ public class TestRunController implements TaskStateEventListener {
 		return new TaskProgressDto();
 	}
 
-	static class SimpleTestRunDto {
-		private String testRunLabel;
-		private String testObjectId;
-		private String testProjectId;
+	private static class TestRunsJsonView {
+		public final String id;
+		public final String label;
+		public final int testTaskCount;
+		public final Date startTimestamp;
+		public final double percentStepsCompleted;
 
-		public String getTestRunLabel() {
-			return testRunLabel;
-		}
-
-		public EID getTestObjectId() {
-			return EidFactory.getDefault().createFromStrAsUUID(testObjectId);
-		}
-
-		public EID getTestProjectId() {
-			return EidFactory.getDefault().createFromStrAsUUID(testProjectId);
+		public TestRunsJsonView(final TaskWithProgress<TestRunDto> t) {
+			id = t.getId().getId();
+			label = ((TestRun) t).getLabel();
+			testTaskCount = ((TestRun) t).getTestTasks().size();
+			startTimestamp = t.getTaskProgress().getStartTimestamp();
+			percentStepsCompleted = t.getTaskProgress().getPercentStepsCompleted();
 		}
 	}
 
-	static class SimpleTestRunInfoDto {
-		private String testRunId;
-		private String testReportId;
-
-		SimpleTestRunInfoDto(EID testRunId, EID testReportId) {
-			this.testRunId = testRunId.toString();
-			this.testReportId = testReportId.toString();
-		}
-
-		public String getTestRunId() {
-			return testRunId;
-		}
-
-		public String getTestReportId() {
-			return testReportId;
-		}
-
-		static SimpleTestRunInfoDto create(TestRunTask testRunTask) {
-			return new SimpleTestRunInfoDto(testRunTask.getTestRun().getId(),
-					testRunTask.getTestRun().getReport().getId());
-		}
-	}
-
-	@RequestMapping(value = "/rest/testruns/start", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public SimpleTestRunInfoDto start(@RequestBody SimpleTestRunDto dto) throws ObjectWithIdNotFoundException, StoreException, ConfigurationException, InitializationException, InvalidStateTransitionException, ComponentNotLoadedException {
-
-		TestRunDto testRunDto = new TestRunDto();
-		testRunDto.setLabel(dto.getTestRunLabel());
-		testRunDto.setId(EidFactory.getDefault().createRandomUuid());
-		final TestObjectDto to = testObjectController.getTestObjStore().getDtoById(dto.getTestObjectId());
-		testRunDto.setTestObject(to);
-		final TestReportDto rep = testReportDao.createReport(testRunDto.getLabel(), testRunDto.getTestObject());
-		testRunDto.setTestReport(rep);
-		final TestProjectDto tp = taskFactory.getProjectById(dto.getTestProjectId());
-		testRunDto.setTestProject(tp);
-		taskPoolRegistry.removeDone();
-		testRunDto.setId(EidFactory.getDefault().createRandomUuid());
-
-		final TestRunTask testRunTask = initAndSubmit(testRunDto);
-
-		return SimpleTestRunInfoDto.create(testRunTask);
+	@ApiOperation(value = "Get the progress of all Test Runs", tags = {"Test Runs"})
+	@RequestMapping(value = API_BASE_URL + "/TestRuns.json", params = "view=progress", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<TestRunsJsonView> listTestRunsJson() throws StorageException, ConfigurationException {
+		final List<TestRunsJsonView> testRunsJsonViews = new ArrayList<TestRunsJsonView>();
+		taskPoolRegistry.getTasks().forEach(t -> testRunsJsonViews.add(new TestRunsJsonView(t)));
+		return testRunsJsonViews;
 	}
 
 }

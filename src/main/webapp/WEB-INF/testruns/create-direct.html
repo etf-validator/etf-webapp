@@ -60,12 +60,12 @@
             Geben Sie ein Label ein, um den Testlauf später wieder auffinden zu können" th:field="*{label}" />
         </div>
 
-        <div th:if="*{testProject.supportedResourceTypeIds[0] == 'serviceEndpoint'}">
+        <div th:if="${simplifiedTestObjectType == 'service'}">
             <div id="serviceUrl" data-role="fieldcontain">
                 <label th:for="*{testObject.resources[__'serviceEndpoint'__]}" th:text="#{l.Service.url}">Service URL</label>
                 <input class="testObjectResourceInput" data-validation="url" type="text" th:field="*{testObject.resources[__'serviceEndpoint'__]}" />
             </div>
-            <div id="credentialFields">
+            <!--div id="credentialFields">
                 <div data-role="fieldcontain">
                     <label th:for="*{testObject.properties.asMap[__'username'__]}" th:text="#{l.Username}">Username</label>
                     <input type="text" th:field="*{testObject.properties.asMap[__'username'__]}" />
@@ -74,27 +74,26 @@
                     <label th:for="*{testObject.properties.asMap[__'password'__]}" th:text="#{l.Password}">Password</label>
                     <input type="text" th:field="*{testObject.properties.asMap[__'password'__]}" />
                 </div>
-            </div>
+            </div-->
         </div>
 
-        <div th:if="*{testProject.supportedResourceTypeIds[0] == 'data'}" id="uploadTestObj" data-role="fieldcontain">
-            <label th:text="#{l.ZipOrXmlFile}" for="testObjFile">ZIP or XML file</label>
+        <div th:if="${simplifiedTestObjectType == 'data'}" id="uploadTestObj" data-role="fieldcontain">
+            <label><span th:text="#{l.ZipOrXmlFile}" for="testObjFile">ZIP or XML file </span> <span class="question" help="maximum size: 500 Megabytes"> ?</span></label>
             <input class="testObjectResourceInput" type="file" accept="application/zip,text/xml" id="testObjFile" name="testObjFile" />
         </div>
 
-        <div data-role="none" style="display:none;">
-            <input data-role="none" type="hidden" th:field="*{testProject.id}" />
-        </div>
-        <div data-role="none" style="display:none;">
-            <input data-role="none" type="hidden" th:field="*{testObject.properties.asMap[__'etf.TestDomain'__]}" />
-        </div>
+        <!--div data-role="none" style="display:none;">
+            <input data-role="none" type="hidden" th:field="*{testTasks[0].executableTestSuite.id}"/>
+        </div-->
+        <!--div data-role="none" style="display:none;">
+            <input data-role="none" type="hidden" th:field="*{tag.id}" />
+        </div-->
 
         <div data-role="fieldcontain" id="propertyConfiguration">
-
         </div>
 
         <button data-inline="true" data-icon="arrow-r" data-iconpos="right" type="submit" >Start</button>
-        <a th:if="*{testProject.supportedResourceTypeIds[0] == 'serviceEndpoint'}" id="show-credentials-button" data-inline="true"
+        <a th:if="${simplifiedTestObjectType == 'service'}" id="show-credentials-button" data-inline="true"
            data-role="button" data-icon="gear" data-iconpos="right" href="#" th:text="#{l.Credentials}">Credentials</a>
     </fieldset>
 
@@ -137,11 +136,12 @@
         var dateLabel = currentDate() + " - " + currentTime();
 
         var withTestProject = /*[[#{l.label.with.testproject}]]*/ "with test project";
-        var testProjectLabel = /*[[${testRun.testProject.label}]]*/ "TestProject label";
+        var testProjectLabel = /*[[${executableTestSuite.label}]]*/ "TestProject label";
 
 
-        $('#testRunLabel').val(testRunLabel + " " + dateLabel + " " + withTestProject+" "+testProjectLabel);
+        $('#testRunLabel').val(testRunLabel + " " + dateLabel + " " + withTestProject+" '"+testProjectLabel+"'");
 
+        questionTooltips();
 
         // Input validation
         $('#testrun-form').on('submit', function (e) {
@@ -167,27 +167,52 @@
 
     // Load input parameters via rest
     var projPropConf = $("#propertyConfiguration");
-    var projId = /*[[${testRun.testProject.id.toString()}]]*/ "TestProject id";
+    var projId = /*[[${executableTestSuite.id.toString()}]]*/ "TestProject id";
 
     getProjProperties = function() {
-        $.getJSON('../rest/testprojects/' + projId + '/properties/', function (jsonData) {
+        $.getJSON('../v2/ExecutableTestSuites/' + projId + '/arguments.json', function (jsonData) {
             if (!$.isEmptyObject(jsonData)) {
                 projPropConf.empty();
                 projPropConf.hide();
                 $.each(jsonData, function (i, prop) {
-                    $.each(prop, function (key, val) {
-                        var propertyInput = $(
-                                '<label for="property-' + projId + '-' + key + '">' + key + '</label>' +
-                                '<input type="text" name="properties.asMap[' + key + ']" id="property-' + projId + '-' + key + '" value="' + val + '" />'
-                        );
-                        projPropConf.append(propertyInput);
-                    });
+                    var name = prop['name'];
+                    var defaultValue = prop['defaultValue'];
+                    var description = prop['description'];
+                    var pattern = prop['allowedValues'];
+                    var propertyInput = $(
+                            '<label for="property-' + projId + '-' + name + '">' + name + ' ' +
+                                '<span class="question" help="'+description+'"> ?</span>' +
+                            '</label>' +
+                            '<input type="text" name="properties.asMap[' + name + ']" ' +
+                                ' title="'+description+'" ' +
+                                ' pattern="'+pattern+'" ' +
+                                ' id="property-' + projId + '-' + name + '" value="' + defaultValue + '" />'
+                    );
+                    projPropConf.append(propertyInput);
                 });
+
+                var etsInput = $(
+                        '<div data-role="none" style="display:none;">' +
+                        '<input data-role="none" type="hidden" name="properties.asMap[etsId]" id="property-' + projId + '-etsId" value="' + projId + '" />' +
+                        '</div>'
+                );
+                projPropConf.append(etsInput);
+
+
                 $('input').textinput();
                 projPropConf.show('slow');
+                questionTooltips();
             }
         }).fail(function () {
             projPropConf.text("Unable to get Project properties!");
+        });
+    }
+
+    function questionTooltips() {
+        $("span.question").hover(function () {
+            $(this).append('<div class="tooltip"><p>'+ $(this).attr('help') + '</p></div>');
+        }, function () {
+            $("div.tooltip").remove();
         });
     }
 

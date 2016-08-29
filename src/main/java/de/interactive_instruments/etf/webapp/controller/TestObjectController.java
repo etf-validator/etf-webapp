@@ -24,7 +24,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -34,7 +34,6 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
-import org.apache.tika.mime.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,43 +47,41 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import de.interactive_instruments.*;
-import de.interactive_instruments.etf.dal.basex.dao.BasexTestObjectDao;
-import de.interactive_instruments.etf.dal.dao.TestObjectDao;
-import de.interactive_instruments.etf.dal.dto.item.VersionDataDto;
-import de.interactive_instruments.etf.dal.dto.plan.TestObjectDto;
-import de.interactive_instruments.etf.dal.dto.plan.TestObjectDtoBuilder;
-import de.interactive_instruments.etf.model.item.EID;
-import de.interactive_instruments.etf.model.item.EidFactory;
-import de.interactive_instruments.etf.model.item.ModelItemDefaultMap;
-import de.interactive_instruments.etf.model.plan.TestObject;
-import de.interactive_instruments.etf.model.plan.TestObjectResource;
-import de.interactive_instruments.etf.model.plan.TestObjectResourceType;
+import de.interactive_instruments.etf.dal.dao.Filter;
+import de.interactive_instruments.etf.dal.dao.WriteDao;
+import de.interactive_instruments.etf.dal.dto.capabilities.ResourceDto;
+import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
+import de.interactive_instruments.etf.model.EID;
+import de.interactive_instruments.etf.model.EidFactory;
 import de.interactive_instruments.etf.webapp.dto.TObjectValidator;
+import de.interactive_instruments.etf.webapp.helpers.View;
 import de.interactive_instruments.exceptions.ExcUtils;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
-import de.interactive_instruments.exceptions.StoreException;
+import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
 import de.interactive_instruments.exceptions.config.MissingPropertyException;
 import de.interactive_instruments.io.FileHashVisitor;
 import de.interactive_instruments.io.GmlAndXmlFilter;
-import de.interactive_instruments.properties.Properties;
 
 /**
  * Test object controller used for managing test objects
  */
 @Controller
-public class TestObjectController {
+public class TestObjectController implements ExpirationItemHolder {
 
 	@Autowired
 	private ServletContext servletContext;
 
 	@Autowired
-	private TestRunTaskFactoryService taskFactory;
+	private TestDriverService testDriverService;
 
 	@Autowired
 	private EtfConfigController etfConfig;
 
-	private TestObjectDao testObjStore;
+	@Autowired
+	private DataStorageService dataStorageService;
+
+	private WriteDao<TestObjectDto> testObjDao;
 
 	private IFile testDataDir;
 	private IFile tmpUploadDir;
@@ -99,11 +96,12 @@ public class TestObjectController {
 
 	@PreDestroy
 	private void shutdown() {
-		testObjStore.release();
+		testObjDao.release();
 	}
 
 	@PostConstruct
 	public void init() throws IOException, JAXBException, MissingPropertyException {
+
 		testDataDir = etfConfig.getPropertyAsFile(EtfConfigController.ETF_TESTDATA_DIR);
 		testDataDir.ensureDir();
 		logger.info("TEST_DATA_DIR " + testDataDir.getAbsolutePath());
@@ -114,8 +112,13 @@ public class TestObjectController {
 		}
 		tmpUploadDir.mkdir();
 		logger.info("TMP_HTTP_UPLOADS: " + tmpUploadDir.getAbsolutePath());
-		testObjStore = new BasexTestObjectDao();
-		logger.info(this.getClass().getName() + " initialized!");
+		testObjDao = ((WriteDao<TestObjectDto>) dataStorageService.getDao(TestObjectDto.class));
+		logger.info("Test Object controller initialized!");
+	}
+
+	@Override
+	public void removeExpiredItems(final long l, final TimeUnit timeUnit) {
+		// todo
 	}
 
 	private class HiddenFileFilter implements FileFilter {
@@ -125,12 +128,12 @@ public class TestObjectController {
 		}
 	}
 
-	TestObjectDao getTestObjStore() {
-		return testObjStore;
+	Collection<TestObjectDto> getTestObjects() throws StorageException {
+		return testObjDao.getAll(null).asCollection();
 	}
 
-	Collection<TestObjectDto> getTestObjects() throws StoreException {
-		return testObjStore.getAll();
+	TestObjectDto getTestObjectById(final EID id) throws StorageException, ObjectWithIdNotFoundException {
+		return testObjDao.getById(id).getDto();
 	}
 
 	private String showCreateWebservice(Model model, TestObjectDto dto) {
@@ -165,33 +168,37 @@ public class TestObjectController {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	@RequestMapping(value = "/testobjects", method = RequestMethod.GET)
-	public String overview(Model model) throws StoreException, ConfigurationException {
+	public String overview(Model model) throws StorageException, ConfigurationException {
 
-		final Map<EID, TestObjectResourceType> resTypes = taskFactory.getTestObjectResourceTypes();
-		if (resTypes != null) {
-			model.addAttribute("resourceSchemes", resTypes.values().parallelStream().map(TestObjectResourceType::getUriScheme).collect(Collectors.toSet()));
-		}
+		model.addAttribute("testObjectTypes", testDriverService.getTestObjectTypes());
 		model.addAttribute("testObjects", getTestObjects());
+
 		return "testobjects/overview";
+	}
+
+	private TestObjectDto createTestObjectDto() {
+		final TestObjectDto dto = new TestObjectDto();
+		dto.setId(EidFactory.getDefault().createRandomId());
+		dto.properties();
+		dto.setResources(new HashMap<>());
+		return dto;
 	}
 
 	@RequestMapping(value = "/testobjects/create-http-to", method = RequestMethod.GET)
 	public String createWebserviceTo(Model model) {
-		return showCreateWebservice(model,
-				new TestObjectDtoBuilder().setId(EidFactory.getDefault().createRandomUuid()).setType(TestObject.TestObjectType.EXECUTABLE).setProperties(new Properties()).setResources(new ModelItemDefaultMap<TestObjectResource>()).createTestObjectDto());
+		return showCreateWebservice(model, createTestObjectDto());
 	}
 
 	@RequestMapping(value = "/testobjects/create-file-to", method = RequestMethod.GET)
 	public String createFileTo(Model model) {
-		return showCreateDoc(model,
-				new TestObjectDtoBuilder().setId(EidFactory.getDefault().createRandomUuid()).setType(TestObject.TestObjectType.TEXT).setProperties(new Properties()).setResources(new ModelItemDefaultMap<TestObjectResource>()).createTestObjectDto());
+
+		return showCreateDoc(model, createTestObjectDto());
 	}
 
 	@RequestMapping(value = "/testobjects/{id}/delete", method = RequestMethod.GET)
-	public String delete(@PathVariable EID id) throws StoreException, ObjectWithIdNotFoundException {
-
-		this.testObjStore.delete(id);
-
+	public String delete(@PathVariable String _id) throws StorageException, ObjectWithIdNotFoundException {
+		final EID id = WebAppUtils.toEid(_id);
+		this.testObjDao.delete(id);
 		return "redirect:/testobjects";
 	}
 
@@ -201,13 +208,12 @@ public class TestObjectController {
 			@ModelAttribute("testObject") @Valid TestObjectDto testObject,
 			BindingResult result,
 			MultipartHttpServletRequest request,
-			Model model) throws IOException, URISyntaxException, StoreException, ParseException, NoSuchAlgorithmException {
+			Model model) throws IOException, URISyntaxException, StorageException, ParseException, NoSuchAlgorithmException {
 		if (result.hasErrors()) {
 			return showCreateWebservice(model, testObject);
 		}
 
-		final VersionDataDto vd = new VersionDataDto();
-		final URI serviceEndpoint = testObject.getResourceById("serviceEndpoint");
+		final URI serviceEndpoint = testObject.getResourceByName("serviceEndpoint");
 		final String hash;
 		try {
 			if (etfConfig.getProperty("etf.testobject.allow.privatenet.access").equals("false")) {
@@ -218,18 +224,19 @@ public class TestObjectController {
 				}
 			}
 			hash = UriUtils.hashFromContent(serviceEndpoint,
-					Credentials.fromProperties(testObject.getProperties()));
+					Credentials.fromProperties(testObject.properties()));
 		} catch (IllegalArgumentException | IOException e) {
 			result.reject("l.invalid.url", new Object[]{e.getMessage()},
 					"The URL is unaccessible: {0}");
 			return showCreateWebservice(model, testObject);
 		}
 
-		vd.setItemHash(hash.getBytes());
-		testObject.setVersionData(vd);
-		testObject.setId(EidFactory.getDefault().createRandomUuid());
+		testObject.setItemHash(hash.getBytes());
+		testObject.setVersionFromStr("1.0.0");
+		testObject.setCreationDateNow();
+		testObject.setId(EidFactory.getDefault().createRandomId());
 
-		testObjStore.create(testObject);
+		testObjDao.add(testObject);
 
 		return "redirect:/testobjects";
 	}
@@ -252,7 +259,7 @@ public class TestObjectController {
 			@ModelAttribute("testObject") @Valid TestObjectDto testObject,
 			BindingResult result,
 			MultipartHttpServletRequest request,
-			Model model) throws IOException, URISyntaxException, StoreException, ParseException, NoSuchAlgorithmException {
+			Model model) throws IOException, URISyntaxException, StorageException, ParseException, NoSuchAlgorithmException {
 		if (SUtils.isNullOrEmpty(testObject.getLabel())) {
 			throw new IllegalArgumentException("Label is empty");
 		}
@@ -262,7 +269,7 @@ public class TestObjectController {
 		}
 
 		final GmlAndXmlFilter filter;
-		final String regex = testObject.getProperty("regex");
+		final String regex = testObject.properties().getProperty("regex");
 		if (regex != null && !regex.isEmpty()) {
 			filter = new GmlAndXmlFilter(new RegexFileFilter(regex));
 		} else {
@@ -302,7 +309,7 @@ public class TestObjectController {
 					try {
 						testObjectDir.delete();
 					} catch (Exception de) {
-						ExcUtils.supress(de);
+						ExcUtils.suppress(de);
 					}
 					result.reject("l.decompress.failed", new Object[]{e.getMessage()},
 							"Unable to decompress file: {0}");
@@ -315,21 +322,20 @@ public class TestObjectController {
 				// Move XML to test directory
 				testObjFile.copyTo(testObjectDir.getPath() + File.separator + multipartFile.getOriginalFilename());
 			}
-			testObject.addResource("data", testObjectDir.toURI());
-			testObject.getProperties().setProperty("uploaded", "true");
+			testObject.addResource(new ResourceDto("data", testObjectDir.toURI()));
+			testObject.properties().setProperty("uploaded", "true");
 		} else {
-			final URI resURI = testObject.getResourceById("data");
+			final URI resURI = testObject.getResourceByName("data");
 			if (resURI == null) {
-				throw new StoreException("Workflow error. Data path resource not set.");
+				throw new StorageException("Workflow error. Data path resource not set.");
 			}
 			final IFile absoluteTestObjectDir = testDataDir.secureExpandPathDown(
 					resURI.getPath());
 			testObject.getResources().clear();
-			testObject.getResources().put(EidFactory.getDefault().createFromStrAsStr("data"),
-					absoluteTestObjectDir.toURI());
+			testObject.addResource(new ResourceDto("data", absoluteTestObjectDir.toURI()));
 
 			// Check if file exists
-			final IFile sourceDir = new IFile(new File(testObject.getResourceById("data")));
+			final IFile sourceDir = new IFile(new File(testObject.getResourceByName("data")));
 			try {
 				sourceDir.expectDirIsReadable();
 			} catch (Exception e) {
@@ -337,11 +343,11 @@ public class TestObjectController {
 						"Insufficient rights to read directory: {0}");
 				return showCreateDoc(model, testObject);
 			}
-			testObject.getProperties().setProperty("uploaded", "false");
+			testObject.properties().setProperty("uploaded", "false");
 		}
 
 		final FileHashVisitor v = new FileHashVisitor(filter);
-		Files.walkFileTree(new File(testObject.getResourceById("data")).toPath(),
+		Files.walkFileTree(new File(testObject.getResourceByName("data")).toPath(),
 				EnumSet.of(FileVisitOption.FOLLOW_LINKS), 5, v);
 
 		if (v.getFileCount() == 0) {
@@ -354,16 +360,19 @@ public class TestObjectController {
 			}
 			return showCreateDoc(model, testObject);
 		}
-		VersionDataDto vd = new VersionDataDto();
-		vd.setItemHash(v.getHash());
-		testObject.getProperties().setProperty("files", String.valueOf(v.getFileCount()));
-		testObject.getProperties().setProperty("size", String.valueOf(v.getSize()));
-		testObject.getProperties().setProperty("sizeHR", FileUtils.byteCountToDisplaySize(v.getSize()));
-		testObject.setVersionData(vd);
+		testObject.setItemHash(v.getHash());
+		testObject.properties().setProperty("files", String.valueOf(v.getFileCount()));
+		testObject.properties().setProperty("size", String.valueOf(v.getSize()));
+		testObject.properties().setProperty("sizeHR", FileUtils.byteCountToDisplaySize(v.getSize()));
+		testObject.setVersionFromStr("1.0.0");
+		testObject.setCreationDateNow();
+		testObject.setRemoteResource(URI.create("http://nowhere"));
+		testObject.setLocalPath(".");
+		testObject.setAuthor("etf");
 
-		testObject.setId(EidFactory.getDefault().createRandomUuid());
+		testObject.setId(EidFactory.getDefault().createRandomId());
 
-		testObjStore.create(testObject);
+		testObjDao.add(testObject);
 
 		return "redirect:/testobjects";
 	}
@@ -373,12 +382,23 @@ public class TestObjectController {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	@RequestMapping(value = "/rest/testobjects/{name}}", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody TestObjectDto get(@PathVariable String name) throws StoreException, ObjectWithIdNotFoundException {
-		return testObjStore.getDtoByName(name);
+	public @ResponseBody TestObjectDto get(@PathVariable String _id) throws StorageException, ObjectWithIdNotFoundException {
+		final EID id = WebAppUtils.toEid(_id);
+		return testObjDao.getById(id).getDto();
 	}
 
 	@RequestMapping(value = "/rest/testobjects", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Collection<TestObjectDto> list() throws StoreException {
-		return getTestObjects();
+	public @ResponseBody Collection<TestObjectDto> list() throws StorageException {
+		return testObjDao.getAll(new Filter() {
+			@Override
+			public int offset() {
+				return 0;
+			}
+
+			@Override
+			public int limit() {
+				return 1000;
+			}
+		}).asCollection();
 	}
 }

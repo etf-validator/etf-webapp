@@ -45,27 +45,25 @@
 
             <div th:if="${p.description != null and not #strings.isEmpty(p.description) }">
                 <h3><span th:text="#{l.Description}">Description</span>:</h3>
-                <span th:text="${p.description}">description</span>
+                <span th:utext="${p.description}">description</span>
             </div>
 
-            <div class="testRunProperties" th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).hasTestRunParams(p)}">
+            <!--div class="testRunProperties" th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).hasTestRunParams(p)}">
                 <h3><span th:text="#{l.Parameters}">Parameters</span>:</h3>
                 <ul th:each="prop: ${T(de.interactive_instruments.etf.webapp.helpers.View).getTestRunParams(p)}">
                     <li>
                         <div class="property">
-                            <span class="propertyKey" th:text="${prop.key}">Parameter</span>
+                            <span class="propertyKey" th:text="${prop[0]}">Parameter</span>
                         </div>
                     </li>
                 </ul>
-            </div>
+            </div-->
 
-            <div class="metaProperties" th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).hasMetaDataProperties(p)}">
-                <h3><span th:text="#{l.Additional.properties}">Addditional properties</span>:</h3>
-                <ul th:each="prop: ${T(de.interactive_instruments.etf.webapp.helpers.View).getMetaDataProperties(p)}">
+            <div class="tags" th:if="${not #lists.isEmpty(p.tags)}">
+                <h3><span th:text="#{l.Tags}">Tags</span>:</h3>
+                <ul th:each="tag: ${p.tags}">
                     <li>
-                        <div class="property">
-                            <span class="propertyKey" th:text="${prop.key}">KEY</span>: <span class="propertyValue" th:text="${prop.value}">Value</span>
-                        </div>
+                        <span class="Tag" th:text="${tag.label}">Tag label</span>
                     </li>
                 </ul>
             </div>
@@ -89,12 +87,12 @@
         var testprojectlistviewItems = testprojectlistview.children('li');
 
         testprojectlistviewItems.detach().sort(function (a, b) {
-            var aData = $(a).find('.propertyKey:contains("TestDomain")').next('.propertyValue');
+            var aData = $(a).find('.Tag');
             var aText = "";
             if ( aData.length ) {
                 aText = aData.text();
             }
-            var bData = $(b).find('.propertyKey:contains("TestDomain")').next('.propertyValue');
+            var bData = $(b).find('.Tag');
             var bText = "";
             if ( bData.length ) {
                 bText = bData.text();
@@ -106,7 +104,7 @@
         $('#testprojectlistview').listview({
             autodividers: true,
             autodividersSelector: function (li) {
-                var testDomain = $(li).find('.propertyKey:contains("TestDomain")').next('.propertyValue');
+                var testDomain = $(li).find('.Tag');
                 console.log(testDomain);
                 if ( testDomain.length ) {
                     return testDomain.text();

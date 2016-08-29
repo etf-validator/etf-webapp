@@ -15,7 +15,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.22'
+        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.23'
         classpath "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
     }
     dependencies {
@@ -44,15 +44,16 @@ dependencies {
 
     compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.7.0-4'
 
-    compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'1.2.6'+project.snapshotSuffix
-    compile group: 'de.interactive_instruments.etf', name: 'etf-model', version:'0.5.8'+project.snapshotSuffix
-    compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version:'1.0.8.1'+project.snapshotSuffix
+    compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'2.0.0'+project.snapshotSuffix
+    compile group: 'de.interactive_instruments.etf', name: 'etf-core', version:'1.0.0'+project.snapshotSuffix
+    compile group: 'de.interactive_instruments.etf', name: 'etf-spi', version:'1.0.0'+project.snapshotSuffix
+
+    // TODO remove later, use SPI
+    compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version:'2.0.0'+project.snapshotSuffix
+
 
     compile group: 'xerces', name: 'xercesImpl', version: etf_xercesVersion
     compile group: 'xml-apis', name: 'xml-apis', version: etf_xmlApisVersion
-
-    compile group: 'xml-apis', name: 'xml-apis', version: etf_xmlApisVersion
-    compile group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: etf_jaxbVersion
 
 
     compile group: 'commons-logging', name: 'commons-logging', version:'1.1.1'
@@ -81,8 +82,6 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.3'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.3'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.3'
-
-    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.4.0'
 
     compile(group: 'org.springframework', name: 'spring-webmvc', version: springVersion ) {
         exclude(module: 'commons-logging')
@@ -121,6 +120,42 @@ dependencies {
     testCompile group: 'org.seleniumhq.selenium', name: 'selenium-firefox-driver', version:'2.46.0'
     testCompile group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version:'2.46.0'
     testCompile group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version:'2.46.0'
+
+    // API
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.5.0'
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.5.0'
+    // compile group: 'io.springfox', name: 'springfox-staticdocs', version: '2.4.0'
+
+
+
+    // !!! TODO TEMPORARY !!!
+
+    // Validator dependencies
+    compile('org.bouncycastle:bcprov-jdk15on:1.53')
+    compile('com.thoughtworks.xstream:xstream:1.4.8')
+    compile('dom4j:dom4j:1.6.1') {
+        exclude group: 'xml-apis'
+    }
+    compile('com.vividsolutions:jts:1.13')
+    compile('org.apache.httpcomponents:httpclient:4.5.1') {
+        exclude group: 'commons-logging'
+    }
+    compile('commons-io:commons-io:2.4')
+    compile('org.jdom:jdom:2.0.2') {
+        exclude group: 'xerces'
+        exclude group: 'xalan'
+    }
+    compile('jaxen:jaxen:1.1.6') {
+        exclude group: 'xerces'
+        exclude group: 'xml-apis'
+    }
+
+    compile('com.github.davidmoten:rtree:0.7.6')
+
+    compile group: 'com.vividsolutions', name: 'jts', version: '1.11'
+
+    // !!! TODO END TEMPORARY !!!
+
 }
 
 

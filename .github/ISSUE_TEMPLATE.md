@@ -4,7 +4,7 @@
 * [ ] Can you reproduce the problem
 * [ ] Did you [use the search](https://github.com/issues?utf8=✓&q=is%3Aissue+user%3Ainteractive-instruments) to see if your bug is already reported or has been resolved?
 * [ ] Upload excerpts of the etf.log, catalina.out/log and localhost-<date>.log files. Important parts are:
-  the initialization log entries beginning with the ETF ASCII logo and ending with "TestRunController initialized!" plus the last exception messages.
+the initialization log entries beginning with the ETF ASCII logo and ending with "TestRunController initialized!" plus the last exception messages.
 * [ ] If the problem relates to Web user interfaces issues: include screenshots
 * [ ] Don't forget to remove sensitive information from uploaded files!!!
 

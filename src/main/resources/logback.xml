@@ -6,7 +6,14 @@
 
     <!-- APPENDERS -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>etf.log</file>
+        <if condition='${ETF_DIR}'>
+            <then>
+                <file>${ETF_DIR}/etf.log</file>
+            </then>
+            <else>
+                <file>etf.log</file>
+            </else>
+        </if>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>etf-%d{yyyy-MM-dd}.%i.zip</fileNamePattern>
@@ -40,7 +47,23 @@
         <appender-ref ref="STD"/>
     </logger>
 
-    <if condition='property("spring.profiles.active").contains("dev")'>
+    <logger name="de.interactive_instruments.etf.testdriver.ComponentClassLoader" level="ERROR" additivity="false">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STD"/>
+    </logger>
+
+    <logger name="de.interactive_instruments.etf.dal.dao.basex.DtoCache" level="ERROR" additivity="false">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STD"/>
+    </logger>
+    <logger name="de.interactive_instruments.etf.dal.dao.basex.BsxDataStorage" level="DEBUG" additivity="false">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STD"/>
+    </logger>
+
+    <!-- TODO -->
+
+    <if condition='property("etf.environment").contains("dev")'>
         <then>
             <logger name="de.interactive_instruments.etf" level="DEBUG" additivity="false">
                 <appender-ref ref="FILE"/>
@@ -52,7 +75,8 @@
             </root>
         </then>
         <else>
-            <logger name="de.interactive_instruments.etf" level="INFO" additivity="false">
+            <!-- TODO -->
+            <logger name="de.interactive_instruments.etf" level="TRACE" additivity="false">
                 <appender-ref ref="FILE"/>
                 <appender-ref ref="STD"/>
             </logger>

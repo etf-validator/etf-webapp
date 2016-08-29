@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.jar.Manifest;
@@ -52,6 +51,7 @@ import de.interactive_instruments.properties.PropertyHolder;
 public class EtfConfigController implements PropertyHolder {
 
 	public static final String ETF_WEBAPP_BASE_URL = "etf.webapp.base.url";
+	public static final String ETF_API_BASE_URL = "etf.api.base.url";
 	public static final String ETF_BRANDING_TEXT = "etf.branding.text";
 	public static final String ETF_TESTOBJECT_ALLOW_PRIVATENET_ACCESS = "etf.testobject.allow.privatenet.access";
 	// in minutes
@@ -101,7 +101,7 @@ public class EtfConfigController implements PropertyHolder {
 			put(EtfConstants.ETF_REPORTSTYLES_DIR, "reportstyles");
 			put(EtfConstants.ETF_TESTDRIVERS_DIR, "td");
 			put(EtfConstants.ETF_DATASOURCE_DIR, "ds");
-			put(EtfConstants.ETF_APPENDICES_DIR, "ds/obj/");
+			put(EtfConstants.ETF_ATTACHMENT_DIR, "ds/attachments/");
 			put(EtfConstants.ETF_BACKUP_DIR, "bak");
 			put(ETF_TESTDATA_DIR, "testdata");
 			put(ETF_TESTDATA_UPLOAD_DIR, "http_uploads");
@@ -113,11 +113,10 @@ public class EtfConfigController implements PropertyHolder {
 		{
 			add(EtfConstants.ETF_PROJECTS_DIR);
 			add(EtfConstants.ETF_REPORTSTYLES_DIR);
-			add(EtfConstants.ETF_APPENDICES_DIR);
+			add(EtfConstants.ETF_ATTACHMENT_DIR);
 			add(EtfConstants.ETF_TESTDRIVERS_DIR);
 			add(EtfConstants.ETF_DATASOURCE_DIR);
 			add(EtfConstants.ETF_BACKUP_DIR);
-			add(ETF_TESTDATA_DIR);
 			add(ETF_TESTDATA_DIR);
 			add(ETF_TESTDATA_UPLOAD_DIR);
 		}
@@ -156,7 +155,7 @@ public class EtfConfigController implements PropertyHolder {
 		if (propertyFileVersion == null) {
 			throw new RuntimeException("Required \"etf.config.properties.version\" property not found!");
 		}
-		if (!"1".equals(propertyFileVersion)) {
+		if (!"2".equals(propertyFileVersion)) {
 			throw new RuntimeException("Config Property file version not supported");
 		}
 
@@ -210,6 +209,15 @@ public class EtfConfigController implements PropertyHolder {
 			logger.info(
 					"Report translation file is not available for language \"" + lang + "\" - using default");
 		}
+
+		final String apiBaseUrl = configProperties.getProperty(ETF_API_BASE_URL);
+		if (SUtils.isNullOrEmpty(apiBaseUrl)) {
+			configProperties.setProperty(ETF_API_BASE_URL, configProperties.getProperty(ETF_WEBAPP_BASE_URL) + "/v2");
+		}
+
+		// Add default properties
+		defaultProperties.entrySet().forEach(p -> configProperties.putIfAbsent(p.getKey(), p.getValue()));
+
 		configProperties.forEach((k, v) -> {
 			logger.info(k + " = " + v);
 		});
@@ -283,7 +291,7 @@ public class EtfConfigController implements PropertyHolder {
 	@RequestMapping(value = "/v0/configuration", method = RequestMethod.POST, produces = "application/json")
 	private @ResponseBody Set<Map.Entry<String, String>> getConfiguration(
 			@RequestBody Set<Map.Entry<String, String>> newConfiguration)
-					throws InvalidPropertyException {
+			throws InvalidPropertyException {
 
 		// No path properties are allowed
 		for (Map.Entry<String, String> e : newConfiguration) {

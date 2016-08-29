@@ -42,16 +42,21 @@
 
 <div id="reportList">
     <ul data-role="listview" data-inset="true" class="ui-listview-outer" data-filter="true">
-        <div data-role="collapsible" data-iconpos="right" data-shadow="false" data-corners="false" th:each="r : ${reports}">
+        <div data-role="collapsible" data-iconpos="right" data-shadow="false" data-corners="false" th:each="r : ${testRuns}">
             <h2 th:text="${r.label}">Item</h2>
 
-            <p><span th:text="#{l.Started}" >Started</span>: <span th:text="${#dates.format(r.startTimestamp, 'HH:mm dd.MM.yyyy')}">TIMESTAMP</span></p>
-            <p><span th:if="${r.testObject != null}" th:text="#{l.Used.testobject}"></span>: <span th:text="${r.testObject.label}">label</span></p>
-            <p th:if="${r.isFinalized() != true}"><span th:text="#{l.Report.not.finished}"></span></p>
+            <p><span th:text="#{l.Started}" >Started</span>: <span th:text="${#dates.format(r.startTimestamp, 'yyyy-MM-dd HH:mm')}">TIMESTAMP</span></p>
+
+            <p><span th:if="${r.testTasks != null and r.testTasks[0].testObject != null}" th:text="#{l.Used.testobject}"></span>: <span th:text="${r.testTasks[0].testObject.label}">label</span></p>
+            <p><span th:text="#{l.Used.executableTestSuites}"></span>: </p>
+            <ul th:each="t : ${r.testTasks}">
+                <li th:if="${t.executableTestSuite != null}"><span th:text="${t.executableTestSuite.label}">label</span></li>
+            </ul>
+
             <p>
-                <a th:if="${r.isFinalized() == true}" data-icon="eye" data-role="button" data-inline="true" data-mini="true" href="#" data-ajax="false" th:href="@{'/reports/' + ${r.id}}" th:text="#{l.open.report}">Open report</a>
-                <a th:if="${r.isFinalized() == true}" data-icon="arrow-d-r" data-role="button" data-inline="true" data-mini="true" href="#" data-ajax="false" th:href="@{'/reports/' + ${r.id} + '?download=true'}" th:text="#{l.download.report}">Download report</a>
-                <a data-role="button" data-icon="info" data-inline="true" data-mini="true" href="#" data-ajax="false" th:href="@{'/reports/' + ${r.id} + '/appendices/' + ${r.id} }" th:text="#{l.open.log}">Open log</a>
+                <a data-icon="eye" data-role="button" data-inline="true" data-mini="true" href="#" data-ajax="false" th:href="@{'/reports/' + ${r.id}}" th:text="#{l.open.report}">Open report</a>
+                <a data-icon="arrow-d-r" data-role="button" data-inline="true" data-mini="true" href="#" data-ajax="false" th:href="@{'/reports/' + ${r.id} + '?download=true'}" th:text="#{l.download.report}">Download report</a>
+                <a data-role="button" data-icon="info" data-inline="true" data-mini="true" href="#" data-ajax="false" th:href="@{'/v2/TestResults/' + ${r.id} + '/log' }" th:text="#{l.open.log}">Open log</a>
                 <a class="delete-button-tr" data-icon="delete" data-role="button" data-inline="true" data-mini="true" href="#" th:href="@{'/reports/' + ${r.id} + '/delete'}" th:text="#{l.delete.report}">Delete report</a>
             </p>
         </div>

@@ -13,25 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.etf.webapp.dto;
+package de.interactive_instruments.etf.webapp.controller;
 
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
-
-public class TestRunValidator implements Validator {
-
-	@Override
-	public boolean supports(Class<?> clasz) {
-		// return TestRunDto.class.isAssignableFrom(clasz);
-		return true;
-	}
-
-	@Override
-	public void validate(Object target, Errors errors) {
-
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "label",
-				"l.enter.label", "Please enter a label!");
-	}
+/**
+ * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ */
+public class EtfObjectMapperConfig {
 
 }

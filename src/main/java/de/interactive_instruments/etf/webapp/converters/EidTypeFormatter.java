@@ -13,25 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.etf.webapp.dto;
+package de.interactive_instruments.etf.webapp.converters;
 
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
+import java.text.ParseException;
+import java.util.Locale;
 
-public class TestRunValidator implements Validator {
+import org.springframework.format.Formatter;
+
+import de.interactive_instruments.etf.model.EID;
+import de.interactive_instruments.etf.model.EidFactory;
+
+/**
+ * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ */
+public final class EidTypeFormatter implements Formatter<EID> {
 
 	@Override
-	public boolean supports(Class<?> clasz) {
-		// return TestRunDto.class.isAssignableFrom(clasz);
-		return true;
+	public EID parse(final String text, final Locale locale) throws ParseException {
+		return EidFactory.getDefault().createUUID(text);
 	}
 
 	@Override
-	public void validate(Object target, Errors errors) {
-
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "label",
-				"l.enter.label", "Please enter a label!");
+	public String print(final EID eid, final Locale locale) {
+		return eid.getId();
 	}
 
 }

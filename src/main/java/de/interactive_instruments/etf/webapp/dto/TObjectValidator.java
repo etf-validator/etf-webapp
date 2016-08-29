@@ -22,7 +22,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import de.interactive_instruments.etf.dal.dto.plan.TestObjectDto;
+import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 
 public class TObjectValidator implements Validator {
 	@Override
@@ -39,7 +39,7 @@ public class TObjectValidator implements Validator {
 
 		final TestObjectDto to = (TestObjectDto) target;
 
-		final String regex = to.getProperties().getProperty("regex");
+		final String regex = to.properties().getProperty("regex");
 		if (regex != null && !regex.isEmpty()) {
 
 			try {
@@ -50,7 +50,7 @@ public class TObjectValidator implements Validator {
 				try {
 					Pattern.compile(regex);
 					// Set the usable pattern
-					to.getProperties().setProperty("regex", quotedRegex);
+					to.properties().setProperty("regex", quotedRegex);
 				} catch (PatternSyntaxException eQuoted) {
 					// Throw the unquoted error message
 					errors.reject("l.invalid.regex", new Object[]{e.getMessage()},

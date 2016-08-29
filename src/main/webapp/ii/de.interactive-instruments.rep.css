@@ -1,59 +1,20 @@
-.ui-tooltip, .arrow:after {
-    background: black;
-    border: 2px solid white;
-}
-.ui-tooltip {
-    padding: 10px 20px;
-    color: white;
-    border-radius: 20px;
-    text-transform: uppercase;
-    box-shadow: 0 0 7px black;
-}
-.arrow {
-    width: 70px;
-    height: 16px;
-    overflow: hidden;
-    position: absolute;
-    left: 50%;
-    margin-left: -35px;
-    bottom: -16px;
-}
-.arrow.top {
-    top: -16px;
-    bottom: auto;
-}
-.arrow.left {
-    left: 20%;
-}
-.arrow:after {
-    content: "";
-    position: absolute;
-    left: 20px;
-    top: -20px;
-    width: 25px;
-    height: 25px;
-    box-shadow: 6px 5px 9px -9px black;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-}
-.arrow.top:after {
-    bottom: -20px;
-    top: auto;
-}
-
-
+<!--/*--><root><![CDATA[<!--*/-->
 #rprtStatistics table {
 }
 
 #rprtStatistics td:not(:first-child) {
-    text-align:center; 
-    vertical-align:middle;
+    text-align:center;
+    vertical-align:top;
 }
 
-td:first-child { 
-    text-align:left; 
-    font-weight:bold; 
+td, th {
+    text-align:left;
+    vertical-align:top;
+    font-size: 90%;
+}
+
+td:first-child {
+    font-weight:bold;
 }
 
 
@@ -65,16 +26,16 @@ td:first-child {
 
 }
 
-#rprtAdditionalStatistics td:first-child { 
-    text-align:left; 
+#rprtAdditionalStatistics td:first-child {
+    text-align:left;
     font-weight:normal;
 }
 
-#rprtAdditionalStatistics td, #rprtAdditionalStatistics th { 
-    text-align:left; 
-    padding-right: 45px;
+#rprtAdditionalStatistics td,th {
+    text-align:left;
+    vertical-align:top;
 }
-#rprtAdditionalStatistics td { 
+#rprtAdditionalStatistics td {
     font-weight:normal;
 }
 
@@ -84,7 +45,7 @@ td:first-child {
 
 #rprtAdditionalStatistics tbody tr:hover {
     background-color: #3388cc;
-        color:#ffffff;
+    color:#ffffff;
     text-shadow: 1px 2px #000000;
     box-shadow: 0px 0px 10px #ff0000;
 }
@@ -112,7 +73,7 @@ td:first-child {
 }
 
 .UrlReferenceContainer a {
-    
+
 }
 
 .RequirementTH {
@@ -124,7 +85,13 @@ td:first-child {
     background-color: #e63531 !important;
 }
 
+.ui-header .ui-title {
+    overflow:auto !important;
+    white-space:normal !important;
+}
+
 .AssertionsContainer {
     padding-top: 15px;
     padding-bottom: 30px;
 }
+<!--/*-->]]></root><!--*/-->

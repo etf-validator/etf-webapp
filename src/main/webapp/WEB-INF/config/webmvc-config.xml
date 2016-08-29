@@ -19,7 +19,12 @@
     </mvc:annotation-driven>
 
 	<mvc:resources mapping="/resources/**" location="/, classpath:/META-INF/web-resources/" />
-	<mvc:default-servlet-handler />
+    <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+
+    <bean name="/applicationSwaggerConfig" class="de.interactive_instruments.etf.webapp.SwaggerConfig"/>
+
+    <mvc:default-servlet-handler />
 
     <!-- Root page -->
 	<mvc:view-controller path="/" view-name="testruns/status" />
@@ -72,6 +77,17 @@
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="messages" />
         <property name="defaultEncoding" value="UTF-8" />
+    </bean>
+
+    <!-- EID conversion -->
+
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="formatterRegistrars">
+            <set>
+                <bean id="webAppFormatterRegistrar" class="de.interactive_instruments.etf.webapp.converters.WebAppFormatterRegistrar">
+                </bean>
+            </set>
+        </property>
     </bean>
 
 </beans>

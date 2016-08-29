@@ -13,25 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.interactive_instruments.etf.webapp.dto;
+package de.interactive_instruments.etf.webapp;
 
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class TestRunValidator implements Validator {
-
-	@Override
-	public boolean supports(Class<?> clasz) {
-		// return TestRunDto.class.isAssignableFrom(clasz);
-		return true;
-	}
-
-	@Override
-	public void validate(Object target, Errors errors) {
-
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "label",
-				"l.enter.label", "Please enter a label!");
-	}
-
-}
+/**
+ * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface EtfWebApi {}
