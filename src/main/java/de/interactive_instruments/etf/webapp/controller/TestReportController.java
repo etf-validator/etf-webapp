@@ -306,7 +306,7 @@ public class TestReportController {
 
 	public void storeTestRun(final TestRunDto testRunDto) throws StorageException {
 		// create copy and remove test task result ids
-		final TestRunDto dto = new TestRunDto(testRunDto);
+		final TestRunDto dto = testRunDto.createCopy();
 		if (dto.getTestTasks() != null) {
 			for (final TestTaskDto testTaskDto : dto.getTestTasks()) {
 				testTaskDto.setTestTaskResult(null);
