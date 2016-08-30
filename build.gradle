@@ -40,21 +40,37 @@ ext.springVersion = "4.2.5.RELEASE"
 configurations {
     compile.exclude group:'xalan'
 }
+
+repositories {
+    maven {
+        url "http://files.basex.org/maven"
+    }
+    maven {
+        url "https://services.interactive-instruments.de/etfdev-af/ext-deegree-cache"
+        credentials {
+            username gradle.rootProject.ext.r_user
+            password gradle.rootProject.ext.r_pwd
+        }
+    }
+}
+
 dependencies {
 
     compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.7.0-4'
 
-    compile group: 'de.interactive_instruments', name: 'ii-commons-util', version:'2.0.0'+project.snapshotSuffix
-    compile group: 'de.interactive_instruments.etf', name: 'etf-core', version:'1.0.0'+project.snapshotSuffix
-    compile group: 'de.interactive_instruments.etf', name: 'etf-spi', version:'1.0.0'+project.snapshotSuffix
+    compile group: 'de.interactive_instruments', name: 'ii-commons-util', version: '2.0.0' + project.snapshotSuffix
+    compile group: 'de.interactive_instruments.etf', name: 'etf-core', version: '1.0.0' + project.snapshotSuffix
+    compile group: 'de.interactive_instruments.etf', name: 'etf-spi', version: '1.0.0' + project.snapshotSuffix
 
     // TODO remove later, use SPI
-    compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version:'2.0.0'+project.snapshotSuffix
+    compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version: '2.0.0' + project.snapshotSuffix
 
-
-    compile group: 'xerces', name: 'xercesImpl', version: etf_xercesVersion
-    compile group: 'xml-apis', name: 'xml-apis', version: etf_xmlApisVersion
-
+    compile("xerces:xercesImpl:"+etf_xercesVersion){
+        force = true
+    }
+    compile("xml-apis:xml-apis:"+etf_xmlApisVersion){
+        force = true
+    }
 
     compile group: 'commons-logging', name: 'commons-logging', version:'1.1.1'
     compile group: 'commons-codec', name: 'commons-codec', version: etf_commonsCodecVersion
@@ -127,13 +143,17 @@ dependencies {
     // compile group: 'io.springfox', name: 'springfox-staticdocs', version: '2.4.0'
 
 
+    ext.deegreeVersion = '3.3.17'
+
 
     // !!! TODO TEMPORARY !!!
 
     // Validator dependencies
+
     compile('org.bouncycastle:bcprov-jdk15on:1.53')
     compile('com.thoughtworks.xstream:xstream:1.4.8')
     compile('dom4j:dom4j:1.6.1') {
+        exclude group: 'xerces'
         exclude group: 'xml-apis'
     }
     compile('com.vividsolutions:jts:1.13')
@@ -149,10 +169,27 @@ dependencies {
         exclude group: 'xerces'
         exclude group: 'xml-apis'
     }
-
+    compile('org.apache.santuario:xmlsec:2.0.5') {
+        exclude group: 'org.slf4j'
+    }
+    compile("org.deegree:deegree-core-cs:$deegreeVersion") {
+        exclude group: 'org.postgis'
+        exclude group: 'postgresql'
+        exclude group: 'commons-logging'
+        exclude group: 'log4j'
+    }
+    compile("org.deegree:deegree-core-base:$deegreeVersion") {
+        exclude group: 'org.slf4j'
+        exclude group: 'xerces'
+        exclude group: 'xml-apis'
+        exclude group: 'com.h2database'
+        exclude group: 'org.postgis'
+        exclude group: 'postgresql'
+        exclude group: 'commons-logging'
+    }
     compile('com.github.davidmoten:rtree:0.7.6')
-
-    compile group: 'com.vividsolutions', name: 'jts', version: '1.11'
+    compile 'com.github.ben-manes.caffeine:caffeine:2.3.1'
+    compile('org.apache.commons:commons-jcs-core:2.0-beta-1')
 
     // !!! TODO END TEMPORARY !!!
 
