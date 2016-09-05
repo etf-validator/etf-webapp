@@ -33,6 +33,7 @@ import javax.validation.Valid;
 
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 
+import de.interactive_instruments.etf.model.EID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,24 +89,10 @@ public class TestRunController implements TestRunEventListener {
 
 	public static final String TESTRUNS_CREATE_QUICK = "testruns/create-direct";
 
-	/*
-	@InitBinder
-	private void initBinder(WebDataBinder binder) {
-		binder.setValidator(new TestRunValidator());
-	}
-	*/
-
 	public final static int MAX_PARALLEL_RUNS = Runtime.getRuntime().availableProcessors();
 
 	private final TaskPoolRegistry<TestRunDto> taskPoolRegistry = new TaskPoolRegistry<>(MAX_PARALLEL_RUNS, MAX_PARALLEL_RUNS);
-	// private final ConsoleAppender ca;
-	private IFile tmpDir;
 	private final Logger logger = LoggerFactory.getLogger(TestRunController.class);
-
-	// Map for transferring the dtos between the controller steps
-	private final ConcurrentMap<UUID, Object> transferDTO = new ConcurrentLinkedHashMap.Builder<UUID, Object>()
-			.maximumWeightedCapacity(10)
-			.build();
 
 	public TestRunController() {}
 
@@ -425,6 +412,11 @@ public class TestRunController implements TestRunEventListener {
 		}
 		*/
 		return "testruns/show";
+	}
+
+	Set<EID> getTestRunIds() {
+		return taskPoolRegistry.getTasks().stream().map(
+				TaskWithProgress::getId).collect(Collectors.toSet());
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)

@@ -283,12 +283,12 @@ public class EtfConfigController implements PropertyHolder {
 	// Rest interfaces
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@RequestMapping(value = "/v0/configuration", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/v2/configuration", method = RequestMethod.GET, produces = "application/json")
 	private @ResponseBody Set<Map.Entry<String, String>> getConfiguration() {
 		return namePropertyPairs();
 	}
 
-	@RequestMapping(value = "/v0/configuration", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/v2/configuration", method = RequestMethod.POST, produces = "application/json")
 	private @ResponseBody Set<Map.Entry<String, String>> getConfiguration(
 			@RequestBody Set<Map.Entry<String, String>> newConfiguration)
 			throws InvalidPropertyException {

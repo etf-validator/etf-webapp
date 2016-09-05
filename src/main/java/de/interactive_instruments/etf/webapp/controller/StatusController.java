@@ -160,7 +160,7 @@ public class StatusController {
 
 	// @PreAuthorize("#oauth2.clientHasRole('ROLE_ADMIN')")
 	@ApiOperation(value = "Get extended service status", tags = {"Service Status"})
-	@RequestMapping(value = "/v0/status", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/v2/status", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Map<String, Object> getStatus() {
 		return serviceStatus.get();
 	}

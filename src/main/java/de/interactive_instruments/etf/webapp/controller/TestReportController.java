@@ -86,6 +86,9 @@ public class TestReportController {
 	@Autowired
 	DataStorageService dataStorageService;
 
+	@Autowired
+	TestRunController testRunController;
+
 	private IFile reportDir;
 	private IFile stylesheetFile;
 	private Dao<TestRunDto> testRunDao;
@@ -279,22 +282,8 @@ public class TestReportController {
 		// TODO tag filter
 
 		model.addAttribute("testRuns", this.testRunDao.getAll(FILTER_GET_ALL).asCollection());
-		/*
-		if (SUtils.isNullOrEmpty(testDomain)) {
-			model.addAttribute("reports", this.testRunDao.getAll(FILTER_GET_ALL).asCollection());
-		} else {
-			this.testRunDao.getAll(
+		model.addAttribute("runningTestRuns", testRunController.getTestRunIds());
 
-			List<TestReportDto> reports = new ArrayList<>();
-			this.store.getAll().forEach(p -> {
-				if (p != null && p.getTestObject() != null && p.getTestObject().getProperties() != null &&
-						Objects.equals(p.getTestObject().getProperties().getProperty(EtfConstants.ETF_TESTDOMAIN_PK), testDomain)) {
-					reports.add(p);
-				}
-			});
-			model.addAttribute("reports", reports);
-		}
-		*/
 		return "reports/overview";
 	}
 
