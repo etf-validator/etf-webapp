@@ -11,3 +11,6 @@ src/main/webapp/ii/*runtfile*
 src/main/webapp/ii/images
 build
 src/main/webapp/help
+etf-*.log
+etf-*.zip
+hs_err_pid*.log

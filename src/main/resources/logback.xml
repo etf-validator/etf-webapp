@@ -6,7 +6,7 @@
 
     <!-- APPENDERS -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <if condition='${ETF_DIR}'>
+        <if condition='isDefined("ETF_DIR")'>
             <then>
                 <file>${ETF_DIR}/etf.log</file>
             </then>
