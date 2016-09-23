@@ -79,7 +79,7 @@
 
         <div th:if="${simplifiedTestObjectType == 'data'}" id="uploadTestObj" data-role="fieldcontain">
             <label><span th:text="#{l.ZipOrXmlFile}" for="testObjFile">ZIP or XML file </span> <span class="question" help="maximum size: 500 Megabytes"> ?</span></label>
-            <input class="testObjectResourceInput" type="file" accept="application/zip,text/xml" id="testObjFile" name="testObjFile" />
+            <input class="testObjectResourceInput" type="file" accept="application/zip,text/xml,application/gml+xml,.gml" id="testObjFile" name="testObjFile" />
         </div>
 
         <!--div data-role="none" style="display:none;">
