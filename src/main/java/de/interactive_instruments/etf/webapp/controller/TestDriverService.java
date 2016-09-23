@@ -32,9 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.interactive_instruments.etf.component.ComponentInfo;
-import de.interactive_instruments.etf.component.ComponentNotLoadedException;
 import de.interactive_instruments.etf.dal.dao.Dao;
-import de.interactive_instruments.etf.dal.dao.DataStorage;
 import de.interactive_instruments.etf.dal.dao.Filter;
 import de.interactive_instruments.etf.dal.dto.IncompleteDtoException;
 import de.interactive_instruments.etf.dal.dto.capabilities.ComponentDto;
@@ -88,6 +86,7 @@ public class TestDriverService {
 		driverManager.getConfigurationProperties().setPropertiesFrom(etfConfig, true);
 		driverManager.getConfigurationProperties().setProperty(ETF_DATA_STORAGE_NAME, "default");
 		driverManager.init();
+		driverManager.loadAll();
 
 		etsDao = dataStorageService.getDataStorage().getDao(ExecutableTestSuiteDto.class);
 		testObjectTypesDao = dataStorageService.getDataStorage().getDao(TestObjectTypeDto.class);

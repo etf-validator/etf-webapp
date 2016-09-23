@@ -200,7 +200,7 @@ public class TestReportController {
 		return testRunDao.getById(WebAppUtils.toEid(id)).getDto();
 	}
 
-	@ApiOperation(value = "Get a Test Run log by ID", tags = {"Test Runs"})
+	@ApiOperation(value = "Get a Test Run log by ID", tags = {"Test Results"})
 	@RequestMapping(value = {TEST_RESULTS_URL + "/{id}/log"}, method = RequestMethod.GET)
 	public void testRunLog(@PathVariable String id, HttpServletResponse response) throws StorageException, IOException, ObjectWithIdNotFoundException {
 		final TestRunDto dto = testRunDao.getById(WebAppUtils.toEid(id)).getDto();

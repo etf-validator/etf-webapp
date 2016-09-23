@@ -33,7 +33,6 @@ import javax.validation.Valid;
 
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 
-import de.interactive_instruments.etf.model.EID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +54,7 @@ import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.etf.dal.dto.run.TestRunDto;
 import de.interactive_instruments.etf.dal.dto.run.TestTaskDto;
 import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
+import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.model.EidFactory;
 import de.interactive_instruments.etf.model.Parameterizable;
 import de.interactive_instruments.etf.testdriver.*;
@@ -91,7 +91,7 @@ public class TestRunController implements TestRunEventListener {
 
 	public final static int MAX_PARALLEL_RUNS = Runtime.getRuntime().availableProcessors();
 
-	private final TaskPoolRegistry<TestRunDto> taskPoolRegistry = new TaskPoolRegistry<>(MAX_PARALLEL_RUNS, MAX_PARALLEL_RUNS);
+	private final TaskPoolRegistry<TestRunDto, TestRun> taskPoolRegistry = new TaskPoolRegistry<>(MAX_PARALLEL_RUNS, MAX_PARALLEL_RUNS);
 	private final Logger logger = LoggerFactory.getLogger(TestRunController.class);
 
 	public TestRunController() {}
@@ -224,7 +224,7 @@ public class TestRunController implements TestRunEventListener {
 			BindingResult testObjectBindingResult,
 			RedirectAttributes redirectAttributes,
 			MultipartHttpServletRequest request,
-			Model model) throws IncompleteDtoException, URISyntaxException, StorageException, NoSuchAlgorithmException, ParseException, IOException, ObjectWithIdNotFoundException, ConfigurationException, ComponentLoadingException, TestRunInitializationException {
+			Model model) throws IncompleteDtoException, URISyntaxException, StorageException, NoSuchAlgorithmException, ParseException, IOException, ObjectWithIdNotFoundException, ConfigurationException, TestRunInitializationException {
 
 		final ExecutableTestSuiteDto executableTestSuite = testDriverService.getExecutableTestSuiteById(
 				WebAppUtils.toEid(request.getParameterMap().get("properties.asMap[etsId]")[0]));
@@ -267,7 +267,7 @@ public class TestRunController implements TestRunEventListener {
 
 	private TestRun initAndSubmit(TestRunDto testRunDto)
 			throws StorageException, ComponentNotLoadedException, ObjectWithIdNotFoundException,
-			ConfigurationException, InvalidStateTransitionException, InitializationException, ComponentLoadingException, TestRunInitializationException, IncompleteDtoException {
+			ConfigurationException, InvalidStateTransitionException, InitializationException, TestRunInitializationException, IncompleteDtoException {
 		final TestRun testRun = testDriverService.create(testRunDto);
 		if (testRun == null) {
 			throw new ConfigurationException("Unable to create a new test run task");
@@ -318,8 +318,8 @@ public class TestRunController implements TestRunEventListener {
 		}
 		// Set currently used test objects
 		final HashSet<String> blockedTestObjects = new HashSet<>();
-		for (final TaskWithProgress<TestRunDto> testRun : taskPoolRegistry.getTasks()) {
-			if (!testRun.getTaskProgress().getState().isCompletedFailedCanceledOrFinalizing()) {
+		for (final TestRun testRun : taskPoolRegistry.getTasks()) {
+			if (!testRun.getProgress().getState().isCompletedFailedCanceledOrFinalizing()) {
 				testRun.getResult().getTestTasks().forEach(task -> blockedTestObjects.add(task.getTestObject().getId().toString()));
 			}
 		}
@@ -338,7 +338,7 @@ public class TestRunController implements TestRunEventListener {
 	public synchronized String start(
 			@Valid @ModelAttribute("testRun") TestRunDto testRunDto, BindingResult result,
 			RedirectAttributes redirectAttributes,
-			Model model) throws ObjectWithIdNotFoundException, StorageException, ConfigurationException, TestRunInitializationException, IncompleteDtoException, ComponentLoadingException {
+			Model model) throws ObjectWithIdNotFoundException, StorageException, ConfigurationException, TestRunInitializationException, IncompleteDtoException {
 		if (result.hasErrors()) {
 			return configureModelAndRedirect(model);
 		}
@@ -354,8 +354,8 @@ public class TestRunController implements TestRunEventListener {
 		}
 
 		// Check if test object is already in usage
-		for (final TaskWithProgress<TestRunDto> testRun : taskPoolRegistry.getTasks()) {
-			if (!testRun.getTaskProgress().getState().isCompletedFailedCanceledOrFinalizing() &&
+		for (TestRun testRun : taskPoolRegistry.getTasks()) {
+			if (!testRun.getProgress().getState().isCompletedFailedCanceledOrFinalizing() &&
 					to.getId().equals(testRun.getResult().getTestObjects().get(0).getId())) {
 				logger.info("Rejecting test start, test object " +
 						to.getId() + " is in use");
@@ -390,7 +390,7 @@ public class TestRunController implements TestRunEventListener {
 
 	@RequestMapping(value = "/testruns/{id}", method = RequestMethod.GET)
 	public String show(@PathVariable String id, Model model) throws Exception {
-		TaskWithProgress<TestRunDto> testRun = null;
+		TestRun testRun = null;
 		try {
 			testRun = taskPoolRegistry.getTaskById(WebAppUtils.toEid(id));
 		} catch (ObjectWithIdNotFoundException e) {
@@ -401,22 +401,12 @@ public class TestRunController implements TestRunEventListener {
 		}
 		model.addAttribute("testRun", testRun);
 
-		/*
-		if (testRun != null) {
-			if (testRun.getTaskProgress().getState() == TaskState.STATE.COMPLETED) {
-				logger.info("TestRun already finished, redirecting to results");
-				return "redirect:/testruns/{id}/result";
-			}
-			logger.info("Presenting TestRun status");
-			model.addAttribute("testRunTask", testRun);
-		}
-		*/
 		return "testruns/show";
 	}
 
 	Set<EID> getTestRunIds() {
 		return taskPoolRegistry.getTasks().stream().map(
-				TaskWithProgress::getId).collect(Collectors.toSet());
+				TestRun::getId).collect(Collectors.toSet());
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -438,7 +428,7 @@ public class TestRunController implements TestRunEventListener {
 			Thread.sleep(1000);
 			taskPoolRegistry.cancelTask(WebAppUtils.toEid(id));
 		} catch (Exception e) {
-			logger.info("Killin Test Run " + id + " failed ", e);
+			logger.info("Killing Test Run " + id + " failed ", e);
 			ExcUtils.suppress(e);
 		}
 		return "redirect:/testruns/status";
@@ -451,7 +441,7 @@ public class TestRunController implements TestRunEventListener {
 	public String showResult(@PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
 		try {
 			// Future call!
-			final TestRunDto testRunDto = ((TestRun) taskPoolRegistry.getTaskById(WebAppUtils.toEid(id))).waitForResult();
+			final TestRunDto testRunDto = taskPoolRegistry.getTaskById(WebAppUtils.toEid(id)).waitForResult();
 			logger.info("Releasing testrun " + id +
 					", persisting and redirecting to report results ");
 
@@ -465,12 +455,13 @@ public class TestRunController implements TestRunEventListener {
 
 	@Override
 	public void taskStateChangedEvent(final TestTask testTask, final TaskState.STATE current, final TaskState.STATE old) {
-		logger.trace("TaskStateChanged event received: {} {} -> {} " + testTask.getId(), old, current);
+		logger.trace("TaskStateChanged event received from Test Task {} : {} -> {}", testTask.getId(), old == null ? "first light" : old, current);
+
 	}
 
 	@Override
 	public void taskRunChangedEvent(final TestRun testRun, final TaskState.STATE current, final TaskState.STATE old) {
-		logger.trace("TaskStateChanged event received: {} ({}) {} -> {} " + testRun.getLabel(), testRun.getId(), old, current);
+		logger.trace("TaskStateChanged event received from Test Run {} : {} -> {} (Test Run label: {})", testRun.getId(), old == null ? "first light" : old, current, testRun.getLabel());
 		if (current.isCompleted()) {
 			try {
 				testReportController.updateTestRun(testRun);
@@ -500,7 +491,7 @@ public class TestRunController implements TestRunEventListener {
 
 		public TaskProgressDto() {}
 
-		static TaskProgressDto createCompletedMsg(Progress p) {
+		static TaskProgressDto createCompletedMsg(TaskProgress p) {
 			return new TaskProgressDto(
 					String.valueOf(p.getMaxSteps()), new ArrayList<>());
 		}
@@ -514,13 +505,14 @@ public class TestRunController implements TestRunEventListener {
 		}
 
 		// Still running
-		private TaskProgressDto(final Progress p, final long pos) {
+		private TaskProgressDto(final TaskProgress p, final long pos) {
 			this.val = String.valueOf(p.getCurrentStepsCompleted());
 			if (p.getCurrentStepsCompleted() >= p.getMaxSteps()) {
 				this.max = String.valueOf(p.getMaxSteps() + p.getCurrentStepsCompleted());
+			} else {
+				this.max = String.valueOf(p.getMaxSteps());
 			}
-			this.max = String.valueOf(p.getMaxSteps());
-			this.log = p.getLogger().getLogMessages(pos);
+			this.log = p.getLogReader().getLogMessages(pos);
 		}
 
 		public String getVal() {
@@ -551,13 +543,13 @@ public class TestRunController implements TestRunEventListener {
 			}
 		}
 
-		final TaskWithProgress<TestRunDto> testRun = taskPoolRegistry.getTaskById(WebAppUtils.toEid(id));
+		final TestRun testRun = taskPoolRegistry.getTaskById(WebAppUtils.toEid(id));
 		final TaskState.STATE state = testRun.getState();
 
 		if (state == TaskState.STATE.FAILED || state == TaskState.STATE.CANCELED) {
 			// Log the internal error and release the task
 			try {
-				((TestRun) testRun).waitForResult();
+				testRun.waitForResult();
 			} catch (Exception e) {
 				logger.error("TestRun failed with an internal error", e);
 				taskPoolRegistry.release(WebAppUtils.toEid(id));
@@ -571,9 +563,9 @@ public class TestRunController implements TestRunEventListener {
 				e.printStackTrace();
 			}
 			logger.info("Notifying web client");
-			return TaskProgressDto.createCompletedMsg(testRun.getTaskProgress());
+			return TaskProgressDto.createCompletedMsg(testRun.getProgress());
 		} else {
-			return new TaskProgressDto(testRun.getTaskProgress(), position);
+			return new TaskProgressDto(testRun.getProgress(), position);
 		}
 
 		// The task is running, but does not provide any new information, so just respond
@@ -588,12 +580,12 @@ public class TestRunController implements TestRunEventListener {
 		public final Date startTimestamp;
 		public final double percentStepsCompleted;
 
-		public TestRunsJsonView(final TaskWithProgress<TestRunDto> t) {
+		public TestRunsJsonView(final TestRun t) {
 			id = t.getId().getId();
 			label = ((TestRun) t).getLabel();
 			testTaskCount = ((TestRun) t).getTestTasks().size();
-			startTimestamp = t.getTaskProgress().getStartTimestamp();
-			percentStepsCompleted = t.getTaskProgress().getPercentStepsCompleted();
+			startTimestamp = t.getProgress().getStartTimestamp();
+			percentStepsCompleted = t.getProgress().getPercentStepsCompleted();
 		}
 	}
 

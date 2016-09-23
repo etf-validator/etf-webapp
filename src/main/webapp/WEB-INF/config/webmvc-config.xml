@@ -35,7 +35,7 @@
 	<bean id="templateResolver"
 		  class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
 		<property name="prefix" value="/WEB-INF/" />
-		<property name="templateMode" value="HTML5" />
+        <property name="templateMode" value="HTML5" />
 	</bean>
 
 	<!-- Thymeleaf Template Engine -->

@@ -49,9 +49,7 @@ public class DataStorageService {
 
 	private DataStorage dataStorage;
 
-	DataStorageService() {
-
-	}
+	DataStorageService() {}
 
 	private final Logger logger = LoggerFactory.getLogger(DataStorageService.class);
 
@@ -61,7 +59,7 @@ public class DataStorageService {
 
 		dataStorage.getConfigurationProperties().setPropertiesFrom(etfConfig, true);
 		dataStorage.init();
-		DataStorageRegistry.instance().register("default", dataStorage);
+		DataStorageRegistry.instance().register(dataStorage);
 		logger.info("Data Storage service initialized");
 	}
 

@@ -15,11 +15,10 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.jar.Manifest;
 
@@ -27,10 +26,15 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.ServletContext;
 
+import ch.qos.logback.classic.Level;
+
+import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import de.interactive_instruments.IFile;
@@ -40,6 +44,7 @@ import de.interactive_instruments.etf.EtfConstants;
 import de.interactive_instruments.exceptions.config.InvalidPropertyException;
 import de.interactive_instruments.exceptions.config.MissingPropertyException;
 import de.interactive_instruments.properties.PropertyHolder;
+import de.interactive_instruments.properties.PropertyUtils;
 
 /**
  * ETF Configuration object which holds the etf-config.properties
@@ -128,6 +133,8 @@ public class EtfConfigController implements PropertyHolder {
 		version = getManifest().getMainAttributes().getValue("Implementation-Version");
 		if (version == null) {
 			version = "unknown";
+		} else if (version.contains("-SNAPSHOT") && !SUtils.isNullOrEmpty(getManifest().getMainAttributes().getValue("Build-Time"))) {
+			version = version.replace("-SNAPSHOT", "-b" + getManifest().getMainAttributes().getValue("Build-Time").substring(2));
 		}
 
 		logger.info(EtfConstants.ETF_ASCII +
@@ -283,12 +290,57 @@ public class EtfConfigController implements PropertyHolder {
 	// Rest interfaces
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@RequestMapping(value = "/v2/configuration", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/v2/admin/log", method = RequestMethod.GET, produces = "application/json")
+	private @ResponseBody List<String> logFile(
+			@RequestParam(value = "max", required = false) String maxLinesStr) throws IOException {
+		long maxLines = 20;
+		if (!SUtils.isNullOrEmpty(maxLinesStr)) {
+			maxLines = Long.valueOf(maxLinesStr);
+			if (maxLines < 0) {
+				maxLines = 20;
+			}
+		}
+		final File logFile = new File(PropertyUtils.getenvOrProperty("ETF_DIR", "./"), "etf.log");
+		if (logFile.exists()) {
+			try (ReversedLinesFileReader reader = new ReversedLinesFileReader(logFile, StandardCharsets.UTF_8)) {
+				int i = 0;
+				String line;
+				final LinkedList<String> output = new LinkedList<>();
+				while ((line = reader.readLine()) != null && i++ < maxLines) {
+					output.addFirst(line);
+				}
+				return output;
+			}
+		} else {
+			logger.warn("Log file '{}' not found", logFile.getAbsolutePath());
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	@RequestMapping(value = "/v2/admin/loglevel", method = RequestMethod.POST, produces = "application/json")
+	private ResponseEntity<String> logLevel(
+			@RequestBody String logLevel) {
+		final ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(
+				Logger.ROOT_LOGGER_NAME);
+		final ch.qos.logback.classic.Level newLevel = ch.qos.logback.classic.Level.toLevel(logLevel,
+				ch.qos.logback.classic.Level.ALL);
+		final ch.qos.logback.classic.Level currentLevel = rootLogger.getLevel();
+		if (currentLevel == newLevel) {
+			return new ResponseEntity("NO CHANGE", HttpStatus.OK);
+		} else if (newLevel == Level.ALL) {
+			return new ResponseEntity("Unknown log level", HttpStatus.BAD_REQUEST);
+		}
+		rootLogger.setLevel(newLevel);
+		logger.info("Set log level to {} ", newLevel);
+		return new ResponseEntity("OK", HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/v2/admin/configuration", method = RequestMethod.GET, produces = "application/json")
 	private @ResponseBody Set<Map.Entry<String, String>> getConfiguration() {
 		return namePropertyPairs();
 	}
 
-	@RequestMapping(value = "/v2/configuration", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/v2/admin/configuration", method = RequestMethod.POST, produces = "application/json")
 	private @ResponseBody Set<Map.Entry<String, String>> getConfiguration(
 			@RequestBody Set<Map.Entry<String, String>> newConfiguration)
 			throws InvalidPropertyException {
@@ -296,6 +348,7 @@ public class EtfConfigController implements PropertyHolder {
 		// No path properties are allowed
 		for (Map.Entry<String, String> e : newConfiguration) {
 			if (filePathPropertyKeys.contains(e.getKey())) {
+				logger.error("Denied attempt to overwrite path property '{}' in configuration", e.getKey());
 				throw new InvalidPropertyException("Path properties are not allowed");
 			}
 		}
