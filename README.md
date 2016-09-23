@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/interactive-instruments/etf-webapp.png?label=ready&title=Ready)](https://waffle.io/interactive-instruments/etf-webapp)
 # etf Web Application
 
 [![Apache License 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
