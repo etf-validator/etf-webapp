@@ -57,6 +57,7 @@ public class EtfConfigController implements PropertyHolder {
 
 	public static final String ETF_WEBAPP_BASE_URL = "etf.webapp.base.url";
 	public static final String ETF_API_BASE_URL = "etf.api.base.url";
+	public static final String ETF_API_ALLOW_ORIGIN = "etf.api.allow.origin";
 	public static final String ETF_BRANDING_TEXT = "etf.branding.text";
 	public static final String ETF_TESTOBJECT_ALLOW_PRIVATENET_ACCESS = "etf.testobject.allow.privatenet.access";
 	// in minutes
@@ -70,6 +71,11 @@ public class EtfConfigController implements PropertyHolder {
 	public static final String ETF_DIR = "etf.dir";
 	public static final String ETF_BSX_RECREATE_CONFIG = "etf.bsx.recreate.config";
 	public static final String ETF_HELP_PAGE_URL = "etf.help.page";
+
+	public static final String ETF_META_CONTACT_TEXT = "etf.meta.contact.text";
+	public static final String ETF_META_DISCLAIMER_TEXT = "etf.meta.legalnotice.disclaimer.text";
+	public static final String ETF_META_COPYRIGHT_TEXT = "etf.meta.legalnotice.copyrightnotice.text";
+	public static final String ETF_META_PRIVACYSTATEMENT_TEXT = "etf.meta.privacystatement.text";
 
 	public static final String ETF_SUBMIT_ERRORS = "etf.errors.autoreport";
 
@@ -86,6 +92,8 @@ public class EtfConfigController implements PropertyHolder {
 
 	private IFile etfDir;
 
+	private static String requiredConfigVersion = "2";
+
 	private String version = "unknown";
 	private static EtfConfigController instance = null;
 
@@ -94,6 +102,7 @@ public class EtfConfigController implements PropertyHolder {
 	private final Map<String, String> defaultProperties = Collections.unmodifiableMap(new HashMap<String, String>() {
 		{
 			put(ETF_WEBAPP_BASE_URL, "http://localhost:8080/etf-webapp");
+			put(ETF_API_ALLOW_ORIGIN, "localhost");
 			put(ETF_BRANDING_TEXT, "");
 			put(ETF_TESTOBJECT_ALLOW_PRIVATENET_ACCESS, "false");
 			put(ETF_REPORT_COMPARISON, "false");
@@ -160,10 +169,11 @@ public class EtfConfigController implements PropertyHolder {
 
 		final String propertyFileVersion = configProperties.getProperty("etf.config.properties.version");
 		if (propertyFileVersion == null) {
-			throw new RuntimeException("Required \"etf.config.properties.version\" property not found!");
+			throw new RuntimeException("Required \"etf.config.properties.version\" property not found in configuration file!");
 		}
-		if (!"2".equals(propertyFileVersion)) {
-			throw new RuntimeException("Config Property file version not supported");
+		if (!requiredConfigVersion.equals(propertyFileVersion)) {
+			throw new RuntimeException("Configuration Property file version " + propertyFileVersion + " not supported. "
+					+ "Version " + requiredConfigVersion + " expected.");
 		}
 
 		// Environment variable ETF_DIR will overwrite the java property
@@ -293,14 +303,17 @@ public class EtfConfigController implements PropertyHolder {
 	@RequestMapping(value = "/v2/admin/log", method = RequestMethod.GET, produces = "application/json")
 	private @ResponseBody List<String> logFile(
 			@RequestParam(value = "max", required = false) String maxLinesStr) throws IOException {
-		long maxLines = 20;
+		long maxLines = 25;
 		if (!SUtils.isNullOrEmpty(maxLinesStr)) {
 			maxLines = Long.valueOf(maxLinesStr);
 			if (maxLines < 0) {
-				maxLines = 20;
+				maxLines = 25;
 			}
 		}
-		final File logFile = new File(PropertyUtils.getenvOrProperty("ETF_DIR", "./"), "etf.log");
+		final File relEtfLog = new File("etf.log");
+		final File logFile = relEtfLog.exists() ?
+				relEtfLog : new File(PropertyUtils.getenvOrProperty(
+						"ETF_DIR", "./"), "etf.log");
 		if (logFile.exists()) {
 			try (ReversedLinesFileReader reader = new ReversedLinesFileReader(logFile, StandardCharsets.UTF_8)) {
 				int i = 0;
