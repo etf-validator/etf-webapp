@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import de.interactive_instruments.SUtils;
 import de.interactive_instruments.etf.EtfConstants;
 import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
 import de.interactive_instruments.etf.model.EID;
@@ -50,6 +51,26 @@ public class View {
 
 	public static String getBrandingText() {
 		return EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_BRANDING_TEXT);
+	}
+
+	public static String getContactText() {
+		final String disclaimer = EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_META_CONTACT_TEXT);
+		return SUtils.isNullOrEmpty(disclaimer) ? null : disclaimer;
+	}
+
+	public static String getDisclaimerText() {
+		final String legalNotice = EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_META_DISCLAIMER_TEXT);
+		return SUtils.isNullOrEmpty(legalNotice) ? null : legalNotice;
+	}
+
+	public static String getCopyrightText() {
+		final String disclaimer = EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_META_COPYRIGHT_TEXT);
+		return SUtils.isNullOrEmpty(disclaimer) ? null : disclaimer;
+	}
+
+	public static String getPrivacyStatementText() {
+		final String legalNotice = EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_META_PRIVACYSTATEMENT_TEXT);
+		return SUtils.isNullOrEmpty(legalNotice) ? null : legalNotice;
 	}
 
 	public static String getHelpPageURL() {
