@@ -22,4 +22,6 @@ public class WebAppConstants {
 	private WebAppConstants() {}
 
 	public static final String TESTDOMAIN_PARAM = "testdomain";
+
+	public static final String API_BASE_URL = "v2";
 }
