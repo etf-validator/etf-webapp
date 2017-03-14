@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright ${year} interactive instruments GmbH
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <title>Header</title>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.min.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.rep.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.wi.css" />
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" />
+    <script data-main="js/main-local-dev" src="//cdn.jsdelivr.net/requirejs/2.1.8/require.min.js"></script>
+
+</head>
+<body>
+
+<div tiles:fragment="test-reports-page" id="test-reports-page" data-role="page" data-title="Test Reports">
+    <div tiles:include="header">
+        <!-- Header -->
+    </div>
+    <div role="main" class="ui-content">
+        <!-- Main -->
+            <h2>Test Reports</h2>
+            <ul id="test-report-item-listview-container" data-role="listview" data-inset="true" data-autodividers="true"
+                class="ui-listview-outer" data-filter="true" data-filter-placeholder="Filter Test Reports...">
+                <!-- Container for template -->
+            </ul>
+    </div>
+    <div tiles:include="footer">
+        <!-- Footer -->
+    </div>
+</div>
+
+<script tiles:fragment="test-reports-page" id="test-report-items-template" type="text/template">
+    <% v2.jeach( collection, function( testRun ) { %>
+    <li class="ii-collapsible-li" id="test-report-item-<%= testRun.id %>" data-role="collapsible" data-iconpos="left" data-shadow="false" data-corners="false">
+        <h2>
+            <%= testRun.label %>
+        </h2>
+        <br>
+        <span th:text="#{l.Started}" >Started</span>: <span class="test-report-time"><%= moment(testRun.startTimestamp).format('HH:mm') %></span> - <span class="test-report-date"><%= moment(testRun.startTimestamp).format('DD.MM.YYYY') %></span>
+        <br>
+        <br>
+        <br>
+
+        <div>
+            <a href="<%= reportBaseUrl + testRun.id + '.html' %>" data-icon="eye" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.open.report}">Open report</a>
+            <a href="<%= reportBaseUrl + testRun.id + '.html?download=true' %>" data-icon="arrow-d-r" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.download.report}">Download report</a>
+            <a href="<%= reportBaseUrl + testRun.id + '/log' %>" data-role="button" data-icon="info" data-inline="true" data-mini="true"  data-ajax="false"  th:text="#{l.open.log}">Open log</a>
+            <a href="#remove-test-report?id=<%= testRun.id %>" class="delete-button-tr" data-icon="delete" data-role="button" data-inline="true" data-mini="true" th:text="#{l.delete.report}">Delete report</a>
+        </div>
+    </li>
+    <% }); %>
+</script>
+
+<div tiles:fragment="test-reports-page" id="delete-testreport-dialog" data-role="dialog" data-title="Delete Test Report?">
+    <div data-role="header">
+        <h1>Delete Test Report?</h1>
+    </div>
+    <div role="main" class="ui-content">
+        <!-- Main -->
+        <p>This will delete the test results including the log files!</p>
+    </div>
+    <div data-role="footer" style="text-align: center">
+        <a id="test-report-delete-confirm" data-inline="true"
+           data-role="button" data-icon="alert" data-iconpos="right"
+           href="#" data-direction="reverse" data-transition="pop">OK</a>
+        <a id="test-report-delete-cancel" data-inline="true"
+           data-role="button" data-icon="back" data-iconpos="right"
+           href="#test-reports" data-direction="reverse" data-transition="pop">Cancel</a>
+    </div>
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      lang="en"
+      class="ui-mobile ui-mobile-rendering">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="ETF web application for testing geo network services and data" />
+    <meta name="keywords" lang="en" content="geo, validation, wfs, wms, metadata, dataset, testsuite, etf" />
+    <meta name="keywords" lang="de" content="Prüftool, inspire, wfs, wms, etf" />
+    <meta name="distribution" content="IU"/>
+    <meta name="web_author" content="interactive instruments GmbH"/>
+
+
+    <title th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText != null }"
+           th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}">BRANDING TEXT</title>
+    <title th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText == null }">etf WebApp</title>
+
+    <!-- Opbeat for Javascript bug reports -->
+    <!-- https://opbeat.com/docs/articles/get-started-with-javascript/ -->
+    <script th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).submitAnalysisData == 'true'}"
+            src="https://d3tvtfb6518e3e.cloudfront.net/1/opbeat.min.js"
+            data-org-id="51578fc580a94ef3a79e0d4f94769114"
+            data-app-id="ea471c7d24" async>
+    </script>
+    <script type="text/javascript">
+        _opbeat = window._opbeat || function() {
+                (window._opbeat.q = window._opbeat.q || []).push(arguments)
+            };
+        _opbeat('config', {
+            // Configuration options
+        });
+    </script>
+    <!--script th:src="@{/js/service-worker.js}" async>
+    </script-->
+
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" href="/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.min.css"
+          th:href="@{/css/de.interactive-instruments.min.css}" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.rep.css"
+          th:href="@{/css/de.interactive-instruments.rep.css}" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.wi.css"
+          th:href="@{/css/de.interactive-instruments.wi.css}" />
+
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" />
+    <script data-main="js/main" src="//cdn.jsdelivr.net/requirejs/2.1.8/require.min.js"></script>
+</head>
+
+
+<body class="ui-mobile-viewport ui-overlay-a">
+
+<!--/* ----------------------------------- */-->
+<!--/* Pages */-->
+<!--/* ----------------------------------- */-->
+<div tiles:replace="start-tests-page">
+    <!--/* ----------------------------------- */-->
+    <!--/* Start test page */-->
+    <!--/* ----------------------------------- */-->
+</div>
+
+<div tiles:replace="test-reports-page">
+    <!--/* ----------------------------------- */-->
+    <!--/* Test reports page */-->
+    <!--/* ----------------------------------- */-->
+</div>
+
+<div tiles:replace="home-page">
+    <!--/* ----------------------------------- */-->
+    <!--/* Home page */-->
+    <!--/* ----------------------------------- */-->
+</div>
+
+<div tiles:replace="test-objects-page">
+    <!--/* ----------------------------------- */-->
+    <!--/* Test Objects page */-->
+    <!--/* ----------------------------------- */-->
+</div>
+
+
+<!--/* ----------------------------------- */-->
+<!--/* Contact dialog */-->
+<!--/* ----------------------------------- */-->
+<div id="contact-dialog" data-role="dialog" th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).contactText != null }">
+    <div data-role="header">
+        <h3 th:text="#{l.Contact}">Contact</h3>
+    </div>
+    <div data-role="main" class="ui-content">
+        <div th:utext="${T(de.interactive_instruments.etf.webapp.helpers.View).contactText}">Contact Text</div>
+    </div>
+</div>
+
+<!--/* ----------------------------------- */-->
+<!--/* Legal notice dialog */-->
+<!--/* ----------------------------------- */-->
+<div id="legal-notice-dialog" data-role="dialog" th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText != null }">
+    <div data-role="header">
+        <h3 th:text="#{l.LegalNotice}">Legal notice</h3>
+    </div>
+    <div data-role="main" class="ui-content">
+        <h3 th:text="#{l.Disclaimer}">Disclaimer</h3>
+        <div th:utext="${T(de.interactive_instruments.etf.webapp.helpers.View).disclaimerText}">Disclaimer Text</div>
+        <h3 th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).copyrightText != null }" th:text="#{l.Copyright}">Copyright</h3>
+        <div th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).copyrightText != null }"
+           th:utext="${T(de.interactive_instruments.etf.webapp.helpers.View).copyrightText}">Copyright</div>
+    </div>
+</div>
+
+<!--/* ----------------------------------- */-->
+<!--/* Privacy dialog */-->
+<!--/* ----------------------------------- */-->
+<div id="privacy-dialog" data-role="dialog" th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).privacyStatementText != null }">
+    <div data-role="header">
+        <h3 th:text="#{l.PrivacyStatement}">Privacy statement</h3>
+    </div>
+    <div data-role="main" class="ui-content">
+        <div th:utext="${T(de.interactive_instruments.etf.webapp.helpers.View).privacyStatementText}">Privacy statement</div>
+    </div>
+</div>
+
+</body>
+</html>

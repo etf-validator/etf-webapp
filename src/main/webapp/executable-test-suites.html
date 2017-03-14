@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright ${year} interactive instruments GmbH
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <title>start-test.html (development view)</title>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.min.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.rep.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.wi.css" />
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" />
+    <script data-main="js/main-local-dev" src="//cdn.jsdelivr.net/requirejs/2.1.8/require.min.js"></script>
+
+</head>
+<body>
+
+<div tiles:fragment="start-tests-page" id="start-tests-page" data-role="page" data-title="Start Tests">
+    <div tiles:replace="header">
+        <!-- Header -->
+    </div>
+
+    <div role="main" class="ui-content">
+        <!-- Main -->
+        <a data-role="button" id="fadin-start-tests-button" style="color: white; background-color: #38c; text-shadow: none; z-index: 99 !important; display: none; width: 150px; position: fixed; top: 102.5px; right: 32px;"  href="#">
+            Start
+        </a>
+
+        <div id="executable-test-suites-content">
+            <h2>Executable Test Suites</h2>
+            <p>To start a Test Run, select one or multiple Test Suites with a click on the flip switch on the right-hand
+                side ('use') and press the 'Start' button that appears once at least one Test Suite is selected. Please note
+                that the Test Suites are only applicable to certain Test Object types and therefore not all Test Suites are
+                combinable for a Test Run. Additional information about a Test Suite will be shown with a click on the plus button.</p>
+
+            <ul id="executable-test-suite-listview-container" data-role="listview"
+                data-inset="true" class="ui-listview-outer" data-filter="true" data-autodividers="true" data-filter-placeholder="Filter Executable Test Suites...">
+                <!-- Container for template -->
+            </ul>
+        </div>
+    </div>
+
+    <div tiles:replace="footer">
+        <!-- Footer -->
+    </div>
+</div>
+
+
+<!-- Underscore Template -->
+<script tiles:fragment="start-tests-page" id="executable-test-suite-items-template" type="text/template">
+    <% v2.jeach( collection, function( executableTestSuite ) { %>
+
+    <%
+        var testObjectTypeClasses = [];
+        v2.jeach( executableTestSuite.supportedTestObjectTypes, function( testObjectType ) {
+            testObjectTypeClasses.push("test-object-type-"+testObjectType.id);
+        });
+    %>
+
+    <li class="ii-collapsible-li" data-role="collapsible" data-iconpos="left" data-shadow="false" data-corners="false">
+        <h2>
+            <div style="line-height: 39px;">
+                <span style="vertical-align: sub; float: left" ><%= executableTestSuite.label %></span>
+                <span class="ii-stop-propagation" style="float: right">
+                    <!--input class="executable-test-suite-selection" data-role="flipswitch" type="checkbox" data-on-text="use" data-off-text="X" data-mini="true" value="<%= executableTestSuite.id %>" /-->
+                    <select class="executable-test-suite-selection <%= testObjectTypeClasses %>" data-role="flipswitch" type="checkbox" data-mini="true">
+                        <option value="X">use</option>
+                        <option value="<%= executableTestSuite.id %>"></option>
+                    </select>
+                </span>
+            </div>
+        </h2>
+
+        <% if (!_.isUndefined(executableTestSuite.description)) { %>
+        <h3><span th:text="#{l.Description}">Description</span>:</h3>
+        <span><%= executableTestSuite.description %></span>
+        <% } %>
+
+        <% if (!_.isUndefined(executableTestSuite.tags)) {  %>
+        <div class="tags">
+            <h3><span th:text="#{l.Tags}">Tags</span>:</h3>
+            <% v2.jeach( executableTestSuite.tags, function( t ) { %>
+            <ul>
+                <li>
+                    <span class="Tag"><%= t.label %></span>
+                </li>
+            </ul>
+            <% }); %>
+        </div>
+        <% } %>
+
+        <div>
+            <h3><span>Applicable to Test Object Types</span>: </h3>
+            <ul>
+                <% v2.jeach( executableTestSuite.supportedTestObjectTypes, function( testObjectType ) { %>
+                    <li><%= testObjectType.label %></li>
+                <% }); %>
+            </ul>
+        </div>
+    </li>
+    <% }); %>
+</script>
+
+
+<div tiles:fragment="start-tests-page" id="start-tests-dialog" data-role="dialog" data-title="Start Tests">
+    <div data-role="header" role="banner">
+        <h2>Configure Test Run</h2>
+
+    </div>
+    <div role="main" class="ui-content">
+
+        <div id="start-tests-configuration-container">
+            <!-- Container for template -->
+        </div>
+
+    </div>
+
+    <div data-role="footer" style="text-align: center">
+        <div style="padding-top: 0.4em" id="fileupload-progress" class="ii-progress">
+            <div class="ii-progress-bar"></div>
+        </div>
+        <a id="show-selected-executable-test-suites-button" data-inline="true"
+           data-role="button" data-icon="eye" data-iconpos="right" href="#" >Test Suites</a>
+        <a id="show-credentials-button" data-inline="true"
+           data-role="button" data-icon="gear" data-iconpos="right" href="#" >Credentials</a>
+        <a id="show-ets-parameters-button" data-inline="true"
+           data-role="button" data-icon="gear" data-iconpos="right" href="#">Optional Parameters</a>
+        <a id="start-tests-confirm" data-inline="true"
+           data-role="button" data-icon="arrow-r" data-iconpos="right" href="#">Start</a>
+    </div>
+</div>
+
+<!-- Underscore Template -->
+<script tiles:fragment="start-tests-page" id="start-tests-configuration-template" type="text/template">
+
+    <div class="ui-field-contain">
+        <label for="testRunLabel">
+            Label:
+            <span class="question" help="The entered label will show up as test result in the test results view"> ?</span>
+        </label>
+        <input data-inline="true" id="testRunLabel" type="text" title="
+                The entered label will show up as test result in the test results view" value="<%= defaultLabel %>"/>
+    </div>
+
+
+    <% if( serviceTest) { %>
+        <div class="ui-field-contain">
+            <label for="serviceEndpoint">Service URL</label>
+            <input class="testObjectResourceInput" data-validation="url" type="url" id="serviceEndpoint" value="http://"/>
+        </div>
+    <% } else { %>
+        <div id="uploadTestObj" data-role="fieldcontain">
+            <div id="dataSourceSelectionContainer">
+                <div class="ui-field-contain">
+                    <label for="dataSourceSelection" class="select" th:text="#{l.Data.source}">Data source:</label>
+                    <select data-inline="true" name="dataSourceSelection" id="dataSourceSelection">
+                        <option value="fileUpload" th:text="#{l.File.upload}">File upload</option>
+                        <option value="remoteUrl" th:text="#{l.Remote.file.Url}">Remote file (URL)</option>
+                    </select>
+                </div>
+                <div id="fileUploadSelection" class="ui-field-contain">
+                    <label><span th:text="#{l.ZipOrXmlFile}" for="fileupload">ZIP or XML file </span> <span class="question"
+                        help="Select one or multiple XML/GML files or ZIP files containing XML/GML files. The Maximum size of each uploaded file is 500 Megabytes.
+                        The upload starts immediately after selecting the files. The 'Start' button is unlocked when the upload has been successfully completed."> ?</span></label>
+                    <input class="testObjectResourceInput" id="fileupload" type="file" accept="application/zip,text/xml,application/xml+gml,.gml" name="files[]" multiple>
+                </div>
+                <div id="remoteUrlSelection" style="display: none" class="ui-field-contain">
+                    <label><span th:text="#{l.Remote.file.Url}" for="testObjFile">Remote URL </span> <span class="question"
+                        help="URL to remote XML/GML file or a ZIP file containing XML/GML files. The download will be initiated after clicking on the 'Start' button."> ?</span></label>
+                    <input class="testObjectResourceInput" type="url" id="test-object-download-url" name="testObjUrl" />
+                </div>
+
+            </div>
+        </div>
+    <% } %>
+
+
+    <div id="start-tests-credentials" style="display: none">
+        <h4>Credentials</h4>
+        <div class="ui-field-contain">
+            <label for="start-tests-username">Username</label>
+            <input type="text" id="start-tests-username" />
+        </div>
+        <div class="ui-field-contain">
+            <label for="start-tests-password">Password</label>
+            <input type="text" id="start-tests-password" />
+        </div>
+    </div>
+
+    <div>
+        <% if( !_.isEmpty(requiredParameters) ) { %>
+            <h4>Test Suite Parameters</h4>
+            <div class="required-parameter">
+                <% _.each( requiredParameters, function( p ) { %>
+                <div class="ui-field-contain">
+                    <label for="ets-parameter-<%= p.name %>">
+                        <%=!_.isUndefined(p.label) ? label : v2.beautifyNerdyStr(p.name) %>
+                        <span class="question" help="Mandatory parameter. <%= p.translation %>"> ?</span>
+                    </label>
+                    <input type="text" class="ets-parameter" id="ets-parameter-<%= p.name %>" name="<%= p.name %>"
+                           title="<%= p.description %>"
+                           pattern="<%= p.allowedValues %>"
+                           value="<%- p.defaultValue %>"/>
+                    <% }); %>
+                </div>
+            </div>
+        <% } else { %>
+            <h4 class="optional-parameter" style="display: none">Test Suite Parameters</h4>
+        <% } %>
+        <div class="optional-parameter" style="display: none">
+                <% _.each( optionalParameters, function( p ) { %>
+                <div class="ui-field-contain">
+                    <label for="ets-parameter-<%= p.name %>">
+                        <%=!_.isUndefined(p.label) ? label : v2.beautifyNerdyStr(p.name) %>
+                        <span class="question" help="Optional parameter. <%= p.translation %>"> ?</span>
+                    </label>
+                    <input type="text" class="ets-parameter" id="ets-parameter-<%= p.name %>" name="<%= p.name %>"
+                           title="<%= p.description %>"
+                           pattern="<%= p.allowedValues %>"
+                           value="<%- p.defaultValue %>"/>
+                </div>
+                <% }); %>
+        </div>
+    </div>
+
+
+    <div id="selected-executable-test-suites" style="display: none">
+        <h4>Selected Test Suites</h4>
+        <ul>
+            <% v2.jeach( selectedExecutableTestSuites, function( executableTestSuite ) { %>
+            <li> <%= executableTestSuite.label %> (Version <%= executableTestSuite.version %>) </li>
+            <% }); %>
+        </ul>
+        <% if( !_.isEmpty(etsDependencies) ) { %>
+        <h4>Direct dependencies</h4>
+        <ul>
+            <% _.each( etsDependencies, function( dependency ) { %>
+            <li> <%= dependency.label %> (Version <%= dependency.version %>) </li>
+            <% }); %>
+        </ul>
+        <% } %>
+    </div>
+
+</script>
+
+<div tiles:fragment="start-tests-page" id="monitor-test-run-dialog" data-role="dialog" data-title="Monitor Test Run">
+    <div data-role="header" role="banner">
+        <h2>Monitor Test Run</h2>
+    </div>
+    <div role="main" class="ui-content">
+        <!-- Main -->
+        <div class="progressbar">
+            <input type="range" id="monitor-test-run-progressbar" value="0" min="0" max="100" data-highlight="true" />
+        </div>
+
+        <textarea data-role="none" id="monitor-log-area" style="width:100%; height: 285px;">Connecting to test runner and waiting for new messages...</textarea>
+
+        <hr/>
+        <div id="#monitor-test-run-container">
+            <!-- Container for template -->
+        </div>
+    </div>
+    <div data-role="footer" style="text-align: right">
+    <a id="cancel-test-run-button" data-icon="delete" data-role="button" data-inline="true" data-mini="true" href="#" th:text="#{l.cancel.testrun}">Cancel Test Run</a>
+    </div>
+</div>
+
+<!-- Underscore Template -->
+<script tiles:fragment="start-tests-page" id="monitor-test-run-information-template" type="text/template">
+
+</script>
+
+</body>
+</html>
+

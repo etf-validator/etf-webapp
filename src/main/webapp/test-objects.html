@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <title>Header</title>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.min.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.rep.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.wi.css" />
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" />
+    <script data-main="js/main-local-dev" src="//cdn.jsdelivr.net/requirejs/2.1.8/require.min.js"></script>
+
+</head>
+<body>
+
+<div tiles:fragment="test-objects-page" id="test-objects-page" data-role="page" data-title="Test Objects">
+    <div tiles:replace="header">
+        <!-- Header -->
+    </div>
+
+    <div role="main" class="ui-content">
+        <!-- Main -->
+        <h2>Test Objects:</h2>
+        <ul id="test-object-item-listview-container" data-role="listview" data-inset="true" class="ui-listview-outer" data-filter="true">
+            <!-- Container for template -->
+        </ul>
+    </div>
+
+    <div tiles:replace="footer">
+        <!-- Footer -->
+    </div>
+</div>
+
+<!-- Underscore Template that is used to display Test Objects -->
+<script tiles:fragment="test-objects-page" id="test-object-items-template" type="text/template">
+    <% v2.jeach( collection, function( testObject ) { %>
+    <div id="test-object-item-<%= testObject.id %>" data-role="collapsible" data-iconpos="right" data-shadow="false" data-corners="false" data-filter-placeholder="Filter Test Objects...">
+        <h2>
+            <%= testObject.label %>
+        </h2>
+        <div>
+            <p><span th:text="l.Description">Description</span>:
+                <span><%= testObject.description %></span></p>
+
+            <% v2.jeach( testObject.ResourceCollection, function( resources ) { %>
+                <p><span th:text="l.Resource">Resource</span>:
+                <span><%= resources.href %></span></p>
+            <% }); %>
+
+            <p><span>Version</span>:
+                <span><%= testObject.version %></span></p>
+
+            <p><span th:text="l.Created">Created</span>:
+                <span><%= moment(testObject.creationDate).format('HH:mm - DD.MM.YYYY') %></span></p>
+
+            <% if (!_.isUndefined(testObject.lastUpdateDate)) { %>
+                <p><span th:text="l.Change.detected">Last change detected</span>:
+                <span><%= moment(testObject.lastUpdateDate).format('HH:mm - DD.MM.YYYY') %></span></p>
+            <% } %>
+
+            <% if (!_.isUndefined(testObject.testObjectTypes)) {  %>
+            <div>
+                <p><span>Test Object Types</span>: </p>
+                <% v2.jeach( testObject.testObjectTypes, function( testObjectType ) { %>
+                <ul>
+                    <li><%= testObjectType.label %></li>
+                </ul>
+                <% }); %>
+            </div>
+            <% } %>
+
+            <% if (!_.isUndefined(testObject.Properties)) {  %>
+            <div>
+                    <p><span>Additional properties</span>: </p>
+                    <% v2.jeach( testObject.Properties.property, function( property ) { %>
+                    <ul>
+                        <li><%= property.name %> = <%= property.$ %></li>
+                    </ul>
+                    <% }); %>
+                </div>
+            <% } %>
+
+            <p><a class="delete-button-to" data-icon="delete" data-role="button" data-inline="true" data-mini="true" href="#remove-test-object?id=<%= testObject.id %>" th:text="l.remove.object">Remove object</a></p>
+        </div>
+    </div>
+
+    <% }); %>
+</script>
+
+<div tiles:fragment="test-objects-page" id="delete-testobject-dialog" data-role="dialog" data-title="Delete Test Object?">
+    <div data-role="header">
+        <h1>Delete Test Object?</h1>
+    </div>
+    <div role="main" class="ui-content">
+        <!-- Main -->
+        <p>This will delete the defined Test Object. Test data referenced by this Test Object are not removed.</p>
+    </div>
+    <div data-role="footer" style="text-align: center">
+        <a id="test-object-delete-confirm" data-inline="true"
+           data-role="button" data-icon="alert" data-iconpos="right"
+           href="#" data-direction="reverse" data-transition="pop">OK</a>
+        <a id="test-object-delete-cancel" data-inline="true"
+           data-role="button" data-icon="back" data-iconpos="right"
+           href="#test-objects" data-direction="reverse" data-transition="pop">Cancel</a>
+    </div>
+</div>
+
+<div tiles:fragment="test-objects-page" id="define-test-object-dialog" data-role="dialog" data-title="Create Test Object">
+    <div data-role="header">
+        <h1>Define Test Object</h1>
+    </div>
+    <div role="main" class="ui-content">
+    <!-- Main -->
+    </div>
+</div>
+
+</body>
+</html>
+
