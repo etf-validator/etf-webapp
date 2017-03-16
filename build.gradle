@@ -18,7 +18,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.23'
+        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.24'
         classpath "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
 
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE"
@@ -46,10 +46,12 @@ ext.springSecurityVersion = "4.0.4.RELEASE"
 ext.springSecurityOAuth2Version = "2.0.9.RELEASE"
 ext.springVersion = "4.3.4.RELEASE"
 ext.jacksonVersion = "2.7.8"
-ext.springfoxSwaggerVersion = "2.5.0"
+ext.springfoxSwaggerVersion = "2.6.1"
 
 configurations {
     compile.exclude group:'xalan'
+
+    testdriver
 }
 
 repositories {
@@ -81,8 +83,14 @@ dependencies {
     compile group: 'de.interactive_instruments.etf', name: 'etf-core', version: '1.0.0' + project.snapshotSuffix
     compile group: 'de.interactive_instruments.etf', name: 'etf-spi', version: '1.0.0' + project.snapshotSuffix
 
-    // TODO remove later, use SPI
+    // TODO remove in future versions, use SPI
     compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version: '2.0.0' + project.snapshotSuffix
+    compile group: 'de.interactive_instruments.etf', name: 'etf-rc', version: '1.0.0' + project.snapshotSuffix
+
+    // Prepackaged test drivers
+    // TODO download in future versions
+    testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-suitd', version: '2.0.0' + project.snapshotSuffix
+    testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-bsxtd', version: '2.0.0' + project.snapshotSuffix
 
     compile("xerces:xercesImpl:"+etf_xercesVersion){
         force = true
@@ -97,7 +105,8 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: etf_commonsIoVersion
     compile group: 'commons-lang', name: 'commons-lang', version:'2.6'
 
-    compile 'org.codehaus.groovy:groovy-all:2.4.6'
+    // switched from 2.4.6
+    compile 'org.codehaus.groovy:groovy-all:2.4.7'
 
     compile group: 'org.jsoup', name: 'jsoup', version: '1.9.1'
 
@@ -161,6 +170,7 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger2', version: springfoxSwaggerVersion
     // compile group: 'io.springfox', name: 'springfox-staticdocs', version: '2.4.0'
 
+
 }
 
 
@@ -202,8 +212,11 @@ war {
         }
 
         archiveName 'etf-webapp.war'
+    }
 
-
+    from(configurations.testdriver) {
+        include 'etf-*td*.jar'
+        into('testdrivers')
     }
 }
 
