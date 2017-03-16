@@ -1,11 +1,11 @@
-/*
- * Copyright ${year} interactive instruments GmbH
+/**
+ * Copyright 2010-2017 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package de.interactive_instruments.etf.webapp.filter;
+
+import static de.interactive_instruments.etf.webapp.controller.EtfConfigController.ETF_API_ALLOW_ORIGIN;
 
 import java.io.IOException;
 
@@ -24,14 +25,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import de.interactive_instruments.etf.webapp.controller.EtfConfigController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import static de.interactive_instruments.etf.webapp.controller.EtfConfigController.ETF_API_ALLOW_ORIGIN;
+import de.interactive_instruments.etf.webapp.controller.EtfConfigController;
 
 @Component("ApiFilter")
 public class ApiFilter extends OncePerRequestFilter {
@@ -49,9 +49,10 @@ public class ApiFilter extends OncePerRequestFilter {
 	}
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
 
-		if(!"localhost".equals(this.allowOrigin)) {
+		if (!"localhost".equals(this.allowOrigin)) {
 			response.addHeader("Access-Control-Allow-Origin", this.allowOrigin);
 			if (request.getHeader("Access-Control-Request-Method") != null && "OPTIONS".equals(request.getMethod())) {
 				response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");

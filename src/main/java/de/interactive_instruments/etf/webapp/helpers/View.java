@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2017 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,8 @@ public class View {
 	}
 
 	public static String getPrivacyStatementText() {
-		final String legalNotice = EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_META_PRIVACYSTATEMENT_TEXT);
+		final String legalNotice = EtfConfigController.getInstance()
+				.getProperty(EtfConfigController.ETF_META_PRIVACYSTATEMENT_TEXT);
 		return SUtils.isNullOrEmpty(legalNotice) ? null : legalNotice;
 	}
 

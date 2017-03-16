@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2017 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import de.interactive_instruments.exceptions.InvalidStateTransitionException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
 
 /**
+ *
  * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
  */
 @Service
@@ -56,7 +57,6 @@ public class DataStorageService {
 	@PostConstruct
 	void init() throws InitializationException, InvalidStateTransitionException, ConfigurationException {
 		dataStorage = new BsxDataStorage();
-
 		dataStorage.getConfigurationProperties().setPropertiesFrom(etfConfig, true);
 		dataStorage.init();
 		DataStorageRegistry.instance().register(dataStorage);
