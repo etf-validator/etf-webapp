@@ -118,6 +118,17 @@
                 <% }); %>
             </ul>
         </div>
+
+        <div>
+            <h3><span>General</span>: </h3>
+            <ul>
+                <li>Version<span>: </span><%= executableTestSuite.version %></li>
+                <li>Author<span>: </span><%= executableTestSuite.author %></li>
+                <li>Date created<span>: </span><%= moment(executableTestSuite.creationDate).format('DD.MM.YYYY') %></li>
+                <li>Last editor<span>: </span><%= executableTestSuite.lastEditor %></li>
+                <li>Last updated<span>: </span><%= moment(executableTestSuite.lastUpdateDate).format('DD.MM.YYYY') %></li>
+            </ul>
+        </div>
     </li>
     <% }); %>
 </script>
