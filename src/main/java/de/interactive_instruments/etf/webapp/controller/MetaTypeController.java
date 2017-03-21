@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2017 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,34 +15,38 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
-import static de.interactive_instruments.etf.webapp.controller.WebAppUtils.*;
+import static de.interactive_instruments.etf.webapp.SwaggerConfig.SERVICE_CAP_TAG_NAME;
+import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import de.interactive_instruments.etf.dal.dao.Dao;
 import de.interactive_instruments.etf.dal.dto.capabilities.ComponentDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.TagDto;
-import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectTypeDto;
 import de.interactive_instruments.etf.dal.dto.test.TestItemTypeDto;
 import de.interactive_instruments.etf.dal.dto.translation.TranslationTemplateBundleDto;
-import de.interactive_instruments.etf.model.OutputFormat;
+import de.interactive_instruments.etf.webapp.WebAppConstants;
+import de.interactive_instruments.etf.webapp.conversion.EidConverter;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -56,209 +60,311 @@ public class MetaTypeController {
 	ServletContext servletContext;
 
 	@Autowired
-	private TestDriverService testDriverService;
+	private DataStorageService dataStorageService;
 
 	@Autowired
-	private DataStorageService dataStorageService;
+	private StreamingService streaming;
 
 	private final Logger logger = LoggerFactory.getLogger(MetaTypeController.class);
 	private Dao<TestItemTypeDto> testItemTypeDao;
-	private OutputFormat testItemTypeXmlOutputFormat;
 
 	private Dao<TestObjectTypeDto> testObjectTypeDao;
-	private OutputFormat testObjectTypeXmlOutputFormat;
 
 	private Dao<TranslationTemplateBundleDto> translationTemplateBundleDao;
-	private OutputFormat translationTemplateBundleXmlOutputFormat;
 
 	private Dao<ComponentDto> componentDao;
-	private OutputFormat componentXmlOutputFormat;
 
 	private Dao<TagDto> tagDao;
-	private OutputFormat tagXmlOutputFormat;
 
 	@PostConstruct
 	private void init() throws IOException, TransformerConfigurationException {
 		translationTemplateBundleDao = dataStorageService.getDao(TranslationTemplateBundleDto.class);
-		translationTemplateBundleXmlOutputFormat = translationTemplateBundleDao.getOutputFormats().values().iterator().next();
 
 		testObjectTypeDao = dataStorageService.getDao(TestObjectTypeDto.class);
-		testObjectTypeXmlOutputFormat = testObjectTypeDao.getOutputFormats().values().iterator().next();
 
 		testItemTypeDao = dataStorageService.getDao(TestItemTypeDto.class);
-		testItemTypeXmlOutputFormat = testItemTypeDao.getOutputFormats().values().iterator().next();
 
 		componentDao = dataStorageService.getDao(ComponentDto.class);
-		componentXmlOutputFormat = componentDao.getOutputFormats().values().iterator().next();
 
 		tagDao = dataStorageService.getDao(TagDto.class);
-		tagXmlOutputFormat = tagDao.getOutputFormats().values().iterator().next();
+
+		streaming.prepareCache(translationTemplateBundleDao);
 
 		logger.info("Meta Type controller initialized");
 	}
 
-	///////////////// Translation Template Bundles
+	private final static String TEST_ITEM_TYPEL_DESCRIPTION = "The Test Item Type model is described in the  "
+			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/test_xsd.html#TestItemType). "
+			+ ETF_ITEM_COLLECTION_DESCRIPTION;
+	private final static String TRANSLATION_TEMP_BUNDLE_DESCRIPTION = "The Translation Template Bundle model is described as "
+			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/basicTypes_xsd.html#TranslationTemplateBundle). "
+			+ ETF_ITEM_COLLECTION_DESCRIPTION;
+	private final static String COMPONENT_DESCRIPTION = "The Components model is described in the "
+			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/capabilities_xsd.html#Component). "
+			+ ETF_ITEM_COLLECTION_DESCRIPTION;
+	private final static String TAG_DESCRIPTION = "The Tag model is described in the "
+			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/capabilities_xsd.html#Tag). "
+			+ ETF_ITEM_COLLECTION_DESCRIPTION;
 
-	private final static String TEST_ITEM_TYPES_URL = API_BASE_URL + "/TestItemTypes";
+	///////////////// Test Item Types
 
-	@ApiOperation(value = "Get all Test Item Types", tags = {"Service Capabilities"}, response = TestItemTypeDto.class)
-	@RequestMapping(value = {TEST_ITEM_TYPES_URL + "/{id}.json"}, method = RequestMethod.GET, produces = "application/json")
-	public void testItemTypeByIdJson(@PathVariable String id, HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streamAsJson2(testItemTypeDao, response, id);
+	private final static String TEST_ITEM_TYPES_URL = WebAppConstants.API_BASE_URL + "/TestItemTypes";
+
+	@ApiOperation(value = "Get Test Item Type as JSON", notes = TEST_ITEM_TYPEL_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})
+	@RequestMapping(value = {TEST_ITEM_TYPES_URL + "/{id}", TEST_ITEM_TYPES_URL + "/{id}.json"}, method = RequestMethod.GET)
+	public void testItemTypeByIdJson(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		streaming.asJson2(testItemTypeDao, request, response, id);
 	}
 
-	@ApiOperation(value = "Get all Test Item Types", tags = {"Service Capabilities"}, response = TestItemTypeDto.class, responseContainer = "List")
-	@RequestMapping(value = TEST_ITEM_TYPES_URL + ".json", method = RequestMethod.GET, produces = "application/json")
-	public void listTestItemTypesJson(HttpServletResponse response) throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
-		streamAsJson2(testItemTypeDao, response, null);
+	@ApiOperation(value = "Get multiple Test Item Types as JSON", notes = TEST_ITEM_TYPEL_DESCRIPTION, tags = {
+			SERVICE_CAP_TAG_NAME})
+	@RequestMapping(value = TEST_ITEM_TYPES_URL + ".json", method = RequestMethod.GET)
+	public void listTestItemTypesJson(
+			@ApiParam(value = OFFSET_DESCRIPTION, example = "0") @RequestParam(required = false, defaultValue = "0") int offset,
+			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+			HttpServletRequest request,
+			HttpServletResponse response)
+			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
+		streaming.asJson2(testItemTypeDao, request, response, offset, limit);
 	}
 
-	@ApiOperation(value = "Get all Test Item Types", tags = {"Service Capabilities"}, produces = "text/xml")
-	@ApiResponses(@ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Item Types", reference = "www.interactive-instruments.de"))
-	@RequestMapping(value = {TEST_ITEM_TYPES_URL, TEST_ITEM_TYPES_URL + ".xml"}, method = RequestMethod.GET)
-	public void listTestItemTypesXml(HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streamAsXml2(testItemTypeDao, testItemTypeXmlOutputFormat, response, null);
+	@ApiOperation(value = "Get multiple Test Item Types as XML", notes = TEST_ITEM_TYPEL_DESCRIPTION, tags = {
+			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
+	@ApiResponses(@ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Item Types"))
+	@RequestMapping(value = {TEST_ITEM_TYPES_URL + ".xml"}, method = RequestMethod.GET)
+	public void listTestItemTypesXml(
+			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
+			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		streaming.asXml2(testItemTypeDao, request, response, offset, limit);
 	}
 
-	@ApiOperation(value = "Get all Test Item Types", tags = {"Service Capabilities"}, produces = "text/xml")
+	@ApiOperation(value = "Get Test Item Type as XML", notes = TEST_ITEM_TYPEL_DESCRIPTION, tags = {
+			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with one Test Item Type", reference = "www.interactive-instruments.de"),
+			@ApiResponse(code = 200, message = "EtfItemCollection with one Test Item Type"),
 			@ApiResponse(code = 404, message = "Test Item Type not found")
 	})
-	@RequestMapping(value = {TEST_ITEM_TYPES_URL + "/{id}", TEST_ITEM_TYPES_URL + "/{id}.xml"}, method = RequestMethod.GET)
-	public void testItemTypeByIdXml(@PathVariable String id, HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streamAsXml2(testItemTypeDao, testItemTypeXmlOutputFormat, response, id);
+	@RequestMapping(value = {TEST_ITEM_TYPES_URL + "/{id}.xml"}, method = RequestMethod.GET)
+	public void testItemTypeByIdXml(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		streaming.asXml2(testItemTypeDao, request, response, id);
+	}
+
+	@ApiOperation(value = "Check if Test Item Type exists", tags = {SERVICE_CAP_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "Test Item Type exists"),
+			@ApiResponse(code = 404, message = "Test Item Type does not exist")
+	})
+	@RequestMapping(value = {TEST_ITEM_TYPES_URL + "/{id}"}, method = RequestMethod.HEAD)
+	public ResponseEntity<String> existsTestItemType(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE) @PathVariable String id)
+			throws IOException, StorageException, ObjectWithIdNotFoundException {
+		return testItemTypeDao.exists(EidConverter.toEid(id)) ? new ResponseEntity(HttpStatus.NO_CONTENT)
+				: new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
 
 	///////////////// Translation Template Bundles
 
-	private final static String TRANSLATION_TEMP_BUNDLE_URL = API_BASE_URL + "/TranslationTemplateBundles";
+	private final static String TRANSLATION_TEMP_BUNDLE_URL = WebAppConstants.API_BASE_URL + "/TranslationTemplateBundles";
 
-	@ApiOperation(value = "Get all Translation Template Bundles", tags = {"Service Capabilities"}, response = TranslationTemplateBundleDto.class)
-	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL + "/{id}.json"}, method = RequestMethod.GET, produces = "application/json")
-	public TranslationTemplateBundleDto translationTemplateBundleByIdJson(@PathVariable String id) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		return translationTemplateBundleDao.getById(WebAppUtils.toEid(id)).getDto();
+	@ApiOperation(value = "Get Translation Template Bundle as JSON", notes = TRANSLATION_TEMP_BUNDLE_DESCRIPTION, tags = {
+			SERVICE_CAP_TAG_NAME})
+	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL + "/{id}",
+			TRANSLATION_TEMP_BUNDLE_URL + "/{id}.json"}, method = RequestMethod.GET)
+	public void translationTemplateBundleByIdJson(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		streaming.asJson2(translationTemplateBundleDao, request, response, id);
 	}
 
-	@ApiOperation(value = "Get all Translation Template Bundles", tags = {"Service Capabilities"}, response = TranslationTemplateBundleDto.class, responseContainer = "List")
-	@RequestMapping(value = TRANSLATION_TEMP_BUNDLE_URL + ".json", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Collection<TranslationTemplateBundleDto> listTranslationTemplateBundlesJson() throws StorageException, ConfigurationException {
-		return translationTemplateBundleDao.getAll(ALL_FILTER).asCollection();
+	@ApiOperation(value = "Get multiple Translation Template Bundles as JSON", notes = TRANSLATION_TEMP_BUNDLE_DESCRIPTION, tags = {
+			SERVICE_CAP_TAG_NAME})
+	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL, TRANSLATION_TEMP_BUNDLE_URL + ".json"}, method = RequestMethod.GET)
+	public void listTranslationTemplateBundlesJson(
+			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
+			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+			HttpServletRequest request,
+			HttpServletResponse response)
+			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
+		streaming.asJson2(translationTemplateBundleDao, request, response, offset, limit);
 	}
 
-	@ApiOperation(value = "Get all Translation Template Bundles", tags = {"Service Capabilities"}, produces = "text/xml")
-	@ApiResponses(@ApiResponse(code = 200, message = "EtfItemCollection with multiple Translation Template Bundles", reference = "www.interactive-instruments.de"))
-	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL, TRANSLATION_TEMP_BUNDLE_URL + ".xml"}, method = RequestMethod.GET)
-	public void listTranslationTemplateBundlesXml(HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streamAsXml2(translationTemplateBundleDao, translationTemplateBundleXmlOutputFormat, response, null);
-	}
-
-	@ApiOperation(value = "Get all Translation Template Bundles", tags = {"Service Capabilities"}, produces = "text/xml")
+	@ApiOperation(value = "Get multiple Translation Template Bundles as XML", notes = TRANSLATION_TEMP_BUNDLE_DESCRIPTION, tags = {
+			SERVICE_CAP_TAG_NAME})
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with one Translation Template Bundle", reference = "www.interactive-instruments.de"),
+			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Translation Template Bundles"),
+	})
+	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL + ".xml"}, method = RequestMethod.GET)
+	public void listTranslationTemplateBundlesXml(
+			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
+			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		streaming.asXml2(translationTemplateBundleDao, request, response, offset, limit);
+	}
+
+	@ApiOperation(value = "Get Translation Template Bundle as XML", notes = TRANSLATION_TEMP_BUNDLE_DESCRIPTION, tags = {
+			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "EtfItemCollection with one Translation Template Bundle"),
 			@ApiResponse(code = 404, message = "Translation Template Bundle not found")
 	})
-	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL + "/{id}", TRANSLATION_TEMP_BUNDLE_URL + "/{id}.xml"}, method = RequestMethod.GET)
-	public void translationTemplateBundleByIdXml(@PathVariable String id, HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streamAsXml2(translationTemplateBundleDao, translationTemplateBundleXmlOutputFormat, response, id);
+	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL + "/{id}.xml"}, method = RequestMethod.GET)
+	public void translationTemplateBundleByIdXml(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		streaming.asXml2(translationTemplateBundleDao, request, response, id);
 	}
 
-	///////////////// Translation Template Bundles
-
-	private final static String TEST_OBJECT_TYPES_URL = API_BASE_URL + "/TestObjectTypes";
-
-	@ApiOperation(value = "Get all Test Object Types", tags = {"Service Capabilities"}, response = ComponentDto.class)
-	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + "/{id}.json"}, method = RequestMethod.GET, produces = "application/json")
-	public TestObjectTypeDto testObjectTypesByIdJson(@PathVariable String id) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		return testObjectTypeDao.getById(WebAppUtils.toEid(id)).getDto();
-	}
-
-	@ApiOperation(value = "Get all Test Object Types", tags = {"Service Capabilities"}, response = TestObjectDto.class, responseContainer = "List")
-	@RequestMapping(value = TEST_OBJECT_TYPES_URL + ".json", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Collection<TestObjectTypeDto> listTestObjectTypesJson() throws StorageException, ConfigurationException {
-		return testObjectTypeDao.getAll(ALL_FILTER).asCollection();
-	}
-
-	@ApiOperation(value = "Get all Test Object Types", tags = {"Service Capabilities"}, produces = "text/xml")
-	@ApiResponses(@ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Object Types", reference = "www.interactive-instruments.de"))
-	@RequestMapping(value = {TEST_OBJECT_TYPES_URL, TEST_OBJECT_TYPES_URL + " .xml"}, method = RequestMethod.GET)
-	public void listTestObjectTypesXml(HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streamAsXml2(testObjectTypeDao, testObjectTypeXmlOutputFormat, response, null);
-	}
-
-	@ApiOperation(value = "Get all Test Object Types", tags = {"Service Capabilities"}, produces = "text/xml")
+	@ApiOperation(value = "Check if Translation Template Bundle exists", tags = {SERVICE_CAP_TAG_NAME})
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with one Test Object Type", reference = "www.interactive-instruments.de"),
-			@ApiResponse(code = 404, message = "Test Object Type not found")
+			@ApiResponse(code = 204, message = "Translation Template Bundle exists"),
+			@ApiResponse(code = 404, message = "Translation Template Bundle does not exist")
 	})
-	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + "/{id}", TEST_OBJECT_TYPES_URL + "/{id}.xml"}, method = RequestMethod.GET)
-	public void testObjectTypesByIdXml(@PathVariable String id, HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streamAsXml2(testObjectTypeDao, testObjectTypeXmlOutputFormat, response, id);
+	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL + "/{id}"}, method = RequestMethod.HEAD)
+	public ResponseEntity<String> existsTranslationTemplateBundle(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE) @PathVariable String id)
+			throws IOException, StorageException, ObjectWithIdNotFoundException {
+		return translationTemplateBundleDao.exists(EidConverter.toEid(id)) ? new ResponseEntity(HttpStatus.NO_CONTENT)
+				: new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
 
-	/////////////////
+	///////////////// Components
 
-	private final static String COMPONENTS_URL = API_BASE_URL + "/Components";
+	public final static String COMPONENTS_URL = WebAppConstants.API_BASE_URL + "/Components";
 
-	@ApiOperation(value = "Get all Framework Components", tags = {"Service Capabilities"}, response = ComponentDto.class)
-	@RequestMapping(value = {COMPONENTS_URL + "/{id}.json"}, method = RequestMethod.GET, produces = "application/json")
-	public ComponentDto componentsByIdJson(@PathVariable String id) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		return componentDao.getById(WebAppUtils.toEid(id)).getDto();
+	@ApiOperation(value = "Get Framework Component as JSON", notes = COMPONENT_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})
+	@RequestMapping(value = {COMPONENTS_URL + "/{id}", COMPONENTS_URL + "/{id}.json"}, method = RequestMethod.GET)
+	public void componentsByIdJson(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		streaming.asJson2(componentDao, request, response, id);
 	}
 
-	@ApiOperation(value = "Get all Framework Components", tags = {"Service Capabilities"}, response = ComponentDto.class, responseContainer = "List")
-	@RequestMapping(value = COMPONENTS_URL + ".json", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Collection<ComponentDto> listComponentsJson() throws StorageException, ConfigurationException {
-		return componentDao.getAll(ALL_FILTER).asCollection();
+	@ApiOperation(value = "Get multiple Framework Components as JSON", notes = COMPONENT_DESCRIPTION, tags = {
+			SERVICE_CAP_TAG_NAME})
+	@RequestMapping(value = {COMPONENTS_URL, COMPONENTS_URL + ".json"}, method = RequestMethod.GET)
+	public void listComponentsJson(
+			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
+			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+			HttpServletRequest request,
+			HttpServletResponse response)
+			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
+		streaming.asJson2(componentDao, request, response, offset, limit);
 	}
 
-	@ApiOperation(value = "Get all Framework Components", tags = {"Service Capabilities"}, produces = "text/xml")
-	@ApiResponses(@ApiResponse(code = 200, message = "EtfItemCollection with multiple Components", reference = "www.interactive-instruments.de"))
-	@RequestMapping(value = {COMPONENTS_URL, COMPONENTS_URL + ".xml"}, method = RequestMethod.GET, produces = "text/xml")
-	public void listComponentsXml(HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streamAsXml2(componentDao, testObjectTypeXmlOutputFormat, response, null);
-	}
-
-	@ApiOperation(value = "Get all Framework Components", tags = {"Service Capabilities"}, produces = "text/xml")
+	@ApiOperation(value = "Get multiple Framework Components as XML", notes = COMPONENT_DESCRIPTION, tags = {
+			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with one Component", reference = "www.interactive-instruments.de"),
+			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Components"),
+	})
+	@RequestMapping(value = {COMPONENTS_URL + ".xml"}, method = RequestMethod.GET)
+	public void listComponentsXml(
+			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
+			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		streaming.asXml2(componentDao, request, response, offset, limit);
+	}
+
+	@ApiOperation(value = "Get Framework Component as XML", notes = COMPONENT_DESCRIPTION, tags = {
+			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "EtfItemCollection with one Component"),
 			@ApiResponse(code = 404, message = "Component not found")
 	})
-	@RequestMapping(value = {COMPONENTS_URL + "/{id}", COMPONENTS_URL + "/{id}.xml"}, method = RequestMethod.GET, produces = "text/xml")
-	public void componentsByIdXml(@PathVariable String id, HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streamAsXml2(componentDao, testObjectTypeXmlOutputFormat, response, id);
+	@RequestMapping(value = {COMPONENTS_URL + "/{id}.xml"}, method = RequestMethod.GET)
+	public void componentsByIdXml(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		streaming.asXml2(componentDao, request, response, id);
 	}
 
-	/////////////////
-
-	private final static String TAGS_URL = API_BASE_URL + "/Tags";
-
-	@ApiOperation(value = "Get all Tags", tags = {"Service Capabilities"}, response = ComponentDto.class)
-	@RequestMapping(value = {TAGS_URL + "/{id}.json"}, method = RequestMethod.GET, produces = "application/json")
-	public TagDto tagsByIdJson(@PathVariable String id) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		return tagDao.getById(WebAppUtils.toEid(id)).getDto();
-	}
-
-	@ApiOperation(value = "Get all Tags", tags = {"Service Capabilities"}, response = ComponentDto.class, responseContainer = "List")
-	@RequestMapping(value = TAGS_URL + ".json", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Collection<TagDto> listTagsJson() throws StorageException, ConfigurationException {
-		return tagDao.getAll(ALL_FILTER).asCollection();
-	}
-
-	@ApiOperation(value = "Get all Tags", tags = {"Service Capabilities"}, produces = "text/xml")
-	@ApiResponses(@ApiResponse(code = 200, message = "EtfItemCollection with multiple Tags", reference = "www.interactive-instruments.de"))
-	@RequestMapping(value = {TAGS_URL, TAGS_URL + ".xml"}, method = RequestMethod.GET, produces = "text/xml")
-	public void listTagsXml(HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streamAsXml2(tagDao, tagXmlOutputFormat, response, null);
-	}
-
-	@ApiOperation(value = "Get all Tags", tags = {"Service Capabilities"}, produces = "text/xml")
+	@ApiOperation(value = "Check if Framework Component exists", tags = {SERVICE_CAP_TAG_NAME})
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with one Tag", reference = "www.interactive-instruments.de"),
-			@ApiResponse(code = 404, message = "Component not found")
+			@ApiResponse(code = 204, message = "Framework Component exists"),
+			@ApiResponse(code = 404, message = "Framework Component does not exist")
 	})
-	@RequestMapping(value = {TAGS_URL + "/{id}", TAGS_URL + "/{id}.xml"}, method = RequestMethod.GET, produces = "text/xml")
-	public void tagsByIdXml(@PathVariable String id, HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streamAsXml2(tagDao, tagXmlOutputFormat, response, id);
+	@RequestMapping(value = {COMPONENTS_URL + "/{id}"}, method = RequestMethod.HEAD)
+	public ResponseEntity<String> existsComponent(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE) @PathVariable String id)
+			throws IOException, StorageException, ObjectWithIdNotFoundException {
+		return componentDao.exists(EidConverter.toEid(id)) ? new ResponseEntity(HttpStatus.NO_CONTENT)
+				: new ResponseEntity(HttpStatus.NOT_FOUND);
+	}
+
+	///////////////// Tags
+
+	private final static String TAGS_URL = WebAppConstants.API_BASE_URL + "/Tags";
+
+	@ApiOperation(value = "Get Tag as JSON", notes = TAG_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})
+	@RequestMapping(value = {TAGS_URL + "/{id}", TAGS_URL + "/{id}.json"}, method = RequestMethod.GET)
+	public void tagsByIdJson(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		streaming.asJson2(tagDao, request, response, id);
+	}
+
+	@ApiOperation(value = "Get multiple Tags as JSON", notes = TAG_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})
+	@RequestMapping(value = {TAGS_URL, TAGS_URL + ".json"}, method = RequestMethod.GET)
+	public void listTagsJson(
+			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
+			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+			HttpServletRequest request,
+			HttpServletResponse response)
+			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
+		streaming.asJson2(tagDao, request, response, offset, limit);
+	}
+
+	@ApiOperation(value = "Get multiple Tags as XML", notes = TAG_DESCRIPTION, tags = {
+			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Tags")
+	})
+	@RequestMapping(value = {TAGS_URL + ".xml"}, method = RequestMethod.GET)
+	public void listTagsXml(
+			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
+			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		streaming.asXml2(tagDao, request, response, offset, limit);
+	}
+
+	@ApiOperation(value = "Get Tag as XML", notes = TAG_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME}, produces = "text/xml")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "EtfItemCollection with one Tag"),
+			@ApiResponse(code = 404, message = "Tag not found")
+	})
+	@RequestMapping(value = {TAGS_URL + "/{id}.xml"}, method = RequestMethod.GET)
+	public void tagsByIdXml(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		streaming.asXml2(tagDao, request, response, id);
+	}
+
+	@ApiOperation(value = "Check if Tag exists", tags = {SERVICE_CAP_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "Tag exists"),
+			@ApiResponse(code = 404, message = "Tag does not exist")
+	})
+	@RequestMapping(value = {TAGS_URL + "/{id}"}, method = RequestMethod.HEAD)
+	public ResponseEntity<String> existsTag(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE) @PathVariable String id)
+			throws IOException, StorageException, ObjectWithIdNotFoundException {
+		return tagDao.exists(EidConverter.toEid(id)) ? new ResponseEntity(HttpStatus.NO_CONTENT)
+				: new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
 }

@@ -1,0 +1,195 @@
+/**
+ * Copyright 2010-2017 interactive instruments GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package de.interactive_instruments.etf.webapp.controller;
+
+import static de.interactive_instruments.etf.EtfConstants.ETF_DATA_STORAGE_NAME;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.servlet.ServletContext;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import de.interactive_instruments.etf.component.ComponentInfo;
+import de.interactive_instruments.etf.component.ComponentLoadingException;
+import de.interactive_instruments.etf.dal.dao.*;
+import de.interactive_instruments.etf.dal.dto.IncompleteDtoException;
+import de.interactive_instruments.etf.dal.dto.capabilities.ComponentDto;
+import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectTypeDto;
+import de.interactive_instruments.etf.dal.dto.run.TestRunDto;
+import de.interactive_instruments.etf.dal.dto.run.TestTaskDto;
+import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
+import de.interactive_instruments.etf.model.EID;
+import de.interactive_instruments.etf.model.EidFactory;
+import de.interactive_instruments.etf.testdriver.MetadataTypeLoader;
+import de.interactive_instruments.etf.testdriver.TestDriverManager;
+import de.interactive_instruments.etf.testdriver.TestRun;
+import de.interactive_instruments.etf.testdriver.TestRunInitializationException;
+import de.interactive_instruments.exceptions.InitializationException;
+import de.interactive_instruments.exceptions.InvalidStateTransitionException;
+import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
+import de.interactive_instruments.exceptions.StorageException;
+import de.interactive_instruments.exceptions.config.ConfigurationException;
+
+/**
+ * Controller for the test drivers
+ */
+@RestController
+public class TestDriverController implements PreparedDtoResolver<ExecutableTestSuiteDto> {
+
+	@Autowired
+	private EtfConfigController etfConfig;
+
+	@Autowired
+	private DataStorageService dataStorageService;
+
+	private TestDriverManager driverManager;
+	private MetadataTypeLoader metadataTypeLoader;
+	private Dao<ExecutableTestSuiteDto> etsDao;
+	private Dao<TestObjectTypeDto> testObjectTypesDao;
+	private final Logger logger = LoggerFactory.getLogger(TestDriverController.class);
+
+	private static final Filter FILTER_GET_ALL = new Filter() {
+		@Override
+		public int offset() {
+			return 0;
+		}
+
+		@Override
+		public int limit() {
+			return 2000;
+		}
+	};
+
+	public TestDriverController() {}
+
+	@PostConstruct
+	public void init()
+			throws ConfigurationException, InvalidStateTransitionException, InitializationException, StorageException {
+
+		// Metadata need to be initialized first
+		metadataTypeLoader = new MetadataTypeLoader(dataStorageService.getDataStorage());
+		metadataTypeLoader.getConfigurationProperties().setPropertiesFrom(etfConfig, true);
+		metadataTypeLoader.init();
+
+		etsDao = dataStorageService.getDataStorage().getDao(ExecutableTestSuiteDto.class);
+		// Delete existing ETS
+		try {
+			final PreparedDtoCollection<ExecutableTestSuiteDto> all = etsDao.getAll(FILTER_GET_ALL);
+			((WriteDao) etsDao).deleteAll(all.keySet());
+		} catch (Exception e) {
+			logger.warn("Failed to clean Executable Test Suites ", e);
+		}
+
+		// Initialize test driver
+		driverManager = TestDriverManager.getDefault();
+		driverManager.getConfigurationProperties().setPropertiesFrom(etfConfig, true);
+		driverManager.getConfigurationProperties().setProperty(ETF_DATA_STORAGE_NAME, "default");
+		driverManager.init();
+		driverManager.loadAll();
+
+		testObjectTypesDao = dataStorageService.getDataStorage().getDao(TestObjectTypeDto.class);
+		logger.info("Test Driver service initialized");
+		if (driverManager.getTestDriverInfo().isEmpty()) {
+			logger.warn("No Test Driver loaded");
+		} else {
+			for (final ComponentInfo componentInfo : driverManager.getTestDriverInfo()) {
+				logger.info("Loaded Test Driver {} - {} ({})", componentInfo.getName(),
+						componentInfo.getVersion(), componentInfo.getId());
+			}
+			if (getExecutableTestSuites().size() == 0) {
+				logger.warn("No Executable Test Suites loaded");
+			} else {
+				logger.info("{} Executable Test Suites loaded", getExecutableTestSuites().size());
+			}
+		}
+
+	}
+
+	@PreDestroy
+	private void shutdown() {
+		driverManager.release();
+	}
+
+	TestRun create(TestRunDto testRunDto) throws IncompleteDtoException, TestRunInitializationException {
+		testRunDto.setStartTimestamp(new Date());
+		testRunDto.setDefaultLang(LocaleContextHolder.getLocale().getLanguage());
+		testRunDto.ensureBasicValidity();
+		for (final TestTaskDto testTaskDto : testRunDto.getTestTasks()) {
+			testTaskDto.setId(EidFactory.getDefault().createRandomId());
+		}
+		return driverManager.createTestRun(testRunDto);
+	}
+
+	Collection<ExecutableTestSuiteDto> getExecutableTestSuites() throws ConfigurationException, StorageException {
+		return etsDao.getAll(FILTER_GET_ALL).asCollection();
+	}
+
+	ExecutableTestSuiteDto getExecutableTestSuiteById(final EID id) throws StorageException, ObjectWithIdNotFoundException {
+		return etsDao.getById(id).getDto();
+	}
+
+	@Override
+	public PreparedDto<ExecutableTestSuiteDto> getById(final EID eid, final Filter filter)
+			throws StorageException, ObjectWithIdNotFoundException {
+		return this.etsDao.getById(eid, filter);
+	}
+
+	@Override
+	public PreparedDtoCollection<ExecutableTestSuiteDto> getByIds(final Set<EID> eids, final Filter filter)
+			throws StorageException, ObjectWithIdNotFoundException {
+		return this.etsDao.getByIds(eids, filter);
+	}
+
+	Collection<TestObjectTypeDto> getTestObjectTypes() throws ConfigurationException, StorageException {
+		return testObjectTypesDao.getAll(FILTER_GET_ALL).asCollection();
+	}
+
+	public Collection<ComponentDto> getTestDriverInfo() {
+		return driverManager.getTestDriverInfo().stream().map(ComponentDto::new).collect(Collectors.toList());
+	}
+
+	@RequestMapping(value = {MetaTypeController.COMPONENTS_URL}, params = "action=reload", method = RequestMethod.GET)
+	public ResponseEntity<String> reloadAll() throws LocalizableApiError {
+		if (!driverManager.getTestDriverInfo().isEmpty()) {
+			return new ResponseEntity("Operation not permitted if a test driver has already been loaded!",
+					HttpStatus.FORBIDDEN);
+		} else {
+			try {
+				driverManager.loadAll();
+			} catch (ConfigurationException e) {
+				new LocalizableApiError(e);
+			} catch (ComponentLoadingException e) {
+				new LocalizableApiError(e);
+			}
+			return new ResponseEntity("OK", HttpStatus.NO_CONTENT);
+		}
+	}
+
+}

@@ -38,6 +38,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
+import de.interactive_instruments.io.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.slf4j.Logger;
@@ -70,10 +71,6 @@ import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
 import de.interactive_instruments.exceptions.config.MissingPropertyException;
-import de.interactive_instruments.io.FileContentFilterHolder;
-import de.interactive_instruments.io.FileHashVisitor;
-import de.interactive_instruments.io.GmlAndXmlFilter;
-import de.interactive_instruments.io.MultiFileFilter;
 import de.interactive_instruments.properties.PropertyHolder;
 import io.swagger.annotations.*;
 
@@ -124,6 +121,21 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		testObjectDao.release();
 	}
 
+
+	private static class GmlAtomFilter implements FileContentFilterHolder {
+		private ContentTypeFilter contentFilter = new ContentTypeFilter(
+				new String[]{"application/xml", "application/gml+xml", "application/atom+xml"});
+		private MultiFileFilter filenameFilter = new FilenameExtensionFilter(new String[]{".xml", ".gml"});
+
+		public ContentTypeFilter content() {
+			return this.contentFilter;
+		}
+
+		public MultiFileFilter filename() {
+			return this.filenameFilter;
+		}
+	}
+
 	@PostConstruct
 	public void init() throws IOException, JAXBException, MissingPropertyException {
 
@@ -136,8 +148,13 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			tmpUploadDir.deleteDirectory();
 		}
 		tmpUploadDir.mkdir();
-		baseFilter = new GmlAndXmlFilter();
+
+		// TODO provide different filters for each fileStorage
+		baseFilter = new GmlAtomFilter();
+
+		// TODO provide file storages for each Test Object Type
 		fileStorage = new FileStorage(testDataDir, tmpUploadDir, baseFilter);
+
 		logger.info("TMP_HTTP_UPLOADS: " + tmpUploadDir.getAbsolutePath());
 
 		testObjectDao = ((WriteDao<TestObjectDto>) dataStorageService.getDao(TestObjectDto.class));
@@ -405,8 +422,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		return exists;
 	}
 
-	@ApiOperation(value = "Check if Test Object exists. "
-			+ "Please note that this interface will always return HTTP status code '404' for temporary Test Object IDs.",
+	@ApiOperation(value = "Check if Test Object exists",
+			notes = "Please note that this interface will always return HTTP status code '404' for temporary Test Object IDs.",
 			tags = {TEST_OBJECTS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 204, message = "Test Object exists"),
