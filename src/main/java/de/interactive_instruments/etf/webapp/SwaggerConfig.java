@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2017 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,16 +68,17 @@ public class SwaggerConfig {
 				.title("ETF API")
 				.description(
 						"This is an interactive documentation and a web user interface for interacting with the Web API version 2 BETA of the test framework "
-						+ "[ETF](https://interactive-instruments.github.io/etf-webapp). "
-						+ "This semi-automatic generated documentation covers basic functionality, but consulting the [Wiki](https://github.com/interactive-instruments/etf-webapp/wiki/Web%20API) "
-						+ "may be required to get a deeper understanding of the ETF model and further procedures. "
-						+ "Issues can be reported in [GitHub]"
-						+ "(https://github.com/interactive-instruments/etf-webapp/issues/new?title=[webapi-v2-beta]%20&body=Please%20don%27t%20delete%20the%20"
-						+ "[webapi-v2-beta]%20text%20in%20the%20title.%20This%20text%20can%20be%20deleted.&labels=webapi). "
-						+ "  "
-						+ "Content negotiation is currently not implemented and therefore JSON is always returned for endpoints without file extension. "
-						+ "Please note that the API is not final and may undergo further changes before being released. ")
-				.contact(new Contact("ETF Team", "https://interactive-instruments.github.io/etf-webapp", "etf@interactive-instruments.de"))
+								+ "[ETF](https://interactive-instruments.github.io/etf-webapp). "
+								+ "This semi-automatic generated documentation covers basic functionality, but consulting the [Wiki](https://github.com/interactive-instruments/etf-webapp/wiki/Web%20API) "
+								+ "may be required to get a deeper understanding of the ETF model and further procedures. "
+								+ "Issues can be reported in [GitHub]"
+								+ "(https://github.com/interactive-instruments/etf-webapp/issues/new?title=[webapi-v2-beta]%20&body=Please%20don%27t%20delete%20the%20"
+								+ "[webapi-v2-beta]%20text%20in%20the%20title.%20This%20text%20can%20be%20deleted.&labels=webapi). "
+								+ "  "
+								+ "Content negotiation is currently not implemented and therefore JSON is always returned for endpoints without file extension. "
+								+ "Please note that the API is not final and may undergo further changes before being released. ")
+				.contact(new Contact("ETF Team", "https://interactive-instruments.github.io/etf-webapp",
+						"etf@interactive-instruments.de"))
 				.license("Apache 2.0")
 				.licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
 				.version("2.0.0-BETA")
