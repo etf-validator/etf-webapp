@@ -1,17 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright ${year} interactive instruments GmbH
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <!DOCTYPE tiles-definitions PUBLIC
 	"-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
 	"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 	
 <tiles-definitions>
-	
-	<definition name="intro" extends="standardLayout">
-		<!--put-attribute name="body" value="/intro.html :: content" TYPE="thymeleaf"/-->
-		<put-attribute name="body" value="/testruns/status.html :: content" type="thymeleaf"/>
+
+	<!-- Main sites -->
+	<definition name="error" template="error.html" templateType="thymeleaf"/>
+	<definition name="etf" template="etf.html" templateType="thymeleaf">
+		<put-attribute name="header" cascade="true" value="/layout.html :: header" type="thymeleaf"/>
+		<put-attribute name="footer" cascade="true" value="/layout.html :: footer" type="thymeleaf"/>
+
+		<put-attribute name="home-page" value="/home.html :: home-page" type="thymeleaf"/>
+		<put-attribute name="start-tests-page" value="/executable-test-suites.html :: start-tests-page" type="thymeleaf"/>
+		<put-attribute name="test-objects-page" value="/test-objects.html :: test-objects-page" type="thymeleaf"/>
+		<put-attribute name="test-reports-page" value="/test-reports.html :: test-reports-page" type="thymeleaf"/>
+		<!--put-attribute name="monitor-test-run-page" value="/monitor-test-run.html :: monitor-test-run-dialog" type="thymeleaf"/-->
 	</definition>
-	
-	<definition name="error" extends="standardLayout">
-		<put-attribute name="body" value="/error/error.html :: content" type="thymeleaf"/>
-	</definition>
+	<definition name="offline" template="offline.html"/>
+
+
+	<!-- Pages -->
+	<definition name="layout" template="layout.html"/>
+	<definition name="home" template="home.html" extends="layout"/>
+	<definition name="start-tests" template="executable-test-suites.html" extends="layout"/>
+	<definition name="test-objects" template="test-objects.html" extends="layout"/>
+	<definition name="test-reports" template="test-reports.html" extends="layout"/>
+	<!--definition name="monitor-test-run" template="monitor-test-run.html" extends="layout"/-->
 
 </tiles-definitions>

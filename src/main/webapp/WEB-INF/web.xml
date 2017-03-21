@@ -6,14 +6,14 @@
 http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 		 id="etf-webapp" version="3.0">
 
-	<!-- The master configuration file for this Spring web application -->
+	<!-- The master configuration path for this Spring web application -->
 	<description>ETF web application for web service and data tests</description>
 	<display-name>ETF-WebApp</display-name>
 	
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			/WEB-INF/config/web-application-config.xml
+			/WEB-INF/web-application-config.xml
 		</param-value>
 	</context-param>
 
@@ -46,5 +46,14 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
+	<filter>
+		<filter-name>apiFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>apiFilter</filter-name>
+		<url-pattern>/v2/*</url-pattern>
+	</filter-mapping>
 
 </web-app>

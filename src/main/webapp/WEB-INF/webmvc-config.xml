@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright ${year} interactive instruments GmbH
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:util="http://www.springframework.org/schema/util"
@@ -13,30 +29,31 @@
     <mvc:annotation-driven>
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                <property name="objectMapper" ref="htmlEscapingObjectMapper" />
+                <property name="objectMapper" ref="objectMapperFactory" />
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-	<mvc:resources mapping="/resources/**" location="/, classpath:/META-INF/web-resources/" />
+    <mvc:resources mapping="/resources/**" location="/, /js, /css, classpath:/META-INF/web-resources/" cache-period="432000"/>
     <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
-    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/" cache-period="432000"/>
 
     <bean name="/applicationSwaggerConfig" class="de.interactive_instruments.etf.webapp.SwaggerConfig"/>
 
     <mvc:default-servlet-handler />
 
     <!-- Root page -->
-	<mvc:view-controller path="/" view-name="testruns/status" />
+	<mvc:view-controller path="/" view-name="/etf.html" />
 
-    <bean id="htmlEscapingObjectMapper" class="de.interactive_instruments.etf.webapp.converters.HtmlEscapingObjectMapperFactory" />
+    <bean id="objectMapperFactory" class="de.interactive_instruments.etf.webapp.conversion.ObjectMapperFactory" />
 
-    <!-- Thymeleaf template resolver -->
-	<bean id="templateResolver"
-		  class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
-		<property name="prefix" value="/WEB-INF/" />
-        <property name="templateMode" value="HTML5" />
-	</bean>
+    <bean
+            id="templateResolver"
+            class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
+        <property name="prefix" value="/" />
+        <property name="templateMode" value="LEGACYHTML5" />
+        <property name="cacheable" value="false" />
+    </bean>
 
 	<!-- Thymeleaf Template Engine -->
     <bean id="templateEngine"
@@ -51,9 +68,10 @@
         </property>
     </bean>
 
-
     <bean id="tilesViewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
         <property name="viewClass" value="org.thymeleaf.extras.tiles2.spring4.web.view.ThymeleafTilesView"/>
+        <property name="characterEncoding" value="UTF-8"/>
+        <property name="contentType" value="text/html"/>
         <property name="templateEngine" ref="templateEngine" />
     </bean>
   
@@ -61,7 +79,7 @@
 	<bean id="tilesConfigurer" class="org.thymeleaf.extras.tiles2.spring4.web.configurer.ThymeleafTilesConfigurer">
 		<property name="definitions">
 			<list>
-				<value>/WEB-INF/**/views.xml</value>
+                <value>WEB-INF/views.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -71,23 +89,21 @@
         <property name="maxUploadSize" value="524288000"/>
     </bean>
 
-	<util:properties id="etfConfigProperties" location="classpath:/etf-config.properties"/>
-	<util:properties id="etfSecurityProperties" location="classpath:/etf-security.properties"/>
-
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="messages" />
         <property name="defaultEncoding" value="UTF-8" />
     </bean>
 
     <!-- EID conversion -->
-
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="formatterRegistrars">
             <set>
-                <bean id="webAppFormatterRegistrar" class="de.interactive_instruments.etf.webapp.converters.WebAppFormatterRegistrar">
+                <bean id="webAppFormatterRegistrar" class="de.interactive_instruments.etf.webapp.conversion.EtfFormatterRegistrar">
                 </bean>
             </set>
         </property>
     </bean>
+
+    <bean id="apiFilter" class="de.interactive_instruments.etf.webapp.filter.ApiFilter"/>
 
 </beans>
