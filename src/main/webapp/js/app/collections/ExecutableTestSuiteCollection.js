@@ -38,8 +38,8 @@ define([
             // Load dependencies first
             var self = this;
             this.deferred = $.when(
-                this.tagCollection.deferred.done,
                 this.testObjectTypeCollection.deferred.done,
+                this.tagCollection.deferred.done,
                 this.translationTemplateBundleCollection.done
             ).then(function() {
                 return self.fetch()
@@ -56,29 +56,36 @@ define([
         comparator: function(a, b) {
             var aJ = a.toJSON(), bJ = b.toJSON();
             var tagsA = aJ.tags, tagsB = bJ.tags;
-            var aText = "", bText = "";
+            var aPrio = 0, bPrio = 0;
+            var aLabel = "", bLabel = "";
 
             if( !_.isNil(tagsA) && tagsA.length != 0) {
                 if(!_.isNil(tagsA[0].priority)) {
-                    aText += tagsA[0].priority;
+                    aPrio = parseInt(tagsA[0].priority, 10);
                 }
-                aText += tagsA[0].label;
+                aLabel += tagsA[0].label;
             }
             if( !_.isNil(tagsB) && tagsB.length != 0) {
                 if(!_.isNil(tagsB[0].priority)) {
-                    bText += tagsB[0].priority;
+                    bPrio += parseInt(tagsB[0].priority, 10);
                 }
-                bText += tagsB[0].label;
+                bLabel += tagsB[0].label;
             }
-            if(aText > bText) {
+            if(aPrio > bPrio) {
                 return 1;
-            }else if(aText < bText) {
+            }else if(aPrio < bPrio) {
                 return -1;
             }else{
-                if(aJ.label > bJ.label) {
+                if(aLabel > bLabel) {
                     return 1;
-                }else if(aJ.label < bJ.label) {
+                }else if(aLabel < bLabel) {
                     return -1;
+                }else{
+                    if(aJ.label > bJ.label) {
+                        return 1;
+                    }else if(aJ.label < bJ.label) {
+                        return -1;
+                    }
                 }
             }
             console.error("Executable Test Suites have identical labels: %o = %o", a.get("id"), b.get("id"));

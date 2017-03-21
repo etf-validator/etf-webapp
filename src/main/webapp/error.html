@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org"
+      lang="en">
+
+<head>
+    <title>Error</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body tiles:fragment="content">
+
+<h1 th:text="#{l.error.occured}">An error occurred</h1>
+
+<p th:if="${hint != null}" th:text="${hint}"></p>
+
+<script th:if="${submitReport == true}" th:inline="javascript">
+    /*<![CDATA[*/
+    var exType = /*[[${ex.class.simpleName}]]*/ null;
+    var message = /*[[${ex.message}]]*/ null;
+    var exid = /*[[${exid}]]*/ null;
+    var e = new Error(exid+" -> "+message);
+    e.name=exType;
+    _opbeat('captureException', e);
+    /*]]>*/
+</script>
+
+
+<div th:if="${ex != null}">
+
+    <p><b th:if="${ex.message}" th:text="${ex.message}">exception message...</b></p>
+    <div data-role="collapsible" data-iconpos="right" data-shadow="false" data-corners="false">
+        <h2>Stacktrace</h2>
+        <p>URL:
+            <span th:text="${#httpServletRequest.requestURL}">Request URL</span>
+        </p>
+        <p>Exception id:
+            <span th:text="${exid}">Excpeption id</span>
+        </p>
+        <p th:each="ste : ${ex.stackTrace}" th:text="${ste}">...</p>
+    </div>
+
+</div>
+
+<div th:if="${ex == null}">
+    <p>Error logged</p>
+</div>
+<div th:if="${submitReport == true}">
+    <p>Error report submitted</p>
+</div>
+
+
+</body>
+</html>

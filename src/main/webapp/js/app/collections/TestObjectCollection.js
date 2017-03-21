@@ -39,6 +39,7 @@ define([
             ).then(function() {
                 return self.fetch()
             });
+            this.testObjectTypeCollection = options.testObjectTypeCollection;
         },
 
         parse: function(response) {
