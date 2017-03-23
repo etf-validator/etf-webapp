@@ -1,5 +1,5 @@
 /**
- * Copyright 2010-2016 interactive instruments GmbH
+ * Copyright 2010-2017 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,15 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
+import static de.interactive_instruments.etf.EtfConstants.ETF_DATASOURCE_DIR;
+import static de.interactive_instruments.etf.EtfConstants.ETF_TESTDRIVERS_DIR;
+
 import java.io.*;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.jar.Manifest;
+import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -28,20 +31,22 @@ import javax.servlet.ServletContext;
 
 import ch.qos.logback.classic.Level;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ReversedLinesFileReader;
+import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import de.interactive_instruments.IFile;
 import de.interactive_instruments.II_Constants;
+import de.interactive_instruments.LogUtils;
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.etf.EtfConstants;
-import de.interactive_instruments.exceptions.config.InvalidPropertyException;
+import de.interactive_instruments.exceptions.ExcUtils;
 import de.interactive_instruments.exceptions.config.MissingPropertyException;
 import de.interactive_instruments.properties.PropertyHolder;
 import de.interactive_instruments.properties.PropertyUtils;
@@ -54,6 +59,11 @@ import de.interactive_instruments.properties.PropertyUtils;
  */
 @RestController
 public class EtfConfigController implements PropertyHolder {
+
+	@FunctionalInterface
+	public interface EtfConfigPropertyChangeListener {
+		void propertyChanged(final String propertyName, final String oldValue, final String newValue);
+	}
 
 	public static final String ETF_WEBAPP_BASE_URL = "etf.webapp.base.url";
 	public static final String ETF_API_BASE_URL = "etf.api.base.url";
@@ -69,6 +79,7 @@ public class EtfConfigController implements PropertyHolder {
 	public static final String ETF_TESTDATA_DIR = "etf.testdata.dir";
 	public static final String ETF_TESTDATA_UPLOAD_DIR = "etf.testdata.upload.dir";
 	public static final String ETF_DIR = "etf.dir";
+	public static final String ETF_FEED_DIR = "etf.feed.dir";
 	public static final String ETF_BSX_RECREATE_CONFIG = "etf.bsx.recreate.config";
 	public static final String ETF_HELP_PAGE_URL = "etf.help.page";
 
@@ -79,18 +90,16 @@ public class EtfConfigController implements PropertyHolder {
 
 	public static final String ETF_SUBMIT_ERRORS = "etf.errors.autoreport";
 
+	private static final String ETF_CONFIG_PROPERTY_FILENAME = "etf-config.properties";
+
 	@Autowired
 	private ServletContext servletContext;
 
-	@Autowired
-	@Qualifier("etfConfigProperties")
 	private Properties configProperties;
 
-	@Autowired
-	@Qualifier("etfSecurityProperties")
-	private Properties secProperties;
-
 	private IFile etfDir;
+
+	private final List<EtfConfigPropertyChangeListener> listeners = new ArrayList<>();
 
 	private static String requiredConfigVersion = "2";
 
@@ -99,42 +108,58 @@ public class EtfConfigController implements PropertyHolder {
 
 	private final Logger logger = LoggerFactory.getLogger(EtfConfigController.class);
 
-	private final Map<String, String> defaultProperties = Collections.unmodifiableMap(new HashMap<String, String>() {
+	private static final Map<String, String> defaultProperties = Collections.unmodifiableMap(new HashMap<String, String>() {
 		{
 			put(ETF_WEBAPP_BASE_URL, "http://localhost:8080/etf-webapp");
-			put(ETF_API_ALLOW_ORIGIN, "localhost");
 			put(ETF_BRANDING_TEXT, "");
 			put(ETF_TESTOBJECT_ALLOW_PRIVATENET_ACCESS, "false");
 			put(ETF_REPORT_COMPARISON, "false");
 			put(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION, "360");
 			put(ETF_TESTREPORTS_LIFETIME_EXPIRATION, "43800");
-			put(ETF_WORKFLOWS, "default");
-			put(ETF_HELP_PAGE_URL, "https://services.interactive-instruments.de/etf-user-manual");
+			put(ETF_HELP_PAGE_URL,
+					"https://github.com/interactive-instruments/etf-webapp/wiki/User%20manual%20for%20simplified%20workflows");
 			put(ETF_BSX_RECREATE_CONFIG, "true");
 			put(EtfConstants.ETF_PROJECTS_DIR, "projects");
 			put(EtfConstants.ETF_REPORTSTYLES_DIR, "reportstyles");
-			put(EtfConstants.ETF_TESTDRIVERS_DIR, "td");
+			put(ETF_TESTDRIVERS_DIR, "td");
 			put(EtfConstants.ETF_DATASOURCE_DIR, "ds");
 			put(EtfConstants.ETF_ATTACHMENT_DIR, "ds/attachments/");
 			put(EtfConstants.ETF_BACKUP_DIR, "bak");
+			// put(ETF_FEED_DIR, ".feed");
 			put(ETF_TESTDATA_DIR, "testdata");
 			put(ETF_TESTDATA_UPLOAD_DIR, "http_uploads");
 			put(ETF_SUBMIT_ERRORS, "false");
+			put(ETF_WORKFLOWS, "simplified");
 		}
 	});
 
-	private final Set<String> filePathPropertyKeys = Collections.unmodifiableSet(new LinkedHashSet<String>() {
+	private static final Set<String> filePathPropertyKeys = Collections.unmodifiableSet(new LinkedHashSet<String>() {
 		{
 			add(EtfConstants.ETF_PROJECTS_DIR);
 			add(EtfConstants.ETF_REPORTSTYLES_DIR);
 			add(EtfConstants.ETF_ATTACHMENT_DIR);
-			add(EtfConstants.ETF_TESTDRIVERS_DIR);
+			add(ETF_TESTDRIVERS_DIR);
 			add(EtfConstants.ETF_DATASOURCE_DIR);
 			add(EtfConstants.ETF_BACKUP_DIR);
 			add(ETF_TESTDATA_DIR);
 			add(ETF_TESTDATA_UPLOAD_DIR);
+			// add(ETF_FEED_DIR);
 		}
 	});
+
+	private IFile checkDirForConfig(final IFile dir) {
+		if (dir.exists()) {
+			final IFile configFile = dir.expandPath(ETF_CONFIG_PROPERTY_FILENAME);
+			if (configFile.exists()) {
+				return configFile;
+			} else {
+				logger.warn("Skipping directory '" + dir.getAbsolutePath() +
+						"' which does not contain a " + ETF_CONFIG_PROPERTY_FILENAME + " configuration file");
+				return null;
+			}
+		}
+		return null;
+	}
 
 	@PostConstruct
 	private void init()
@@ -142,8 +167,10 @@ public class EtfConfigController implements PropertyHolder {
 		version = getManifest().getMainAttributes().getValue("Implementation-Version");
 		if (version == null) {
 			version = "unknown";
-		} else if (version.contains("-SNAPSHOT") && !SUtils.isNullOrEmpty(getManifest().getMainAttributes().getValue("Build-Time"))) {
-			version = version.replace("-SNAPSHOT", "-b" + getManifest().getMainAttributes().getValue("Build-Time").substring(2));
+		} else if (version.contains("-SNAPSHOT")
+				&& !SUtils.isNullOrEmpty(getManifest().getMainAttributes().getValue("Build-Time"))) {
+			version = version.replace("-SNAPSHOT",
+					"-b" + getManifest().getMainAttributes().getValue("Build-Time").substring(2));
 		}
 
 		logger.info(EtfConstants.ETF_ASCII +
@@ -151,21 +178,79 @@ public class EtfConfigController implements PropertyHolder {
 				II_Constants.II_COPYRIGHT);
 
 		System.setProperty("java.awt.headless", "true");
-		logger.info("file.encoding is set to " + System.getProperty("file.encoding"));
+		final String encoding = System.getProperty("file.encoding");
+		logger.info("file.encoding is set to " + encoding);
 		if (!"UTF-8".equalsIgnoreCase(System.getProperty("file.encoding"))) {
-			logger.warn("The file encoding should be set to UTF-8 for "
-					+ "instance in the JAVA_OPTS ( -Dfile.encoding=UTF-8 ) !");
+			System.setProperty("file.encoding", "UTF-8");
+			// Print as error and sleep for 3 seconds, so it is noticed by Admins
+			logger.error(LogUtils.ADMIN_MESSAGE,
+					"The file encoding must be set to UTF-8 " +
+							"(for instance by adding   -Dfile.encoding=UTF-8   to the JAVA_OPTS)");
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException ign) {
+				ExcUtils.suppress(ign);
+			}
 		}
 
-		final String propertiesFilePath = System.getenv("ETF_WEBAPP_PROPERTIES_FILE");
+		final String propertiesFilePath = PropertyUtils.getenvOrProperty("ETF_WEBAPP_PROPERTIES_FILE", null);
+		configProperties = new Properties();
+		final IFile propertiesFile;
+		final String configFileIdentifier = "ETF_CONFIG_PROPERTY_FILE";
 		if (!SUtils.isNullOrEmpty(propertiesFilePath)) {
-			logger.info("ETF_WEBAPP_PROPERTIES_FILE is set, using property file " + propertiesFilePath);
-			final IFile propertiesFile = new IFile(propertiesFilePath, "ETF_WEBAPP_PROPERTIES_FILE");
+			logger.info("Using environment variable ETF_WEBAPP_PROPERTIES_FILE for property file");
+			if (propertiesFilePath.contains(ETF_CONFIG_PROPERTY_FILENAME)) {
+				propertiesFile = new IFile(propertiesFilePath, configFileIdentifier);
+			} else {
+				// Be gentle, user accidentally selected the dir
+				propertiesFile = new IFile(propertiesFilePath, configFileIdentifier).expandPath(ETF_CONFIG_PROPERTY_FILENAME);
+			}
 			propertiesFile.expectIsReadable();
-			configProperties.clear();
-			configProperties.load(new FileInputStream(propertiesFile));
+		} else {
+			// Check root directories
+			IFile detectedPropertiesFile = null;
+			for (final File rootFile : File.listRoots()) {
+				detectedPropertiesFile = checkDirForConfig(new IFile(rootFile, configFileIdentifier));
+				if (detectedPropertiesFile != null) {
+					break;
+				}
+			}
 
+			// Check for the /etc/etf directory on Linux
+			if (detectedPropertiesFile == null && (SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC)) {
+				detectedPropertiesFile = checkDirForConfig(new IFile("/etc/etf/", configFileIdentifier));
+			}
+
+			// Check for a etf directory in home
+			if (detectedPropertiesFile == null) {
+				final String etfHomeDirName = SystemUtils.IS_OS_WINDOWS ? "etf" : ".etf";
+				final IFile homeConfigDir = new IFile(System.getProperty("user.home")).expandPath(etfHomeDirName);
+				detectedPropertiesFile = checkDirForConfig(homeConfigDir);
+
+				if (detectedPropertiesFile == null) {
+					// Not found, check the ProgammData directory on windows
+					if (SystemUtils.IS_OS_WINDOWS) {
+						// Folders in ALLUSERSPROFILE may be uploaded to the server after logoff.
+						// Alternative: combine with LOCALAPPDATA ?
+						// https://www.microsoft.com/security/portal/mmpc/shared/variables.aspx
+						final IFile programDataDir = new IFile(System.getenv("ALLUSERSPROFILE")).expandPath("etf");
+						detectedPropertiesFile = checkDirForConfig(programDataDir);
+						if (detectedPropertiesFile == null) {
+							// Create the directories in the ProgammData directory on Windows
+							createInitialDirectoryStructure(programDataDir);
+							detectedPropertiesFile = checkDirForConfig(programDataDir);
+						}
+					} else {
+						// Create the directories in the home directory on Linux
+						createInitialDirectoryStructure(homeConfigDir);
+						detectedPropertiesFile = checkDirForConfig(homeConfigDir);
+					}
+				}
+			}
+			propertiesFile = detectedPropertiesFile;
 		}
+		logger.info("Using configuration file: {}", propertiesFile);
+		configProperties.load(new FileInputStream(propertiesFile));
 
 		final String propertyFileVersion = configProperties.getProperty("etf.config.properties.version");
 		if (propertyFileVersion == null) {
@@ -176,25 +261,18 @@ public class EtfConfigController implements PropertyHolder {
 					+ "Version " + requiredConfigVersion + " expected.");
 		}
 
-		// Environment variable ETF_DIR will overwrite the java property
-		// etf.dir
-		final String sysEtfDir = System.getenv("ETF_DIR");
-		if (!SUtils.isNullOrEmpty(sysEtfDir)) {
-			logger.info("ETF_DIR is set, using path " + sysEtfDir);
-			etfDir = new IFile(sysEtfDir, "ETF_DIR");
+		// Check if etfDir is set in configuration, otherwise default to directory with the config file
+		if (configProperties.getProperty(ETF_DIR) != null) {
+			etfDir = new IFile(configProperties.getProperty(ETF_DIR), "ETF_DIR");
 		} else {
-			if (configProperties.getProperty(ETF_DIR) != null) {
-				etfDir = new IFile(configProperties.getProperty(ETF_DIR), "ETF_DIR");
-			} else {
-				etfDir = new IFile(servletContext.getRealPath("/WEB-INF/etf"), "ETF_DIR");
-			}
+			etfDir = new IFile(propertiesFile.getParentFile());
 		}
 
 		// Change every path variable to absolute paths
 		for (final String filePathPropertyKey : filePathPropertyKeys) {
 			final String path = getProperty(filePathPropertyKey);
 			final File f = new File(path);
-			// Correct pathes to absolute paths
+			// Correct paths to absolute paths
 			if (!f.isAbsolute()) {
 				final IFile absPath = etfDir.expandPath(path);
 				absPath.expectIsReadable();
@@ -215,35 +293,104 @@ public class EtfConfigController implements PropertyHolder {
 			}
 		}
 
-		// Set report style lang
-		final String lang = Locale.getDefault().getLanguage();
-		final IFile reportStyleDir = getPropertyAsFile(EtfConstants.ETF_REPORTSTYLES_DIR);
-		final IFile langXsl = reportStyleDir.expandPath("lang/" + lang + ".xsl");
-		if (langXsl.exists()) {
-			langXsl.copyTo(reportStyleDir.expandPath("current.xsl").getAbsolutePath());
-			logger.info("Report translation file set to \"" + lang + "\"");
-		} else {
-			logger.info(
-					"Report translation file is not available for language \"" + lang + "\" - using default");
+		// Add default properties
+		defaultProperties.entrySet().forEach(p -> configProperties.putIfAbsent(p.getKey(), p.getValue()));
+
+		if (this.getProperty(ETF_WEBAPP_BASE_URL).contains("//localhost")) {
+			logger.warn(LogUtils.ADMIN_MESSAGE,
+					"The ETF_WEBAPP_BASE_URL property must not be set to 'localhost' in a production environment");
 		}
 
+		// Set API base url
 		final String apiBaseUrl = configProperties.getProperty(ETF_API_BASE_URL);
 		if (SUtils.isNullOrEmpty(apiBaseUrl)) {
 			configProperties.setProperty(ETF_API_BASE_URL, configProperties.getProperty(ETF_WEBAPP_BASE_URL) + "/v2");
 		}
 
-		// Add default properties
-		defaultProperties.entrySet().forEach(p -> configProperties.putIfAbsent(p.getKey(), p.getValue()));
+		// Set CORS
+		final String cors = configProperties.getProperty(ETF_API_ALLOW_ORIGIN);
+		if (SUtils.isNullOrEmpty(cors)) {
+			configProperties.setProperty(ETF_API_ALLOW_ORIGIN, configProperties.getProperty(ETF_WEBAPP_BASE_URL));
+		}
 
-		configProperties.forEach((k, v) -> {
-			logger.info(k + " = " + v);
-		});
+		if (!this.getProperty(ETF_WORKFLOWS).equals("simplified")) {
+			logger.error("Workflow types other than 'simplified', are not supported yet!");
+			throw new RuntimeException("Workflow types other than 'simplified' are not supported yet!");
+		}
 
+		configProperties.forEach((k, v) -> logger.info(k + " = " + v));
 		instance = this;
+	}
+
+	private void createInitialDirectoryStructure(final IFile configDir) throws IOException {
+		etfDir = configDir;
+		logger.info("Creating a new ETF data directory in {} ", etfDir);
+		configDir.mkdirs();
+		etfDir.expectDirIsWritable();
+		filePathPropertyKeys.forEach(d -> etfDir.expandPath(d).mkdirs());
+
+		// Hide feed folder
+		/*
+		if(SystemUtils.IS_OS_WINDOWS) {
+			try {
+				Files.setAttribute(etfDir.expandPath(ETF_FEED_DIR).toPath(), "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
+			}catch (final IOException e) {
+				ExcUtils.suppress(e);
+			}
+		}
+		*/
+
+		final IFile tdDir = etfDir.expandPath(defaultProperties.get(ETF_TESTDRIVERS_DIR));
+		tdDir.mkdirs();
+
+		etfDir.expandPath(defaultProperties.get(ETF_DATASOURCE_DIR)).mkdirs();
+		etfDir.expandPath(defaultProperties.get(ETF_DATASOURCE_DIR)).expandPath("obj").mkdirs();
+		etfDir.expandPath(defaultProperties.get(ETF_DATASOURCE_DIR)).expandPath("attachments").mkdirs();
+		etfDir.expandPath(defaultProperties.get(ETF_DATASOURCE_DIR)).expandPath("db").mkdirs();
+		etfDir.expandPath(defaultProperties.get(ETF_DATASOURCE_DIR)).expandPath("db/data").mkdirs();
+		etfDir.expandPath(defaultProperties.get(ETF_DATASOURCE_DIR)).expandPath("db/repo").mkdirs();
+
+		// Copy template
+		final InputStream stream = servletContext.getResourceAsStream("/WEB-INF/classes/" + ETF_CONFIG_PROPERTY_FILENAME);
+		if (stream == null) {
+			throw new RuntimeException("Unknown internal error: "
+					+ "Could not find template etf configuration file. Servlet Context: " + servletContext);
+		}
+		final IFile newConfigFile = new IFile(etfDir, ETF_CONFIG_PROPERTY_FILENAME);
+		try (final FileOutputStream out = new FileOutputStream(newConfigFile)) {
+			IOUtils.copy(stream, out);
+		} catch (final IOException e) {
+			newConfigFile.delete();
+			throw new RuntimeException("Could not copy template configuration file: ", e);
+		} finally {
+			stream.close();
+		}
+
+		// Copy test drivers (will be automatically downloaded in future releases)
+		final String tdDirName = "/testdrivers";
+		final Set<String> tds = servletContext.getResourcePaths(tdDirName);
+		for (final String td : tds) {
+			final String tdName = td.substring(tdDirName.length());
+			final IFile tdJar = new IFile(tdDir, tdName);
+			final InputStream jarStream = servletContext.getResourceAsStream(td);
+			try (final FileOutputStream out = new FileOutputStream(tdJar)) {
+				IOUtils.copy(jarStream, out);
+			} catch (final IOException e) {
+				tdJar.delete();
+				logger.error("Could not copy test driver: ", e);
+			} finally {
+				jarStream.close();
+			}
+		}
+
 	}
 
 	public static EtfConfigController getInstance() {
 		return instance;
+	}
+
+	public void registerPropertyChangeListener(final EtfConfigPropertyChangeListener listener) {
+		this.listeners.add(listener);
 	}
 
 	public String getVersion() {
@@ -265,6 +412,7 @@ public class EtfConfigController implements PropertyHolder {
 
 	@PreDestroy
 	public void release() {
+		this.listeners.clear();
 		logger.info("Bye");
 		instance = null;
 	}
@@ -300,27 +448,68 @@ public class EtfConfigController implements PropertyHolder {
 	// Rest interfaces
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	private static String[] logLevels = {"OFF", "ERROR", "WARN", "INFO", "DEBUG", "TRACE", "ALL"};
+
 	@RequestMapping(value = "/v2/admin/log", method = RequestMethod.GET, produces = "application/json")
 	private @ResponseBody List<String> logFile(
-			@RequestParam(value = "max", required = false) String maxLinesStr) throws IOException {
-		long maxLines = 25;
+			@RequestParam(value = "max", required = false) String maxLinesStr,
+			@RequestParam(value = "search", required = false) String search) throws IOException {
+		final long defaultMax = 45;
+		long maxLines = defaultMax;
 		if (!SUtils.isNullOrEmpty(maxLinesStr)) {
 			maxLines = Long.valueOf(maxLinesStr);
 			if (maxLines < 0) {
-				maxLines = 25;
+				maxLines = defaultMax;
 			}
 		}
 		final File relEtfLog = new File("etf.log");
-		final File logFile = relEtfLog.exists() ?
-				relEtfLog : new File(PropertyUtils.getenvOrProperty(
-						"ETF_DIR", "./"), "etf.log");
+		final File logFile = relEtfLog.exists() ? relEtfLog : new File(PropertyUtils.getenvOrProperty(
+				"ETF_DIR", "./"), "logs/etf.log");
 		if (logFile.exists()) {
 			try (ReversedLinesFileReader reader = new ReversedLinesFileReader(logFile, StandardCharsets.UTF_8)) {
 				int i = 0;
 				String line;
 				final LinkedList<String> output = new LinkedList<>();
-				while ((line = reader.readLine()) != null && i++ < maxLines) {
-					output.addFirst(line);
+
+				if (SUtils.isNullOrEmpty(search)) {
+					while ((line = reader.readLine()) != null && i++ < maxLines) {
+						output.addFirst(line);
+					}
+				} else {
+					final int linesAfterMatch = 30;
+					final int linesBeforeMatch = 15;
+
+					final LinkedList<String> tmpOutput = new LinkedList<>();
+					final Pattern pattern = Pattern.compile(search);
+
+					int remainingLinesAfterMatch = 0;
+					while ((line = reader.readLine()) != null && i++ < maxLines) {
+						if (remainingLinesAfterMatch > 0) {
+							// Add remaining lines after a match
+							if (pattern.matcher(line).find()) {
+								remainingLinesAfterMatch += linesAfterMatch;
+							} else {
+								--remainingLinesAfterMatch;
+							}
+							output.add(line);
+						} else {
+							if (pattern.matcher(line).find()) {
+								remainingLinesAfterMatch = linesAfterMatch;
+								if (tmpOutput.isEmpty()) {
+									output.add(line);
+								} else {
+									output.addAll(tmpOutput);
+									output.addFirst(line);
+									tmpOutput.clear();
+								}
+							} else {
+								tmpOutput.addFirst(line);
+								if (tmpOutput.size() > linesBeforeMatch) {
+									tmpOutput.removeLast();
+								}
+							}
+						}
+					}
 				}
 				return output;
 			}
@@ -333,19 +522,28 @@ public class EtfConfigController implements PropertyHolder {
 	@RequestMapping(value = "/v2/admin/loglevel", method = RequestMethod.POST, produces = "application/json")
 	private ResponseEntity<String> logLevel(
 			@RequestBody String logLevel) {
-		final ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(
-				Logger.ROOT_LOGGER_NAME);
-		final ch.qos.logback.classic.Level newLevel = ch.qos.logback.classic.Level.toLevel(logLevel,
-				ch.qos.logback.classic.Level.ALL);
-		final ch.qos.logback.classic.Level currentLevel = rootLogger.getLevel();
-		if (currentLevel == newLevel) {
-			return new ResponseEntity("NO CHANGE", HttpStatus.OK);
-		} else if (newLevel == Level.ALL) {
-			return new ResponseEntity("Unknown log level", HttpStatus.BAD_REQUEST);
+		if (!SUtils.isNullOrEmpty(logLevel)) {
+			try {
+				final ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(
+						Logger.ROOT_LOGGER_NAME);
+				final ch.qos.logback.classic.Level newLevel = ch.qos.logback.classic.Level.toLevel(logLevel.toUpperCase(),
+						ch.qos.logback.classic.Level.ALL);
+				final ch.qos.logback.classic.Level currentLevel = rootLogger.getLevel();
+				if (currentLevel == newLevel) {
+					return new ResponseEntity("NO CHANGE", HttpStatus.FOUND);
+				} else if (newLevel == Level.ALL) {
+					return new ResponseEntity("Unknown log level", HttpStatus.BAD_REQUEST);
+				}
+				rootLogger.setLevel(newLevel);
+				logger.info("Set log level to {} ", newLevel);
+				return new ResponseEntity("OK", HttpStatus.OK);
+			} catch (final ClassCastException e) {
+				logger.error(LogUtils.FATAL_MESSAGE, "Failed to change log level: ", e);
+				return new ResponseEntity("Could not change logger", HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} else {
+			return new ResponseEntity("Empty log level", HttpStatus.BAD_REQUEST);
 		}
-		rootLogger.setLevel(newLevel);
-		logger.info("Set log level to {} ", newLevel);
-		return new ResponseEntity("OK", HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/v2/admin/configuration", method = RequestMethod.GET, produces = "application/json")
@@ -356,13 +554,13 @@ public class EtfConfigController implements PropertyHolder {
 	@RequestMapping(value = "/v2/admin/configuration", method = RequestMethod.POST, produces = "application/json")
 	private @ResponseBody Set<Map.Entry<String, String>> getConfiguration(
 			@RequestBody Set<Map.Entry<String, String>> newConfiguration)
-			throws InvalidPropertyException {
+			throws LocalizableApiError {
 
 		// No path properties are allowed
 		for (Map.Entry<String, String> e : newConfiguration) {
 			if (filePathPropertyKeys.contains(e.getKey())) {
 				logger.error("Denied attempt to overwrite path property '{}' in configuration", e.getKey());
-				throw new InvalidPropertyException("Path properties are not allowed");
+				throw new LocalizableApiError("l.overwriting.path.properties.not.allowed", false, HttpStatus.FORBIDDEN.value());
 			}
 		}
 
