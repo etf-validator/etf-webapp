@@ -37,9 +37,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import de.interactive_instruments.IFile;
@@ -53,8 +51,6 @@ import de.interactive_instruments.etf.dal.dto.result.AttachmentDto;
 import de.interactive_instruments.etf.dal.dto.result.TestTaskResultDto;
 import de.interactive_instruments.etf.dal.dto.run.TestRunDto;
 import de.interactive_instruments.etf.dal.dto.run.TestTaskDto;
-import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
-import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.model.OutputFormat;
 import de.interactive_instruments.etf.testdriver.TestRun;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
@@ -67,8 +63,6 @@ import de.interactive_instruments.exceptions.config.ConfigurationException;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 /**
  * Test result controller for viewing and comparing test results

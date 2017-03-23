@@ -15,17 +15,6 @@
  */
 package de.interactive_instruments.etf.webapp.helpers;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.UnknownHostException;
-import java.nio.file.NoSuchFileException;
-
-import de.interactive_instruments.UriUtils;
-import de.interactive_instruments.etf.component.ComponentLoadingException;
-import de.interactive_instruments.etf.webapp.controller.LocalizableApiError;
-import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
-import de.interactive_instruments.exceptions.config.ConfigurationException;
-
 /**
  * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
  */

@@ -15,9 +15,6 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
 /**
  * Service status types
  *

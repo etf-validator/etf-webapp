@@ -15,8 +15,6 @@
  */
 package de.interactive_instruments.etf.webapp.dto;
 
-import java.util.UUID;
-
 import de.interactive_instruments.etf.model.EID;
 
 /**

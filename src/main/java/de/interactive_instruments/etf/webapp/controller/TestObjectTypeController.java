@@ -20,7 +20,9 @@ import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -38,21 +40,16 @@ import javax.xml.xpath.XPathFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import de.interactive_instruments.Credentials;
 import de.interactive_instruments.IFile;
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.etf.dal.dao.Dao;
-import de.interactive_instruments.etf.dal.dao.WriteDao;
-import de.interactive_instruments.etf.dal.dao.WriteDaoListener;
-import de.interactive_instruments.etf.dal.dto.Dto;
 import de.interactive_instruments.etf.dal.dto.capabilities.ComponentDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.ResourceDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectTypeDto;
-import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.webapp.WebAppConstants;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
@@ -78,7 +75,6 @@ public class TestObjectTypeController {
 
 	private Dao<TestObjectTypeDto> testObjectTypeDao;
 	private final static String TEST_OBJECT_TYPES_URL = WebAppConstants.API_BASE_URL + "/TestObjectTypes";
-
 
 	private final static String TEST_OBJECT_TYPE_DESCRIPTION = "The Test Object model is described in the "
 			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/capabilities_xsd.html#TestObjectType) "
@@ -191,7 +187,7 @@ public class TestObjectTypeController {
 						// Web service
 						dto.setTestObjectType(testObjectTypeDao.getById(
 								EidConverter.toEid("EID9b6ef734-981e-4d60-aa81-d6730a1c6389")).getDto());
-								// EidConverter.toEid("EID88311f83-818c-46ed-8a9a-cec4f3707365")).getDto());
+						// EidConverter.toEid("EID88311f83-818c-46ed-8a9a-cec4f3707365")).getDto());
 						return;
 					}
 				} catch (Exception e) {

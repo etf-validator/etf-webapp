@@ -18,9 +18,10 @@ package de.interactive_instruments.etf.webapp.controller;
 import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_OBJECTS_TAG_NAME;
 import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
@@ -29,7 +30,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
@@ -38,7 +38,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
-import de.interactive_instruments.io.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.slf4j.Logger;
@@ -54,11 +53,13 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import springfox.documentation.annotations.ApiIgnore;
 
-import de.interactive_instruments.*;
+import de.interactive_instruments.Credentials;
+import de.interactive_instruments.IFile;
+import de.interactive_instruments.SUtils;
+import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.etf.dal.dao.*;
 import de.interactive_instruments.etf.dal.dto.capabilities.ResourceDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
-import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectTypeDto;
 import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.model.EidFactory;
 import de.interactive_instruments.etf.model.OutputFormat;
@@ -71,6 +72,7 @@ import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
 import de.interactive_instruments.exceptions.config.MissingPropertyException;
+import de.interactive_instruments.io.*;
 import de.interactive_instruments.properties.PropertyHolder;
 import io.swagger.annotations.*;
 
@@ -120,7 +122,6 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	private void shutdown() {
 		testObjectDao.release();
 	}
-
 
 	private static class GmlAtomFilter implements FileContentFilterHolder {
 		private ContentTypeFilter contentFilter = new ContentTypeFilter(
@@ -359,7 +360,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	public void testObjectByIdJson(@PathVariable String id, @RequestParam(required = false) String search,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException, StorageException, ObjectWithIdNotFoundException, LocalizableApiError {
-		if(transientTestObjects.getIfPresent(EidConverter.toEid(id))!=null) {
+		if (transientTestObjects.getIfPresent(EidConverter.toEid(id)) != null) {
 			throw new LocalizableApiError("l.temporary.testobject.access", false, 404);
 		}
 		streaming.asJson2(testObjectDao, request, response, id);
@@ -401,7 +402,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			@ApiParam(value = "ID of Test Object that needs to be fetched", example = "EID-1ffe6ea2-5c29-4ce9-9a7e-f4d9d71119e8", required = true) @PathVariable String id,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException, StorageException, ObjectWithIdNotFoundException, LocalizableApiError {
-		if(transientTestObjects.getIfPresent(EidConverter.toEid(id))!=null) {
+		if (transientTestObjects.getIfPresent(EidConverter.toEid(id)) != null) {
 			throw new LocalizableApiError("l.temporary.testobject.access", false, 404);
 		}
 		streaming.asXml2(testObjectDao, request, response, id);
@@ -422,9 +423,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		return exists;
 	}
 
-	@ApiOperation(value = "Check if Test Object exists",
-			notes = "Please note that this interface will always return HTTP status code '404' for temporary Test Object IDs.",
-			tags = {TEST_OBJECTS_TAG_NAME})
+	@ApiOperation(value = "Check if Test Object exists", notes = "Please note that this interface will always return HTTP status code '404' for temporary Test Object IDs.", tags = {
+			TEST_OBJECTS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 204, message = "Test Object exists"),
 			@ApiResponse(code = 404, message = "Test Object does not exist")

@@ -16,15 +16,9 @@
 package de.interactive_instruments.etf.webapp.helpers;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 import de.interactive_instruments.SUtils;
-import de.interactive_instruments.etf.EtfConstants;
 import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
-import de.interactive_instruments.etf.model.EID;
-import de.interactive_instruments.etf.model.EidFactory;
 import de.interactive_instruments.etf.webapp.controller.EtfConfigController;
 
 /**

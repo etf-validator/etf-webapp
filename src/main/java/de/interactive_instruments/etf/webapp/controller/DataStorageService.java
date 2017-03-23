@@ -15,8 +15,6 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
-import static de.interactive_instruments.etf.EtfConstants.ETF_DATA_STORAGE_NAME;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.ServletContext;

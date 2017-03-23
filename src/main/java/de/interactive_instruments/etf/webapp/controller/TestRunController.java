@@ -28,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,14 +43,17 @@ import org.springframework.web.bind.annotation.*;
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.TimedExpiredItemsRemover;
 import de.interactive_instruments.etf.EtfConstants;
-import de.interactive_instruments.etf.dal.dao.*;
+import de.interactive_instruments.etf.dal.dao.Dao;
+import de.interactive_instruments.etf.dal.dao.WriteDao;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.etf.dal.dto.run.TestRunDto;
 import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.testdriver.*;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
 import de.interactive_instruments.etf.webapp.dto.StartTestRunRequest;
-import de.interactive_instruments.exceptions.*;
+import de.interactive_instruments.exceptions.ExcUtils;
+import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
+import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
 import io.swagger.annotations.*;
 
@@ -399,8 +401,7 @@ public class TestRunController implements TestRunEventListener {
 		return new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
 
-	@ApiOperation(value = "Start a new Test Run",
-			notes = "Start a new Test Run by specifying one or multiple Executable Test Suites "
+	@ApiOperation(value = "Start a new Test Run", notes = "Start a new Test Run by specifying one or multiple Executable Test Suites "
 			+ "that shall be used to test one Test Object with specified test parameters. "
 			+ "If data for a Test Object need to be uploaded, the TestObject POST interface "
 			+ "needs to be used to create a new temporary Test Object. "

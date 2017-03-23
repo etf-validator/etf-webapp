@@ -19,14 +19,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import de.interactive_instruments.etf.model.exceptions.IllegalEidException;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
@@ -74,14 +77,14 @@ class RestExceptionHandler {
 							url + "\"",
 					e);
 			final LocalizableApiError localizableApiError;
-			if(e instanceof LocalizableApiError) {
+			if (e instanceof LocalizableApiError) {
 				localizableApiError = (LocalizableApiError) e;
-			}else if(e.getCause() instanceof LocalizableApiError) {
+			} else if (e.getCause() instanceof LocalizableApiError) {
 				localizableApiError = (LocalizableApiError) e.getCause();
-			}else{
+			} else {
 				localizableApiError = null;
 			}
-			if (localizableApiError!=null) {
+			if (localizableApiError != null) {
 				this.id = localizableApiError.getId();
 				final String err = applicationContext.getMessage(localizableApiError.getId(),
 						localizableApiError.getArgumentValueArr(), null,
@@ -134,8 +137,8 @@ class RestExceptionHandler {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		} else if (exception != null && exception.getCause() instanceof LocalizableApiError) {
 			response.setStatus(((LocalizableApiError) exception.getCause()).getStatus());
-		} else if( exception != null && exception.getCause() instanceof JsonMappingException){
-			final Throwable e = new LocalizableApiError((JsonMappingException)exception.getCause());
+		} else if (exception != null && exception.getCause() instanceof JsonMappingException) {
+			final Throwable e = new LocalizableApiError((JsonMappingException) exception.getCause());
 			return new ApiError(e, request.getRequestURL().toString(), applicationContext);
 		} else {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
