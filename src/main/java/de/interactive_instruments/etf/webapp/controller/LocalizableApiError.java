@@ -17,13 +17,12 @@ package de.interactive_instruments.etf.webapp.controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.UnknownHostException;
 import java.nio.file.NoSuchFileException;
-import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+
 import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.etf.LocalizableError;
 import de.interactive_instruments.etf.component.ComponentLoadingException;
@@ -113,23 +112,19 @@ public class LocalizableApiError extends LocalizableError {
 		sc = 404;
 	}
 
-
-
 	public LocalizableApiError(final JsonMappingException e) {
 		super("l.json.parse.error", e,
 				e.getLocation().getLineNr(),
 				e.getLocation().getColumnNr(),
 				e.getPath().get(0).getFieldName(),
 				e.getPath().get(0).getFrom().getClass().getSimpleName(),
-				e.getMessage().indexOf("\n at [")!=0 ?
-						e.getMessage().substring(0, e.getMessage().indexOf("\n at [")) : "unknown"
+				e.getMessage().indexOf("\n at [") != 0 ? e.getMessage().substring(0, e.getMessage().indexOf("\n at ["))
+						: "unknown"
 
 		);
 		sensitiveInformation = false;
 		sc = 404;
 	}
-
-
 
 	public LocalizableApiError(final NoSuchFileException e) {
 		super(e);
