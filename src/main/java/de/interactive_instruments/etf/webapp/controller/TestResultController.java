@@ -16,6 +16,7 @@
 package de.interactive_instruments.etf.webapp.controller;
 
 import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_RESULTS_TAG_NAME;
+import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_RUNS_TAG_NAME;
 import static de.interactive_instruments.etf.webapp.WebAppConstants.API_BASE_URL;
 import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
 
@@ -33,11 +34,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
 
+import de.interactive_instruments.etf.dal.dto.Dto;
+import de.interactive_instruments.etf.dal.dto.result.TestResultStatus;
+import de.interactive_instruments.etf.model.EID;
+import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import de.interactive_instruments.IFile;
@@ -91,6 +100,7 @@ public class TestResultController {
 	private Dao<TestTaskResultDto> testTaskResultDao;
 	private OutputFormat testRunHtmlReportFormat;
 	private final static String TEST_RUNS_URL = API_BASE_URL + "/TestRuns";
+	private final static String TEST_TASKS_URL = API_BASE_URL + "/TestTaskResults";
 
 	// TODO report comparison output format
 	// private XslReportTransformer comparisonTransformer;
@@ -98,6 +108,10 @@ public class TestResultController {
 
 	private final static String TEST_RUN_DESCRIPTION = "The Test Run model is described in the "
 			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/run_xsd.html#TestRun). "
+			+ ETF_ITEM_COLLECTION_DESCRIPTION;
+
+	private final static String TEST_TASK_RESULT_DESCRIPTION = "The Test Task model is described in the "
+			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/result_xsd.html#TestTaskResult). "
 			+ ETF_ITEM_COLLECTION_DESCRIPTION;
 
 	public TestResultController() {
@@ -120,7 +134,7 @@ public class TestResultController {
 			}
 		}
 
-		streaming.prepareCache(testRunDao);
+		streaming.prepareCache(testRunDao, new SimpleFilter());
 
 		logger.info("Result controller initialized!");
 	}
@@ -146,22 +160,34 @@ public class TestResultController {
 		((WriteDao<TestRunDto>) testRunDao).replace(testRunDto.getResult());
 	}
 
-	private void getById(
-			@PathVariable String id,
-			@RequestParam(value = "download", required = false) String download,
-			HttpServletRequest request,
-			HttpServletResponse response) throws LocalizableApiError {
-		if (CacheControl.clientNeedsUpdate(testRunDao, request, response, TimeUnit.SECONDS.toDays(31)))
+	private void getByIdHtml(
+			final Dao<? extends Dto> dao,
+			final String id,
+			final String download,
+			final HttpServletRequest request,
+			final HttpServletResponse response) throws LocalizableApiError {
+		if (CacheControl.clientNeedsUpdate(dao, request, response, TimeUnit.SECONDS.toDays(31)))
 			try {
 				final ServletOutputStream out = response.getOutputStream();
-				final PreparedDto<TestRunDto> dto = testRunDao.getById(EidConverter.toEid(id));
-				// todo check if test run finished, otherwise return code 406
+				final PreparedDto dto = dao.getById(EidConverter.toEid(id));
 				if (Objects.equals(download, "true")) {
+					final String reportFileName;
+					if(dto.getDto() instanceof TestRun) {
+						final TestRunDto testRunDto = (TestRunDto) dto.getDto();
+						// todo check if test run finished, otherwise return code 406
+						reportFileName = testRunDto.getLabel();
+					}else if(dto.getDto() instanceof TestTaskResultDto) {
+						final TestTaskResultDto testTaskResultDto = (TestTaskResultDto) dto.getDto();
+						if(testTaskResultDto.getResultStatus()==TestResultStatus.UNDEFINED) {
+							response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+						}
+						reportFileName = IFile.sanitize(testTaskResultDto.getId().getId());
+					}else{
+						reportFileName = "Out";
+					}
 					response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-					final String label = dto.getDto().getLabel();
-					final String reportFileName = IFile.sanitize(label);
 					response.setContentType(MediaType.TEXT_HTML_VALUE);
-					response.setHeader("Content-Disposition", "attachment; filename=" + reportFileName + ".html");
+					response.setHeader("Content-Disposition", "attachment; filename=" + IFile.sanitize(reportFileName) + ".html");
 					dto.streamTo(testRunHtmlReportFormat, null, out);
 				} else {
 					response.setContentType(MediaType.TEXT_HTML_VALUE);
@@ -170,9 +196,9 @@ public class TestResultController {
 			} catch (final ObjectWithIdNotFoundException e) {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				logger.error("Report not found: ", e);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				throw new LocalizableApiError(e);
-			} catch (StorageException e) {
+			} catch (final StorageException e) {
 				throw new LocalizableApiError(e);
 			}
 	}
@@ -188,7 +214,7 @@ public class TestResultController {
 			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
 			HttpServletRequest request,
 			HttpServletResponse response) throws StorageException, IOException, ObjectWithIdNotFoundException {
-		streaming.asXml2(testRunDao, request, response, offset, limit);
+		streaming.asXml2(testRunDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get a single Test Result as XML", notes = TEST_RUN_DESCRIPTION, tags = {TEST_RESULTS_TAG_NAME})
@@ -209,7 +235,7 @@ public class TestResultController {
 			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streaming.asJson2(testRunDao, request, response, offset, limit);
+		streaming.asJson2(testRunDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get a single Test Result as JSON", notes = "Transforms one Test Run to JSON. "
@@ -225,6 +251,11 @@ public class TestResultController {
 
 	@ApiOperation(value = "Generate a HTML Test Report", notes = "Generates a HTML report from the test results of one Test Run.", produces = "text/html", tags = {
 			TEST_RESULTS_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 202, message = "Test Run exists", response = Void.class),
+			@ApiResponse(code = 404, message = "Test Run does not exist", response = Void.class),
+			@ApiResponse(code = 406, message = "Test Run not finished yet", response = Void.class),
+	})
 	@RequestMapping(value = {TEST_RUNS_URL + "/{id}.html"}, method = RequestMethod.GET)
 	public void getReportById(
 			@ApiParam(value = "Test Run ID. "
@@ -232,7 +263,7 @@ public class TestResultController {
 			@ApiParam(value = "Download report", example = "true", allowableValues = "true,false", defaultValue = "false") @RequestParam(value = "download", required = false) String download,
 			HttpServletRequest request,
 			HttpServletResponse response) throws LocalizableApiError {
-		getById(id, download, request, response);
+		getByIdHtml(testRunDao, id, download, request, response);
 	}
 
 	@ApiOperation(value = "Get a Test Run's log by ID", notes = "Retrieves all messages that were logged during a Test Run.", produces = "text/plain", tags = {
@@ -257,24 +288,28 @@ public class TestResultController {
 
 	@ApiOperation(value = "Get all attachments of a Test Result as JSON", notes = "Retrieves meta information about all attachments that were saved during a Test Run.", tags = {
 			TEST_RESULTS_TAG_NAME})
-	@RequestMapping(value = {API_BASE_URL + "/TestTaskResults/{resultId}/Attachments"}, method = RequestMethod.GET)
+	@RequestMapping(value = {API_BASE_URL + "/TestTaskResults/{id}/Attachments"}, method = RequestMethod.GET)
 	public @ResponseBody Collection<AttachmentDto> getAttachmentsAsJson(
-			@PathVariable String resultId) throws ObjectWithIdNotFoundException, StorageException, IOException {
-		final TestTaskResultDto testTaskResultDto = testTaskResultDao.getById(EidConverter.toEid(resultId)).getDto();
+			@PathVariable String id) throws ObjectWithIdNotFoundException, StorageException, IOException {
+		final TestTaskResultDto testTaskResultDto = testTaskResultDao.getById(EidConverter.toEid(id)).getDto();
 		return testTaskResultDto.getAttachments();
 	}
 
 	@ApiOperation(value = "Get a Test Result's attachment by ID", notes = "Get an attachment which was saved during a Test Run. The mime type can not be predicted, "
 			+ "but text/plain will be used as fallback if the mime type could not be detected during the test run.", tags = {
 					TEST_RESULTS_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "Attachment exists", response = Void.class),
+			@ApiResponse(code = 404, message = "Attachment does not exist", response = Void.class),
+	})
 	@RequestMapping(value = {
-			API_BASE_URL + "/TestTaskResults/{resultId}/Attachments/{attachmentId}"}, method = RequestMethod.GET)
+			API_BASE_URL + "/TestTaskResults/{id}/Attachments/{attachmentId}"}, method = RequestMethod.GET)
 	public void getAttachmentById(
-			@PathVariable String resultId,
+			@PathVariable String id,
 			@PathVariable String attachmentId,
 			HttpServletResponse response) throws ObjectWithIdNotFoundException, StorageException, IOException {
 
-		final TestTaskResultDto testTaskResultDto = testTaskResultDao.getById(EidConverter.toEid(resultId)).getDto();
+		final TestTaskResultDto testTaskResultDto = testTaskResultDao.getById(EidConverter.toEid(id)).getDto();
 		final AttachmentDto attachmentDto = testTaskResultDto.getAttachmentById(EidConverter.toEid(attachmentId));
 		if (attachmentDto == null) {
 			throw new ObjectWithIdNotFoundException(attachmentId);
@@ -286,6 +321,68 @@ public class TestResultController {
 			response.setContentType(attachmentDto.getMimeType());
 		}
 		UriUtils.stream(attachmentDto.getReferencedData(), response.getOutputStream());
+	}
+
+
+	@ApiOperation(value = "Get the result from a single Test Task within a Test Run as XML",
+			notes = "Returns the result from a single Test Task as XML. " + TEST_TASK_RESULT_DESCRIPTION +
+				" Note: use the TestRuns interface to get all Test Task results within a Test Run. ",
+			tags = {TEST_RESULTS_TAG_NAME})
+	@RequestMapping(value = {TEST_TASKS_URL + "/{id}.xml"}, method = RequestMethod.GET)
+	public void testTaskResultByIdXml(
+			@ApiParam(value = "Test Task ID. "
+					+ EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
+			HttpServletRequest request, HttpServletResponse response)
+			throws StorageException, IOException, ObjectWithIdNotFoundException {
+		streaming.asXml2(testTaskResultDao, request, response, id);
+	}
+
+	@ApiOperation(value = "Get the result from a single Test Task within a Test Run as JSON",
+			notes = "Transforms the result from a single Test Task to JSON. " + TEST_TASK_RESULT_DESCRIPTION +
+				" Note: use the TestRuns interface to get all Test Task results within a Test Run. ", tags = {TEST_RESULTS_TAG_NAME})
+	@RequestMapping(value = {TEST_TASKS_URL + "/{id}.json"}, method = RequestMethod.GET)
+	public void testTaskResultByIdJson(
+			@ApiParam(value = "Test Task ID. "
+					+ EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
+			HttpServletRequest request, HttpServletResponse response)
+			throws StorageException, IOException, ObjectWithIdNotFoundException {
+		streaming.asJson2(testTaskResultDao, request, response, id);
+	}
+
+
+	@ApiOperation(value = "Generate a HTML Test Report from a single Test Task within a Test Run",
+			notes = "Generates a HTML report from one single result of Test Task the within a Test Run. " +
+					"Note: use the TestRuns interface to get all Test Task results within a Test Run. \"", produces = "text/html",
+			tags = {TEST_RESULTS_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 202, message = "Test Task exists", response = Void.class),
+			@ApiResponse(code = 404, message = "Test Task does not exist", response = Void.class),
+			@ApiResponse(code = 406, message = "Test Task not finished yet", response = Void.class),
+	})
+	@RequestMapping(value = {TEST_TASKS_URL + "/{id}.html"}, method = RequestMethod.GET)
+	public void testTaskResultByIdHtml(
+			@ApiParam(value = "Test Task ID. "
+					+ EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
+			@ApiParam(value = "Download report", example = "true", allowableValues = "true,false", defaultValue = "false")
+			@RequestParam(value = "download", required = false) String download,
+			HttpServletRequest request,
+			HttpServletResponse response) throws LocalizableApiError {
+		getByIdHtml(testTaskResultDao, id, download, request, response);
+	}
+
+
+	@ApiOperation(value = "Check if the Test Task exists", notes = "Checks if a Test Task has been completed and saved. ",
+			tags = {TEST_RESULTS_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "Test Task exists", response = Void.class),
+			@ApiResponse(code = 404, message = "Test Task does not exist", response = Void.class),
+	})
+	@RequestMapping(value = {TEST_TASKS_URL + "/{id}"}, method = RequestMethod.HEAD)
+	public ResponseEntity testTaskResultexists(
+			@ApiParam(value = "Test Task ID. "
+					+ EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id) throws StorageException {
+		final EID eid = EidConverter.toEid(id);
+		return testTaskResultDao.exists(eid) ? new ResponseEntity(HttpStatus.NO_CONTENT) : new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
 
 }
