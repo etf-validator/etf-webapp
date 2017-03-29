@@ -91,11 +91,12 @@ public class EtfConfigController implements PropertyHolder {
 	public static final String ETF_SUBMIT_ERRORS = "etf.errors.autoreport";
 
 	private static final String ETF_CONFIG_PROPERTY_FILENAME = "etf-config.properties";
+	private static final String ETF_CONFIG_DIR_NAME = "config";
 
 	@Autowired
 	private ServletContext servletContext;
 
-	private Properties configProperties;
+	private final Properties configProperties = new Properties();
 
 	private IFile etfDir;
 
@@ -119,6 +120,8 @@ public class EtfConfigController implements PropertyHolder {
 			put(ETF_HELP_PAGE_URL,
 					"https://github.com/interactive-instruments/etf-webapp/wiki/User%20manual%20for%20simplified%20workflows");
 			put(ETF_BSX_RECREATE_CONFIG, "true");
+			put(ETF_SUBMIT_ERRORS, "false");
+			put(ETF_WORKFLOWS, "simplified");
 			put(EtfConstants.ETF_PROJECTS_DIR, "projects");
 			put(EtfConstants.ETF_REPORTSTYLES_DIR, "reportstyles");
 			put(ETF_TESTDRIVERS_DIR, "td");
@@ -128,15 +131,13 @@ public class EtfConfigController implements PropertyHolder {
 			// put(ETF_FEED_DIR, ".feed");
 			put(ETF_TESTDATA_DIR, "testdata");
 			put(ETF_TESTDATA_UPLOAD_DIR, "http_uploads");
-			put(ETF_SUBMIT_ERRORS, "false");
-			put(ETF_WORKFLOWS, "simplified");
 		}
 	});
 
 	private static final Set<String> filePathPropertyKeys = Collections.unmodifiableSet(new LinkedHashSet<String>() {
 		{
 			add(EtfConstants.ETF_PROJECTS_DIR);
-			add(EtfConstants.ETF_REPORTSTYLES_DIR);
+			// add(EtfConstants.ETF_REPORTSTYLES_DIR);
 			add(EtfConstants.ETF_ATTACHMENT_DIR);
 			add(ETF_TESTDRIVERS_DIR);
 			add(EtfConstants.ETF_DATASOURCE_DIR);
@@ -150,11 +151,16 @@ public class EtfConfigController implements PropertyHolder {
 	private IFile checkDirForConfig(final IFile dir) {
 		if (dir.exists()) {
 			final IFile configFile = dir.expandPath(ETF_CONFIG_PROPERTY_FILENAME);
-			if (configFile.exists()) {
+			final IFile configFallbackFile = dir.expandPath(ETF_CONFIG_DIR_NAME).expandPath(ETF_CONFIG_PROPERTY_FILENAME);
+			if (configFile.exists() && configFile.length()>0) {
 				return configFile;
+			}else if(configFallbackFile.exists() && configFallbackFile.length()>0){
+				return configFallbackFile;
 			} else {
 				logger.warn("Skipping directory '" + dir.getAbsolutePath() +
-						"' which does not contain a " + ETF_CONFIG_PROPERTY_FILENAME + " configuration file");
+						"' which does not contain a '" + ETF_CONFIG_PROPERTY_FILENAME +
+						"' configuration file or a '"+ETF_CONFIG_DIR_NAME+"' subdirectory containing the '" +
+						ETF_CONFIG_PROPERTY_FILENAME+ "' file.");
 				return null;
 			}
 		}
@@ -193,63 +199,74 @@ public class EtfConfigController implements PropertyHolder {
 			}
 		}
 
-		final String propertiesFilePath = PropertyUtils.getenvOrProperty("ETF_WEBAPP_PROPERTIES_FILE", null);
-		configProperties = new Properties();
+		// Find property file
 		final IFile propertiesFile;
-		final String configFileIdentifier = "ETF_CONFIG_PROPERTY_FILE";
-		if (!SUtils.isNullOrEmpty(propertiesFilePath)) {
-			logger.info("Using environment variable ETF_WEBAPP_PROPERTIES_FILE for property file");
-			if (propertiesFilePath.contains(ETF_CONFIG_PROPERTY_FILENAME)) {
-				propertiesFile = new IFile(propertiesFilePath, configFileIdentifier);
-			} else {
-				// Be gentle, user accidentally selected the dir
-				propertiesFile = new IFile(propertiesFilePath, configFileIdentifier).expandPath(ETF_CONFIG_PROPERTY_FILENAME);
+		final String sysEnv = System.getenv("ETF_DIR");
+		if(!SUtils.isNullOrEmpty(sysEnv)) {
+			logger.info("Using environment variable ETF_DIR for the ETF data directory {}", sysEnv);
+			final IFile sysEnvEtfDir = new IFile(sysEnv, "ETF_DIR");
+			final IFile detectedPropertiesFile = checkDirForConfig(sysEnvEtfDir);
+			if(detectedPropertiesFile!=null) {
+				propertiesFile = detectedPropertiesFile;
+			}else{
+				propertiesFile = createInitialDirectoryStructure(sysEnvEtfDir);
 			}
-			propertiesFile.expectIsReadable();
-		} else {
-			// Check root directories
-			IFile detectedPropertiesFile = null;
-			for (final File rootFile : File.listRoots()) {
-				detectedPropertiesFile = checkDirForConfig(new IFile(rootFile, configFileIdentifier));
-				if (detectedPropertiesFile != null) {
-					break;
+		}else{
+			final String propertiesFilePath = PropertyUtils.getenvOrProperty("ETF_WEBAPP_PROPERTIES_FILE", null);
+			final String configFileIdentifier = "ETF_CONFIG_PROPERTY_FILE";
+			if (!SUtils.isNullOrEmpty(propertiesFilePath)) {
+				logger.info("Using environment variable ETF_WEBAPP_PROPERTIES_FILE for property file {}", propertiesFilePath);
+				if (propertiesFilePath.contains(ETF_CONFIG_PROPERTY_FILENAME)) {
+					propertiesFile = new IFile(propertiesFilePath, configFileIdentifier);
+				} else {
+					// Be gentle, user accidentally selected the dir
+					propertiesFile = new IFile(propertiesFilePath, configFileIdentifier).expandPath(ETF_CONFIG_PROPERTY_FILENAME);
 				}
-			}
-
-			// Check for the /etc/etf directory on Linux
-			if (detectedPropertiesFile == null && (SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC)) {
-				detectedPropertiesFile = checkDirForConfig(new IFile("/etc/etf/", configFileIdentifier));
-			}
-
-			// Check for a etf directory in home
-			if (detectedPropertiesFile == null) {
-				final String etfHomeDirName = SystemUtils.IS_OS_WINDOWS ? "etf" : ".etf";
-				final IFile homeConfigDir = new IFile(System.getProperty("user.home")).expandPath(etfHomeDirName);
-				detectedPropertiesFile = checkDirForConfig(homeConfigDir);
-
-				if (detectedPropertiesFile == null) {
-					// Not found, check the ProgammData directory on windows
-					if (SystemUtils.IS_OS_WINDOWS) {
-						// Folders in ALLUSERSPROFILE may be uploaded to the server after logoff.
-						// Alternative: combine with LOCALAPPDATA ?
-						// https://www.microsoft.com/security/portal/mmpc/shared/variables.aspx
-						final IFile programDataDir = new IFile(System.getenv("ALLUSERSPROFILE")).expandPath("etf");
-						detectedPropertiesFile = checkDirForConfig(programDataDir);
-						if (detectedPropertiesFile == null) {
-							// Create the directories in the ProgammData directory on Windows
-							createInitialDirectoryStructure(programDataDir);
-							detectedPropertiesFile = checkDirForConfig(programDataDir);
-						}
-					} else {
-						// Create the directories in the home directory on Linux
-						createInitialDirectoryStructure(homeConfigDir);
-						detectedPropertiesFile = checkDirForConfig(homeConfigDir);
+				propertiesFile.expectIsReadable();
+			} else {
+				// Check root directories
+				IFile detectedPropertiesFile = null;
+				for (final File rootFile : File.listRoots()) {
+					detectedPropertiesFile = checkDirForConfig(new IFile(rootFile, configFileIdentifier));
+					if (detectedPropertiesFile != null) {
+						break;
 					}
 				}
+
+				// Check for the /etc/etf directory on Linux
+				if (detectedPropertiesFile == null && (SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC)) {
+					detectedPropertiesFile = checkDirForConfig(new IFile("/etc/etf/", configFileIdentifier));
+				}
+
+				// Check for a etf directory in home
+				if (detectedPropertiesFile == null) {
+					final String etfHomeDirName = SystemUtils.IS_OS_WINDOWS ? "etf" : ".etf";
+					final IFile homeConfigDir = new IFile(System.getProperty("user.home")).expandPath(etfHomeDirName);
+					detectedPropertiesFile = checkDirForConfig(homeConfigDir);
+
+					if (detectedPropertiesFile == null) {
+						// Not found, check the ProgammData directory on windows
+						if (SystemUtils.IS_OS_WINDOWS) {
+							// Folders in ALLUSERSPROFILE may be uploaded to the server after logoff.
+							// Alternative: combine with LOCALAPPDATA ?
+							// https://www.microsoft.com/security/portal/mmpc/shared/variables.aspx
+							final IFile programDataDir = new IFile(System.getenv("ALLUSERSPROFILE")).expandPath("etf");
+							detectedPropertiesFile = checkDirForConfig(programDataDir);
+							if (detectedPropertiesFile == null) {
+								// Create the directories in the ProgammData directory on Windows
+								detectedPropertiesFile = createInitialDirectoryStructure(programDataDir);
+							}
+						} else {
+							// Create the directories in the home directory on Linux
+							detectedPropertiesFile = createInitialDirectoryStructure(homeConfigDir);
+						}
+					}
+				}
+				propertiesFile = detectedPropertiesFile;
 			}
-			propertiesFile = detectedPropertiesFile;
 		}
 		logger.info("Using configuration file: {}", propertiesFile);
+		propertiesFile.expectFileIsReadable();
 		configProperties.load(new FileInputStream(propertiesFile));
 
 		final String propertyFileVersion = configProperties.getProperty("etf.config.properties.version");
@@ -265,7 +282,8 @@ public class EtfConfigController implements PropertyHolder {
 		if (configProperties.getProperty(ETF_DIR) != null) {
 			etfDir = new IFile(configProperties.getProperty(ETF_DIR), "ETF_DIR");
 		} else {
-			etfDir = new IFile(propertiesFile.getParentFile());
+			// configuration file is in a subdirectory of the etf dir.
+			etfDir = new IFile(propertiesFile.getParentFile().getParentFile());
 		}
 
 		// Change every path variable to absolute paths
@@ -322,23 +340,12 @@ public class EtfConfigController implements PropertyHolder {
 		instance = this;
 	}
 
-	private void createInitialDirectoryStructure(final IFile configDir) throws IOException {
-		etfDir = configDir;
+	private IFile createInitialDirectoryStructure(final IFile dir) throws IOException {
+		etfDir = dir;
 		logger.info("Creating a new ETF data directory in {} ", etfDir);
-		configDir.mkdirs();
+		etfDir.mkdirs();
 		etfDir.expectDirIsWritable();
-		filePathPropertyKeys.forEach(d -> etfDir.expandPath(d).mkdirs());
-
-		// Hide feed folder
-		/*
-		if(SystemUtils.IS_OS_WINDOWS) {
-			try {
-				Files.setAttribute(etfDir.expandPath(ETF_FEED_DIR).toPath(), "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
-			}catch (final IOException e) {
-				ExcUtils.suppress(e);
-			}
-		}
-		*/
+		filePathPropertyKeys.forEach(d -> etfDir.expandPath(defaultProperties.get(d)).mkdirs());
 
 		final IFile tdDir = etfDir.expandPath(defaultProperties.get(ETF_TESTDRIVERS_DIR));
 		tdDir.mkdirs();
@@ -350,17 +357,19 @@ public class EtfConfigController implements PropertyHolder {
 		etfDir.expandPath(defaultProperties.get(ETF_DATASOURCE_DIR)).expandPath("db/data").mkdirs();
 		etfDir.expandPath(defaultProperties.get(ETF_DATASOURCE_DIR)).expandPath("db/repo").mkdirs();
 
-		// Copy template
+		// Copy config template to ETF_CONFIG_DIR_NAME / ETF_CONFIG_PROPERTY_FILENAME
+		final IFile configFileDir = etfDir.expandPath(ETF_CONFIG_DIR_NAME);
+		configFileDir.mkdirs();
 		final InputStream stream = servletContext.getResourceAsStream("/WEB-INF/classes/" + ETF_CONFIG_PROPERTY_FILENAME);
 		if (stream == null) {
+			// Debugging and running jettyRun instead of jettyRunWar ?
 			throw new RuntimeException("Unknown internal error: "
 					+ "Could not find template etf configuration file. Servlet Context: " + servletContext);
 		}
-		final IFile newConfigFile = new IFile(etfDir, ETF_CONFIG_PROPERTY_FILENAME);
+		final IFile newConfigFile = new IFile(configFileDir, ETF_CONFIG_PROPERTY_FILENAME);
 		try (final FileOutputStream out = new FileOutputStream(newConfigFile)) {
 			IOUtils.copy(stream, out);
 		} catch (final IOException e) {
-			newConfigFile.delete();
 			throw new RuntimeException("Could not copy template configuration file: ", e);
 		} finally {
 			stream.close();
@@ -383,6 +392,7 @@ public class EtfConfigController implements PropertyHolder {
 			}
 		}
 
+		return checkDirForConfig(etfDir);
 	}
 
 	public static EtfConfigController getInstance() {
