@@ -37,6 +37,9 @@ import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.IOException;
+import java.util.Objects;
+
 /**
  * Handles exceptions thrown by RestControllers
  */
@@ -50,6 +53,8 @@ class RestExceptionHandler {
 	private StatusController statusController;
 
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
+
+	private static byte[] reserve = new byte[30 * 1024 * 1024]; // Reserve 30 MB
 
 	@ApiModel(value = "ApiError")
 	public static class ApiError {
@@ -130,7 +135,24 @@ class RestExceptionHandler {
 	@ResponseBody
 	public ApiError defaultErrorHandler(final HttpServletRequest request, final HttpServletResponse response,
 			final Exception exception) {
-		// todo log parameter
+
+		if (exception != null && exception.getCause() instanceof OutOfMemoryError) {
+			// Recover the reserved memory
+			reserve = null;
+			System.gc();
+			statusController.triggerMaintenance();
+			return new ApiError(exception, request.getRequestURL().toString(), applicationContext);
+		}else if (Objects.equals(exception.getMessage(), "No space left on device")
+				|| exception.getCause() != null && exception.getCause() instanceof IOException &&
+				Objects.equals(exception.getCause().getMessage(), "No space left on device")) {
+			statusController.triggerMaintenance();
+			return new ApiError(exception, request.getRequestURL().toString(), applicationContext);
+		} else if (exception.getCause() != null && exception.getCause() instanceof StackOverflowError
+				|| exception.getCause() instanceof StackOverflowError) {
+			statusController.triggerMaintenance();
+			return new ApiError(exception, request.getRequestURL().toString(), applicationContext);
+		}
+
 		if (exception instanceof IllegalEidException) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		} else if (exception instanceof ObjectWithIdNotFoundException) {

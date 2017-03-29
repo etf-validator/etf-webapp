@@ -38,6 +38,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
+import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.slf4j.Logger;
@@ -374,7 +375,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			HttpServletRequest request,
 			HttpServletResponse response)
 			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
-		streaming.asJson2(testObjectDao, request, response, offset, limit);
+		streaming.asJson2(testObjectDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get multiple Test Objects as XML", notes = TEST_OBJECT_DESCRIPTION, tags = {
@@ -388,7 +389,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			@RequestParam(required = false, defaultValue = "0") int limit,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streaming.asXml2(testObjectDao, request, response, offset, limit);
+		streaming.asXml2(testObjectDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get Test Object as XML", notes = TEST_OBJECT_DESCRIPTION, tags = {

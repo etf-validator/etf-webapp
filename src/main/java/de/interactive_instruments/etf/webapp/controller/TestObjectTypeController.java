@@ -37,6 +37,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
+import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
@@ -270,7 +271,7 @@ public class TestObjectTypeController {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	@ApiOperation(value = "Get Test Object Type as JSON", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
-			SERVICE_CAP_TAG_NAME}, response = ComponentDto.class)
+			SERVICE_CAP_TAG_NAME})
 	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + "/{id}", TEST_OBJECT_TYPES_URL + "/{id}.json"}, method = RequestMethod.GET)
 	public void testObjectTypesByIdJson(
 			@PathVariable String id,
@@ -280,7 +281,7 @@ public class TestObjectTypeController {
 	}
 
 	@ApiOperation(value = "Get multiple Test Object Types as JSON", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
-			SERVICE_CAP_TAG_NAME}, response = TestObjectDto.class, responseContainer = "List")
+			SERVICE_CAP_TAG_NAME})
 	@RequestMapping(value = {TEST_OBJECT_TYPES_URL, TEST_OBJECT_TYPES_URL + ".json"}, method = RequestMethod.GET)
 	public void listTestObjectTypesJson(
 			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
@@ -288,19 +289,19 @@ public class TestObjectTypeController {
 			HttpServletRequest request,
 			HttpServletResponse response)
 			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
-		streaming.asJson2(testObjectTypeDao, request, response, offset, limit);
+		streaming.asJson2(testObjectTypeDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get multiple Test Object Types as XML", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
 			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Object Types", reference = "www.interactive-instruments.de")
+			@ApiResponse(code = 202, message = "EtfItemCollection with multiple Test Object Types")
 	})
 	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + " .xml"}, method = RequestMethod.GET)
 	public void listTestObjectTypesXml(@RequestParam(required = false, defaultValue = "0") int offset,
 			@RequestParam(required = false, defaultValue = "0") int limit, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streaming.asXml2(testObjectTypeDao, request, response, offset, limit);
+		streaming.asXml2(testObjectTypeDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get Test Object Type as XML", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {

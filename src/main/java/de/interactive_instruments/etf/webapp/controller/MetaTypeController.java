@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
 
+import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +89,7 @@ public class MetaTypeController {
 
 		tagDao = dataStorageService.getDao(TagDto.class);
 
-		streaming.prepareCache(translationTemplateBundleDao);
+		streaming.prepareCache(translationTemplateBundleDao, new SimpleFilter());
 
 		logger.info("Meta Type controller initialized");
 	}
@@ -128,7 +129,7 @@ public class MetaTypeController {
 			HttpServletRequest request,
 			HttpServletResponse response)
 			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
-		streaming.asJson2(testItemTypeDao, request, response, offset, limit);
+		streaming.asJson2(testItemTypeDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get multiple Test Item Types as XML", notes = TEST_ITEM_TYPEL_DESCRIPTION, tags = {
@@ -140,7 +141,7 @@ public class MetaTypeController {
 			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streaming.asXml2(testItemTypeDao, request, response, offset, limit);
+		streaming.asXml2(testItemTypeDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get Test Item Type as XML", notes = TEST_ITEM_TYPEL_DESCRIPTION, tags = {
@@ -194,7 +195,7 @@ public class MetaTypeController {
 			HttpServletRequest request,
 			HttpServletResponse response)
 			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
-		streaming.asJson2(translationTemplateBundleDao, request, response, offset, limit);
+		streaming.asJson2(translationTemplateBundleDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get multiple Translation Template Bundles as XML", notes = TRANSLATION_TEMP_BUNDLE_DESCRIPTION, tags = {
@@ -208,7 +209,7 @@ public class MetaTypeController {
 			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streaming.asXml2(translationTemplateBundleDao, request, response, offset, limit);
+		streaming.asXml2(translationTemplateBundleDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get Translation Template Bundle as XML", notes = TRANSLATION_TEMP_BUNDLE_DESCRIPTION, tags = {
@@ -260,7 +261,7 @@ public class MetaTypeController {
 			HttpServletRequest request,
 			HttpServletResponse response)
 			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
-		streaming.asJson2(componentDao, request, response, offset, limit);
+		streaming.asJson2(componentDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get multiple Framework Components as XML", notes = COMPONENT_DESCRIPTION, tags = {
@@ -274,7 +275,7 @@ public class MetaTypeController {
 			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streaming.asXml2(componentDao, request, response, offset, limit);
+		streaming.asXml2(componentDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get Framework Component as XML", notes = COMPONENT_DESCRIPTION, tags = {
@@ -325,7 +326,7 @@ public class MetaTypeController {
 			HttpServletRequest request,
 			HttpServletResponse response)
 			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
-		streaming.asJson2(tagDao, request, response, offset, limit);
+		streaming.asJson2(tagDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get multiple Tags as XML", notes = TAG_DESCRIPTION, tags = {
@@ -339,7 +340,7 @@ public class MetaTypeController {
 			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streaming.asXml2(tagDao, request, response, offset, limit);
+		streaming.asXml2(tagDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get Tag as XML", notes = TAG_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME}, produces = "text/xml")

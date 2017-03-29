@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
 
+import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +51,6 @@ import de.interactive_instruments.etf.webapp.conversion.EidConverter;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 /**
  * Test project controller used for accessing metadata of a test project
@@ -76,7 +73,6 @@ public class EtsController {
 	private final Logger logger = LoggerFactory.getLogger(EtsController.class);
 	private Dao<ExecutableTestSuiteDto> etsDao;
 	private OutputFormat xmlOutputFormat;
-	public static final String PATH = "ets";
 	private final static String ETS_URL = WebAppConstants.API_BASE_URL + "/ExecutableTestSuites";
 	private final static String ETS_MODEL_DESCRIPTION = "The Executable Test Suite model is described in the "
 			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/test_xsd.html#ExecutableTestSuite). "
@@ -89,19 +85,24 @@ public class EtsController {
 		logger.info("Executable Test Suite controller initialized!");
 
 		// Prepare cache
-		streaming.prepareCache(etsDao);
+		streaming.prepareCache(etsDao, new SimpleFilter("label remoteResource description version author creationDate "
+				+ "lastEditor lastUpdateDate tags translationTemplateBundle ParameterList supportedTestObjectTypes dependencies"));
 	}
 
 	@ApiOperation(value = "Get multiple Executable Test Suites as JSON", notes = ETS_MODEL_DESCRIPTION, tags = {
 			SERVICE_CAP_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Executable Test Suite"),
+	})
 	@RequestMapping(value = {ETS_URL, ETS_URL + ".json"}, method = RequestMethod.GET)
 	public void listExecutableTestSuitesJson(
-			@RequestParam(required = false, defaultValue = "0") int offset,
-			@RequestParam(required = false, defaultValue = "0") int limit,
+			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
+			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+			@ApiParam(value = FIELDS_DESCRIPTION) @RequestParam(required = false, defaultValue = "*") String fields,
 			HttpServletRequest request,
 			HttpServletResponse response)
 			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
-		streaming.asJson2(etsDao, request, response, offset, limit);
+		streaming.asJson2(etsDao, request, response, new SimpleFilter(offset, limit, fields));
 	}
 
 	@ApiOperation(value = "Get multiple Executable Test Suites as XML", notes = ETS_MODEL_DESCRIPTION, tags = {
@@ -111,11 +112,12 @@ public class EtsController {
 	})
 	@RequestMapping(value = {ETS_URL + ".xml"}, method = RequestMethod.GET)
 	public void listExecutableTestSuitesXml(
-			@RequestParam(required = false, defaultValue = "0") int offset,
-			@RequestParam(required = false, defaultValue = "0") int limit,
+			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
+			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+			@ApiParam(value = FIELDS_DESCRIPTION) @RequestParam(required = false, defaultValue = "*") String fields,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streaming.asXml2(etsDao, request, response, offset, limit);
+		streaming.asXml2(etsDao, request, response, new SimpleFilter(offset, limit, fields));
 	}
 
 	@ApiOperation(value = "Get Executable Test Suite as XML", notes = ETS_MODEL_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})

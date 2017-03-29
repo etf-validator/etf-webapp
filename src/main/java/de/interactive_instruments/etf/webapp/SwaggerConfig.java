@@ -15,6 +15,7 @@
  */
 package de.interactive_instruments.etf.webapp;
 
+import de.interactive_instruments.etf.webapp.controller.EtfConfigController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -61,11 +62,9 @@ public class SwaggerConfig {
 	public final static String TEST_RESULTS_TAG_NAME = "5. Test Run Results";
 	private final static Tag testResultsTag = new Tag(TEST_RESULTS_TAG_NAME, "Retrieve test results");
 
-	// http://localhost:8080/v2/api-docs
-
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
-				.title("ETF API")
+				.title("ETF Web API")
 				.description(
 						"This is an interactive documentation and a web user interface for interacting with the Web API version 2 BETA of the test framework "
 								+ "[ETF](https://interactive-instruments.github.io/etf-webapp). "
@@ -74,9 +73,11 @@ public class SwaggerConfig {
 								+ "Issues can be reported in [GitHub]"
 								+ "(https://github.com/interactive-instruments/etf-webapp/issues/new?title=[webapi-v2-beta]%20&body=Please%20don%27t%20delete%20the%20"
 								+ "[webapi-v2-beta]%20text%20in%20the%20title.%20This%20text%20can%20be%20deleted.&labels=webapi). "
-								+ "  "
+								+ "\n\n"
 								+ "Content negotiation is currently not implemented and therefore JSON is always returned for endpoints without file extension. "
-								+ "Please note that the API is not final and may undergo further changes before being released. ")
+								+ "Please note that the API is not final and may undergo further changes before being released. "
+								+ "\n\n"
+								+ "[Back to user interface]("+EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_WEBAPP_BASE_URL)+")")
 				.contact(new Contact("ETF Team", "https://interactive-instruments.github.io/etf-webapp",
 						"etf@interactive-instruments.de"))
 				.license("Apache 2.0")

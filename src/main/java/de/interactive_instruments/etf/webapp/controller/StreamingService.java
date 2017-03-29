@@ -28,6 +28,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
+import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
+import de.interactive_instruments.properties.PropertyUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -56,44 +58,23 @@ public class StreamingService {
 
 	private ObjectMapper mapper;
 
-	private Cache<String, byte[]> bigResponseCache = Caffeine.newBuilder().maximumSize(30).build();
+	private Cache<String, byte[]> bigResponseCache = Caffeine.newBuilder().maximumSize(
+			PropertyUtils.getenvOrProperty("ETF_STREAMING_CACHE_SIZE",30)).build();
 
 	@PostConstruct
 	void init() throws Exception {
 		mapper = objectMapperFactory.getObject();
 	}
 
-	private static class SFilter implements Filter {
-
-		private final int offset;
-		private final int limit;
-
-		SFilter(final int offset, final int limit) {
-			this.offset = offset > 0 ? offset : 0;
-			this.limit = limit > 0 && limit < 5000 ? limit : 1500;
-		}
-
-		@Override
-		public int offset() {
-			return offset;
-		}
-
-		@Override
-		public int limit() {
-			return limit;
-		}
-	}
-
 	void asXml2(
-			final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response,
-			final int offset, final int limit)
+			final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response, final Filter filter)
 			throws IOException, ObjectWithIdNotFoundException, StorageException {
 		if (CacheControl.clientNeedsUpdate(dao, request, response)) {
 			final ServletOutputStream out = response.getOutputStream();
 			response.setContentType(MediaType.TEXT_XML_VALUE);
 			final OutputFormat xml = dao.getOutputFormats()
 					.get(EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Xml"));
-			dao.getAll(new SFilter(offset, limit)).streamTo(xml, null, out);
+			dao.getAll(filter).streamTo(xml, null, out);
 		}
 	}
 
@@ -109,20 +90,22 @@ public class StreamingService {
 		}
 	}
 
-	private static String keyFor(final Dao<? extends Dto> dao, final int offset, final int limit) {
+	private static String keyFor(final Dao<? extends Dto> dao, final Filter filter) {
 		final StringBuilder k = new StringBuilder(dao.getId());
 		k.append(".").append(dao.getLastModificationDate());
-		k.append(".").append(offset).append(".").append(limit);
+		k.append(".").append(filter.offset());
+		k.append(".").append(filter.limit());
+		k.append(".").append(filter.fields());
 		return k.toString();
 	}
 
-	public void prepareCache(final Dao<? extends Dto> dao) {
+	public void prepareCache(final Dao<? extends Dto> dao, final Filter filter) {
 		try (ByteArrayOutputStream byteCache = new ByteArrayOutputStream()) {
 			try {
 				final OutputFormat json = dao.getOutputFormats().get(
 						EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Json"));
-				dao.getAll(new SFilter(0, 0)).streamTo(json, null, byteCache);
-				bigResponseCache.put(keyFor(dao, 0, 0), byteCache.toByteArray());
+				dao.getAll(new SimpleFilter(0, 0)).streamTo(json, null, byteCache);
+				bigResponseCache.put(keyFor(dao, filter), byteCache.toByteArray());
 			} catch (StorageException | IOException e) {
 				ExcUtils.suppress(e);
 			}
@@ -132,22 +115,21 @@ public class StreamingService {
 	}
 
 	void asJson2(
-			final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response,
-			final int offset, final int limit)
+			final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response, final Filter filter)
 			throws IOException, ObjectWithIdNotFoundException, StorageException {
 		if (CacheControl.clientNeedsUpdate(dao, request, response)) {
 			final ServletOutputStream out = response.getOutputStream();
 			response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
 
 			// Check if response is in cache
-			final String k = keyFor(dao, offset, limit);
+			final String k = keyFor(dao, filter);
 			byte[] preparedResponse = bigResponseCache.getIfPresent(k);
 			if (preparedResponse == null) {
 				// save in cache
 				try (ByteArrayOutputStream byteCache = new ByteArrayOutputStream()) {
 					final OutputFormat json = dao.getOutputFormats()
 							.get(EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Json"));
-					dao.getAll(new SFilter(offset, limit)).streamTo(json, null, byteCache);
+					dao.getAll(filter).streamTo(json, null, byteCache);
 					preparedResponse = byteCache.toByteArray();
 					bigResponseCache.put(k, preparedResponse);
 				}

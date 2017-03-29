@@ -37,6 +37,10 @@ public class DocumentationConstants {
 	public final static String OFFSET_DESCRIPTION = "The offset indicates the starting position of this request in relation to the complete set of unpaginated items. "
 			+ "Values less than 0 will be silently defaulted to the value 0.";
 
+	public final static String FIELDS_DESCRIPTION = "If set to another value  than '*' a partial response with only the selected fields is returned. "
+			+ "Only fields on the highest level can be selected. Unknown fields are silently ignored. "
+			+ "As also mandatory fields can be filtered the response may not validate against the default schema. ";
+
 	public final static String ETF_ITEM_COLLECTION_DESCRIPTION = "Items are returned in an "
 			+ "[ETF item collection](https://services.interactive-instruments.de/etf/schemadoc/service_xsd.html#EtfItemCollection).";
 }
