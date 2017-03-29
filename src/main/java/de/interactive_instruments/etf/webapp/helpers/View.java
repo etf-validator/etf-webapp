@@ -68,6 +68,11 @@ public class View {
 		return SUtils.isNullOrEmpty(legalNotice) ? null : legalNotice;
 	}
 
+	public static String getBaseUrl() {
+		return EtfConfigController.getInstance()
+				.getProperty(EtfConfigController.ETF_WEBAPP_BASE_URL);
+	}
+
 	public static String getHelpPageURL() {
 		return EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_HELP_PAGE_URL);
 	}
