@@ -23,7 +23,7 @@ define([
         },
 
         confirm: function(e){
-            event.preventDefault();
+            e.preventDefault();
             console.log("Confirmed to delete "+this.typeName+" %o", this.targetObject);
             var _this = this;
             var callbacks = {
