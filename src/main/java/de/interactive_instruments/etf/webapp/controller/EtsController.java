@@ -85,8 +85,8 @@ public class EtsController {
 		logger.info("Executable Test Suite controller initialized!");
 
 		// Prepare cache
-		streaming.prepareCache(etsDao, new SimpleFilter("label remoteResource description version author creationDate "
-				+ "lastEditor lastUpdateDate tags translationTemplateBundle ParameterList supportedTestObjectTypes dependencies"));
+		streaming.prepareCache(etsDao, new SimpleFilter("label,remoteResource,description,version,author,creationDate,"
+				+ "lastEditor,lastUpdateDate,tags,translationTemplateBundle,ParameterList,supportedTestObjectTypes,dependencies"));
 	}
 
 	@ApiOperation(value = "Get multiple Executable Test Suites as JSON", notes = ETS_MODEL_DESCRIPTION, tags = {

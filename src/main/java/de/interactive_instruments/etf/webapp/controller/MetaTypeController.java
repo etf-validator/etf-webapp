@@ -80,16 +80,15 @@ public class MetaTypeController {
 	@PostConstruct
 	private void init() throws IOException, TransformerConfigurationException {
 		translationTemplateBundleDao = dataStorageService.getDao(TranslationTemplateBundleDto.class);
-
 		testObjectTypeDao = dataStorageService.getDao(TestObjectTypeDto.class);
-
-		testItemTypeDao = dataStorageService.getDao(TestItemTypeDto.class);
-
-		componentDao = dataStorageService.getDao(ComponentDto.class);
-
 		tagDao = dataStorageService.getDao(TagDto.class);
 
+		testItemTypeDao = dataStorageService.getDao(TestItemTypeDto.class);
+		componentDao = dataStorageService.getDao(ComponentDto.class);
+
 		streaming.prepareCache(translationTemplateBundleDao, new SimpleFilter());
+		streaming.prepareCache(testObjectTypeDao, new SimpleFilter());
+		streaming.prepareCache(tagDao, new SimpleFilter());
 
 		logger.info("Meta Type controller initialized");
 	}

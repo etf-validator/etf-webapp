@@ -34,13 +34,13 @@ public class SimpleFilter implements Filter {
 	public SimpleFilter(final int offset, final int limit, final String fields) {
 		this.offset = offset > 0 ? offset : 0;
 		this.limit = limit > 0 && limit < 5000 ? limit : 1500;
-		this.fields = fields != null ? fields : "*";
+		this.fields = fields != null ? fields.trim() : "*";
 	}
 
 	public SimpleFilter(final String fields) {
 		this.offset = 0;
 		this.limit = 1500;
-		this.fields = fields != null ? fields : "*";
+		this.fields = fields != null ? fields.trim() : "*";
 	}
 
 	public SimpleFilter() {

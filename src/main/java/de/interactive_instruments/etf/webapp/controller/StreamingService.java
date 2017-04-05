@@ -104,7 +104,7 @@ public class StreamingService {
 			try {
 				final OutputFormat json = dao.getOutputFormats().get(
 						EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Json"));
-				dao.getAll(new SimpleFilter(0, 0)).streamTo(json, null, byteCache);
+				dao.getAll(filter).streamTo(json, null, byteCache);
 				bigResponseCache.put(keyFor(dao, filter), byteCache.toByteArray());
 			} catch (StorageException | IOException e) {
 				ExcUtils.suppress(e);
