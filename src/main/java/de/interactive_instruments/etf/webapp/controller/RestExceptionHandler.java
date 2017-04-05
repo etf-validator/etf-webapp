@@ -18,6 +18,7 @@ package de.interactive_instruments.etf.webapp.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -161,6 +163,12 @@ class RestExceptionHandler {
 			response.setStatus(((LocalizableApiError) exception.getCause()).getStatus());
 		} else if (exception != null && exception.getCause() instanceof JsonMappingException) {
 			final Throwable e = new LocalizableApiError((JsonMappingException) exception.getCause());
+			return new ApiError(e, request.getRequestURL().toString(), applicationContext);
+		} else if (exception != null && exception.getCause() instanceof JsonParseException) {
+			final Throwable e = new LocalizableApiError((JsonParseException) exception.getCause());
+			return new ApiError(e, request.getRequestURL().toString(), applicationContext);
+		} else if (exception instanceof HttpMessageNotReadableException) {
+			final Throwable e = new LocalizableApiError((HttpMessageNotReadableException) exception);
 			return new ApiError(e, request.getRequestURL().toString(), applicationContext);
 		} else {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

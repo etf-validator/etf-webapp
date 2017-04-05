@@ -25,6 +25,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.*;
 
+import de.interactive_instruments.SUtils;
 import de.interactive_instruments.etf.dal.dao.PreparedDtoResolver;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.etf.dal.dto.run.TestRunDto;
@@ -37,6 +38,8 @@ import de.interactive_instruments.exceptions.StorageException;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
@@ -51,27 +54,25 @@ public class StartTestRunRequest {
 
 	@ApiModelProperty(position = 0, value = TEST_RUN_LABEL_DESCRIPTION
 			+ " Mandatory.", example = TEST_RUN_LABEL_EXAMPLE, dataType = "String", required = true)
-	@JsonProperty
+	@JsonProperty(required = true)
+	@NotNull(message = "{l.enter.label}")
 	private String label;
 
-	// Double quote
-	private final static String dQ = " \\u0022 ";
-
 	@ApiModelProperty(position = 1, value = "List of Executable Test Suite IDs. Mandatory."
-			+ EID_DESCRIPTION, example = "[" + dQ + EID_LIST_EXAMPLE + dQ + "]", required = true)
+			+ EID_DESCRIPTION + ". See Implementation Notes for an complete example.", required = true)
 	@JsonProperty(required = true)
+	@NotNull(message = "{l.json.empty.ets.list}")
 	private List<String> executableTestSuiteIds;
 
-	@ApiModelProperty(position = 2, value = "Test run arguments as key value pairs. Mandatory (use {} for empty arguments). ", example = "{ "
-			+ dQ + "parameter" + dQ + ": " + dQ + "value" + dQ + " }", required = true)
+	@ApiModelProperty(position = 2, value = "Test run arguments as key value pairs. Mandatory (use {} for empty arguments). See Implementation Notes for an complete example.",  required = true)
 	@JsonProperty
 	private SimpleArguments arguments;
 
 	@ApiModelProperty(position = 3, value = "Simplified Test Object. Either a reference to an existing Test Object or a new "
 			+ "Test Object definition which references a resource in the web. Mandatory. "
-			+ "See Test Object model for more information", example = "{ " + dQ + "resources" + dQ + " : { " + dQ
-					+ "serviceEndpoint" + dQ + ": " + dQ + "www.example.com/service" + dQ + " } }", required = true)
+			+ "See Test Object model for more information and the Implementation Notes for an complete example.", required = true)
 	@JsonProperty(required = true)
+	@NotNull(message = "{l.json.invalid.test.object}")
 	private SimpleTestObject testObject;
 
 	@JsonIgnore
@@ -104,7 +105,9 @@ public class StartTestRunRequest {
 			throws ObjectWithIdNotFoundException, StorageException, IOException, URISyntaxException {
 		final TestRunDto testRun = new TestRunDto();
 		testRun.setId(EidFactory.getDefault().createRandomId());
+
 		testRun.setLabel(label);
+
 		final TestObjectDto testObject = this.testObject.toTestObject(testObjectDao);
 
 		for (final String executableTestSuiteId : executableTestSuiteIds) {
