@@ -27,7 +27,8 @@ define([
 
     var Collection = Backbone.Collection.extend( {
 
-        url: v2.baseUrl+"/ExecutableTestSuites",
+        url: v2.baseUrl+"/ExecutableTestSuites?fields=label,remoteResource,description,version,author,creationDate,"
+        + "lastEditor,lastUpdateDate,tags,translationTemplateBundle,ParameterList,supportedTestObjectTypes,dependencies",
 
         // The Collection constructor
         initialize: function( models, options ) {
@@ -42,7 +43,7 @@ define([
                 this.tagCollection.deferred.done,
                 this.translationTemplateBundleCollection.done
             ).then(function() {
-                return self.fetch()
+                return self.fetch();
             });
         },
 
