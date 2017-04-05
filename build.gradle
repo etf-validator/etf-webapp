@@ -44,8 +44,8 @@ apply plugin: 'idea'
 
 ext.springSecurityVersion = "4.0.4.RELEASE"
 ext.springSecurityOAuth2Version = "2.0.9.RELEASE"
-ext.springVersion = "4.3.4.RELEASE"
-ext.jacksonVersion = "2.7.8"
+ext.springVersion = "4.3.7.RELEASE"
+ext.jacksonVersion = "2.7.9"
 ext.springfoxSwaggerVersion = "2.6.1"
 
 configurations {
@@ -91,6 +91,9 @@ dependencies {
     // TODO download in future versions
     testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-suitd', version: '2.0.0' + project.snapshotSuffix
     testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-bsxtd', version: '2.0.0' + project.snapshotSuffix
+
+    // Bean validation
+    compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.0.1.Final'
 
     compile("xerces:xercesImpl:"+etf_xercesVersion){
         force = true
