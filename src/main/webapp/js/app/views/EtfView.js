@@ -32,14 +32,14 @@ define([
             ctx.onHide(e, ctx);
         },
         onHide: function (e, ctx) {
-            console.log("Hiding %o", ctx);
+            // console.log("Hiding %o", ctx);
         },
 
         _onShow: function(e, ctx) {
             ctx.onShow(e, ctx);
         },
         onShow: function (e, ctx) {
-            console.log("Showing %o", ctx);
+            // console.log("Showing %o", ctx);
         },
     });
     return EtfView;

@@ -55,19 +55,61 @@
 
 <script tiles:fragment="test-reports-page" id="test-report-items-template" type="text/template">
     <% v2.jeach( collection, function( testRun ) { %>
-    <li class="ii-collapsible-li" id="test-report-item-<%= testRun.id %>" data-role="collapsible" data-iconpos="left" data-shadow="false" data-corners="false">
+    <li class="ii-collapsible-li test-run-status-<%= testRun.status %>" id="test-report-item-<%= testRun.id %>" data-role="collapsible" data-iconpos="left" data-shadow="false" data-corners="false">
         <h2>
             <%= testRun.label %>
         </h2>
         <br>
         <span th:text="#{l.Started}" >Started</span>: <span class="test-report-time"><%= moment(testRun.startTimestamp).format('HH:mm') %></span> - <span class="test-report-date"><%= moment(testRun.startTimestamp).format('DD.MM.YYYY') %></span>
-        <br>
-        <br>
+        <% if(!_.isUndefined(testRun.status)) { %>
+            <br/>
+            <span th:text="#{l.Status}" >Status</span>: <span><%= testRun.status='PASSED_MANUAL' ? 'Passed, manual checks required' : testRun.status %></span>
+        <% } %>
+        <br/>
+        <%
+            var testObject;
+            var executableTestSuites =[];
+            if (!_.isUndefined(testRun.testTasks.TestTask[0])) {
+                testObject=testRun.testTasks.TestTask[0].testObject;
+                _.each(testRun.testTasks.TestTask, function(task) {
+                    executableTestSuites.push(task.executableTestSuite);
+                })
+            }else{
+                testObject=testRun.testTasks.TestTask.testObject;
+                executableTestSuites.push(testRun.testTasks.TestTask.executableTestSuite);
+            }
+
+            if(!_.isUndefined(testObject) && !_.isUndefined(testObject.label)) {
+        %>
+        <div data-enhance="false">
+            <span th:text="#{l.Used.testobject}" >Used test object</span>:
+            <% if(!_.isUndefined(testObject.remoteResource) && testObject.remoteResource!='http://nowhere' && testObject.remoteResource!='http://private') { %>
+            <a href="<%= testObject.remoteResource %>" target="_blank"><%= testObject.label %></a>
+            <% }else{ %>
+            <span><%= testRun.testTasks.TestTask[0].testObject.label %></span>
+        </div>
+        <%
+            }}
+            if(!_.isUndefined(executableTestSuites)) {
+        %>
+            <div>
+                <span th:text="#{l.Used.executableTestSuites}" >Used test suites</span>:
+                <ul>
+                <% _.each( executableTestSuites, function( ets ) { %>
+                    <% if(!_.isUndefined(ets) && !_.isUndefined(ets.label)) { %>
+                        <li><%= ets.label %></li>
+                    <% } %>
+                <% }); %>
+                </ul>
+            </div>
+        <% } %>
         <br>
 
         <div>
-            <a href="<%= reportBaseUrl + testRun.id + '.html' %>" data-icon="eye" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.open.report}">Open report</a>
-            <a href="<%= reportBaseUrl + testRun.id + '.html?download=true' %>" data-icon="arrow-d-r" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.download.report}">Download report</a>
+            <% if (testRun.status!='unknown') {  %>
+                <a href="<%= reportBaseUrl + testRun.id + '.html' %>" data-icon="eye" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.open.report}">Open report</a>
+                <a href="<%= reportBaseUrl + testRun.id + '.html?download=true' %>" data-icon="arrow-d-r" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.download.report}">Download report</a>
+            <% }; %>
             <a href="<%= reportBaseUrl + testRun.id + '/log' %>" data-role="button" data-icon="info" data-inline="true" data-mini="true"  data-ajax="false"  th:text="#{l.open.log}">Open log</a>
             <a href="#remove-test-report?id=<%= testRun.id %>" class="delete-button-tr" data-icon="delete" data-role="button" data-inline="true" data-mini="true" th:text="#{l.delete.report}">Delete report</a>
         </div>

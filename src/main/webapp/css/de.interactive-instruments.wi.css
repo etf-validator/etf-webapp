@@ -131,3 +131,15 @@ div.tooltip p {
     -o-transition: width .6s ease;
     transition: width .6s ease;
 }
+
+.test-run-status-FAILED h2 a {
+    color: #d02d29 !important;
+}
+
+.test-run-status-PASSED h2 a {
+    color: #176456 !important;
+}
+
+.test-run-status-PASSED_MANUAL h2 a {
+    color: #856946 !important;
+}

@@ -37,12 +37,20 @@ define(['toastr'], function (toastr) {
         var eid = eidFromUrl(url);
         // toastr.error("The referenced Object "+eid+" could not be found. " +
         //    "Information in the web interface may be incomplete.", "Invalid Reference", {timeOut: 15000, extendedTimeOut: 20000});
-        console.error("Reference not found: "+eid+ " (" +url+")" );
+        var err = new Error("Reference not found: "+eid+ " (" +url+")" );
+        console.error(err);
+        unexpectedError(err);
     }
 
     function invalidInputError(message, element) {
         toastr.error(message, "Invalid input", {timeOut: 4000, extendedTimeOut: 7000});
         blurWarn(element, 4000);
+    }
+
+    function unexpectedError(error) {
+        if(!_.isUndefined(_opbeat)) {
+            _opbeat('captureException', error);
+        }
     }
 
     function apiCallError(message, title, xhr) {
@@ -64,16 +72,21 @@ define(['toastr'], function (toastr) {
 
         var errorMesg="unknown error";
         if(!_.isUndefined(jsonErr)) {
-            console.error(jsonErr.error);
-            if(!_.isUndefined(jsonErr.id)) {
+            if(!_.isUndefined(jsonErr.error)) {
+                console.error("API call error: "+jsonErr.error);
                 errorMesg=jsonErr.error;
+            }else if(!_.isUndefined(jsonErr.id)) {
+                errorMesg="Error id "+jsonErr.id;
+                unexpectedError(new Error("No translation provided for '"+jsonErr.id+"'"));
             }
+        }else if(xhr.status==0) {
+            errorMesg="Please check the internet connection to the service.";
         }else if(!_.isUndefined(xhr.xhr) && !_.isUndefined(xhr.xhr.responseText)) {
-                console.error(xhr.responseText);
+            console.error(xhr.responseText);
         }else{
             console.error(xhr);
         }
-        toastr.error(message+errorMesg, title, {timeOut: 15000, extendedTimeOut: 20000});
+        toastr.error(message+errorMesg, title, {timeOut: 0, extendedTimeOut: 0});
     }
 
     /**
@@ -87,7 +100,7 @@ define(['toastr'], function (toastr) {
         if(_.isArray(obj)) {
             return _.each(obj, fct);
         }else{
-            return fct(obj);
+            return fct(obj, 0);
         }
     }
 
@@ -135,6 +148,19 @@ define(['toastr'], function (toastr) {
             }
         }else{
             referenceError(refProperty);
+        }
+    };
+
+    function resolveRefOrUndefined(refProperty, collection, fct) {
+        var o = collection.get(eidFromUrl(refProperty));
+        if(typeof o !== "undefined") {
+            if( typeof fct === "undefined" ) {
+                return o.toJSON();
+            }else{
+                return fct(o);
+            }
+        }else{
+            return undefined;
         }
     };
 
@@ -244,7 +270,7 @@ define(['toastr'], function (toastr) {
             data: JSON.stringify(testRun) ,
             error: function (xhr, status, error) {
                 apiCallError(
-                    "Could not submit Test Run: ", "Error", xhr);
+                    "", "Test Run initialization failure", xhr);
             },
             success: function (data) {
                 successCallback(data);
@@ -275,6 +301,7 @@ define(['toastr'], function (toastr) {
         getParameters: getParameters,
         resolveRefs: resolveRefs,
         resolveRef: resolveRef,
+        resolveRefOrUndefined: resolveRefOrUndefined,
         beautifyNerdyStr: beautifyNerdyStr,
         addColToIdMap: addColToIdMap,
         addColToIdMap1IfNotInMap2: addColToIdMap1IfNotInMap2,
@@ -282,6 +309,7 @@ define(['toastr'], function (toastr) {
         getClassNamesArr: getClassNamesArr,
         getClassNamesForNotSelection: getClassNamesForNotSelection,
         changePage: changePage,
+        unexpectedError: unexpectedError,
     };
 });
 

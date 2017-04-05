@@ -97,12 +97,22 @@ define([
                 }
             });
 
-            var testObjectCollection = new TestObjectCollection( [] ,
-                { testObjectTypeCollection: testObjectTypeCollection } );
-            this.testObjectsView = new TestObjectView( { collection: testObjectCollection } );
+            var testObjectCollection = new TestObjectCollection( [] , {
+                testObjectTypeCollection: testObjectTypeCollection
+            });
+            this.testObjectsView = new TestObjectView( {
+                collection: testObjectCollection
+            });
 
-            var testRunCollection = new TestRunCollection( [] , { } );
-            this.testReportView = new TestReportView( { collection: testRunCollection } );
+            var testRunCollection = new TestRunCollection( [] , {
+                testObjectCollection: testObjectCollection,
+                etsCollection: etsCollection
+            });
+            this.testReportView = new TestReportView( {
+                collection: testRunCollection,
+                testObjectCollection: testObjectCollection,
+                etsCollection: etsCollection
+            });
 
             this.homeView = new HomeView();
             this.monitorView = new MonitorView();

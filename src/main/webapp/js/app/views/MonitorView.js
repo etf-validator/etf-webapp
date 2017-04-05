@@ -129,7 +129,22 @@ define([
                                     console.log("Test run finished, trying to show test results: " + _this.htmlReportUrl);
                                     // location.href = htmlReportUrl;
                                     // $("body").pagecontainer("change", htmlReportUrl, { reload: true, transition: "slideup", changeHash: true });
-                                    v2.changePage(_this.htmlReportUrl);
+                                    $.ajax({
+                                        url: _this.htmlReportUrl,
+                                        type: "GET",
+                                        // wait 90 seconds
+                                        timeout: 90000,
+                                        error: function () {
+                                            _this.monitorLogArea.append("\nTest run finished.");
+                                            toastr.error("There was an internal problem generating the report. " +
+                                                "Please contact you administrator to check the ETF log file.", {
+                                                timeOut: 0, extendedTimeOut: 0
+                                            });
+                                        },
+                                        success: function () {
+                                            v2.changePage(_this.htmlReportUrl);
+                                        }
+                                    });
                                 }
                             }
                         }

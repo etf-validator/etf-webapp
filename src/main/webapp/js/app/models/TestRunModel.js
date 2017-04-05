@@ -28,7 +28,54 @@ define([
     var Model = Backbone.Model.extend( {
 
         initialize: function( attr, options ) {
+            this.testObjectCollection = options.collection.testObjectCollection;
+            this.etsCollection = options.collection.etsCollection;
         },
+
+        toJSON: function() {
+            var testObjectCollection = this.testObjectCollection;
+            var etsCollection = this.etsCollection;
+            var attributes = _.clone(this.attributes);
+
+            var testTasks =  this.get("testTasks");
+            if(!_.isUndefined(testTasks)) {
+                if(_.isUndefined(testTasks.TestTask[0])) {
+                    // single task
+
+                    if(!_.isUndefined(testTasks.TestTask.testObject) &&
+                        !_.isUndefined(testTasks.TestTask.testObject.href)) {
+                        attributes['testTasks'].TestTask.testObject = v2.resolveRefOrUndefined(
+                            testTasks.TestTask.testObject.href, testObjectCollection);
+                    }
+
+                    if(!_.isUndefined(testTasks.TestTask.executableTestSuite) &&
+                        !_.isUndefined(testTasks.TestTask.executableTestSuite.href)) {
+                        attributes['testTasks'].TestTask.executableTestSuite = v2.resolveRefOrUndefined(
+                            testTasks.TestTask.executableTestSuite.href,
+                            etsCollection);
+                    }
+
+                }else{
+                    if(!_.isUndefined(testTasks.TestTask[0].testObject) &&
+                        !_.isUndefined(testTasks.TestTask[0].testObject.href)) {
+                        attributes['testTasks'].TestTask[0].testObject = v2.resolveRefOrUndefined(
+                            testTasks.TestTask[0].testObject.href, testObjectCollection);
+                    }
+                    v2.jeach(testTasks.TestTask, function(task, i) {
+                        if(!_.isUndefined(task.executableTestSuite) &&
+                            !_.isUndefined(task.executableTestSuite.href)) {
+                            attributes['testTasks'].TestTask[i].executableTestSuite = v2.resolveRefOrUndefined(
+                                task.executableTestSuite.href,
+                                etsCollection);
+                        }
+                    })
+                }
+
+
+            }
+            return attributes;
+        },
+
     } );
 
     // Returns the Model class

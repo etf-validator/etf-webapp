@@ -32,7 +32,17 @@ define([
 
         // The Collection constructor
         initialize: function( models, options ) {
-            this.deferred = this.fetch();
+            this.testObjectCollection = options.testObjectCollection;
+            this.etsCollection = options.etsCollection;
+
+            // Load dependencies first
+            var self = this;
+            this.deferred = $.when(
+                this.testObjectCollection.deferred.done,
+                this.etsCollection.deferred.done
+            ).then(function() {
+                return self.fetch();
+            });
         },
 
         parse: function(response) {
