@@ -31,13 +31,10 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "Arguments")
 public class SimpleArguments {
 
-	// Double quote
-	private final static String dQ = "&#34;";
-
 	@JsonIgnore
 	private Map<String, String> additionalProperties = new HashMap<String, String>();
 
-	@ApiModelProperty(value = "Key value pairs", example = "{ " + dQ + "parameter" + dQ + ": " + dQ + "value" + dQ + " }")
+	@ApiModelProperty(value = "Key value pairs. See Implementation Notes for an complete example.")
 	@JsonAnyGetter
 	public Map<String, String> get() {
 		return this.additionalProperties;

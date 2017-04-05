@@ -266,9 +266,9 @@ public class TestResultController {
 		getByIdHtml(testRunDao, id, download, request, response);
 	}
 
-	@ApiOperation(value = "Get a Test Run's log by ID", notes = "Retrieves all messages that were logged during a Test Run.", produces = "text/plain", tags = {
+	@ApiOperation(value = "Get a Test Run's log by ID", notes = "Retrieves all messages that were logged during a Test Run.", tags = {
 			TEST_RESULTS_TAG_NAME})
-	@RequestMapping(value = {TEST_RUNS_URL + "/{id}/log"}, method = RequestMethod.GET)
+	@RequestMapping(value = {TEST_RUNS_URL + "/{id}/log"}, method = RequestMethod.GET, produces = "text/plain")
 	public void testRunLog(
 			@ApiParam(value = "Test Run ID. "
 					+ EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
@@ -288,7 +288,7 @@ public class TestResultController {
 
 	@ApiOperation(value = "Get all attachments of a Test Result as JSON", notes = "Retrieves meta information about all attachments that were saved during a Test Run.", tags = {
 			TEST_RESULTS_TAG_NAME})
-	@RequestMapping(value = {API_BASE_URL + "/TestTaskResults/{id}/Attachments"}, method = RequestMethod.GET)
+	@RequestMapping(value = {API_BASE_URL + "/TestTaskResults/{id}/Attachments"}, method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Collection<AttachmentDto> getAttachmentsAsJson(
 			@PathVariable String id) throws ObjectWithIdNotFoundException, StorageException, IOException {
 		final TestTaskResultDto testTaskResultDto = testTaskResultDao.getById(EidConverter.toEid(id)).getDto();

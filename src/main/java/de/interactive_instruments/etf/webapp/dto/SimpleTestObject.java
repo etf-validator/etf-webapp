@@ -48,7 +48,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "TestObject", description = "Simplified Test Object definition")
 public class SimpleTestObject {
 
-	private final static String dQ = "&#34;";
 
 	@ApiModelProperty(value = EID_DESCRIPTION + ". " +
 			"Either an id or a resource property must be provided.", example = EID_EXAMPLE, dataType = "String")
@@ -60,8 +59,7 @@ public class SimpleTestObject {
 			+ "Currently two resource types are supported: if a web service resource is defined, the resource name must be 'serviceEndpoint'. "
 			+ "If a data set resource is defined, the resource name must be 'data'. "
 			+ "PLEASE NOTE: only the one resource can be used in the current version. "
-			+ "Either an id or a resource property must be provided.", example = "{" + dQ + "data" + dQ + ": " + dQ
-					+ "https://www.example.com/dataset.xml" + dQ + "}")
+			+ "Either an id or a resource property must be provided.")
 	@JsonProperty
 	private Map<String, String> resources;
 
@@ -80,7 +78,7 @@ public class SimpleTestObject {
 	}
 
 	public String getId() {
-		return toEid(id).toString();
+		return "EID"+toEid(id).toString();
 	}
 
 	public String getUsername() {
@@ -108,7 +106,7 @@ public class SimpleTestObject {
 			testObject.properties().setProperty("temporary", "true");
 			testObject.setVersionFromStr("1.0.0");
 			testObject.setCreationDateNowIfNotSet();
-			testObject.setRemoteResource(URI.create("http://nowhere"));
+			testObject.setRemoteResource(URI.create("http://private"));
 			testObject.setLocalPath(".");
 			final Credentials credentials;
 			if (!SUtils.isNullOrEmpty(username)) {
@@ -129,7 +127,7 @@ public class SimpleTestObject {
 			}
 		} else {
 			testObject = testObjectDao.getById(
-					EidFactory.getDefault().createAndPreserveStr(this.id)).getDto();
+					EidFactory.getDefault().createAndPreserveStr(toEid(id).toString())).getDto();
 		}
 		return testObject;
 	}

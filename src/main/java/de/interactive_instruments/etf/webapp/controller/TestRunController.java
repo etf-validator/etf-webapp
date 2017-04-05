@@ -30,6 +30,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import de.interactive_instruments.SUtils;
@@ -219,7 +221,7 @@ public class TestRunController implements TestRunEventListener {
 	private void initAndSubmit(TestRunDto testRunDto) throws LocalizableApiError {
 		try {
 			final TestRun testRun = testDriverController.create(testRunDto);
-			Objects.requireNonNull(testRun, "TestRun is null").addTestRunEventListener(this);
+			Objects.requireNonNull(testRun, "Test Driver created invalid TestRun").addTestRunEventListener(this);
 			testRun.init();
 
 			// Check if the test object has changed since the last run
@@ -236,7 +238,9 @@ public class TestRunController implements TestRunEventListener {
 			logger.info("TestRun " + testRunDto.getDescriptiveLabel() + " initialized");
 			taskPoolRegistry.submitTask(testRun);
 		} catch (Exception e) {
-			throw new LocalizableApiError("l.initialization.failed", e);
+			throw new LocalizableApiError(
+					"l.internal.testrun.initialization.error",
+					true, 500, e);
 		}
 	}
 
@@ -403,13 +407,60 @@ public class TestRunController implements TestRunEventListener {
 
 	@ApiOperation(value = "Start a new Test Run", notes = "Start a new Test Run by specifying one or multiple Executable Test Suites "
 			+ "that shall be used to test one Test Object with specified test parameters. "
-			+ "If data for a Test Object need to be uploaded, the TestObject POST interface "
+			+ "If data for a Test Object need to be uploaded, the Test Object POST interface "
 			+ "needs to be used to create a new temporary Test Object. "
 			+ "The temporary Test Object or any other existing Test Object can be referenced by "
 			+ "setting exclusively the 'id' in the StartTestRunRequest's 'testObject' property. "
 			+ "If data do not need to be uploaded or a web service is tested, a temporary Test Object "
 			+ "can be created directly with this interface, by defining at least the "
-			+ "'resources' property of the 'testObject' but omit except the 'id' property.", tags = {TEST_RUNS_TAG_NAME})
+			+ "'resources' property of the 'testObject' but omit except the 'id' property."
+			+ "\n\n"
+			+ "Example for starting a Test Run for a service Test:  <br/>"
+			+ "\n\n"
+			+ "    {\n"
+			+ "        \"label\": \"Test run on 15:00 - 01.01.2017 with Conformance class Conformance Class: Download Service - Pre-defined WFS\",\n"
+			+ "        \"executableTestSuiteIds\": [\"EID174edf55-699b-446c-968c-1892a4d8d5bd\"],\n"
+			+ "        \"arguments\": {},\n"
+			+ "        \"testObject\": {\n"
+			+ "            \"resources\": {\n"
+			+ "                \"serviceEndpoint\": \"http://example.com/service?request=GetCapabilities\"\n"
+			+ "            }\n"
+			+ "        }\n"
+			+ "    }\n"
+			+ "\n\n"
+			+ "Example for starting a Test Run for a file-based Test, using a temporary Test Object:<br/>"
+			+ "\n\n"
+			+ "    {\n"
+			+ "        \"label\": \"Test run on 15:00 - 01.01.2017 with Conformance class INSPIRE Profile based on EN ISO 19115 and EN ISO 19119\",\n"
+			+ "        \"executableTestSuiteIds\": [\"EIDec7323d5-d8f0-4cfe-b23a-b826df86d58c\"],\n"
+			+ "        \"arguments\": {\n"
+			+ "            \"files_to_test\": \".*\",\n"
+			+ "            \"tests_to_execute\": \".*\"\n"
+			+ "        },\n"
+			+ "        \"testObject\": {\n"
+			+ "            \"id\": \"b502260f-1054-432e-8cd5-4a61302dfdba\"\n"
+			+ "        }\n"
+			+ "    }\n"
+			+ "\n\n"
+			+ "Where \"EIDb502260f-1054-432e-8cd5-4a61302dfdba\" is the ID of the previous created temporary Test Object."
+			+ "\n\n"
+			+ "Example for starting a Test Run for a file-based Test, referencing Test data in the web:<br/>"
+			+ "\n\n"
+			+ "    {\n"
+			+ "        \"label\": \"Test run on 15:00 - 01.01.2017 with Conformance class INSPIRE Profile based on EN ISO 19115 and EN ISO 19119\",\n"
+			+ "        \"executableTestSuiteIds\": [\"EIDec7323d5-d8f0-4cfe-b23a-b826df86d58c\"],\n"
+			+ "        \"arguments\": {\n"
+			+ "            \"files_to_test\": \".*\",\n"
+			+ "            \"tests_to_execute\": \".*\"\n"
+			+ "        },\n"
+			+ "        \"testObject\": {\n"
+			+ "            \"resources\": {\n"
+			+ "                \"data\": \"http://example.com/test-data.xml\"\n"
+			+ "            }\n"
+			+ "        }\n"
+			+ "    }\n"
+			+ "\n\n"
+			, tags = {TEST_RUNS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 201, message = "Test Run created"),
 			@ApiResponse(code = 400, message = "Invalid request", response = RestExceptionHandler.ApiError.class),
@@ -418,8 +469,12 @@ public class TestRunController implements TestRunEventListener {
 			@ApiResponse(code = 500, message = "Internal error", response = RestExceptionHandler.ApiError.class),
 	})
 	@RequestMapping(value = TEST_RUNS_URL, method = RequestMethod.POST)
-	public void start(@RequestBody StartTestRunRequest testRunRequest, HttpServletRequest request, HttpServletResponse response)
+	public void start(@RequestBody @Valid StartTestRunRequest testRunRequest, BindingResult result, HttpServletRequest request, HttpServletResponse response)
 			throws LocalizableApiError {
+
+		if(result.hasErrors()) {
+			throw new LocalizableApiError(result.getFieldError());
+		}
 
 		// Remove finished test runs
 		taskPoolRegistry.removeDone();
