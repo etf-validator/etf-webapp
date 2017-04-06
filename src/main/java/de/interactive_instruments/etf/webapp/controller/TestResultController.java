@@ -110,8 +110,13 @@ public class TestResultController {
 			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/run_xsd.html#TestRun). "
 			+ ETF_ITEM_COLLECTION_DESCRIPTION;
 
+	private final static String TEST_TASK_RESULT_NOTE = " Note: a Test Run consists of one or multiple Test Task Results. "
+			+ "A Test Task Result represents the result of the execution of one single Test Suite. "
+			+ "Use the Test Run interface to get all results of a Test Run and the Test Task Result interfaces to get only one single result. ";
+
 	private final static String TEST_TASK_RESULT_DESCRIPTION = "The Test Task model is described in the "
 			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/result_xsd.html#TestTaskResult). "
+			+ TEST_TASK_RESULT_NOTE
 			+ ETF_ITEM_COLLECTION_DESCRIPTION;
 
 	public TestResultController() {
@@ -174,14 +179,18 @@ public class TestResultController {
 					final String reportFileName;
 					if(dto.getDto() instanceof TestRun) {
 						final TestRunDto testRunDto = (TestRunDto) dto.getDto();
-						// todo check if test run finished, otherwise return code 406
+						if(TestResultStatus.valueOf(testRunDto.getTestResultStatus())==TestResultStatus.UNDEFINED) {
+							response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+							return;
+						}
 						reportFileName = testRunDto.getLabel();
 					}else if(dto.getDto() instanceof TestTaskResultDto) {
 						final TestTaskResultDto testTaskResultDto = (TestTaskResultDto) dto.getDto();
 						if(testTaskResultDto.getResultStatus()==TestResultStatus.UNDEFINED) {
-							response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+							response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+							return;
 						}
-						reportFileName = IFile.sanitize(testTaskResultDto.getId().getId());
+						reportFileName = testTaskResultDto.getId().getId();
 					}else{
 						reportFileName = "Out";
 					}
@@ -286,8 +295,13 @@ public class TestResultController {
 		}
 	}
 
-	@ApiOperation(value = "Get all attachments of a Test Result as JSON", notes = "Retrieves meta information about all attachments that were saved during a Test Run.", tags = {
-			TEST_RESULTS_TAG_NAME})
+	@ApiOperation(value = "Get all attachments of a Test Result as JSON", notes =
+			"Retrieves meta information about all attachments that were saved during a Test Run.",
+			tags = {TEST_RESULTS_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 202, message = "Attachment exists", response = Void.class),
+			@ApiResponse(code = 404, message = "Test Task does not exist", response = Void.class),
+	})
 	@RequestMapping(value = {API_BASE_URL + "/TestTaskResults/{id}/Attachments"}, method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Collection<AttachmentDto> getAttachmentsAsJson(
 			@PathVariable String id) throws ObjectWithIdNotFoundException, StorageException, IOException {
@@ -295,7 +309,8 @@ public class TestResultController {
 		return testTaskResultDto.getAttachments();
 	}
 
-	@ApiOperation(value = "Get a Test Result's attachment by ID", notes = "Get an attachment which was saved during a Test Run. The mime type can not be predicted, "
+	@ApiOperation(value = "Get a Test Result's attachment by ID", notes =
+			"Get an attachment which was saved during a Test Run. The mime type can not be predicted, "
 			+ "but text/plain will be used as fallback if the mime type could not be detected during the test run.", tags = {
 					TEST_RESULTS_TAG_NAME})
 	@ApiResponses(value = {
@@ -325,9 +340,12 @@ public class TestResultController {
 
 
 	@ApiOperation(value = "Get the result from a single Test Task within a Test Run as XML",
-			notes = "Returns the result from a single Test Task as XML. " + TEST_TASK_RESULT_DESCRIPTION +
-				" Note: use the TestRuns interface to get all Test Task results within a Test Run. ",
+			notes = "Returns the result from a single Test Task as XML. " + TEST_TASK_RESULT_DESCRIPTION,
 			tags = {TEST_RESULTS_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 202, message = "Test Task exists", response = Void.class),
+			@ApiResponse(code = 404, message = "Test Task does not exist", response = Void.class),
+	})
 	@RequestMapping(value = {TEST_TASKS_URL + "/{id}.xml"}, method = RequestMethod.GET)
 	public void testTaskResultByIdXml(
 			@ApiParam(value = "Test Task ID. "
@@ -338,8 +356,12 @@ public class TestResultController {
 	}
 
 	@ApiOperation(value = "Get the result from a single Test Task within a Test Run as JSON",
-			notes = "Transforms the result from a single Test Task to JSON. " + TEST_TASK_RESULT_DESCRIPTION +
-				" Note: use the TestRuns interface to get all Test Task results within a Test Run. ", tags = {TEST_RESULTS_TAG_NAME})
+			notes = "Transforms the result from a single Test Task to JSON. " + TEST_TASK_RESULT_DESCRIPTION,
+			tags = {TEST_RESULTS_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 202, message = "Test Task exists", response = Void.class),
+			@ApiResponse(code = 404, message = "Test Task does not exist", response = Void.class),
+	})
 	@RequestMapping(value = {TEST_TASKS_URL + "/{id}.json"}, method = RequestMethod.GET)
 	public void testTaskResultByIdJson(
 			@ApiParam(value = "Test Task ID. "
@@ -351,8 +373,8 @@ public class TestResultController {
 
 
 	@ApiOperation(value = "Generate a HTML Test Report from a single Test Task within a Test Run",
-			notes = "Generates a HTML report from one single result of Test Task the within a Test Run. " +
-					"Note: use the TestRuns interface to get all Test Task results within a Test Run. \"", produces = "text/html",
+			notes = "Generates a HTML report from one single result of Test Task the within a Test Run. "
+					+TEST_TASK_RESULT_NOTE, produces = "text/html",
 			tags = {TEST_RESULTS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 202, message = "Test Task exists", response = Void.class),
@@ -371,7 +393,8 @@ public class TestResultController {
 	}
 
 
-	@ApiOperation(value = "Check if the Test Task exists", notes = "Checks if a Test Task has been completed and saved. ",
+	@ApiOperation(value = "Check if the Test Task exists", notes = "Checks if a Test Task has been completed and saved. "
+			+TEST_TASK_RESULT_NOTE,
 			tags = {TEST_RESULTS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 204, message = "Test Task exists", response = Void.class),
