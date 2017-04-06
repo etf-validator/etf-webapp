@@ -63,7 +63,7 @@
         <span th:text="#{l.Started}" >Started</span>: <span class="test-report-time"><%= moment(testRun.startTimestamp).format('HH:mm') %></span> - <span class="test-report-date"><%= moment(testRun.startTimestamp).format('DD.MM.YYYY') %></span>
         <% if(!_.isUndefined(testRun.status)) { %>
             <br/>
-            <span th:text="#{l.Status}" >Status</span>: <span><%= testRun.status='PASSED_MANUAL' ? 'Passed, manual checks required' : testRun.status %></span>
+            <span th:text="#{l.Status}" >Status</span>: <span><%= testRun.status=='PASSED_MANUAL' ? 'Passed, manual checks required' : testRun.status %></span>
         <% } %>
         <br/>
         <%
@@ -86,10 +86,9 @@
             <% if(!_.isUndefined(testObject.remoteResource) && testObject.remoteResource!='http://nowhere' && testObject.remoteResource!='http://private') { %>
             <a href="<%= testObject.remoteResource %>" target="_blank"><%= testObject.label %></a>
             <% }else{ %>
-            <span><%= testRun.testTasks.TestTask[0].testObject.label %></span>
+            <span><%= testObject.label %></span>
         </div>
-        <%
-            }}
+        <% }}
             if(!_.isUndefined(executableTestSuites)) {
         %>
             <div>
@@ -106,7 +105,7 @@
         <br>
 
         <div>
-            <% if (testRun.status!='unknown') {  %>
+            <% if (testRun.status!='UNDEFINED') {  %>
                 <a href="<%= reportBaseUrl + testRun.id + '.html' %>" data-icon="eye" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.open.report}">Open report</a>
                 <a href="<%= reportBaseUrl + testRun.id + '.html?download=true' %>" data-icon="arrow-d-r" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.download.report}">Download report</a>
             <% }; %>

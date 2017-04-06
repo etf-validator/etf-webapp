@@ -39,12 +39,16 @@ define([
             // Load dependencies first
             var self = this;
             this.deferred = $.when(
-                this.testObjectTypeCollection.deferred.done,
-                this.tagCollection.deferred.done,
-                this.translationTemplateBundleCollection.done
+                self.testObjectTypeCollection.deferred,
+                self.tagCollection.deferred,
+                self.translationTemplateBundleCollection.deferred
             ).then(function() {
-                return self.fetch();
+                return self.fetch()
             });
+            // Resolve deferreds
+            this.testObjectTypeCollection.deferred.resolve();
+            this.tagCollection.deferred.resolve();
+            this.translationTemplateBundleCollection.deferred.resolve();
         },
 
         parse: function(response) {

@@ -33,12 +33,15 @@ define([
         initialize: function( models, options ) {
             this.testObjectTypeCollection = options.testObjectTypeCollection;
 
+            // Load dependencies first
             var self = this;
-            this.deferred = $.when(
-                this.testObjectTypeCollection.deferred.done
+            self.deferred = $.when(
+                self.testObjectTypeCollection.deferred
             ).then(function() {
-                return self.fetch()
+                return self.fetch();
             });
+            // Resolve deferreds
+            this.testObjectTypeCollection.deferred.resolve();
         },
 
         parse: function(response) {
