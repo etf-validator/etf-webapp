@@ -283,11 +283,25 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 				throw new LocalizableApiError("l.testObject.testdir.no.xml.gml.found", false, 400);
 			}
 		}
+		if(v.getSize()==0) {
+			if (v.getFileCount() == 1) {
+				throw new LocalizableApiError("l.testObject.one.file.with.zero.size", false, 400, v.getFileCount());
+			} else {
+				throw new LocalizableApiError("l.testObject.multiple.files.with.zero.size", false, 400, v.getFileCount());
+			}
+		}
+
 		testObject.setItemHash(v.getHash());
 		testObject.properties().setProperty("indexed", "false");
 		testObject.properties().setProperty("files", String.valueOf(v.getFileCount()));
 		testObject.properties().setProperty("size", String.valueOf(v.getSize()));
 		testObject.properties().setProperty("sizeHR", FileUtils.byteCountToDisplaySize(v.getSize()));
+		if(v.getSkippedFiles()>0) {
+			testObject.properties().setProperty("skippedFiles", String.valueOf(v.getSkippedFiles()));
+		}
+		if(v.getEmptyFiles()>0) {
+			testObject.properties().setProperty("emptyFiles", String.valueOf(v.getEmptyFiles()));
+		}
 
 		return testObject;
 	}

@@ -163,7 +163,7 @@ public class LocalizableApiError extends LocalizableError {
 	}
 
 	public LocalizableApiError(final NoSuchFileException e) {
-		super(e);
+		super("l.json.parse.error", e);
 		sensitiveInformation = true;
 		sc = 500;
 	}
