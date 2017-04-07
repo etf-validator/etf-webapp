@@ -77,7 +77,7 @@ public class SwaggerConfig {
 								+ "Content negotiation is currently not implemented and therefore JSON is always returned for endpoints without file extension. "
 								+ "Please note that the API is not final and may undergo further changes before being released. "
 								+ "\n\n"
-								+ "[Back to user interface]("+EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_WEBAPP_BASE_URL)+")")
+								+ "[Back to user interface]("+EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_WEBAPP_BASE_URL)+"/#home)")
 				.contact(new Contact("ETF Team", "https://interactive-instruments.github.io/etf-webapp",
 						"etf@interactive-instruments.de"))
 				.license("Apache 2.0")
