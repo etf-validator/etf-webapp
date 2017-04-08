@@ -41,7 +41,7 @@ define([
                 self.testObjectCollection.deferred,
                 self.etsCollection.deferred
             ).then(function() {
-                return self.fetch()
+                return self.fetch();
             });
             // Both collections don't need to be resolved (promise objects not deferred)
         },

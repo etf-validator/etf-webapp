@@ -43,7 +43,7 @@ define([
                 self.tagCollection.deferred,
                 self.translationTemplateBundleCollection.deferred
             ).then(function() {
-                return self.fetch()
+                return self.fetch();
             });
             // Resolve deferreds
             this.testObjectTypeCollection.deferred.resolve();
