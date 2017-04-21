@@ -17,9 +17,7 @@
     <meta name="web_author" content="interactive instruments GmbH"/>
 
 
-    <title th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText != null }"
-           th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}">BRANDING TEXT</title>
-    <title th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText == null }">etf WebApp</title>
+    <title th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}">BRANDING TEXT</title>
 
     <!-- Opbeat for Javascript bug reports -->
     <!-- https://opbeat.com/docs/articles/get-started-with-javascript/ -->
@@ -36,10 +34,27 @@
             // Configuration options
         });
     </script>
-    <!--script th:src="@{/js/service-worker.js}" async>
-    </script-->
 
+    <link rel="fluid-icon" th:href="@{/img/310x310.png}" th:title="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}">
+    <link rel="mask-icon" th:href="@{/img/icon-mono.svg}" color="#8b8b8b">
     <link rel="shortcut icon" th:href="@{/favicon.ico}" href="/favicon.ico" type="image/vnd.microsoft.icon" />
+
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" th:href="@{/img/apple-touch-icon-60x60.png}" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" th:href="@{/img/apple-touch-icon-76x76.png}" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" th:href="@{/img/apple-touch-icon-120x120.png}" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" th:href="@{/img/apple-touch-icon-152x152.png}" />
+    <link rel="icon" type="image/png" th:href="@{/img/favicon-196x196.png}" sizes="196x196" />
+    <link rel="icon" type="image/png" th:href="@{/img/favicon-128x128.png}" sizes="128x128" />
+    <link rel="icon" type="image/png" th:href="@{/img/favicon-96x96.png}" sizes="96x96" />
+    <link rel="icon" type="image/png" th:href="@{/img/favicon-32x32.png}" sizes="32x32" />
+    <link rel="icon" type="image/png" th:href="@{/img/favicon-16x16.png}" sizes="16x16" />
+
+    <meta name="application-name" th:content="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}"/>
+    <meta name="application-major-version" content="2"/>
+    <meta name="msapplication-TileImage" th:content="@{/img/mstile-144x144.png}" />
+    <meta name="msapplication-square150x150logo" th:content="@{/img/mstile-150x150.png}" />
+    <meta name="msapplication-square310x310logo" th:content="@{/img/310x310.png}" />
+
     <link rel="stylesheet" type="text/css"
           href="css/de.interactive-instruments.min.css"
           th:href="@{/css/de.interactive-instruments.min.css}" />
