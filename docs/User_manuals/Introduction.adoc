@@ -4,6 +4,7 @@ The ETF web interface enables the user to start, control, monitor tests
 and to inspect the test results. These task areas are reflected in the
 menu structure.
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24769663/92baa548-1b07-11e7-9861-d856bd67f39d.png["1.
 Menu"]
 

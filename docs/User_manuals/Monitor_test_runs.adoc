@@ -2,10 +2,12 @@
 
 After a Test Run has been started the Monitor View is shown.
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24776001/6e32c3dc-1b1f-11e7-95e7-d37ec54f2d74.png["screenshot13"]
 
 The blue bar indicates the progress.
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24776030/8044c64c-1b1f-11e7-96ee-bf7c3c7a38fa.png["screenshot14"]
 
 The console area shows information and result messages. The Test Run can
@@ -18,6 +20,7 @@ To reattach to a Monitor View select in the menu bar the _Status_ view.
 The Status view shows all running tests. A click on the Test Run opens
 the Monitor View of that Test Run again.
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24776115/d22463b4-1b1f-11e7-9ad0-262ecbb5aecc.png["screenshot15"]
 
 When a Test Run finshes and the Monitor View is opened, the Test Report

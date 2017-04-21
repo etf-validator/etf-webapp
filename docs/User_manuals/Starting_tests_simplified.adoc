@@ -4,12 +4,14 @@
 
 The landing view shows the available __Executable Test Suites__.
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24769794/0ab17ed2-1b08-11e7-98af-7dfd4f7224ef.png["2
 ETS list"]
 
 Additional information about a Test Suite can be shown by clicking on
 the plus button.
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24769921/76a97770-1b08-11e7-8052-035f7e2ea9bd.png["3
 ETS details",800]
 
@@ -30,6 +32,7 @@ and change dates.
 To start a Test Run, a Test Suite must be selected with a click on the
 *use* flip switch on the right-hand side.
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24769985/b0ee7872-1b08-11e7-9d5e-bdd374596be6.png["4
 ETS selection"]
 
@@ -41,6 +44,7 @@ Run, but must be applicable to the same Test Object Type. Once one Test
 Suite is selected, the flip switch of all Test Suites, that have
 different Test Object Types, are disabled.
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24770148/44831192-1b09-11e7-9727-072fe116381d.png["5
 ETS: multiple selections"]
 
@@ -53,6 +57,7 @@ about the target to be tested.
 
 == Test Run configuration
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24771135/bd70a15c-1b0c-11e7-88ec-24dbcc1e7d45.png["6
 Test Run configuration view"]
 
@@ -74,6 +79,7 @@ accepts files with XML and GML file ending and ZIP files containing
 these two file types. All other files like schema files can not be used
 and are silently ignored by the Validator!
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24774770/759dc7de-1b1a-11e7-98af-c9deff4054d4.png["screenshot7"]
 
 The maximum uploadable file size is displayed when the mouse is over the
@@ -84,11 +90,13 @@ single URL. After _Remote file (URL)_ has been selected as __Data
 source__, an URL to either one single XML, GML or a ZIP file can be
 entered.
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24774946/34a566c8-1b1b-11e7-85ca-fe04628e6897.png["screenshot8"]
 
 If the URL requires authentication, username and password can be
 provided by clicking on __Credentials__.
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24775066/af8c75de-1b1b-11e7-96ae-b5989e9702e7.png["screenshot9"]
 
 === Service Tests
@@ -98,6 +106,7 @@ that test one service.
 
 The URL of a service must be entered beginning with http:// or https:// .
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24775449/405f7268-1b1d-11e7-8ed9-28b364b4e339.png["screenshot10"]
 
 If the service requires authentication, username and password can be
@@ -108,6 +117,7 @@ provided by clicking on __Credentials__.
 The _Test Suites_ button shows some basic information about the selected
 Test Suites and -if applicable- about the direct dependencies.
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24775122/dbe5741e-1b1b-11e7-858d-ac453b36f97e.png["screenshot11"]
 
 If the Test accepts parameters, they are shown in the Test Suite
@@ -116,6 +126,7 @@ the _Optional Parameters_ button. A description of the parameters is
 displayed when the mouse is over the question mark. In most cases the
 preset default values can be used.
 
+[.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24775199/180a8d94-1b1c-11e7-85d1-a591df928738.png["screenshot12"]
 
 Finally the test can be started by clicking on the _Start_ button. The
