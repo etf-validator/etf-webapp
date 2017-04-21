@@ -1,0 +1,11 @@
+= Scope
+
+This manual is intended for users that are using a central
+deployed validator to test geo network services and data. Services must be
+accessible via the internet but can be protected with basic authentication.
+Small test data sets can be uploaded or downloaded by the validator
+by providing an URL.
+
+If your services are not publicly accessible via the internet or data can
+not be uploaded, ask your Administrator to set up a organization-internal
+deployment of the ETF validator.
