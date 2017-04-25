@@ -46,7 +46,7 @@
 <li><a href="#_linux">Linux</a></li>
 </ul>
 </li>
-<li><a href="#ETF-config-file">1.3.2. ETF configuration</a></li>
+<li><a href="#ETF-config-file">1.3.2. ETF configuration properties file</a></li>
 <li><a href="#_etf_data_directory_structure">1.3.3. ETF data directory structure</a></li>
 </ul>
 </li>
@@ -356,50 +356,20 @@ If ETF is accessed not only from one local machine, the <strong>etf.webapp.base.
 </div>
 <div class="sect2">
 <h3 id="_etf_configuration">1.3. ETF configuration</h3>
+<div class="sect3">
+<h4 id="_data_directory_configuration">1.3.1. Data directory configuration</h4>
 <div class="paragraph">
 <p>The deployment directory, in which the ETF web app is deployed by the web
 application server, can not be used to store data because it is also deleted,
 when the ETF web application is undeployed. Therefore a separate ETF data
 directory is used.</p>
 </div>
-<div class="sect3">
-<h4 id="_data_directory_configuration">1.3.1. Data directory configuration</h4>
 <div class="paragraph">
 <p>The application determines the ETF data directory based on the operating system
 in a specific order.</p>
 </div>
 <div class="sect4">
 <h5 id="_windows">Windows</h5>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>If the environment variable <code>ETF_WEBAPP_PROPERTIES_FILE</code> or the java
-property <code>etf.webapp.properties.file</code> is set, the file will be used to
-configure the etf directory.</p>
-</li>
-<li>
-<p>If a <code>/etc/etf/etf-config.properties</code> file exists, the file will
-be used to configure the etf data directory.</p>
-</li>
-<li>
-<p>If an etf-config.properties file exists in the 'etf' subfolder of the root
-filesystem ('/etf'), the file will be used to configure the etf directory.</p>
-</li>
-<li>
-<p>If a etf-config.properties file exists in the home subfolder '~/.etf'
-(note that the directory is hidden) on <em>Linux</em>, the file will be used to
-configure the etf directory.</p>
-</li>
-<li>
-<p>If the etf-config.properties file is not found, a template configuration and
-the default ETF data directory structure will be created in the hidden home
-subfolder '~/.etf'.</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_linux">Linux</h5>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -430,9 +400,39 @@ folder ( %ALLUSERSPROFILE% ).</p>
 </ol>
 </div>
 </div>
+<div class="sect4">
+<h5 id="_linux">Linux</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If the environment variable <code>ETF_WEBAPP_PROPERTIES_FILE</code> or the java
+property <code>etf.webapp.properties.file</code> is set, the file will be used to
+configure the etf directory.</p>
+</li>
+<li>
+<p>If a <code>/etc/etf/etf-config.properties</code> file exists, the file will
+be used to configure the etf data directory.</p>
+</li>
+<li>
+<p>If an etf-config.properties file exists in the 'etf' subfolder of the root
+filesystem ('/etf'), the file will be used to configure the etf directory.</p>
+</li>
+<li>
+<p>If a etf-config.properties file exists in the home subfolder '~/.etf'
+(note that the directory is hidden) on <em>Linux</em>, the file will be used to
+configure the etf directory.</p>
+</li>
+<li>
+<p>If the etf-config.properties file is not found, a template configuration and
+the default ETF data directory structure will be created in the hidden home
+subfolder '~/.etf'.</p>
+</li>
+</ol>
+</div>
+</div>
 </div>
 <div class="sect3">
-<h4 id="ETF-config-file">1.3.2. ETF configuration</h4>
+<h4 id="ETF-config-file">1.3.2. ETF configuration properties file</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="properties"><span class="tok-c">#########################################</span>
@@ -581,7 +581,7 @@ on the host.
 <a id="etf-configuration-dir"></a></p>
 </li>
 <li>
-<p>The <a href="#ETF-config-file">ETF configuration</a> file can be found in the <strong>config</strong> directory. Changes to
+<p>The <a href="#ETF-config-file">ETF configuration properties file</a> is located in the <strong>config</strong> directory. Changes to
 this file will only take effect after restarting the ETF.</p>
 </li>
 <li>

@@ -1,33 +1,16 @@
 == ETF configuration
 
+=== Data directory configuration
+
 The deployment directory, in which the ETF web app is deployed by the web
 application server, can not be used to store data because it is also deleted,
 when the ETF web application is undeployed. Therefore a separate ETF data
 directory is used.
 
-=== Data directory configuration
-
 The application determines the ETF data directory based on the operating system
 in a specific order.
 
 ==== Windows
-
-1. If the environment variable `ETF_WEBAPP_PROPERTIES_FILE` or the java
-property `etf.webapp.properties.file` is set, the file will be used to
-configure the etf directory.
-2. If a `/etc/etf/etf-config.properties` file exists, the file will
-be used to configure the etf data directory.
-3. If an etf-config.properties file exists in the 'etf' subfolder of the root
-filesystem ('/etf'), the file will be used to configure the etf directory.
-4. If a etf-config.properties file exists in the home subfolder '~/.etf'
-(note that the directory is hidden) on _Linux_, the file will be used to
-configure the etf directory.
-5. If the etf-config.properties file is not found, a template configuration and
-the default ETF data directory structure will be created in the hidden home
-subfolder '~/.etf'.
-
-
-==== Linux
 
 1. If the environment variable `ETF_WEBAPP_PROPERTIES_FILE` or the java
 property `etf.webapp.properties.file` is set, the file will be used to
@@ -45,9 +28,25 @@ the etf directory.
 the default ETF data directory structure will be created in the ProgramData
 folder ( %ALLUSERSPROFILE% ).
 
+==== Linux
+
+1. If the environment variable `ETF_WEBAPP_PROPERTIES_FILE` or the java
+property `etf.webapp.properties.file` is set, the file will be used to
+configure the etf directory.
+2. If a `/etc/etf/etf-config.properties` file exists, the file will
+be used to configure the etf data directory.
+3. If an etf-config.properties file exists in the 'etf' subfolder of the root
+filesystem ('/etf'), the file will be used to configure the etf directory.
+4. If a etf-config.properties file exists in the home subfolder '~/.etf'
+(note that the directory is hidden) on _Linux_, the file will be used to
+configure the etf directory.
+5. If the etf-config.properties file is not found, a template configuration and
+the default ETF data directory structure will be created in the hidden home
+subfolder '~/.etf'.
+
 
 [[ETF-config-file]]
-=== ETF configuration
+=== ETF configuration properties file
 
 [source,properties]
 ----
@@ -217,7 +216,7 @@ etf
 
 . The *bak* directory is used for internal backups.
 anchor:etf-configuration-dir[ETF configuration file]
-. The <<ETF-config-file>> file can be found in the *config* directory. Changes to
+. The <<ETF-config-file>> is located in the *config* directory. Changes to
 this file will only take effect after restarting the ETF.
 . The *ds* directory is used for storing data and contains a *attachments*
 subfolder for files that are downloaded or created during a Test Run.
