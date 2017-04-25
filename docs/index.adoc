@@ -35,10 +35,10 @@ WARNING: WORK IN PROGRESS
 
 == Administrator manual
 * link:https://github.com/interactive-instruments/etf-webapp-docker#setup-etf-with-docker-compose[Docker image]
-* link:Admin_manuals/index.adoc#_installation_on_windows[Tomcat 8 deployment on Windows 7]
-* link:Admin_manuals/index.adoc#_installation_on_linux[Tomcat 8 deployment on Linux]
-* link:Admin_manuals/index.adoc#_etf_configuration[Configuration]
-* link:Admin_manuals/index.adoc#ets-installation[Executable Test Suite installation]
+* link:Admin_manuals/index.html#_installation_on_windows[Tomcat 8 deployment on Windows 7]
+* link:Admin_manuals/index.html#_installation_on_linux[Tomcat 8 deployment on Linux]
+* link:Admin_manuals/index.html#_etf_configuration[Configuration]
+* link:Admin_manuals/index.html#ets-installation[Executable Test Suite installation]
 
 == Developer manuals
 * link:Developer_manuals/WEB-API.html[Workflow automation with the Web API]
