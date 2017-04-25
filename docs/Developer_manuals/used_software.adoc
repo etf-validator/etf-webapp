@@ -1,0 +1,17 @@
+== Used Software
+
+This is an incomplete list of libraries used in the ETF framework.
+
+* BaseX | The XML Database from BaseX GmbH - http://basex.org[http://basex.org]
+
+* The Saxon XSLT and XQuery Processor from Saxonica Limited - http://www.saxonica.com/[http://www.saxonica.com]
+
+* Spring Framework from SpringSource- https://projects.spring.io/spring-framework/[https://projects.spring.io/spring-framework]
+
+* SoapUI Open Source from SmartBear - https://www.soapui.org[https://www.soapui.org]
+
+* Byte Buddy from Rafael Winterhalter - http://bytebuddy.net[http://bytebuddy.net]
+
+* EclipseLink from the Eclipse Foundation - http://www.eclipse.org/eclipselink/[http://www.eclipse.org/eclipselink]
+
+* backbonejs from Jeremy Ashkenas - http://backbonejs.org/[http://backbonejs.org]

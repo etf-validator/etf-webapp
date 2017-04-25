@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.5">
+<title>User manual for central deployments</title>
+<link rel="stylesheet" href="../stylesheets/etf.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="../stylesheets/pygments-autumn.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of contents</div>
+<ul class="sectlevel0">
+<li><a href="#_user_manual_for_central_deployments">User manual for central deployments</a>
+<ul class="sectlevel1">
+<li><a href="#_changelog">Changelog</a>
+<ul class="sectlevel2">
+<li><a href="#_installation_on_windows">1.1. Installation on Windows</a>
+<ul class="sectlevel3">
+<li><a href="#_prerequisites_on_windows">1.1.1. Prerequisites on Windows:</a></li>
+<li><a href="#_configure_tomcat_on_windows">1.1.2. Configure Tomcat on Windows</a>
+<ul class="sectlevel4">
+<li><a href="#_option_1_tomcat_is_started_as_service">Option 1: Tomcat is started as service</a></li>
+<li><a href="#_option_2_tomcat_is_started_in_batch_mode">Option 2: Tomcat is started in batch mode</a></li>
+</ul>
+</li>
+<li><a href="#_install_etf_web_application_on_windows">1.1.3. Install ETF web application on Windows</a></li>
+</ul>
+</li>
+<li><a href="#_installation_on_linux">1.2. Installation on Linux</a>
+<ul class="sectlevel3">
+<li><a href="#_prerequisites_on_linux">1.2.1. Prerequisites on Linux:</a></li>
+<li><a href="#_configure_tomcat_on_linux">1.2.2. Configure Tomcat on Linux</a></li>
+<li><a href="#_install_etf_web_application_on_linux">1.2.3. Install ETF web application on Linux</a></li>
+</ul>
+</li>
+<li><a href="#_etf_configuration">1.3. ETF configuration</a>
+<ul class="sectlevel3">
+<li><a href="#_data_directory_configuration">1.3.1. Data directory configuration</a>
+<ul class="sectlevel4">
+<li><a href="#_windows">Windows</a></li>
+<li><a href="#_linux">Linux</a></li>
+</ul>
+</li>
+<li><a href="#ETF-config-file">1.3.2. ETF configuration</a></li>
+<li><a href="#_etf_data_directory_structure">1.3.3. ETF data directory structure</a></li>
+</ul>
+</li>
+<li><a href="#ets-installation">1.4. Executable Test Suites</a>
+<ul class="sectlevel3">
+<li><a href="#_installation">1.4.1. Installation</a></li>
+<li><a href="#_official_executable_test_suite_repositories">1.4.2. Official Executable Test Suite repositories</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div id="ii_logo" class="imageblock" style="text-align: center">
+<div class="content">
+<a class="image" href="http://www.interactive-instruments.de/en"><img src="http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png" alt="Interactive instruments logo" width="150"></a>
+</div>
+</div>
+<table class="tableblock frame-none grid-none spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="image"><a class="image" href="http://www.etf-validator.net"><img src="../images/ETF_logo.png" alt="ETF Logo" width="125"></a></span></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><span class="etf_headline">ETF<br>
+testing framework for geo network services and data</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<h1 id="_user_manual_for_central_deployments" class="sect0">User manual for central deployments</h1>
+<div class="openblock partintro">
+<div class="content">
+<table class="tableblock frame-topbot grid-none spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Status</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">in review</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Date</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-04-20</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This manual is intended for administrators who want to set up an organization internal deployment of the ETF validator.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Licence</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution (cc-by) 4.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Identifier</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Admin_manuals/index.adoc" class="bare">https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Admin_manuals/index.adoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Language</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EN</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The ETF Web application version 2 beta is not intended for production environments.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_changelog">Changelog</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Date</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Editor</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Comments</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-04-24</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jon Herrmann</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">document converted from GitHub wiki</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<!-- toc disabled -->
+<div style="page-break-after: always;"></div>
+<div class="sect2">
+<h3 id="_installation_on_windows">1.1. Installation on Windows</h3>
+<div class="sect3">
+<h4 id="_prerequisites_on_windows">1.1.1. Prerequisites on Windows:</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Machine with at least 4 GB Ram (8GB are recommended, 16 GB and more if a large set of XML files are tested)</p>
+</li>
+<li>
+<p><a href="https://www.java.com/en/download/help/windows_offline_download.xml">Oracle Java 8 is installed</a></p>
+</li>
+<li>
+<p><a href="https://tomcat.apache.org/download-80.cgi">Apache Tomcat 8 installed and configured</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configure_tomcat_on_windows">1.1.2. Configure Tomcat on Windows</h4>
+<div class="paragraph">
+<p>Tomcat 8 must be run with UTF-8 file encoding and two parameters must be set. The configuration depends on how Tomcat is started on Windows. Accordingly, one of the two following chapters applies.</p>
+</div>
+<div class="sect4">
+<h5 id="_option_1_tomcat_is_started_as_service">Option 1: Tomcat is started as service</h5>
+<div class="paragraph">
+<p>If the Tomcat is running as a service on Windows, the parameters must be set in the service configuration (each parameter must be on a new line):</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://cloud.githubusercontent.com/assets/13570741/24648926/97582bd6-1925-11e7-966c-a18337c56756.png" alt="Tomcat service configuration">
+</div>
+<div class="title">Figure 1. Tomcat service configuration</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash">-Dfile.encoding<span class="tok-o">=</span>UTF-8
+-Djavax.servlet.request.encoding<span class="tok-o">=</span>UTF-8</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the <a href="https://tomcat.apache.org/tomcat-8.0-doc/windows-service-howto.html">Tomcat Howto</a> for more information.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_option_2_tomcat_is_started_in_batch_mode">Option 2: Tomcat is started in batch mode</h5>
+<div class="paragraph">
+<p>If Tomcat is started on Windows on the console via the batch file catalina.bat, the file setenv.bat must be created in the subfolder bin, of the Tomcat installation directory, with the following content:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span class="tok-nb">set</span> <span class="tok-nv">JAVA_OPTS</span><span class="tok-o">=</span>-Dfile.encoding<span class="tok-o">=</span>UTF-8 -Djavax.servlet.request.encoding<span class="tok-o">=</span>UTF-8</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_install_etf_web_application_on_windows">1.1.3. Install ETF web application on Windows</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Download the <a href="https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/etf-webapp/2.0.0/etf-webapp-2.0.0.war">latest ETF-Webapp</a> version, using etf-public-dev as user and password.</p>
+</li>
+<li>
+<p>Rename the etf-webapp-2.x.x.war file to etf-webapp.war . Otherwise, the version must be specified in the URL after the deployment.</p>
+</li>
+<li>
+<p>Either copy the etf-webapp.war file to <strong>TOMCAT_INSTALLATION_DIRECTORY\webapps</strong> or deploy the file using the Tomcat manager. If the manager is used, make sure that <strong>max-file-size</strong> and <strong>max-request-size</strong> are set to at least 157286400 (150 Megabytes) in the <strong>TOMCAT_INSTALLATION_DIRECTORY\webapps\manager\WEB-INF\web.xml</strong> file:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml">    <span class="tok-nt">&lt;multipart-config&gt;</span>
+      <span class="tok-c">&lt;!-- 150MB max --&gt;</span>
+      <span class="tok-nt">&lt;max-file-size&gt;</span>157286400<span class="tok-nt">&lt;/max-file-size&gt;</span>
+      <span class="tok-nt">&lt;max-request-size&gt;</span>157286400<span class="tok-nt">&lt;/max-request-size&gt;</span>
+      <span class="tok-nt">&lt;file-size-threshold&gt;</span>0<span class="tok-nt">&lt;/file-size-threshold&gt;</span>
+    <span class="tok-nt">&lt;/multipart-config&gt;</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>The application will start and initially create the ETF directory structure in the directory %ALLUSERSPROFILE% (default: C:\ProgramData). If the environment variables TOMCAT_HOME or CATALINA_HOME are set the etf.log file is stored in <strong>%TOMCAT_HOME%\logs\etf.log</strong> or <strong>%CATALINA_HOME%\logs\etf.log</strong> otherwise in <strong>%ALLUSERSPROFILE%\etf\logs\etf.log</strong></p>
+</li>
+<li>
+<p>Download the <a href="https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/bsxm/etf-gmlgeox/1.1.0/etf-gmlgeox-1.1.0.jar">latest GmlGeoX library</a>. Rename the downloaded file to GmlGeoX.jar (note that the file name is case-sensitive!). Afterwards copy the file to <strong>%ALLUSERSPROFILE%\etf\ds\db\repo\de\interactive_instruments\etf\bsxm</strong>.</p>
+</li>
+<li>
+<p>Download <a href="#ets-installation">Executable Test Suites</a> and extract archives into the <strong>%ALLUSERSPROFILE%\etf\projects</strong> directory. The web application will automatically load the Executable Test Suites after a few seconds.</p>
+</li>
+<li>
+<p>The web application can be accessed via <a href=":http://localhost:8080/etf-webapp"><a href="http://localhost:8080/etf-webapp" class="bare">http://localhost:8080/etf-webapp</a></a>.
+If ETF is accessed not only from one local machine, the <strong>etf.webapp.base.url</strong> property must be changed in the <a href="#etf-configuration-dir">ETF configuration file</a> to your server address (e.g. <a href="http://etf-server:8080/etf-webapp" class="bare">http://etf-server:8080/etf-webapp</a>).</p>
+</li>
+<li>
+<p>Check the <a href="#etf-log-file">ETF log file</a> file for errors.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_installation_on_linux">1.2. Installation on Linux</h3>
+<div class="sect3">
+<h4 id="_prerequisites_on_linux">1.2.1. Prerequisites on Linux:</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Machine with at least 4 GB Ram (8GB are recommended, 16 GB and more if a large set of XML files are tested)</p>
+</li>
+<li>
+<p><a href="https://www.java.com/en/download/help/linux_x64_install.xml">Oracle Java 8 is installed</a></p>
+</li>
+<li>
+<p><a href="https://tomcat.apache.org/download-80.cgi">Apache Tomcat 8 installed and configured</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configure_tomcat_on_linux">1.2.2. Configure Tomcat on Linux</h4>
+<div class="paragraph">
+<p>Tomcat 8 must be run with UTF-8 file encoding and two parameters must be set. The
+parameters can be set in the <strong>setenv.sh</strong> file which is located in the <strong>bin</strong>
+subfolder of the Tomcat application directory.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The Tomcat application directory is Linux distribution specific. In some
+distributions it is located at <strong>/opt/tomcat/</strong>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The following lines must be added to the setenv.sh file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span class="tok-nb">export</span> <span class="tok-nv">JAVA_OPTS</span><span class="tok-o">=</span><span class="tok-s2">&quot;</span><span class="tok-nv">$JAVA_OPTS</span><span class="tok-s2"> -Dfile.encoding=UTF-8 -Djavax.servlet.request.encoding=UTF-8&quot;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Restart Tomcat afterwards.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_install_etf_web_application_on_linux">1.2.3. Install ETF web application on Linux</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Download the <a href=":https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/etf-webapp/2.0.0/etf-webapp-2.0.0.war">latest ETF-Webapp</a> version, using etf-public-dev as user and password.</p>
+</li>
+<li>
+<p>Rename the etf-webapp-2.x.x.war file to etf-webapp.war . Otherwise, the version must be specified in the URL after the deployment.</p>
+</li>
+<li>
+<p>Either copy the etf-webapp.war file to <strong>TOMCAT_INSTALLATION_DIRECTORY/webapps</strong> or deploy the file using the Tomcat manager. If the manager is used, make sure that <strong>max-file-size</strong> and <strong>max-request-size</strong> are set to at least 157286400 (150 Megabytes) in the <strong>TOMCAT_INSTALLATION_DIRECTORY/webapps/manager/WEB-INF/web.xml</strong> file:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="xml">    <span class="tok-nt">&lt;multipart-config&gt;</span>
+      <span class="tok-c">&lt;!-- 150MB max --&gt;</span>
+      <span class="tok-nt">&lt;max-file-size&gt;</span>157286400<span class="tok-nt">&lt;/max-file-size&gt;</span>
+      <span class="tok-nt">&lt;max-request-size&gt;</span>157286400<span class="tok-nt">&lt;/max-request-size&gt;</span>
+      <span class="tok-nt">&lt;file-size-threshold&gt;</span>0<span class="tok-nt">&lt;/file-size-threshold&gt;</span>
+    <span class="tok-nt">&lt;/multipart-config&gt;</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>The application will start and initially create the ETF directory structure in the directory <strong>~/.etf</strong> (note: the directory is hidden). If the environment variables TOMCAT_HOME or CATALINA_HOME are set the etf.log file is stored in <strong>$TOMCAT_HOME/logs/etf.log</strong> or <strong>$CATALINA_HOME/logs/etf.log</strong> otherwise in <strong>~/.etf/logs/etf.log</strong></p>
+</li>
+<li>
+<p>Download the <a href="https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/bsxm/etf-gmlgeox/1.1.0/etf-gmlgeox-1.1.0.jar">latest GmlGeoX library</a>. Rename the downloaded file to GmlGeoX.jar (note: the file name is case-sensitive). Afterwards copy the file to <strong>~/.etf/ds/db/repo/de/interactive_instruments/etf/bsxm</strong>.</p>
+</li>
+<li>
+<p>Download <a href="#ets-installation">Executable Test Suites</a> and extract archives into the <strong>~/.etf/projects</strong> directory. The web application will automatically load the Executable Test Suites after a few seconds.</p>
+</li>
+<li>
+<p>The web application can be accessed via <a href=":http://localhost:8080/etf-webapp"><a href="http://localhost:8080/etf-webapp" class="bare">http://localhost:8080/etf-webapp</a></a>.
+If ETF is accessed not only from one local machine, the <strong>etf.webapp.base.url</strong> property must be changed in the <a href="#etf-configuration-dir">ETF configuration file</a> to your server address (e.g. <a href="http://etf-server:8080/etf-webapp" class="bare">http://etf-server:8080/etf-webapp</a>).</p>
+</li>
+<li>
+<p>Check the <a href="#etf-log-file">ETF log file</a> file for errors.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_etf_configuration">1.3. ETF configuration</h3>
+<div class="paragraph">
+<p>The deployment directory, in which the ETF web app is deployed by the web
+application server, can not be used to store data because it is also deleted,
+when the ETF web application is undeployed. Therefore a separate ETF data
+directory is used.</p>
+</div>
+<div class="sect3">
+<h4 id="_data_directory_configuration">1.3.1. Data directory configuration</h4>
+<div class="paragraph">
+<p>The application determines the ETF data directory based on the operating system
+in a specific order.</p>
+</div>
+<div class="sect4">
+<h5 id="_windows">Windows</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If the environment variable <code>ETF_WEBAPP_PROPERTIES_FILE</code> or the java
+property <code>etf.webapp.properties.file</code> is set, the file will be used to
+configure the etf directory.</p>
+</li>
+<li>
+<p>If a <code>/etc/etf/etf-config.properties</code> file exists, the file will
+be used to configure the etf data directory.</p>
+</li>
+<li>
+<p>If an etf-config.properties file exists in the 'etf' subfolder of the root
+filesystem ('/etf'), the file will be used to configure the etf directory.</p>
+</li>
+<li>
+<p>If a etf-config.properties file exists in the home subfolder '~/.etf'
+(note that the directory is hidden) on <em>Linux</em>, the file will be used to
+configure the etf directory.</p>
+</li>
+<li>
+<p>If the etf-config.properties file is not found, a template configuration and
+the default ETF data directory structure will be created in the hidden home
+subfolder '~/.etf'.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_linux">Linux</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If the environment variable <code>ETF_WEBAPP_PROPERTIES_FILE</code> or the java
+property <code>etf.webapp.properties.file</code> is set, the file will be used to
+configure the etf directory.</p>
+</li>
+<li>
+<p>If an etf-config.properties file exists in the 'etf' subfolder of the root
+filesystems ('C:/etf', 'D:/etf', etc.), the file will be used to configure
+the etf directory.</p>
+</li>
+<li>
+<p>If a etf-config.properties file exists in the 'etf' subfolder of
+the 'My Documents folder' (%DEFAULTUSERPROFILE%) on <em>Windows</em>, the file will
+be used to configure the etf directory.</p>
+</li>
+<li>
+<p>If on <em>Windows</em> the etf-config.properties file exists in the
+ProgramData folder ( %ALLUSERSPROFILE% ), the file will be used to configure
+the etf directory.</p>
+</li>
+<li>
+<p>If the etf-config.properties file is not found, a template configuration and
+the default ETF data directory structure will be created in the ProgramData
+folder ( %ALLUSERSPROFILE% ).</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ETF-config-file">1.3.2. ETF configuration</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="properties"><span class="tok-c">#########################################</span>
+<span class="tok-c"># ETF CONFIGURATION PROPERTY FILE</span>
+<span class="tok-c">#########################################</span>
+
+<span class="tok-c"># Version of the property path, used for backward compatibility.</span>
+<span class="tok-c"># (do not modify unless you know what you are doing)</span>
+<span class="tok-na">etf.config.properties.version</span> <span class="tok-o">=</span> <span class="tok-s">2</span>
+
+
+<span class="tok-c">#########################################</span>
+<span class="tok-c">## General properties</span>
+<span class="tok-c">#########################################</span>
+
+<span class="tok-c"># Modify the base URL which points to the deployed web application.</span>
+<span class="tok-c"># The URL is used to reference this ETF instance from the Test Reports.</span>
+<span class="tok-c"># Example: http://yourserver/etf-webapp</span>
+<span class="tok-na">etf.webapp.base.url</span> <span class="tok-o">=</span> <span class="tok-s">http://localhost:8080/etf-webapp</span>
+
+<span class="tok-c"># Restrict cross-origin HTTP requests for browsers, see</span>
+<span class="tok-c"># https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS</span>
+<span class="tok-c"># for more information.</span>
+<span class="tok-c"># Default: equals etf.webapp.base.url</span>
+<span class="tok-c"># etf.api.allow.origin = *</span>
+
+<span class="tok-c"># An optional branding text which is shown in the header</span>
+<span class="tok-c"># etf.branding.text =</span>
+
+<span class="tok-c"># Allow access to private networks. Checked when</span>
+<span class="tok-c"># a new webservice test object is created. &quot;false&quot; is recommended in public</span>
+<span class="tok-c"># deployments.</span>
+<span class="tok-c"># Default: false</span>
+<span class="tok-c"># etf.testobject.allow.privatenet.access = false</span>
+
+<span class="tok-c"># Recreate internal BaseX configuration path (.basex) on startup. &quot;true&quot; is</span>
+<span class="tok-c"># recommended.</span>
+<span class="tok-c"># Default: true</span>
+<span class="tok-c"># etf.bsx.recreate.config = true</span>
+
+<span class="tok-c"># Possible values default/simplified . A simplified workflow enables the user</span>
+<span class="tok-c"># to the start a test run without creating a test object.</span>
+<span class="tok-c"># Default: simplified</span>
+<span class="tok-c"># etf.workflows = simplified</span>
+
+<span class="tok-c"># Help to improve our application by automatically reporting internal errors</span>
+<span class="tok-c"># (last user action, error message and stacktrace) to interactive instruments through the third</span>
+<span class="tok-c"># party service platform opbeat (see https://opbeat.com/about for more information).</span>
+<span class="tok-c"># Default: false</span>
+<span class="tok-c"># etf.errors.autoreport=false</span>
+
+
+<span class="tok-c">##################################################################################</span>
+<span class="tok-c">## Contact, legal notice, privacy statement</span>
+<span class="tok-c">##################################################################################</span>
+<span class="tok-c">#</span>
+<span class="tok-c"># Please note: you can add multiple lines by using the \ character at the end</span>
+<span class="tok-c"># of the line.</span>
+<span class="tok-c">#</span>
+
+<span class="tok-c"># Contact</span>
+<span class="tok-c"># etf.meta.contact.text = &lt;p&gt;Operator A&lt;/p&gt; \</span>
+<span class="tok-c">#                    &lt;p&gt;X Avenue&lt;/p&gt; \</span>
+<span class="tok-c">#                    &lt;p&gt;Fort Lauderdale&lt;/p&gt; \</span>
+<span class="tok-c">#                    &lt;p&gt;Broward County&lt;/p&gt; \</span>
+<span class="tok-c">#                    &lt;p&gt;Florida, USA&lt;/p&gt; \</span>
+<span class="tok-c">#                    &lt;br&gt;\</span>
+<span class="tok-c">#                    &lt;p&gt;Email: nielsen@a.com&lt;/p&gt;</span>
+
+<span class="tok-c"># Disclaimer shown under Legal notice</span>
+<span class="tok-c"># etf.meta.legalnotice.disclaimer.text = Disclaimer ...</span>
+
+<span class="tok-c"># Copyright notice only shown under Legal notice if Disclaimer is set!</span>
+<span class="tok-c"># etf.meta.legalnotice.copyrightnotice.text = Copyright notice ...</span>
+
+<span class="tok-c"># Privacy statement</span>
+<span class="tok-c"># etf.meta.privacystatement.text = Privacy statement ...</span>
+
+
+<span class="tok-c">#########################################</span>
+<span class="tok-c">## Directory properties</span>
+<span class="tok-c">#########################################</span>
+
+<span class="tok-c"># For all directories paths can be set that are either absolute or</span>
+<span class="tok-c"># relative to the etf.dir. If the etf.dir is not specified it is</span>
+<span class="tok-c"># set to ../ relative to this configuration file.</span>
+
+<span class="tok-c"># Optional base path</span>
+<span class="tok-c"># Default: ../</span>
+<span class="tok-c"># etf.dir=/data/etf</span>
+
+<span class="tok-c"># Directory for the test projects</span>
+<span class="tok-c"># Default: projects</span>
+<span class="tok-c"># etf.projects.dir = projects</span>
+
+<span class="tok-c"># Directory which contains the test drivers</span>
+<span class="tok-c"># Default: td</span>
+<span class="tok-c"># etf.testdrivers.dir = td</span>
+
+<span class="tok-c"># Directory that the application uses for text data tests</span>
+<span class="tok-c"># Default: testdata</span>
+<span class="tok-c"># etf.testdata.dir = testdata</span>
+
+<span class="tok-c"># Directory for the internal data source</span>
+<span class="tok-c"># Default: ds</span>
+<span class="tok-c"># etf.datasource.dir = ds</span>
+
+<span class="tok-c"># Directory that the application uses to store uploaded files</span>
+<span class="tok-c"># Default: http_uploads</span>
+<span class="tok-c"># etf.testdata.upload.dir = http_uploads</span>
+
+<span class="tok-c"># Directory that the application uses to backup files</span>
+<span class="tok-c"># Default: bak</span>
+<span class="tok-c"># etf.backup.dir = bak</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_etf_data_directory_structure">1.3.3. ETF data directory structure</h4>
+<div class="paragraph">
+<p>This chapter describes the strucutre of the ETF data directory.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+When ETF is started from a docker image not all directories are mounted
+on the host.
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/etf-data-dir.png" alt="ETF data directory">
+</div>
+<div class="title">Figure 2. ETF data directory</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The <strong>bak</strong> directory is used for internal backups.
+<a id="etf-configuration-dir"></a></p>
+</li>
+<li>
+<p>The <a href="#ETF-config-file">ETF configuration</a> file can be found in the <strong>config</strong> directory. Changes to
+this file will only take effect after restarting the ETF.</p>
+</li>
+<li>
+<p>The <strong>ds</strong> directory is used for storing data and contains a <strong>attachments</strong>
+subfolder for files that are downloaded or created during a Test Run.
+In the <strong>obj</strong> folder XML representations of all framework items
+(Executable Test Suites, Reports, etc.) are stored. These items are also stored
+in a database that is saved in the <strong>db/data/etf-ds</strong> directory. Other databases
+in the <strong>db/data/</strong> folder, are created during test runs to speed up test queries.
+The <strong>db/repo</strong> folder contains extensions for the database.</p>
+</li>
+<li>
+<p>Files that are uploaded to the framework are temporary stored in the
+<strong>http_uploads</strong> folder and afterwards moved to the <strong>testdata</strong> directory.
+<a id="etf-log-file"></a></p>
+</li>
+<li>
+<p>The ETF log file location depends on whether the system environment
+variables <strong>CATALINA_HOME</strong> or <strong>TOMCAT_HOME</strong> are set. If so the file is
+stored in the <strong>TOMCAT_HOME\logs</strong> or <strong>CATALINA_HOME\logs</strong> directory. This is usually
+the case when ETF is run from within a Tomcat application server. Otherwise the
+log file can be found in the ETF data directory below the <strong>logs</strong> subfolder.</p>
+</li>
+<li>
+<p>Executable Test Suites must be installed in the <strong>projects</strong> folder.
+They are automatically (re-)loaded after a short time.</p>
+</li>
+<li>
+<p>estdrivers are loaded from the <strong>td</strong> directory on ETF startup.</p>
+</li>
+<li>
+<p>The <strong>testdata</strong> directory contains uploaded files. XML files are
+indexed in databases in <strong>db/data/etf-tdb-&lt;UUID&gt;</strong> directories during a test run.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you want to create backups of the ETF data directory, back up:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>config/etf-config.properties</p>
+</li>
+<li>
+<p>ds/obj</p>
+</li>
+<li>
+<p>logs/etf.log</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ets-installation">1.4. Executable Test Suites</h3>
+<div class="sect3">
+<h4 id="_installation">1.4.1. Installation</h4>
+<div class="paragraph">
+<p>Create a new subfolder in the <strong>projects</strong> subfolder of the ETF data directory and copy
+the Executable Test Suites in there.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+ZIP files are not supported and need to be extracted!
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The framework will automatically load the Executable Test Suites after a
+short time and list the Test Suites in the <strong>Start Tests</strong> view.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_official_executable_test_suite_repositories">1.4.2. Official Executable Test Suite repositories</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The Executable Test Suite in the listed repositories only work with ETF version 2
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>List of official supported Executable Test Suite repositories:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>INSPIRE ETS <a href="https://github.com/inspire-eu-validation/ets-repository/">repository</a> - <a href="https://github.com/inspire-eu-validation/ets-repository/archive/master.zip">Download ZIP</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2017-04-25 23:09:52 CEST
+</div>
+</div>
+</body>
+</html>

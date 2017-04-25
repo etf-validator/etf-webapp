@@ -1,0 +1,20 @@
+[[ets-installation]]
+== Executable Test Suites
+
+=== Installation
+
+Create a new subfolder in the *projects* subfolder of the ETF data directory and copy
+the Executable Test Suites in there.
+
+NOTE: ZIP files are not supported and need to be extracted!
+
+The framework will automatically load the Executable Test Suites after a
+short time and list the Test Suites in the *Start Tests* view.
+
+=== Official Executable Test Suite repositories
+
+NOTE: The Executable Test Suite in the listed repositories only work with ETF version 2
+
+List of official supported Executable Test Suite repositories:
+
+* INSPIRE ETS link:https://github.com/inspire-eu-validation/ets-repository/[repository] - link:https://github.com/inspire-eu-validation/ets-repository/archive/master.zip[Download ZIP]

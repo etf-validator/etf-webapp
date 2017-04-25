@@ -8,8 +8,10 @@ table, which summarizes the status of all tests on several levels.
 image:https://cloud.githubusercontent.com/assets/13570741/24777508/fa19217e-1b25-11e7-8bda-cfede748804b.png["screenshot16"]
 
 The Test Reports are interactive. The _Show_ switch can be used to
-filter _Only failed_ or _Only manual_ tests. The _Level of detail_
-switch is used to show additional information in the reports.
+filter _Only failed_ or _Only manual_ tests. _All_ deactivates the filter.
+
+The _Level of detail_ switch is used to show additional technical information
+in the reports.
 
 [.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24777824/9b754a4c-1b27-11e7-9a0f-7dad61f6e251.png["screenshot17"]

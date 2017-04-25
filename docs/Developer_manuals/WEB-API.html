@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.5">
+<title>Web API v2</title>
+<link rel="stylesheet" href="../stylesheets/etf.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="../stylesheets/pygments-autumn.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of contents</div>
+<ul class="sectlevel0">
+<li><a href="#_web_api_v2">Web API v2</a>
+<ul class="sectlevel1">
+<li><a href="#_changelog">Changelog</a></li>
+<li><a href="#_response_schema_model">Response schema model</a></li>
+<li><a href="#_example_starting_a_test_run_with_the_api">Example: starting a Test Run with the API</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div id="ii_logo" class="imageblock" style="text-align: center">
+<div class="content">
+<a class="image" href="http://www.interactive-instruments.de/en"><img src="http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png" alt="Interactive instruments logo" width="150"></a>
+</div>
+</div>
+<table class="tableblock frame-none grid-none spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="image"><a class="image" href="http://www.etf-validator.net"><img src="../images/ETF_logo.png" alt="ETF Logo" width="125"></a></span></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><span class="etf_headline">ETF<br>
+testing framework for geo network services and data</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<h1 id="_web_api_v2" class="sect0">Web API v2</h1>
+<div class="openblock partintro">
+<div class="content">
+<table class="tableblock frame-topbot grid-none spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Status</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">in review</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Date</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-04-20</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This quickstart manual is intended for developers who want to automate test runs with an ETF instance, for example in an automated test pipeline.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Licence</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution (cc-by) 4.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Identifier</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Developer_manuals/WEB-API.adoc" class="bare">https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Developer_manuals/WEB-API.adoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Language</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EN</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_changelog">Changelog</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Date</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Editor</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Comments</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-04-24</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jon Herrmann</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">document converted from GitHub wiki</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<!-- toc disabled -->
+<div style="page-break-after: always;"></div>
+<div class="paragraph">
+<p>The ETF Web API v2 is used to retrieve Framework metadata, start/observe/manage tests and retrieve test results.</p>
+</div>
+<div class="paragraph">
+<p>The API is published as swagger definition on <a href="https://app.swaggerhub.com/api/etf/etf/">Swaggerhub</a>. The ETF web application instance also provides the Swagger web interface which is available at</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>http://your-etf-server/swagger-ui.html</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Example for retrieving all installed Executable Test Suites:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>http://your-etf-server/v2/ExecutableTestSuites.json</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_response_schema_model">Response schema model</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The response model is based on a XML schema. The interactive XML schema documentation is available <a href="http://resources.etf-validator.net/schema/v2/doc/service.html">here</a>. Since the JSON responses are transformed from the XML, they are also based on this schema.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example_starting_a_test_run_with_the_api">Example: starting a Test Run with the API</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>First the ID of the Executable Test Suite that shall be used needs to be known. All available Executable Test Suites can be queried by invoking the GET request (replace localhost:8080 with your server address):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>http://localhost:8080/v2/ExecutableTestSuites.json</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The response may look like this (excerpt):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="JSON"><span class="tok-p">{</span>
+	<span class="tok-nt">&quot;EtfItemCollection&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+		<span class="tok-nt">&quot;returnedItems&quot;</span><span class="tok-p">:</span> <span class="tok-mi">51</span><span class="tok-p">,</span>
+		<span class="tok-nt">&quot;position&quot;</span><span class="tok-p">:</span> <span class="tok-mi">0</span><span class="tok-p">,</span>
+		<span class="tok-nt">&quot;ref&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;http://localhost:8080/v2/ExecutableTestSuites.json&quot;</span><span class="tok-p">,</span>
+		<span class="tok-nt">&quot;executableTestSuites&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+			<span class="tok-nt">&quot;ExecutableTestSuite&quot;</span><span class="tok-p">:</span> <span class="tok-p">[{</span>
+					<span class="tok-nt">&quot;id&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;EIDec7323d5-d8f0-4cfe-b23a-b826df86d58c&quot;</span><span class="tok-p">,</span>
+					<span class="tok-nt">&quot;remoteResource&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;https://github.com/inspire-eu-validation/ets-repository/tree/master/metadata/iso&quot;</span><span class="tok-p">,</span>
+					<span class="tok-nt">&quot;label&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;Conformance class: INSPIRE Profile based on EN ISO 19115 and EN ISO 19119&quot;</span><span class="tok-p">,</span>
+					<span class="tok-err">...</span>
+					<span class="tok-nt">&quot;ParameterList&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+						<span class="tok-nt">&quot;name&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;ETF Standard Parameters for metadata XML test objects&quot;</span><span class="tok-p">,</span>
+						<span class="tok-nt">&quot;parameter&quot;</span><span class="tok-p">:</span> <span class="tok-p">[{</span>
+							<span class="tok-nt">&quot;name&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;tests_to_execute&quot;</span><span class="tok-p">,</span>
+							<span class="tok-nt">&quot;required&quot;</span><span class="tok-p">:</span> <span class="tok-kc">false</span><span class="tok-p">,</span>
+							<span class="tok-nt">&quot;defaultValue&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.*&quot;</span><span class="tok-p">,</span>
+							<span class="tok-nt">&quot;description&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+								<span class="tok-nt">&quot;ref&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;TR.testsToExecute&quot;</span>
+							<span class="tok-p">},</span>
+							<span class="tok-nt">&quot;allowedValues&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.*&quot;</span><span class="tok-p">,</span>
+							<span class="tok-nt">&quot;type&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;string&quot;</span>
+						<span class="tok-p">},</span> <span class="tok-p">{</span>
+							<span class="tok-nt">&quot;name&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;files_to_test&quot;</span><span class="tok-p">,</span>
+							<span class="tok-nt">&quot;required&quot;</span><span class="tok-p">:</span> <span class="tok-kc">true</span><span class="tok-p">,</span>
+							<span class="tok-nt">&quot;defaultValue&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.*&quot;</span><span class="tok-p">,</span>
+							<span class="tok-nt">&quot;description&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+								<span class="tok-nt">&quot;ref&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;TR.filesToTest&quot;</span>
+							<span class="tok-p">},</span>
+							<span class="tok-nt">&quot;allowedValues&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.*&quot;</span><span class="tok-p">,</span>
+							<span class="tok-nt">&quot;type&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;string&quot;</span>
+						<span class="tok-p">}]</span>
+					<span class="tok-p">},</span>
+					<span class="tok-err">...</span>
+				<span class="tok-p">}</span>
+			<span class="tok-err">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example the Executable Test Suite <strong>Conformance class: INSPIRE Profile based on EN ISO 19115 and EN ISO 19119</strong> with the <strong>EIDec7323d5-d8f0-4cfe-b23a-b826df86d58c</strong> is used.
+To start a new Test Run with test data that are located at <a href="http://example.com/test-data" class="bare">http://example.com/test-data</a> a JSON request must be send via POST to the interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>http://localhost:8080/v2/TestRuns</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The example testRunRequest JSON object may look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="JSON"><span class="tok-p">{</span>
+    <span class="tok-nt">&quot;label&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;Test run on 15:00 - 01.01.2017 with Conformance class INSPIRE Profile based on EN ISO 19115 and EN ISO 19119&quot;</span><span class="tok-p">,</span>
+    <span class="tok-nt">&quot;executableTestSuiteIds&quot;</span><span class="tok-p">:</span> <span class="tok-p">[</span><span class="tok-s2">&quot;EIDec7323d5-d8f0-4cfe-b23a-b826df86d58c&quot;</span><span class="tok-p">],</span>
+    <span class="tok-nt">&quot;arguments&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+        <span class="tok-nt">&quot;files_to_test&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.*&quot;</span><span class="tok-p">,</span>
+        <span class="tok-nt">&quot;tests_to_execute&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.*&quot;</span>
+    <span class="tok-p">},</span>
+    <span class="tok-nt">&quot;testObject&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+        <span class="tok-nt">&quot;resources&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+            <span class="tok-nt">&quot;data&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;http://example.com/test-data&quot;</span>
+        <span class="tok-p">}</span>
+    <span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note: in this example the resource ID needs to be set to <strong>data</strong>, for file based resources. If a service is tested, the resource ID needs to be set to <strong>serviceEndpoint</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="JSON">    <span class="tok-s2">&quot;testObject&quot;</span><span class="tok-err">:</span> <span class="tok-p">{</span>
+        <span class="tok-nt">&quot;resources&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+            <span class="tok-nt">&quot;serviceEndpoint&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;http://example.com/service?request=GetCapabilities&quot;</span>
+        <span class="tok-p">}</span>
+    <span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On success a Test Run object will be returned as JSON.
+Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="JSON"><span class="tok-p">{</span>
+  <span class="tok-nt">&quot;EtfItemCollection&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+    <span class="tok-nt">&quot;returnedItems&quot;</span><span class="tok-p">:</span> <span class="tok-mi">1</span><span class="tok-p">,</span>
+    <span class="tok-nt">&quot;ref&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;http://localhost:8080/v2/TestRuns/1dfbed0e-131e-489d-a0a4-712f4259c30a.json&quot;</span><span class="tok-p">,</span>
+    <span class="tok-nt">&quot;testRuns&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+      <span class="tok-nt">&quot;TestRun&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+        <span class="tok-nt">&quot;id&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;EID1dfbed0e-131e-489d-a0a4-712f4259c30a&quot;</span><span class="tok-p">,</span>
+        <span class="tok-nt">&quot;label&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;Test run on 15:00 - 01.01.2017 with test suite Conformance class: INSPIRE Profile based on EN ISO 19115 and EN ISO 19119&quot;</span><span class="tok-p">,</span>
+        <span class="tok-nt">&quot;defaultLang&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;en&quot;</span><span class="tok-p">,</span>
+        <span class="tok-nt">&quot;startTimestamp&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;2017-01-01T15:00:00.000+01:00&quot;</span><span class="tok-p">,</span>
+        <span class="tok-nt">&quot;testTasks&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+          <span class="tok-nt">&quot;TestTask&quot;</span><span class="tok-p">:</span> <span class="tok-p">[</span>
+            <span class="tok-p">{</span>
+              <span class="tok-nt">&quot;id&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;EIDe8714e65-d435-458f-9cf8-5f912adde0e3&quot;</span><span class="tok-p">,</span>
+              <span class="tok-nt">&quot;parent&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+                <span class="tok-nt">&quot;ref&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;EID1dfbed0e-131e-489d-a0a4-712f4259c30a&quot;</span>
+              <span class="tok-p">},</span>
+              <span class="tok-nt">&quot;executableTestSuite&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+                <span class="tok-nt">&quot;ref&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;EIDe3500038-e37c-4dcf-806c-6bc82d585b3b&quot;</span>
+              <span class="tok-p">},</span>
+              <span class="tok-nt">&quot;testObject&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+                <span class="tok-nt">&quot;ref&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;EIDeb5c79c8-5be8-4029-83e4-5cf0cde5d33c&quot;</span>
+              <span class="tok-p">},</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The returned ID -in this example <strong>EID1dfbed0e-131e-489d-a0a4-712f4259c30a</strong> - can then be used to monitor the progress by invoking the interface :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>http://localhost:8080/v2/TestRuns/EID1dfbed0e-131e-489d-a0a4-712f4259c30a/progress</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>which will return a Progress Object:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="JSON"><span class="tok-p">{</span>
+  <span class="tok-nt">&quot;val&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;30&quot;</span><span class="tok-p">,</span>
+  <span class="tok-nt">&quot;max&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;30&quot;</span><span class="tok-p">,</span>
+  <span class="tok-nt">&quot;log&quot;</span><span class="tok-p">:</span> <span class="tok-p">[]</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As the val property equals the max property the test run already finished and the HTML report can be fetched by invoking</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>http://localhost:8080/v2/TestRuns/EID1dfbed0e-131e-489d-a0a4-712f4259c30a.html</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2017-04-24 18:27:13 CEST
+</div>
+</div>
+</body>
+</html>

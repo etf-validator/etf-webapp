@@ -17,20 +17,30 @@
 :pygments-linenums-mode: inline
 
 [[ii_logo]]
-image::http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png["Interactive instruments logo",150,align="center"]
+image::http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png["Interactive instruments logo",150,align="center",link=http://www.interactive-instruments.de/en]
 
 [frame="none",grid="none",cols="^25,<.^75"]
 |===
-|image:images/ETF_logo.png["ETF Logo",150] | [etf_headline]#ETF +
-is an open source testing framework for testing geo network services and data#
+| image:images/ETF_logo.png["ETF Logo",125,link=http://www.etf-validator.net] | [etf_headline]#ETF +
+testing framework for geo network services and data#
 |===
 
+= ETF manuals
 
 WARNING: WORK IN PROGRESS
 
-== Admin manuals
-
 == User manuals
-link:User_manuals/Simplified_workflows.html[User manual for central deployments]
+* link:User_manuals/Simplified_workflows.html[User manual for central deployments]
+* #User manual for organization internal deployments (todo)#
+
+== Administrator manual
+* link:https://github.com/interactive-instruments/etf-webapp-docker#setup-etf-with-docker-compose[Docker image]
+* link:Admin_manuals/index.adoc#_installation_on_windows[Tomcat 8 deployment on Windows 7]
+* link:Admin_manuals/index.adoc#_installation_on_linux[Tomcat 8 deployment on Linux]
+* link:Admin_manuals/index.adoc#_etf_configuration[Configuration]
+* link:Admin_manuals/index.adoc#ets-installation[Executable Test Suite installation]
 
 == Developer manuals
+* link:Developer_manuals/WEB-API.html[Workflow automation with the Web API]
+* #Developing Executable Test Suites (todo)#
+* #Building ETF (todo)#

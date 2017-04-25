@@ -1,0 +1,53 @@
+== Installation on Windows
+
+=== Prerequisites on Windows:
+* Machine with at least 4 GB Ram (8GB are recommended, 16 GB and more if a large set of XML files are tested)
+* link:https://www.java.com/en/download/help/windows_offline_download.xml[Oracle Java 8 is installed]
+* link:https://tomcat.apache.org/download-80.cgi[Apache Tomcat 8 installed and configured]
+
+=== Configure Tomcat on Windows
+Tomcat 8 must be run with UTF-8 file encoding and two parameters must be set. The configuration depends on how Tomcat is started on Windows. Accordingly, one of the two following chapters applies.
+
+==== Option 1: Tomcat is started as service
+If the Tomcat is running as a service on Windows, the parameters must be set in the service configuration (each parameter must be on a new line):
+
+.Tomcat service configuration
+image::https://cloud.githubusercontent.com/assets/13570741/24648926/97582bd6-1925-11e7-966c-a18337c56756.png[Tomcat service configuration]
+
+[source,bash]
+----
+-Dfile.encoding=UTF-8
+-Djavax.servlet.request.encoding=UTF-8
+----
+See the link:https://tomcat.apache.org/tomcat-8.0-doc/windows-service-howto.html[Tomcat Howto] for more information.
+
+==== Option 2: Tomcat is started in batch mode
+
+If Tomcat is started on Windows on the console via the batch file catalina.bat, the file setenv.bat must be created in the subfolder bin, of the Tomcat installation directory, with the following content:
+
+[source,bash]
+----
+set JAVA_OPTS=-Dfile.encoding=UTF-8 -Djavax.servlet.request.encoding=UTF-8
+----
+
+=== Install ETF web application on Windows
+
+. Download the link:https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/etf-webapp/2.0.0/etf-webapp-2.0.0.war[latest ETF-Webapp] version, using etf-public-dev as user and password.
+. Rename the etf-webapp-2.x.x.war file to etf-webapp.war . Otherwise, the version must be specified in the URL after the deployment.
+. Either copy the etf-webapp.war file to *TOMCAT_INSTALLATION_DIRECTORY\webapps* or deploy the file using the Tomcat manager. If the manager is used, make sure that **max-file-size** and **max-request-size** are set to at least 157286400 (150 Megabytes) in the *TOMCAT_INSTALLATION_DIRECTORY\webapps\manager\WEB-INF\web.xml* file:
++
+[source,xml]
+----
+    <multipart-config>
+      <!-- 150MB max -->
+      <max-file-size>157286400</max-file-size>
+      <max-request-size>157286400</max-request-size>
+      <file-size-threshold>0</file-size-threshold>
+    </multipart-config>
+----
+. The application will start and initially create the ETF directory structure in the directory %ALLUSERSPROFILE% (default: C:\ProgramData). If the environment variables TOMCAT_HOME or CATALINA_HOME are set the etf.log file is stored in *%TOMCAT_HOME%\logs\etf.log* or *%CATALINA_HOME%\logs\etf.log* otherwise in *%ALLUSERSPROFILE%\etf\logs\etf.log*
+. Download the link:https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/bsxm/etf-gmlgeox/1.1.0/etf-gmlgeox-1.1.0.jar[latest GmlGeoX library]. Rename the downloaded file to GmlGeoX.jar (note that the file name is case-sensitive!). Afterwards copy the file to *%ALLUSERSPROFILE%\etf\ds\db\repo\de\interactive_instruments\etf\bsxm*.
+. Download <<ets-installation>> and extract archives into the *%ALLUSERSPROFILE%\etf\projects* directory. The web application will automatically load the Executable Test Suites after a few seconds.
+. The web application can be accessed via link::http://localhost:8080/etf-webapp[http://localhost:8080/etf-webapp].
+If ETF is accessed not only from one local machine, the *etf.webapp.base.url* property must be changed in the <<etf-configuration-dir>> to your server address (e.g. http://etf-server:8080/etf-webapp).
+. Check the <<etf-log-file>> file for errors.

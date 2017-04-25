@@ -76,14 +76,16 @@ that test one or multiple test data files.
 If _File upload_ is selected as _Data source_ one or multiple local
 files can be selected and uploaded to the Validator. The Validator only
 accepts files with XML and GML file ending and ZIP files containing
-these two file types. All other files like schema files can not be used
-and are silently ignored by the Validator!
+these two file types.
+
+WARNING: Other files, like schema definition files, can not be used and are
+silently ignored by the Validator!
 
 [.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24774770/759dc7de-1b1a-11e7-98af-c9deff4054d4.png["screenshot7"]
 
-The maximum uploadable file size is displayed when the mouse is over the
-question mark with the blue background.
+The maximum uploadable file size is displayed when the mouse is moved over the
+question mark.
 
 If the data are available on the web they can be tested by providing one
 single URL. After _Remote file (URL)_ has been selected as __Data
@@ -123,8 +125,9 @@ image:https://cloud.githubusercontent.com/assets/13570741/24775122/dbe5741e-1b1b
 If the Test accepts parameters, they are shown in the Test Suite
 Parameters section. Optional parameters can be displayed by clicking on
 the _Optional Parameters_ button. A description of the parameters is
-displayed when the mouse is over the question mark. In most cases the
-preset default values can be used.
+displayed when the mouse is moved over the question mark.
+
+NOTE: In most cases the preset default values can be used.
 
 [.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24775199/180a8d94-1b1c-11e7-85d1-a591df928738.png["screenshot12"]

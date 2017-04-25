@@ -10,14 +10,16 @@ Menu"]
 
 In the *Start test* section all available (respectively installed) Executable Test
 Suites are listed. Within this section, an Executable Test Suite can be
-selected and run against a Test Object. A Test Object can be a single or
-multiple artifacts like GML files or a whole system like a Web Feature
-Service.
+selected and run against a Test Object.
+
+NOTE: A Test Object can consists of one or multiple artifacts and can,
+for example, manifest multiple GML files or an entire system like a
+Web Feature Service.
 
 The *Status* section shows all tests that are currently executed on the
-system and enables the user to open a monitor view for single test runs.
+system and enables to open a monitor view for single test runs.
 
-The *Test reports* section list the test results of completed test runs
-ordered by their start date.
+The *Test reports* section list the test results of completed test runs.
 
-The *Help* link refers to this page.
+The *Help* link refers to a help page. Unless otherwise set by the administrator,
+it refers to this page.
