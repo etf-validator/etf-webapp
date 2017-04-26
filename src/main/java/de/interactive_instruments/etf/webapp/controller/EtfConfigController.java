@@ -183,6 +183,9 @@ public class EtfConfigController implements PropertyHolder {
 				"ETF WebApp " + version + SUtils.ENDL +
 				II_Constants.II_COPYRIGHT);
 
+		// Set HTTP Client to ETF
+		System.setProperty("http.agent", "ETF validator (version: "+version+" )");
+
 		System.setProperty("java.awt.headless", "true");
 		final String encoding = System.getProperty("file.encoding");
 		logger.info("file.encoding is set to " + encoding);
