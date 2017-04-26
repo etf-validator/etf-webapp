@@ -23,7 +23,7 @@ Restart Tomcat afterwards.
 
 === Install ETF web application on Linux
 
-. Download the link::https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/etf-webapp/2.0.0/etf-webapp-2.0.0.war[latest ETF-Webapp] version, using etf-public-dev as user and password.
+. Download the link:https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/etf-webapp/2.0.0/etf-webapp-2.0.0.war[latest ETF-Webapp] version, using etf-public-dev as user and password.
 . Rename the etf-webapp-2.x.x.war file to etf-webapp.war . Otherwise, the version must be specified in the URL after the deployment.
 . Either copy the etf-webapp.war file to *TOMCAT_INSTALLATION_DIRECTORY/webapps* or deploy the file using the Tomcat manager. If the manager is used, make sure that **max-file-size** and **max-request-size** are set to at least 157286400 (150 Megabytes) in the *TOMCAT_INSTALLATION_DIRECTORY/webapps/manager/WEB-INF/web.xml* file:
 +
@@ -39,6 +39,6 @@ Restart Tomcat afterwards.
 . The application will start and initially create the ETF directory structure in the directory *~/.etf* (note: the directory is hidden). If the environment variables TOMCAT_HOME or CATALINA_HOME are set the etf.log file is stored in *$TOMCAT_HOME/logs/etf.log* or *$CATALINA_HOME/logs/etf.log* otherwise in *~/.etf/logs/etf.log*
 . Download the link:https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/bsxm/etf-gmlgeox/1.1.0/etf-gmlgeox-1.1.0.jar[latest GmlGeoX library]. Rename the downloaded file to GmlGeoX.jar (note: the file name is case-sensitive). Afterwards copy the file to *~/.etf/ds/db/repo/de/interactive_instruments/etf/bsxm*.
 . Download <<ets-installation>> and extract archives into the *~/.etf/projects* directory. The web application will automatically load the Executable Test Suites after a few seconds.
-. The web application can be accessed via link::http://localhost:8080/etf-webapp[http://localhost:8080/etf-webapp].
+. The web application can be accessed via link:http://localhost:8080/etf-webapp[http://localhost:8080/etf-webapp].
 If ETF is accessed not only from one local machine, the *etf.webapp.base.url* property must be changed in the <<etf-configuration-dir>> to your server address (e.g. http://etf-server:8080/etf-webapp).
 . Check the <<etf-log-file>> file for errors.
