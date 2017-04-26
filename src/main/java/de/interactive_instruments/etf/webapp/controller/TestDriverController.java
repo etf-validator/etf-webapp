@@ -15,26 +15,6 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
-import static de.interactive_instruments.etf.EtfConstants.ETF_DATA_STORAGE_NAME;
-
-import java.util.Collection;
-import java.util.Date;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import de.interactive_instruments.etf.component.ComponentInfo;
 import de.interactive_instruments.etf.component.ComponentLoadingException;
 import de.interactive_instruments.etf.dal.dao.*;
@@ -55,6 +35,23 @@ import de.interactive_instruments.exceptions.InvalidStateTransitionException;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static de.interactive_instruments.etf.EtfConstants.ETF_DATA_STORAGE_NAME;
 
 /**
  * Controller for the test drivers
@@ -138,7 +135,6 @@ public class TestDriverController implements PreparedDtoResolver<ExecutableTestS
 
 	TestRun create(TestRunDto testRunDto) throws IncompleteDtoException, TestRunInitializationException {
 		testRunDto.setStartTimestamp(new Date());
-		testRunDto.setDefaultLang(LocaleContextHolder.getLocale().getLanguage());
 		testRunDto.ensureBasicValidity();
 		for (final TestTaskDto testTaskDto : testRunDto.getTestTasks()) {
 			testTaskDto.setId(EidFactory.getDefault().createRandomId());

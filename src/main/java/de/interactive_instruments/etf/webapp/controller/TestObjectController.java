@@ -15,45 +15,9 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
-import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_OBJECTS_TAG_NAME;
-import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URI;
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBException;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-
-import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.RegexFileFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import springfox.documentation.annotations.ApiIgnore;
-
 import de.interactive_instruments.Credentials;
 import de.interactive_instruments.IFile;
 import de.interactive_instruments.SUtils;
@@ -68,6 +32,8 @@ import de.interactive_instruments.etf.webapp.WebAppConstants;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
 import de.interactive_instruments.etf.webapp.dto.SimpleTestObject;
 import de.interactive_instruments.etf.webapp.dto.TObjectValidator;
+import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
+import de.interactive_instruments.etf.webapp.helpers.User;
 import de.interactive_instruments.etf.webapp.helpers.View;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
@@ -76,6 +42,37 @@ import de.interactive_instruments.exceptions.config.MissingPropertyException;
 import de.interactive_instruments.io.*;
 import de.interactive_instruments.properties.PropertyHolder;
 import io.swagger.annotations.*;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.RegexFileFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_OBJECTS_TAG_NAME;
+import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
 
 /**
  * Test object controller used for managing test objects
@@ -283,7 +280,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 				throw new LocalizableApiError("l.testObject.testdir.no.xml.gml.found", false, 400);
 			}
 		}
-		if(v.getSize()==0) {
+		if (v.getSize() == 0) {
 			if (v.getFileCount() == 1) {
 				throw new LocalizableApiError("l.testObject.one.file.with.zero.size", false, 400, v.getFileCount());
 			} else {
@@ -296,10 +293,10 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		testObject.properties().setProperty("files", String.valueOf(v.getFileCount()));
 		testObject.properties().setProperty("size", String.valueOf(v.getSize()));
 		testObject.properties().setProperty("sizeHR", FileUtils.byteCountToDisplaySize(v.getSize()));
-		if(v.getSkippedFiles()>0) {
+		if (v.getSkippedFiles() > 0) {
 			testObject.properties().setProperty("skippedFiles", String.valueOf(v.getSkippedFiles()));
 		}
-		if(v.getEmptyFiles()>0) {
+		if (v.getEmptyFiles() > 0) {
 			testObject.properties().setProperty("emptyFiles", String.valueOf(v.getEmptyFiles()));
 		}
 
@@ -326,7 +323,9 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 				// Download referenced files if there is a "data" resource
 				createWithFileResources(testObject, null);
 			}
-			testObject.setAuthor("unknown");
+			if (testObject.getAuthor() == null) {
+				testObject.setAuthor("unknown");
+			}
 		}
 		testObjectTypeController.checkAndResolveTypes(testObject);
 		// otherwise it contains all required types.
@@ -536,7 +535,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		}
 
 		testObject.setLastUpdateDateNow();
-		testObject.setLastEditor(request.getRemoteAddr());
+		testObject.setLastEditor(User.getUser(request));
 
 		this.transientTestObjects.put(testObject.getId(), testObject);
 		final TestObjectUpload testObjectUpload = new TestObjectUpload(testObject, request.getMultiFileMap().values());
@@ -574,7 +573,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	*/
 
 	@ApiOperation(value = "Get all Test Object resources", notes = "Download the Test Object - as long as the creator did not set the 'data.downloadable' property to 'false'.", tags = {
-			TEST_OBJECTS_TAG_NAME}, produces = "application/gzip,text/xml")
+			TEST_OBJECTS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Test Object resources returned"),
 			@ApiResponse(code = 400, message = "Invalid Test Object ID", response = RestExceptionHandler.ApiError.class),
@@ -593,24 +592,42 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 				if (!UriUtils.isFile(uri)) {
 					// stream url
 					UriUtils.stream(uri, response.getOutputStream());
-					return;
 				} else {
 					// compress one file/dir
 					final IFile file = new IFile(uri);
-					response.setContentType("application/gzip");
-					response.setHeader("Content-disposition", "attachment; filename=\"TestObject." + id + ".gz\"");
+					response.setContentType("application/zip");
+					response.setHeader("Content-disposition",
+							"attachment; filename=\"TestObject." + id + ".zip\"");
 					file.compressTo(response.getOutputStream());
 				}
-			}
-			// compress multiple files
-			for (final ResourceDto resource : testObject.getResourceCollection()) {
-				final URI uri = resource.getUri();
-				final IFile file = new IFile(uri);
-				// todo
+			} else {
+				// compress multiple files
+				final List<IFile> tmpDownloadedFiles = new ArrayList<>();
+				try {
+					final List<IFile> files = new ArrayList<>();
+					for (final ResourceDto resource : testObject.getResourceCollection()) {
+						final URI uri = resource.getUri();
+						if (!UriUtils.isFile(uri)) {
+							// download
+							final IFile tmpFile = UriUtils.download(uri);
+							tmpDownloadedFiles.add(tmpFile);
+							files.add(tmpFile);
+						} else {
+							files.add(new IFile(uri));
+						}
+					}
+					response.setContentType("application/zip");
+					response.setHeader("Content-disposition",
+							"attachment; filename=\"TestObject." + id + ".zip\"");
+					IFile.compressTo(files, response.getOutputStream());
+				} finally {
+					tmpDownloadedFiles.forEach(f -> f.delete());
+				}
 			}
 		} else {
 			response.setStatus(403);
-			response.getWriter().print("Forbidden");
+			response.getWriter().print(
+					"Data download forbidden through \"data.downloadable\" property");
 		}
 	}
 }

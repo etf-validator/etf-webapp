@@ -15,33 +15,6 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
-import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_RESULTS_TAG_NAME;
-import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_RUNS_TAG_NAME;
-import static de.interactive_instruments.etf.webapp.WebAppConstants.API_BASE_URL;
-import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.text.ParseException;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.TimedExpiredItemsRemover;
 import de.interactive_instruments.etf.EtfConstants;
@@ -53,11 +26,38 @@ import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.testdriver.*;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
 import de.interactive_instruments.etf.webapp.dto.StartTestRunRequest;
+import de.interactive_instruments.etf.webapp.helpers.User;
 import de.interactive_instruments.exceptions.ExcUtils;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_RESULTS_TAG_NAME;
+import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_RUNS_TAG_NAME;
+import static de.interactive_instruments.etf.webapp.WebAppConstants.API_BASE_URL;
+import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
 
 /**
  * Test run controller for starting and monitoring test runs
@@ -459,8 +459,7 @@ public class TestRunController implements TestRunEventListener {
 			+ "            }\n"
 			+ "        }\n"
 			+ "    }\n"
-			+ "\n\n"
-			, tags = {TEST_RUNS_TAG_NAME})
+			+ "\n\n", tags = {TEST_RUNS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 201, message = "Test Run created"),
 			@ApiResponse(code = 400, message = "Invalid request", response = RestExceptionHandler.ApiError.class),
@@ -469,10 +468,11 @@ public class TestRunController implements TestRunEventListener {
 			@ApiResponse(code = 500, message = "Internal error", response = RestExceptionHandler.ApiError.class),
 	})
 	@RequestMapping(value = TEST_RUNS_URL, method = RequestMethod.POST)
-	public void start(@RequestBody @Valid StartTestRunRequest testRunRequest, BindingResult result, HttpServletRequest request, HttpServletResponse response)
+	public void start(@RequestBody @Valid StartTestRunRequest testRunRequest, BindingResult result, HttpServletRequest request,
+			HttpServletResponse response)
 			throws LocalizableApiError {
 
-		if(result.hasErrors()) {
+		if (result.hasErrors()) {
 			throw new LocalizableApiError(result.getFieldError());
 		}
 
@@ -481,9 +481,9 @@ public class TestRunController implements TestRunEventListener {
 
 		try {
 			final TestRunDto testRunDto = testRunRequest.toTestRun(testObjectController, testDriverController);
+			testRunDto.setDefaultLang(LocaleContextHolder.getLocale().getLanguage());
 
 			final TestObjectDto tO = testRunDto.getTestObjects().get(0);
-
 			// Check if test object is already in use
 			// TODO check if Test Object is already in use
 			for (TestRun tR : taskPoolRegistry.getTasks()) {
@@ -494,7 +494,7 @@ public class TestRunController implements TestRunEventListener {
 				}
 			}
 
-			tO.setAuthor(request.getRemoteAddr());
+			tO.setAuthor(User.getUser(request));
 			testObjectController.initResourcesAndAdd(tO);
 
 			// this will save the Dto
