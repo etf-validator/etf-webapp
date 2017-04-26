@@ -13,13 +13,14 @@ image:https://cloud.githubusercontent.com/assets/13570741/24776030/8044c64c-1b1f
 The console area shows information and result messages. The Test Run can
 be canceled with a click on the _Cancel_ button.
 
-The view can be left for instance with the X Button in the upper left
+The view can be left, for instance with the X Button in the upper left
 corner. Also when the browser is closed, the Test Run execution continues
 on the server.
 
-To reattach to a Monitor View select in the menu bar the _Status_ view.
+To reopen the Monitor View after it has been closed,
+select in the menu bar the _Status_ view.
 The Status view shows all running tests. A click on the Test Run opens
-the Monitor View of that Test Run again.
+the Monitor View of that Test Run.
 
 [.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24776115/d22463b4-1b1f-11e7-9ad0-262ecbb5aecc.png["screenshot15"]

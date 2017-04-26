@@ -22,15 +22,15 @@ level there are the Test Suites.
 By clicking on one test suite a description and all lower level tests in
 that test suite are shown. Failures in a test suite can be immediately
 recognized by the red color. The number of failed tests is shown in the
-right corner.
+top-right corner.
 
 [.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24778385/8f6f73dc-1b2a-11e7-8e86-f32a05de0517.png["Screenshot17_1"]
 
-The green color indicates a passed test. A passed test which requires
-further manual test steps that could not be automated are colored
+The green color indicates a passed test. Passed tests which require
+additional manual test steps that could not be automated are colored
 orange. The orange color may also indicate a test that has been skipped
-as it depends on another test that have been failed. The exact status
+because it depends on another test that has failed. The exact status
 can be found below the description.
 
 The number of levels depends on the tested Test Object. If service tests
@@ -52,8 +52,8 @@ from which the test has been derived (Source).
 [.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24778468/0ad773e4-1b2b-11e7-8368-a7b1735853be.png["Screenshot17_2"]
 
-Assertions stand for atomar test queries on the lowest level. Failed,
-red colored assertions display rrror messages in the _Messages_ section.
+Assertions stand for atomic test queries on the lowest level. Failed,
+red colored assertions display error messages in the _Messages_ section.
 
 [.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24777997/7e6fae96-1b28-11e7-80b1-cc3e89dbaa15.png["Screenshot18"]

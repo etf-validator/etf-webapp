@@ -15,18 +15,18 @@ the plus button.
 image:https://cloud.githubusercontent.com/assets/13570741/24769921/76a97770-1b08-11e7-8052-035f7e2ea9bd.png["3
 ETS details",800]
 
-These information include:
+This information includes:
 
-* a description of the Test Suite
-* may include a link to the Abstract Test Suite from which the
-Executable Test Suite has been derived (Source)
-* may include Test Suite dependencies which are automatically executed
-with the Test Suite in a Test Run (Pre-requisite conformance classes)
-* may include the name of associated Tags that are used to group the
-Test Suites in the view
-* the name of applicable Test Object Types (explained in the next
-section)
-* general information like the version, author and last editor, creation
+* A description of the Test Suite.
+* May include a link to the Abstract Test Suite from which the
+Executable Test Suite has been derived (Source).
+* May include Test Suite dependencies which are automatically executed
+with the Test Suite in a Test Run (Pre-requisite conformance classes).
+* May include the name of associated Tags which are used to group the
+Test Suites in the view.
+* The name of applicable Test Object Types (explained in the next
+section).
+* General information like the version, author and last editor, creation
 and change dates.
 
 To start a Test Run, a Test Suite must be selected with a click on the
@@ -41,8 +41,8 @@ A _Start_ button appears once at least one Test Suite is selected.
 A Test Suite is applicable to certain Test Object Types, that are listed
 in the description. Multiple Test Suites can be selected for one Test
 Run, but must be applicable to the same Test Object Type. Once one Test
-Suite is selected, the flip switch of all Test Suites, that have
-different Test Object Types, are disabled.
+Suite is selected, the flip switch of all other Test Suites having
+different Test Object Types is disabled.
 
 [.thumb]
 image:https://cloud.githubusercontent.com/assets/13570741/24770148/44831192-1b09-11e7-9727-072fe116381d.png["5
@@ -63,7 +63,7 @@ Test Run configuration view"]
 
 The _Label_ field is mandatory but automatically preset with the current
 time and names of the selected Test Suites. The Label will be shown in
-the _Test reports_ overview and can be changed in order to help finding
+the _Test reports_ overview and can be changed in order to help find
 the report again after a test run.
 
 The style of the view may depend on the selected Test Suites.
