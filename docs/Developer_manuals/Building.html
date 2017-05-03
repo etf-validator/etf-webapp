@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.5">
+<title>Building ETF</title>
+<link rel="stylesheet" href="../stylesheets/etf.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="../stylesheets/pygments-autumn.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of contents</div>
+<ul class="sectlevel0">
+<li><a href="#_building_etf">Building ETF</a>
+<ul class="sectlevel1">
+<li><a href="#_changelog">Changelog</a></li>
+<li><a href="#_prerequisites">Prerequisites</a></li>
+<li><a href="#_accessing_the_source_code">Accessing the source code</a></li>
+<li><a href="#_compiling_the_source_code">Compiling the source code</a></li>
+<li><a href="#_running_the_web_application">Running the web application</a></li>
+<li><a href="#_building_other_etf_components">Building other ETF components</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div id="ii_logo" class="imageblock" style="text-align: center">
+<div class="content">
+<a class="image" href="http://www.interactive-instruments.de/en"><img src="http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png" alt="Interactive instruments logo" width="150"></a>
+</div>
+</div>
+<table class="tableblock frame-none grid-none spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="image"><a class="image" href="http://www.etf-validator.net"><img src="../images/ETF_logo.png" alt="ETF Logo" width="125"></a></span></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><span class="etf_headline">ETF<br>
+testing framework for geo network services and data</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<h1 id="_building_etf" class="sect0">Building ETF</h1>
+<div class="openblock partintro">
+<div class="content">
+<table class="tableblock frame-topbot grid-none spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Status</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">in review</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Date</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-04-20</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This manual is intended for developers for building the ETF validator. Basic knowledge about maven, maven repositories and build management tools are required.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Licence</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution (cc-by) 4.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Identifier</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Developer_manuals/Building.adoc" class="bare">https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Developer_manuals/Building.adoc</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Language</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EN</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_changelog">Changelog</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Date</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Editor</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Comments</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-05-02</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jon Herrmann</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">document created</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<!-- toc disabled -->
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prerequisites">Prerequisites</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java SE Development Kit JDK 8 installed</a></p>
+</li>
+<li>
+<p>Ensure JAVA_HOME environment variable is set</p>
+</li>
+<li>
+<p><a href="https://git-scm.com/downloads">Git installed</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_accessing_the_source_code">Accessing the source code</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The code base of the web application can be cloned from <a href="https://github.com/interactive-instruments/etf-webapp">GitHub</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+because the ETF version 2 is not finally released, the next branch must be used.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash">git clone -b next https://github.com/interactive-instruments/etf-webapp.git</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_compiling_the_source_code">Compiling the source code</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>ETF uses <a href="https://gradle.org">Gradle</a> as build management tool. The gradle
+wrapper script will automatically download the required Gradle version and
+start the build process afterwards.</p>
+</div>
+<div class="paragraph">
+<p>Dependencies are downloaded from the interactive instruments repositories.
+Currently only the snapshot repository can be accessed with the credentials
+etf-public-releases / etf-public-releases . This is automatically done by
+default.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The repository to be used is determined from the version.properties file.
+Make sure the version is suffixed with "-SNAPSHOT". If necessary, change the
+version in the version.properties file, for example to:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>version = 2.0.0-SNAPSHOT</pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">On a Windows command line run</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="cmd">C<span class="tok-p">:</span><span class="tok-nl">\etf-webapp</span><span class="tok-c1">&gt; gradlew.bat build</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">On Linux execute</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash">$ ./gradlew build</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_running_the_web_application">Running the web application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The web application can be started by executing the <strong>jettyRun</strong> task.</p>
+</div>
+<div class="listingblock">
+<div class="title">On a Windows command line run</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="cmd">C<span class="tok-p">:</span><span class="tok-nl">\etf-webapp</span><span class="tok-c1">&gt; gradlew.bat jettyRunWar</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">On Linux execute</div>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash">$ ./gradlew.sh jettyRunWar</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The web application can then be accessed at <a href="http://localhost:8080">http://localhost:8080</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_building_other_etf_components">Building other ETF components</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The web application depends on several other ETF components:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/interactive-instruments/etf-core">etf-core</a> ETF core library including API and domain model</p>
+</li>
+<li>
+<p><a href="https://github.com/interactive-instruments/etf-spi">etf-spi</a> ETF Service Provider Interface</p>
+</li>
+<li>
+<p><a href="https://github.com/interactive-instruments/etf-bsxds">etf-bsxds</a> ETF data storage based on the BaseX database</p>
+</li>
+<li>
+<p><a href="https://github.com/interactive-instruments/etf-suitd">etf-suitd</a> ETF SoapUI test driver</p>
+</li>
+<li>
+<p><a href="https://github.com/interactive-instruments/etf-sui-ae">etf-sui-ae</a> ETF test driver adapter and extensions for SoapUI</p>
+</li>
+<li>
+<p><a href="https://github.com/interactive-instruments/etf-sui-ae">etf-bsxtd</a> ETF BaseX test driver</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The source code of the components can be cloned with git.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+because the ETF version 2 is not finally released, the next branches must be used.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Changed components can be installed into the local maven repository with the
+gradle <strong>install</strong> command and be used by the etf-webapp component afterwards.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2017-05-03 02:24:40 CEST
+</div>
+</div>
+</body>
+</html>

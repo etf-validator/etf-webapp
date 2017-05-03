@@ -30,7 +30,7 @@ testing framework for geo network services and data#
 |===
 | *Status* | in review
 | *Date* | 2017-04-20
-| *Description* | This manual is intended for administrators who want to set up an organization internal deployment of the ETF validator.
+| *Description* | This manual is intended for administrators who want to set up an organization internal deployment of the ETF validator. Basic knowledge about Apache Tomcat 8 are required.
 | *Licence* | https://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution (cc-by) 4.0]
 | *Identifier* | https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Admin_manuals/index.adoc
 | *Language* | EN

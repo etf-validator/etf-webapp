@@ -6,4 +6,5 @@ asciidoctor \
 index.adoc \
 User_manuals/Simplified_workflows.adoc \
 Admin_manuals/index.adoc \
-Developer_manuals/WEB-API.adoc
+Developer_manuals/WEB-API.adoc \
+Developer_manuals/Building.adoc

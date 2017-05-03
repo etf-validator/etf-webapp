@@ -1,0 +1,139 @@
+:doctype: book
+
+:stylesdir: ../stylesheets/
+:stylesheet: etf.css
+:linkcss:
+
+:toc: macro
+:toc-title: Table of contents
+:toclevels: 4
+:toc-position: left
+:appendix-caption: Annex
+
+:icons: font
+
+:source-highlighter: pygments
+:pygments-style: autumn
+:pygments-linenums-mode: inline
+
+[[ii_logo]]
+image::http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png["Interactive instruments logo",150,align="center",link=http://www.interactive-instruments.de/en]
+
+[frame="none",grid="none",cols="^25,<.^75"]
+|===
+| image:../images/ETF_logo.png["ETF Logo",125,link=http://www.etf-validator.net] | [etf_headline]#ETF +
+testing framework for geo network services and data#
+|===
+
+= Building ETF
+[frame="topbot",grid="none"]
+|===
+| *Status* | in review
+| *Date* | 2017-04-20
+| *Description* | This manual is intended for developers for building the ETF validator. Basic knowledge about maven, maven repositories and build management tools are required.
+| *Licence* | https://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution (cc-by) 4.0]
+| *Identifier* | https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Developer_manuals/Building.adoc
+| *Language* | EN
+|===
+
+
+== Changelog
+[width="100%",options="header"]
+|===
+|  *Date* | *Editor* | *Comments*
+| 2017-05-02 | Jon Herrmann | document created |
+|===
+
+
+<<<
+
+toc::[]
+
+<<<
+
+== Prerequisites
+
+- link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java SE Development Kit JDK 8 installed]
+- Ensure JAVA_HOME environment variable is set
+- link:https://git-scm.com/downloads[Git installed]
+
+== Accessing the source code
+
+The code base of the web application can be cloned from link:https://github.com/interactive-instruments/etf-webapp[GitHub].
+
+NOTE: because the ETF version 2 is not finally released, the next branch must be used.
+
+[source,bash]
+----
+git clone -b next https://github.com/interactive-instruments/etf-webapp.git
+----
+
+== Compiling the source code
+
+ETF uses link:https://gradle.org[Gradle] as build management tool. The gradle
+wrapper script will automatically download the required Gradle version and
+start the build process afterwards.
+
+Dependencies are downloaded from the interactive instruments repositories.
+Currently only the snapshot repository can be accessed with the credentials
+etf-public-releases / etf-public-releases . This is automatically done by
+default.
+
+[NOTE]
+====
+The repository to be used is determined from the version.properties file.
+Make sure the version is suffixed with "-SNAPSHOT". If necessary, change the
+version in the version.properties file, for example to:
+
+----
+version = 2.0.0-SNAPSHOT
+----
+====
+
+
+.On a Windows command line run
+[source,cmd]
+----
+C:\etf-webapp> gradlew.bat build
+----
+
+.On Linux execute
+[source,bash]
+----
+$ ./gradlew build
+----
+
+== Running the web application
+
+The web application can be started by executing the *jettyRun* task.
+
+.On a Windows command line run
+[source,cmd]
+----
+C:\etf-webapp> gradlew.bat jettyRunWar
+----
+
+.On Linux execute
+[source,bash]
+----
+$ ./gradlew.sh jettyRunWar
+----
+
+The web application can then be accessed at link:http://localhost:8080[http://localhost:8080].
+
+== Building other ETF components
+The web application depends on several other ETF components:
+
+- link:https://github.com/interactive-instruments/etf-core[etf-core] ETF core library including API and domain model
+- link:https://github.com/interactive-instruments/etf-spi[etf-spi] ETF Service Provider Interface
+- link:https://github.com/interactive-instruments/etf-bsxds[etf-bsxds] ETF data storage based on the BaseX database
+- link:https://github.com/interactive-instruments/etf-suitd[etf-suitd] ETF SoapUI test driver
+- link:https://github.com/interactive-instruments/etf-sui-ae[etf-sui-ae] ETF test driver adapter and extensions for SoapUI
+- link:https://github.com/interactive-instruments/etf-sui-ae[etf-bsxtd] ETF BaseX test driver
+
+The source code of the components can be cloned with git.
+
+NOTE: because the ETF version 2 is not finally released, the next branches must be used.
+
+Changed components can be installed into the local maven repository with the
+gradle *install* command and be used by the etf-webapp component afterwards.

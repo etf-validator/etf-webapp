@@ -43,4 +43,4 @@ WARNING: WORK IN PROGRESS
 == Developer manuals
 * link:Developer_manuals/WEB-API.html[Workflow automation with the Web API]
 * #Developing Executable Test Suites (todo)#
-* #Building ETF (todo)#
+* link:Developer_manuals/Building.html[Building ETF]
