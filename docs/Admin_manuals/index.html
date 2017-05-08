@@ -198,12 +198,26 @@ The ETF Web application version 2 beta is not intended for production environmen
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="bash">-Dfile.encoding<span class="tok-o">=</span>UTF-8
--Djavax.servlet.request.encoding<span class="tok-o">=</span>UTF-8</code></pre>
+<pre class="pygments highlight"><code data-lang="properties"><span class="tok-na">-Dfile.encoding</span><span class="tok-o">=</span><span class="tok-s">UTF-8</span>
+<span class="tok-na">-Djavax.servlet.request.encoding</span><span class="tok-o">=</span><span class="tok-s">UTF-8</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>See the <a href="https://tomcat.apache.org/tomcat-8.0-doc/windows-service-howto.html">Tomcat Howto</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>If access to the Internet is secured with a proxy server, the JVM
+parameter http.proxyHost must be added:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="properties"><span class="tok-na">-Dfile.encoding</span><span class="tok-o">=</span><span class="tok-s">UTF-8</span>
+<span class="tok-na">-Djavax.servlet.request.encoding</span><span class="tok-o">=</span><span class="tok-s">UTF-8</span>
+<span class="tok-na">-Dhttp.proxyHost</span><span class="tok-o">=</span><span class="tok-s">proxyserver.orgdomain</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html">Java Networking and Proxies</a> for more information and configuration options.</p>
 </div>
 </div>
 <div class="sect4">
@@ -213,8 +227,20 @@ The ETF Web application version 2 beta is not intended for production environmen
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="bash"><span class="tok-nb">set</span> <span class="tok-nv">JAVA_OPTS</span><span class="tok-o">=</span>-Dfile.encoding<span class="tok-o">=</span>UTF-8 -Djavax.servlet.request.encoding<span class="tok-o">=</span>UTF-8</code></pre>
+<pre class="pygments highlight"><code data-lang="CMD"><span class="tok-k">set</span> <span class="tok-nv">JAVA_OPTS</span><span class="tok-p">=</span>-Dfile.encoding=UTF-8 -Djavax.servlet.request.encoding=UTF-8</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>If access to the Internet is secured with a proxy server, the JVM
+parameter http.proxyHost must be added:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="CMD"><span class="tok-k">set</span> <span class="tok-nv">JAVA_OPTS</span><span class="tok-p">=</span>-Dfile.encoding=UTF-8 -Djavax.servlet.request.encoding=UTF-8 -Dhttp.proxyHost=proxyserver.orgdomain</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html">Java Networking and Proxies</a> for more information and configuration options.</p>
 </div>
 </div>
 </div>
@@ -306,6 +332,18 @@ distributions it is located at <strong>/opt/tomcat/</strong>.
 <div class="content">
 <pre class="pygments highlight"><code data-lang="bash"><span class="tok-nb">export</span> <span class="tok-nv">JAVA_OPTS</span><span class="tok-o">=</span><span class="tok-s2">&quot;</span><span class="tok-nv">$JAVA_OPTS</span><span class="tok-s2"> -Dfile.encoding=UTF-8 -Djavax.servlet.request.encoding=UTF-8&quot;</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>If access to the Internet is secured with a proxy server, the JVM
+parameter http.proxyHost must be added:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span class="tok-nb">export</span> <span class="tok-nv">JAVA_OPTS</span><span class="tok-o">=</span><span class="tok-s2">&quot;</span><span class="tok-nv">$JAVA_OPTS</span><span class="tok-s2"> -Dfile.encoding=UTF-8 -Djavax.servlet.request.encoding=UTF-8 -Dhttp.proxyHost=proxyserver.orgdomain&quot;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html">Java Networking and Proxies</a> for more information and configuration options.</p>
 </div>
 <div class="paragraph">
 <p>Restart Tomcat afterwards.</p>
