@@ -20,9 +20,7 @@ import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +35,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
-import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
@@ -47,12 +44,16 @@ import de.interactive_instruments.IFile;
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.etf.dal.dao.Dao;
-import de.interactive_instruments.etf.dal.dto.capabilities.ComponentDto;
+import de.interactive_instruments.etf.dal.dao.WriteDao;
 import de.interactive_instruments.etf.dal.dto.capabilities.ResourceDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectTypeDto;
+import de.interactive_instruments.etf.detector.TestObjectTypeDetectorManager;
+import de.interactive_instruments.etf.model.EID;
+import de.interactive_instruments.etf.model.EidMap;
 import de.interactive_instruments.etf.webapp.WebAppConstants;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
+import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
@@ -116,6 +117,10 @@ public class TestObjectTypeController {
 	@PostConstruct
 	private void init() throws IOException, TransformerConfigurationException, StorageException {
 		testObjectTypeDao = dataStorageService.getDao(TestObjectTypeDto.class);
+		final EidMap<TestObjectTypeDto> supportedTypes = TestObjectTypeDetectorManager.getSupportedTypes();
+
+		((WriteDao) testObjectTypeDao).deleteAllExisting(supportedTypes.keySet());
+		((WriteDao) testObjectTypeDao).addAll(supportedTypes.values());
 	}
 
 	public void checkAndResolveTypes(final TestObjectDto dto) throws StorageException, ObjectWithIdNotFoundException {
@@ -297,7 +302,7 @@ public class TestObjectTypeController {
 	@ApiResponses(value = {
 			@ApiResponse(code = 202, message = "EtfItemCollection with multiple Test Object Types")
 	})
-	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + " .xml"}, method = RequestMethod.GET)
+	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + ".xml"}, method = RequestMethod.GET)
 	public void listTestObjectTypesXml(@RequestParam(required = false, defaultValue = "0") int offset,
 			@RequestParam(required = false, defaultValue = "0") int limit, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
