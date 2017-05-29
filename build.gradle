@@ -83,6 +83,8 @@ dependencies {
     compile group: 'de.interactive_instruments.etf', name: 'etf-core', version: '1.0.0' + project.snapshotSuffix
     compile group: 'de.interactive_instruments.etf', name: 'etf-spi', version: '1.0.0' + project.snapshotSuffix
 
+    compile group: 'de.interactive_instruments.etf', name: 'etf-stdtot', version: '1.0.0' + project.snapshotSuffix
+
     // TODO remove in future versions, use SPI
     compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version: '2.0.0' + project.snapshotSuffix
     compile group: 'de.interactive_instruments.etf', name: 'etf-rc', version: '1.0.0' + project.snapshotSuffix
@@ -108,8 +110,8 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: etf_commonsIoVersion
     compile group: 'commons-lang', name: 'commons-lang', version:'2.6'
 
-    // switched from 2.4.6
-    compile 'org.codehaus.groovy:groovy-all:2.4.7'
+    // switched from 2.4.7
+    compile 'org.codehaus.groovy:groovy-all:2.4.10'
 
     compile group: 'org.jsoup', name: 'jsoup', version: '1.9.1'
 
