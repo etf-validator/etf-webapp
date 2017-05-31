@@ -29,8 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
 
-import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
-import io.swagger.annotations.*;
+import de.interactive_instruments.etf.model.EID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +47,15 @@ import de.interactive_instruments.etf.model.Parameterizable;
 import de.interactive_instruments.etf.testdriver.DependencyGraph;
 import de.interactive_instruments.etf.webapp.WebAppConstants;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
+import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * Test project controller used for accessing metadata of a test project
@@ -61,6 +66,7 @@ public class EtsController {
 	@Autowired
 	ServletContext servletContext;
 
+	// Wait for TestDriverController to activate all ETS
 	@Autowired
 	private TestDriverController testDriverController;
 
@@ -148,14 +154,24 @@ public class EtsController {
 	@ApiOperation(value = "Check if Executable Test Suite exists", tags = {SERVICE_CAP_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 204, message = "Executable Test Suite exists"),
+			@ApiResponse(code = 301, message = "Executable Test Suite exists but has been replaced by a newer version"),
+			@ApiResponse(code = 423, message = "Executable Test Suite exists but is disabled and can not be executed"),
 			@ApiResponse(code = 404, message = "Executable Test Suite does not exist")
 	})
 	@RequestMapping(value = {ETS_URL + "/{id}"}, method = RequestMethod.HEAD)
 	public ResponseEntity<String> exists(
 			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE) @PathVariable String id)
 			throws IOException, StorageException, ObjectWithIdNotFoundException {
-		return etsDao.exists(EidConverter.toEid(id)) ? new ResponseEntity(HttpStatus.NO_CONTENT)
-				: new ResponseEntity(HttpStatus.NOT_FOUND);
+		final EID eid = EidConverter.toEid(id);
+		if(etsDao.exists(eid)) {
+			if(etsDao.isDisabled(eid)) {
+				return new ResponseEntity(HttpStatus.LOCKED);
+			}else{
+				return new ResponseEntity(HttpStatus.NO_CONTENT);
+			}
+		}else{
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@ApiOperation(value = "Get the parameter of an Executable Test Suites ", tags = {
