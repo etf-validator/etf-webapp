@@ -35,6 +35,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
@@ -64,7 +66,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 @RestController
 public class TestObjectTypeController {
@@ -74,6 +76,8 @@ public class TestObjectTypeController {
 
 	@Autowired
 	private StreamingService streaming;
+
+	private final Logger logger = LoggerFactory.getLogger(TestObjectTypeController.class);
 
 	private Dao<TestObjectTypeDto> testObjectTypeDao;
 	private final static String TEST_OBJECT_TYPES_URL = WebAppConstants.API_BASE_URL + "/TestObjectTypes";
@@ -115,12 +119,14 @@ public class TestObjectTypeController {
 	}
 
 	@PostConstruct
-	private void init() throws IOException, TransformerConfigurationException, StorageException {
+	private void init() throws IOException, TransformerConfigurationException, ObjectWithIdNotFoundException {
 		testObjectTypeDao = dataStorageService.getDao(TestObjectTypeDto.class);
 		final EidMap<TestObjectTypeDto> supportedTypes = TestObjectTypeDetectorManager.getSupportedTypes();
-
 		((WriteDao) testObjectTypeDao).deleteAllExisting(supportedTypes.keySet());
 		((WriteDao) testObjectTypeDao).addAll(supportedTypes.values());
+
+		streaming.prepareCache(testObjectTypeDao, new SimpleFilter());
+		logger.info("Test Object Type controller initialized");
 	}
 
 	public void checkAndResolveTypes(final TestObjectDto dto) throws StorageException, ObjectWithIdNotFoundException {

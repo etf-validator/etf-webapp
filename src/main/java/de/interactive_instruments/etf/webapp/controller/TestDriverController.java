@@ -15,6 +15,25 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
+import static de.interactive_instruments.etf.EtfConstants.ETF_DATA_STORAGE_NAME;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import de.interactive_instruments.etf.component.ComponentInfo;
 import de.interactive_instruments.etf.component.ComponentLoadingException;
 import de.interactive_instruments.etf.dal.dao.*;
@@ -26,7 +45,7 @@ import de.interactive_instruments.etf.dal.dto.run.TestTaskDto;
 import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
 import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.model.EidFactory;
-import de.interactive_instruments.etf.testdriver.MetadataTypeLoader;
+import de.interactive_instruments.etf.testdriver.MetadataFileTypeLoader;
 import de.interactive_instruments.etf.testdriver.TestDriverManager;
 import de.interactive_instruments.etf.testdriver.TestRun;
 import de.interactive_instruments.etf.testdriver.TestRunInitializationException;
@@ -35,23 +54,6 @@ import de.interactive_instruments.exceptions.InvalidStateTransitionException;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static de.interactive_instruments.etf.EtfConstants.ETF_DATA_STORAGE_NAME;
 
 /**
  * Controller for the test drivers
@@ -62,11 +64,15 @@ public class TestDriverController implements PreparedDtoResolver<ExecutableTestS
 	@Autowired
 	private EtfConfigController etfConfig;
 
+	// Wait for TestObjectTypeController to activate all standard Test Object Types
+	@Autowired
+	private TestObjectTypeController testObjectTypeController;
+
 	@Autowired
 	private DataStorageService dataStorageService;
 
 	private TestDriverManager driverManager;
-	private MetadataTypeLoader metadataTypeLoader;
+	private MetadataFileTypeLoader metadataTypeLoader;
 	private Dao<ExecutableTestSuiteDto> etsDao;
 	private Dao<TestObjectTypeDto> testObjectTypesDao;
 	private final Logger logger = LoggerFactory.getLogger(TestDriverController.class);
@@ -90,16 +96,18 @@ public class TestDriverController implements PreparedDtoResolver<ExecutableTestS
 			throws ConfigurationException, InvalidStateTransitionException, InitializationException, StorageException {
 
 		// Metadata need to be initialized first
-		metadataTypeLoader = new MetadataTypeLoader(dataStorageService.getDataStorage());
+		metadataTypeLoader = new MetadataFileTypeLoader(dataStorageService.getDataStorage());
 		metadataTypeLoader.getConfigurationProperties().setPropertiesFrom(etfConfig, true);
 		metadataTypeLoader.init();
 
 		etsDao = dataStorageService.getDataStorage().getDao(ExecutableTestSuiteDto.class);
-		// Delete existing ETS
+
+
+		// Deactivate all ETS first and ensure that drivers only reactivate existing ETS
 		try {
-			final PreparedDtoCollection<ExecutableTestSuiteDto> all = etsDao.getAll(FILTER_GET_ALL);
-			((WriteDao) etsDao).deleteAll(all.keySet());
-		} catch (Exception e) {
+			// keyset() does not invoke full Dto resolution, so invalid Dtos are ingored.
+			((WriteDao) etsDao).deleteAll(etsDao.getAll(FILTER_GET_ALL).keySet());
+		} catch (final Exception e) {
 			logger.warn("Failed to clean Executable Test Suites ", e);
 		}
 
@@ -110,7 +118,6 @@ public class TestDriverController implements PreparedDtoResolver<ExecutableTestS
 		driverManager.init();
 		driverManager.loadAll();
 
-		testObjectTypesDao = dataStorageService.getDataStorage().getDao(TestObjectTypeDto.class);
 		logger.info("Test Driver service initialized");
 		if (driverManager.getTestDriverInfo().isEmpty()) {
 			logger.warn("No Test Driver loaded");
@@ -125,7 +132,6 @@ public class TestDriverController implements PreparedDtoResolver<ExecutableTestS
 				logger.info("{} Executable Test Suites loaded", getExecutableTestSuites().size());
 			}
 		}
-
 	}
 
 	@PreDestroy

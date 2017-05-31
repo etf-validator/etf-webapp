@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
 
-import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +41,7 @@ import de.interactive_instruments.etf.dal.dto.test.TestItemTypeDto;
 import de.interactive_instruments.etf.dal.dto.translation.TranslationTemplateBundleDto;
 import de.interactive_instruments.etf.webapp.WebAppConstants;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
+import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
@@ -52,7 +52,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 @RestController
 public class MetaTypeController {
@@ -86,10 +86,8 @@ public class MetaTypeController {
 		testItemTypeDao = dataStorageService.getDao(TestItemTypeDto.class);
 		componentDao = dataStorageService.getDao(ComponentDto.class);
 
-		streaming.prepareCache(translationTemplateBundleDao, new SimpleFilter());
-		streaming.prepareCache(testObjectTypeDao, new SimpleFilter());
 		streaming.prepareCache(tagDao, new SimpleFilter());
-
+		streaming.prepareCache(translationTemplateBundleDao, new SimpleFilter());
 		logger.info("Meta Type controller initialized");
 	}
 
