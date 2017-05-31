@@ -30,7 +30,7 @@ import org.springframework.core.convert.converter.Converter;
 import de.interactive_instruments.Version;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class VersionConverter implements EtfConverter<Version> {
 

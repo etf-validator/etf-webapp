@@ -174,10 +174,14 @@ public class EtsController {
 		}
 	}
 
-	@ApiOperation(value = "Get the parameter of an Executable Test Suites ", tags = {
-			SERVICE_CAP_TAG_NAME}, response = Parameterizable.Parameter.class, responseContainer = "List")
-	@RequestMapping(value = {ETS_URL + "/{etsId}/parameter",
-			ETS_URL + "/{etsId}/arguments.json"}, method = RequestMethod.GET, produces = "application/json")
+	@ApiOperation(value = "Get the parameter of an Executable Test Suite ",
+			notes = "Get the parameter of an Executable Test Suite as JSON",
+			tags = {SERVICE_CAP_TAG_NAME}, response = Parameterizable.Parameter.class, responseContainer = "List")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Arguments"),
+			@ApiResponse(code = 404, message = "Executable Test Suite not found")
+	})
+	@RequestMapping(value = {ETS_URL + "/{etsId}/arguments.json"}, method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody Collection<Parameterizable.Parameter> etsParameterById(@PathVariable String etsId)
 			throws StorageException, ConfigurationException, ObjectWithIdNotFoundException {
 		// Get ETS and translation bundle to translate the description text
@@ -212,10 +216,14 @@ public class EtsController {
 		}
 	}
 
-	@ApiOperation(value = "Get the dependencies of an Executable Test Suite", tags = {
-			SERVICE_CAP_TAG_NAME}, response = DependenciesJsonView.class, responseContainer = "List")
-	@RequestMapping(value = {ETS_URL + "/{etsId}/dependencies",
-			ETS_URL + "/{etsId}/dependencies.json"}, method = RequestMethod.GET, produces = "application/json")
+	@ApiOperation(value = "Get the dependencies of an Executable Test Suite",
+			notes = "Get the dependencies of an Executable Test Suite as JSON",
+			tags = {SERVICE_CAP_TAG_NAME}, response = DependenciesJsonView.class, responseContainer = "List")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Dependencies"),
+			@ApiResponse(code = 404, message = "Executable Test Suite not found")
+	})
+	@RequestMapping(value = {ETS_URL + "/{etsId}/dependencies.json"}, method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<DependenciesJsonView> etsDependenciesById(@PathVariable String etsId)
 			throws StorageException, ConfigurationException, ObjectWithIdNotFoundException {
 		final Collection<ExecutableTestSuiteDto> dependencies = testDriverController

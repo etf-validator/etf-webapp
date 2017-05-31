@@ -43,11 +43,10 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 @ApiModel(value = "TestObject", description = "Simplified Test Object definition")
 public class SimpleTestObject {
-
 
 	@ApiModelProperty(value = EID_DESCRIPTION + ". " +
 			"Either an id or a resource property must be provided.", example = EID_EXAMPLE, dataType = "String")
@@ -78,7 +77,7 @@ public class SimpleTestObject {
 	}
 
 	public String getId() {
-		return "EID"+toEid(id).toString();
+		return "EID" + toEid(id).toString();
 	}
 
 	public String getUsername() {

@@ -15,7 +15,6 @@
  */
 package de.interactive_instruments.etf.webapp;
 
-import de.interactive_instruments.etf.webapp.controller.EtfConfigController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +29,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import de.interactive_instruments.etf.webapp.controller.EtfConfigController;
 import de.interactive_instruments.etf.webapp.conversion.ObjectMapperFactory;
 import io.swagger.annotations.ApiOperation;
 
@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
  * - http://localhost:8080/swagger-ui.html
  * - http://localhost:8080/v2/api-docs
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 @EnableSwagger2
 @Configuration
@@ -74,11 +74,14 @@ public class SwaggerConfig {
 								+ "(https://github.com/interactive-instruments/etf-webapp/issues/new?title=[webapi-v2-beta]%20&body=Please%20don%27t%20delete%20the%20"
 								+ "[webapi-v2-beta]%20text%20in%20the%20title.%20This%20text%20can%20be%20deleted.&labels=webapi). "
 								+ "\n\n"
-								+ "Content negotiation is currently not implemented and therefore JSON is always returned for endpoints without file extension. "
-								+ "Please note that the API is not final and may undergo further changes before being released. "
+								+ "Content negotiation is not supported and therefore JSON is always returned for endpoints without file extension. "
+								+ "For most operations, a link to the XML response schema is provided in the implementation nodes."
+								+ "JSON responses are derived from XML the response schema, based on this [stylesheet](https://github.com/bramstein/xsltjson#basic-output-default)."
 								+ "\n\n"
-								+ "[Back to user interface]("+EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_WEBAPP_BASE_URL)+"/#home)")
-				.contact(new Contact("ETF Team", "https://interactive-instruments.github.io/etf-webapp",
+								+ "[Back to user interface]("
+								+ EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_WEBAPP_BASE_URL)
+								+ "/#home)")
+				.contact(new Contact("ETF Team", "www.etf-validator.net",
 						"etf@interactive-instruments.de"))
 				.license("Apache 2.0")
 				.licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")

@@ -39,7 +39,7 @@ import de.interactive_instruments.etf.dal.dto.translation.TranslationTemplateDto
 import de.interactive_instruments.etf.model.EID;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class ObjectMapperFactory implements FactoryBean<ObjectMapper> {
 

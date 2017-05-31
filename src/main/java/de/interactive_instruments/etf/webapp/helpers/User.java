@@ -15,15 +15,16 @@
  */
 package de.interactive_instruments.etf.webapp.helpers;
 
+import java.net.UnknownHostException;
+
+import javax.servlet.http.HttpServletRequest;
+
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.exceptions.ExcUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import java.net.UnknownHostException;
-
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class User {
 

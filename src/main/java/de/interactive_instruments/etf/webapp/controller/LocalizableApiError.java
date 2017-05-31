@@ -18,14 +18,15 @@ package de.interactive_instruments.etf.webapp.controller;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.NoSuchFileException;
-import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 
 import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.etf.LocalizableError;
@@ -34,11 +35,9 @@ import de.interactive_instruments.etf.webapp.dto.StartTestRunRequest;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class LocalizableApiError extends LocalizableError {
 	protected final boolean sensitiveInformation;
@@ -94,8 +93,7 @@ public class LocalizableApiError extends LocalizableError {
 	}
 
 	public LocalizableApiError(final HttpMessageNotReadableException e) {
-		super(e.getMessage().contains("Required request body is missing:") ?
-				"l.json.request.body.missing" : "",e);
+		super(e.getMessage().contains("Required request body is missing:") ? "l.json.request.body.missing" : "", e);
 		sensitiveInformation = false;
 		sc = 400;
 	}
@@ -156,8 +154,7 @@ public class LocalizableApiError extends LocalizableError {
 		super("l.json.parse.error", e,
 				e.getLocation().getLineNr(),
 				e.getLocation().getColumnNr(),
-				e.getOriginalMessage()
-		);
+				e.getOriginalMessage());
 		sensitiveInformation = false;
 		sc = 404;
 	}

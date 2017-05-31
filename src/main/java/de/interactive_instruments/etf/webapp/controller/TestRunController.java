@@ -15,6 +15,34 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
+import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_RESULTS_TAG_NAME;
+import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_RUNS_TAG_NAME;
+import static de.interactive_instruments.etf.webapp.WebAppConstants.API_BASE_URL;
+import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.TimedExpiredItemsRemover;
 import de.interactive_instruments.etf.EtfConstants;
@@ -32,32 +60,6 @@ import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
 import io.swagger.annotations.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.text.ParseException;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
-import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_RESULTS_TAG_NAME;
-import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_RUNS_TAG_NAME;
-import static de.interactive_instruments.etf.webapp.WebAppConstants.API_BASE_URL;
-import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
 
 /**
  * Test run controller for starting and monitoring test runs
@@ -281,11 +283,12 @@ public class TestRunController implements TestRunEventListener {
 			@ApiParam(value = "Test Run ID. "
 					+ EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			@ApiParam(value = "The position in the logs from where to resume. "
-					+ "The client shall submit his current cached log message size to this interface, "
+					+ "The client may submit his current cached log message size to this interface, "
 					+ "so that the service can skip the known messages and return only new ones. "
-					+ "Example: the client received 3 log messages and shall therefore invoke this interface with pos=3. "
+					+ "Example: the client received 3 log messages and should therefore invoke this interface with pos=3. "
 					+ "In the meantime the service logged a total of 13 messages. As the client knows the first three "
-					+ "messages the service will skip the first 3 messages and return the 10 new messages.", example = "13", required = false) @RequestParam(value = "pos", required = false) String strPos,
+					+ "messages the service will skip the first 3 messages and return the 10 new messages.", example = "13",
+					required = false, defaultValue = "0") @RequestParam(value = "pos", required = false) String strPos,
 			final HttpServletResponse response) throws StorageException {
 
 		long position = 0;
@@ -371,7 +374,7 @@ public class TestRunController implements TestRunEventListener {
 			TEST_RESULTS_TAG_NAME, TEST_RUNS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 204, message = "Test Run deleted", responseHeaders = {
-					@ResponseHeader(name = "action", response = String.class, description = "Set to 'canceled' if the Test Run was canceled or "
+					@ResponseHeader(name = "action", description = "Set to 'canceled' if the Test Run was canceled or "
 							+ "'deleted' if a persisted Test Run was removed")}),
 			@ApiResponse(code = 404, message = "Test Run not found", response = RestExceptionHandler.ApiError.class)
 	})
@@ -423,7 +426,7 @@ public class TestRunController implements TestRunEventListener {
 			+ "        \"arguments\": {},\n"
 			+ "        \"testObject\": {\n"
 			+ "            \"resources\": {\n"
-			+ "                \"serviceEndpoint\": \"http://example.com/service?request=GetCapabilities\"\n"
+			+ "                \"serviceEndpoint\": \"http://example.com/service?request=GetCapabilities&service=WFS\"\n"
 			+ "            }\n"
 			+ "        }\n"
 			+ "    }\n"

@@ -283,6 +283,10 @@ public class TestObjectTypeController {
 
 	@ApiOperation(value = "Get Test Object Type as JSON", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
 			SERVICE_CAP_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Test Object Type"),
+			@ApiResponse(code = 404, message = "Test Object Type not found")
+	})
 	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + "/{id}", TEST_OBJECT_TYPES_URL + "/{id}.json"}, method = RequestMethod.GET)
 	public void testObjectTypesByIdJson(
 			@PathVariable String id,
@@ -293,6 +297,9 @@ public class TestObjectTypeController {
 
 	@ApiOperation(value = "Get multiple Test Object Types as JSON", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
 			SERVICE_CAP_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Object Types")
+	})
 	@RequestMapping(value = {TEST_OBJECT_TYPES_URL, TEST_OBJECT_TYPES_URL + ".json"}, method = RequestMethod.GET)
 	public void listTestObjectTypesJson(
 			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
@@ -306,7 +313,7 @@ public class TestObjectTypeController {
 	@ApiOperation(value = "Get multiple Test Object Types as XML", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
 			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
 	@ApiResponses(value = {
-			@ApiResponse(code = 202, message = "EtfItemCollection with multiple Test Object Types")
+			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Object Types")
 	})
 	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + ".xml"}, method = RequestMethod.GET)
 	public void listTestObjectTypesXml(@RequestParam(required = false, defaultValue = "0") int offset,

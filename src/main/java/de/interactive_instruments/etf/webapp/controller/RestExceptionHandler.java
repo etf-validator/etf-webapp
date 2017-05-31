@@ -15,6 +15,9 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
+import java.io.IOException;
+import java.util.Objects;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,9 +42,6 @@ import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.io.IOException;
-import java.util.Objects;
-
 /**
  * Handles exceptions thrown by RestControllers
  */
@@ -61,18 +61,17 @@ class RestExceptionHandler {
 	@ApiModel(value = "ApiError")
 	public static class ApiError {
 
-		@ApiModelProperty(value = "Error message", example = "The uploaded file with type 'text/plain' "
-				+ "is not supported and cannot be used")
+		@ApiModelProperty(value = "Error message", example = "Error message")
 		private final String error;
 
 		@ApiModelProperty(value = "Timestamp in milliseconds, measured between the time the error occurred "
 				+ "and midnight, January 1, 1970 UTC(coordinated universal time).", example = "1488469744783")
 		private final String timestamp = String.valueOf(System.currentTimeMillis());
 
-		@ApiModelProperty(value = "URL that was invoked before the error occured", example = "http://localhost:8080/v2/TestObjects")
+		@ApiModelProperty(value = "URL that was invoked before the error occured", example = "http://localhost:8080/v2/X")
 		private final String url;
 
-		@ApiModelProperty(value = "Optional error ID which was used to translate the error message", example = "l.upload.invalid")
+		@ApiModelProperty(value = "Optional error ID which was used to translate the error message", example = "l.invalid.fooBar")
 		private final String id;
 
 		@ApiModelProperty(value = "Optional stacktrace which will only be attached in ETF development mode")
@@ -144,9 +143,9 @@ class RestExceptionHandler {
 			System.gc();
 			statusController.triggerMaintenance();
 			return new ApiError(exception, request.getRequestURL().toString(), applicationContext);
-		}else if (Objects.equals(exception.getMessage(), "No space left on device")
+		} else if (Objects.equals(exception.getMessage(), "No space left on device")
 				|| exception.getCause() != null && exception.getCause() instanceof IOException &&
-				Objects.equals(exception.getCause().getMessage(), "No space left on device")) {
+						Objects.equals(exception.getCause().getMessage(), "No space left on device")) {
 			statusController.triggerMaintenance();
 			return new ApiError(exception, request.getRequestURL().toString(), applicationContext);
 		} else if (exception.getCause() != null && exception.getCause() instanceof StackOverflowError

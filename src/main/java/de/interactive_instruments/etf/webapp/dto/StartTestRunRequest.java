@@ -23,9 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.*;
 
-import de.interactive_instruments.SUtils;
 import de.interactive_instruments.etf.dal.dao.PreparedDtoResolver;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.etf.dal.dto.run.TestRunDto;
@@ -39,10 +40,8 @@ import de.interactive_instruments.exceptions.StorageException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotNull;
-
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 @JsonPropertyOrder({
 		"label",
@@ -64,7 +63,7 @@ public class StartTestRunRequest {
 	@NotNull(message = "{l.json.empty.ets.list}")
 	private List<String> executableTestSuiteIds;
 
-	@ApiModelProperty(position = 2, value = "Test run arguments as key value pairs. Mandatory (use {} for empty arguments). See Implementation Notes for an complete example.",  required = true)
+	@ApiModelProperty(position = 2, value = "Test run arguments as key value pairs. Mandatory (use {} for empty arguments). See Implementation Notes for an complete example.", required = true)
 	@JsonProperty
 	private SimpleArguments arguments;
 

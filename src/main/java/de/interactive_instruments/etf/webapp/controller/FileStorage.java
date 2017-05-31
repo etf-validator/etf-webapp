@@ -35,7 +35,7 @@ import de.interactive_instruments.io.FileContentFilterHolder;
 import de.interactive_instruments.io.MultiFileFilter;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 class FileStorage {
 

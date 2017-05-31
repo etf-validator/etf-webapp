@@ -16,7 +16,7 @@
 package de.interactive_instruments.etf.webapp.dto;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class DocumentationConstants {
 
@@ -37,7 +37,7 @@ public class DocumentationConstants {
 	public final static String OFFSET_DESCRIPTION = "The offset indicates the starting position of this request in relation to the complete set of unpaginated items. "
 			+ "Values less than 0 will be silently defaulted to the value 0.";
 
-	public final static String FIELDS_DESCRIPTION = "If set to another value  than '*' a partial response with only the selected fields is returned. "
+	public final static String FIELDS_DESCRIPTION = "If set to a value other than '*' a partial response with only the selected fields is returned. "
 			+ "Only fields on the highest level can be selected and should be separated with a comma. Unknown fields are silently ignored. "
 			+ "As also mandatory fields can be filtered the response may not validate against the default schema. ";
 

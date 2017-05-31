@@ -18,7 +18,7 @@ package de.interactive_instruments.etf.webapp.dto;
 import de.interactive_instruments.etf.model.EID;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class ReportSelections {
 	private EID report1;

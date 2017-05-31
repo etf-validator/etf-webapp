@@ -48,7 +48,7 @@ import io.swagger.annotations.*;
 /**
  * Controller for reporting the service status
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 @RestController
 public class StatusController {
@@ -227,7 +227,7 @@ public class StatusController {
 				statusWarningMessages));
 	}
 
-	@ApiOperation(value = "Get simple service status", notes = "Returns an empty response with status code 204 if the service is up and running."
+	@ApiOperation(value = "Get simple service status", notes = "Returns an empty response with status code 204, if the service is up and running."
 			+ " The service status is returned in the 'Service-Status' header. Please note that the service status can be accessed via the root path '/' to ensure "
 			+ "backward compatibility and also explicit with the API version prefix '/v2/heartbeat'", tags = {STATUS_TAG_NAME})
 	@ApiResponses(value = {
@@ -244,7 +244,7 @@ public class StatusController {
 	}
 
 	// @PreAuthorize("#oauth2.clientHasRole('ROLE_ADMIN')")
-	@ApiOperation(value = "Get extended service status", notes = "Get the service workload and health information.", produces = "application/json", tags = {
+	@ApiOperation(value = "Get extended service status", notes = "Get service workload and health information.", produces = "application/json", tags = {
 			STATUS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Service is up and running"),

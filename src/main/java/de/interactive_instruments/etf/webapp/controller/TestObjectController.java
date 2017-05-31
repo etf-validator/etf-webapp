@@ -15,9 +15,44 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
+import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_OBJECTS_TAG_NAME;
+import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.RegexFileFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import springfox.documentation.annotations.ApiIgnore;
+
 import de.interactive_instruments.Credentials;
 import de.interactive_instruments.IFile;
 import de.interactive_instruments.SUtils;
@@ -42,37 +77,6 @@ import de.interactive_instruments.exceptions.config.MissingPropertyException;
 import de.interactive_instruments.io.*;
 import de.interactive_instruments.properties.PropertyHolder;
 import io.swagger.annotations.*;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.RegexFileFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import springfox.documentation.annotations.ApiIgnore;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBException;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URI;
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
-import static de.interactive_instruments.etf.webapp.SwaggerConfig.TEST_OBJECTS_TAG_NAME;
-import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
 
 /**
  * Test object controller used for managing test objects
@@ -333,7 +337,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		testObject.setVersionFromStr("1.0.0");
 		testObject.setLastUpdateDate(new Date());
 		if (testObject.getLastEditor() == null) {
-			testObject.setLastEditor("unknown");
+			final String author = testObject.getAuthor();
+			testObject.setLastEditor(SUtils.isNullOrEmpty(author) ? "unknown" : author);
 		}
 		if (testObject.getRemoteResource() == null) {
 			testObject.setRemoteResource(URI.create("http://nowhere"));
@@ -501,12 +506,16 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		}
 	}
 
-	@ApiOperation(value = "Upload a file for the Test Object using a MULTIPART upload request", notes = "On success the service will internally create a TEMPORARY new Test Object and "
+	@ApiOperation(value = "Upload a file for the Test Object using a MULTIPART upload request",
+			notes = "On success the service will internally create a TEMPORARY new Test Object and "
 			+ "return it's ID which afterwards can be used to start a new Test Run. "
 			+ "If the Test Object ID is not used within 5 minutes, the Test Object and all uploaded data will be deleted automatically. "
 			+ "PLEASE NOTE: This interface will create a TEMPORARY Test Object that will not be persisted as long as it is not used in a Test Run. "
-			+ "A TEMPORARY Test Object can not be retrieved or deleted but can only be referenced from a 'Test Run Request' to start a new Test Run."
-			+ "Also note that the Swagger UI does only allow single file uploads in contrast to the API which allows multi file uploads.", tags = {
+			+ "A TEMPORARY Test Object can not be retrieved or deleted but can only be referenced from a 'Test Run Request' to start a new Test Run. "
+			+ "The property 'data.downloadable' of a TEMPORARY Test Object is always set to true. "
+			+ "Also note that the Swagger UI does only allow single file uploads in contrast to the API which allows multi file uploads.",
+
+			tags = {
 					TEST_OBJECTS_TAG_NAME}, produces = "application/json")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "fileupload", required = true, dataType = "file", paramType = "form"),

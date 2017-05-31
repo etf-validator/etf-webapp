@@ -109,6 +109,10 @@ public class MetaTypeController {
 	private final static String TEST_ITEM_TYPES_URL = WebAppConstants.API_BASE_URL + "/TestItemTypes";
 
 	@ApiOperation(value = "Get Test Item Type as JSON", notes = TEST_ITEM_TYPEL_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Item Type"),
+			@ApiResponse(code = 404, message = "Item Type not found")
+	})
 	@RequestMapping(value = {TEST_ITEM_TYPES_URL + "/{id}", TEST_ITEM_TYPES_URL + "/{id}.json"}, method = RequestMethod.GET)
 	public void testItemTypeByIdJson(
 			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
@@ -119,6 +123,7 @@ public class MetaTypeController {
 
 	@ApiOperation(value = "Get multiple Test Item Types as JSON", notes = TEST_ITEM_TYPEL_DESCRIPTION, tags = {
 			SERVICE_CAP_TAG_NAME})
+	@ApiResponses(@ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Item Types"))
 	@RequestMapping(value = TEST_ITEM_TYPES_URL + ".json", method = RequestMethod.GET)
 	public void listTestItemTypesJson(
 			@ApiParam(value = OFFSET_DESCRIPTION, example = "0") @RequestParam(required = false, defaultValue = "0") int offset,
@@ -144,8 +149,8 @@ public class MetaTypeController {
 	@ApiOperation(value = "Get Test Item Type as XML", notes = TEST_ITEM_TYPEL_DESCRIPTION, tags = {
 			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with one Test Item Type"),
-			@ApiResponse(code = 404, message = "Test Item Type not found")
+			@ApiResponse(code = 200, message = "Item Type"),
+			@ApiResponse(code = 404, message = "Item Type not found")
 	})
 	@RequestMapping(value = {TEST_ITEM_TYPES_URL + "/{id}.xml"}, method = RequestMethod.GET)
 	public void testItemTypeByIdXml(
@@ -174,6 +179,10 @@ public class MetaTypeController {
 
 	@ApiOperation(value = "Get Translation Template Bundle as JSON", notes = TRANSLATION_TEMP_BUNDLE_DESCRIPTION, tags = {
 			SERVICE_CAP_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Translation Template Bundle"),
+			@ApiResponse(code = 404, message = "Translation Template Bundle not found")
+	})
 	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL + "/{id}",
 			TRANSLATION_TEMP_BUNDLE_URL + "/{id}.json"}, method = RequestMethod.GET)
 	public void translationTemplateBundleByIdJson(
@@ -185,6 +194,9 @@ public class MetaTypeController {
 
 	@ApiOperation(value = "Get multiple Translation Template Bundles as JSON", notes = TRANSLATION_TEMP_BUNDLE_DESCRIPTION, tags = {
 			SERVICE_CAP_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Translation Template Bundles"),
+	})
 	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL, TRANSLATION_TEMP_BUNDLE_URL + ".json"}, method = RequestMethod.GET)
 	public void listTranslationTemplateBundlesJson(
 			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
@@ -212,7 +224,7 @@ public class MetaTypeController {
 	@ApiOperation(value = "Get Translation Template Bundle as XML", notes = TRANSLATION_TEMP_BUNDLE_DESCRIPTION, tags = {
 			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with one Translation Template Bundle"),
+			@ApiResponse(code = 200, message = "Translation Template Bundle"),
 			@ApiResponse(code = 404, message = "Translation Template Bundle not found")
 	})
 	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL + "/{id}.xml"}, method = RequestMethod.GET)
@@ -241,6 +253,10 @@ public class MetaTypeController {
 	public final static String COMPONENTS_URL = WebAppConstants.API_BASE_URL + "/Components";
 
 	@ApiOperation(value = "Get Framework Component as JSON", notes = COMPONENT_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Component"),
+			@ApiResponse(code = 404, message = "Component not found")
+	})
 	@RequestMapping(value = {COMPONENTS_URL + "/{id}", COMPONENTS_URL + "/{id}.json"}, method = RequestMethod.GET)
 	public void componentsByIdJson(
 			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
@@ -251,6 +267,9 @@ public class MetaTypeController {
 
 	@ApiOperation(value = "Get multiple Framework Components as JSON", notes = COMPONENT_DESCRIPTION, tags = {
 			SERVICE_CAP_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Components"),
+	})
 	@RequestMapping(value = {COMPONENTS_URL, COMPONENTS_URL + ".json"}, method = RequestMethod.GET)
 	public void listComponentsJson(
 			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
@@ -278,7 +297,7 @@ public class MetaTypeController {
 	@ApiOperation(value = "Get Framework Component as XML", notes = COMPONENT_DESCRIPTION, tags = {
 			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with one Component"),
+			@ApiResponse(code = 200, message = "Component"),
 			@ApiResponse(code = 404, message = "Component not found")
 	})
 	@RequestMapping(value = {COMPONENTS_URL + "/{id}.xml"}, method = RequestMethod.GET)
@@ -291,8 +310,8 @@ public class MetaTypeController {
 
 	@ApiOperation(value = "Check if Framework Component exists", tags = {SERVICE_CAP_TAG_NAME})
 	@ApiResponses(value = {
-			@ApiResponse(code = 204, message = "Framework Component exists"),
-			@ApiResponse(code = 404, message = "Framework Component does not exist")
+			@ApiResponse(code = 204, message = "Component exists"),
+			@ApiResponse(code = 404, message = "Component does not exist")
 	})
 	@RequestMapping(value = {COMPONENTS_URL + "/{id}"}, method = RequestMethod.HEAD)
 	public ResponseEntity<String> existsComponent(
@@ -307,6 +326,10 @@ public class MetaTypeController {
 	private final static String TAGS_URL = WebAppConstants.API_BASE_URL + "/Tags";
 
 	@ApiOperation(value = "Get Tag as JSON", notes = TAG_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Tag"),
+			@ApiResponse(code = 404, message = "Tag not found")
+	})
 	@RequestMapping(value = {TAGS_URL + "/{id}", TAGS_URL + "/{id}.json"}, method = RequestMethod.GET)
 	public void tagsByIdJson(
 			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
@@ -316,6 +339,9 @@ public class MetaTypeController {
 	}
 
 	@ApiOperation(value = "Get multiple Tags as JSON", notes = TAG_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Tags")
+	})
 	@RequestMapping(value = {TAGS_URL, TAGS_URL + ".json"}, method = RequestMethod.GET)
 	public void listTagsJson(
 			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
@@ -342,7 +368,7 @@ public class MetaTypeController {
 
 	@ApiOperation(value = "Get Tag as XML", notes = TAG_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME}, produces = "text/xml")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with one Tag"),
+			@ApiResponse(code = 200, message = "Tag"),
 			@ApiResponse(code = 404, message = "Tag not found")
 	})
 	@RequestMapping(value = {TAGS_URL + "/{id}.xml"}, method = RequestMethod.GET)

@@ -18,7 +18,7 @@ package de.interactive_instruments.etf.webapp.controller;
 /**
  * Service status types
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public enum ServiceStatus {
 	STARTING, GOOD, MINOR, // increased exception rate, 1 exception found in the last 100 log file lines
