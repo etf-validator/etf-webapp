@@ -55,7 +55,7 @@ import de.interactive_instruments.properties.PropertyUtils;
  * ETF Configuration object which holds the etf-config.properties
  * and defaults.
  *
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 @RestController
 public class EtfConfigController implements PropertyHolder {
@@ -118,7 +118,7 @@ public class EtfConfigController implements PropertyHolder {
 			put(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION, "360");
 			put(ETF_TESTREPORTS_LIFETIME_EXPIRATION, "43800");
 			put(ETF_HELP_PAGE_URL,
-					"https://github.com/interactive-instruments/etf-webapp/wiki/User%20manual%20for%20simplified%20workflows");
+					"http://docs.etf-validator.net/User_manuals/Simplified_workflows.html");
 			put(ETF_BSX_RECREATE_CONFIG, "true");
 			put(ETF_SUBMIT_ERRORS, "false");
 			put(ETF_WORKFLOWS, "simplified");
@@ -152,15 +152,15 @@ public class EtfConfigController implements PropertyHolder {
 		if (dir.exists()) {
 			final IFile configFile = dir.expandPath(ETF_CONFIG_PROPERTY_FILENAME);
 			final IFile configFallbackFile = dir.expandPath(ETF_CONFIG_DIR_NAME).expandPath(ETF_CONFIG_PROPERTY_FILENAME);
-			if (configFile.exists() && configFile.length()>0) {
+			if (configFile.exists() && configFile.length() > 0) {
 				return configFile;
-			}else if(configFallbackFile.exists() && configFallbackFile.length()>0){
+			} else if (configFallbackFile.exists() && configFallbackFile.length() > 0) {
 				return configFallbackFile;
 			} else {
 				logger.warn("Skipping directory '" + dir.getAbsolutePath() +
 						"' which does not contain a '" + ETF_CONFIG_PROPERTY_FILENAME +
-						"' configuration file or a '"+ETF_CONFIG_DIR_NAME+"' subdirectory containing the '" +
-						ETF_CONFIG_PROPERTY_FILENAME+ "' file.");
+						"' configuration file or a '" + ETF_CONFIG_DIR_NAME + "' subdirectory containing the '" +
+						ETF_CONFIG_PROPERTY_FILENAME + "' file.");
 				return null;
 			}
 		}
@@ -184,7 +184,7 @@ public class EtfConfigController implements PropertyHolder {
 				II_Constants.II_COPYRIGHT);
 
 		// Set HTTP Client to ETF
-		System.setProperty("http.agent", "ETF validator (version: "+version+" )");
+		System.setProperty("http.agent", "ETF validator (version: " + version + " )");
 
 		System.setProperty("java.awt.headless", "true");
 		final String encoding = System.getProperty("file.encoding");
@@ -197,7 +197,7 @@ public class EtfConfigController implements PropertyHolder {
 							"(for instance by adding   -Dfile.encoding=UTF-8   to the JAVA_OPTS)");
 			try {
 				Thread.sleep(3000);
-			} catch (InterruptedException ign) {
+			} catch (final InterruptedException ign) {
 				ExcUtils.suppress(ign);
 			}
 		}
@@ -205,16 +205,16 @@ public class EtfConfigController implements PropertyHolder {
 		// Find property file
 		final IFile propertiesFile;
 		final String sysEnv = System.getenv("ETF_DIR");
-		if(!SUtils.isNullOrEmpty(sysEnv)) {
+		if (!SUtils.isNullOrEmpty(sysEnv)) {
 			logger.info("Using environment variable ETF_DIR for the ETF data directory {}", sysEnv);
 			final IFile sysEnvEtfDir = new IFile(sysEnv, "ETF_DIR");
 			final IFile detectedPropertiesFile = checkDirForConfig(sysEnvEtfDir);
-			if(detectedPropertiesFile!=null) {
+			if (detectedPropertiesFile != null) {
 				propertiesFile = detectedPropertiesFile;
-			}else{
+			} else {
 				propertiesFile = createInitialDirectoryStructure(sysEnvEtfDir);
 			}
-		}else{
+		} else {
 			final String propertiesFilePath = PropertyUtils.getenvOrProperty("ETF_WEBAPP_PROPERTIES_FILE", null);
 			final String configFileIdentifier = "ETF_CONFIG_PROPERTY_FILE";
 			if (!SUtils.isNullOrEmpty(propertiesFilePath)) {
@@ -223,7 +223,8 @@ public class EtfConfigController implements PropertyHolder {
 					propertiesFile = new IFile(propertiesFilePath, configFileIdentifier);
 				} else {
 					// Be gentle, user accidentally selected the dir
-					propertiesFile = new IFile(propertiesFilePath, configFileIdentifier).expandPath(ETF_CONFIG_PROPERTY_FILENAME);
+					propertiesFile = new IFile(propertiesFilePath, configFileIdentifier)
+							.expandPath(ETF_CONFIG_PROPERTY_FILENAME);
 				}
 				propertiesFile.expectIsReadable();
 			} else {
@@ -417,6 +418,8 @@ public class EtfConfigController implements PropertyHolder {
 				return new Manifest(inputStream);
 			} catch (IOException e) {
 				logger.error("Manifest not available; ", e);
+			} finally {
+				IFile.closeQuietly(inputStream);
 			}
 		}
 		// in development mode
