@@ -28,9 +28,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
-import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
-import de.interactive_instruments.properties.PropertyUtils;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -46,9 +45,10 @@ import de.interactive_instruments.etf.webapp.helpers.CacheControl;
 import de.interactive_instruments.exceptions.ExcUtils;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
+import de.interactive_instruments.properties.PropertyUtils;
 
 /**
- * @author J. Herrmann ( herrmann <aT) interactive-instruments (doT> de )
+ * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 @Service
 public class StreamingService {
@@ -58,8 +58,16 @@ public class StreamingService {
 
 	private ObjectMapper mapper;
 
-	private Cache<String, byte[]> bigResponseCache = Caffeine.newBuilder().maximumSize(
-			PropertyUtils.getenvOrProperty("ETF_STREAMING_CACHE_SIZE",30)).build();
+	private long initCacheSize() {
+		final long defaultVal = 30;
+		final long size = PropertyUtils.getenvOrProperty("ETF_STREAMING_CACHE_SIZE", defaultVal);
+		if(size!=defaultVal) {
+			LoggerFactory.getLogger(StreamingService.class).info("Streaming cache set to: {}", defaultVal);
+		}
+		return size;
+	}
+
+	private final Cache<String, byte[]> bigResponseCache = Caffeine.newBuilder().maximumSize(initCacheSize()).build();
 
 	@PostConstruct
 	void init() throws Exception {
@@ -67,7 +75,8 @@ public class StreamingService {
 	}
 
 	void asXml2(
-			final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response, final Filter filter)
+			final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response,
+			final Filter filter)
 			throws IOException, ObjectWithIdNotFoundException, StorageException {
 		if (CacheControl.clientNeedsUpdate(dao, request, response)) {
 			final ServletOutputStream out = response.getOutputStream();
@@ -101,21 +110,18 @@ public class StreamingService {
 
 	public void prepareCache(final Dao<? extends Dto> dao, final Filter filter) {
 		try (ByteArrayOutputStream byteCache = new ByteArrayOutputStream()) {
-			try {
-				final OutputFormat json = dao.getOutputFormats().get(
-						EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Json"));
-				dao.getAll(filter).streamTo(json, null, byteCache);
-				bigResponseCache.put(keyFor(dao, filter), byteCache.toByteArray());
-			} catch (StorageException | IOException e) {
-				ExcUtils.suppress(e);
-			}
+			final OutputFormat json = dao.getOutputFormats().get(
+					EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Json"));
+			dao.getAll(filter).streamTo(json, null, byteCache);
+			bigResponseCache.put(keyFor(dao, filter), byteCache.toByteArray());
 		} catch (IOException e) {
 			ExcUtils.suppress(e);
 		}
 	}
 
 	void asJson2(
-			final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response, final Filter filter)
+			final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response,
+			final Filter filter)
 			throws IOException, ObjectWithIdNotFoundException, StorageException {
 		if (CacheControl.clientNeedsUpdate(dao, request, response)) {
 			final ServletOutputStream out = response.getOutputStream();
