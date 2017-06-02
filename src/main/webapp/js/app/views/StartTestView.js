@@ -1,11 +1,11 @@
 /*
- * Copyright ${year} interactive instruments GmbH
+ * Copyright 2010-2017 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -101,6 +101,7 @@ define([
             var _this = this;
             var defaultLabel = "Test run on "+moment().format('HH:mm - DD.MM.YYYY');
             defaultLabel+=" with test suite "+this.executableTestSuitesJson[0].label;
+            // Todo: dependencies are ignored yet
             if(this.executableTestSuitesJson.length==2) {
                 defaultLabel+=" and one more test suite";
             }else if(this.executableTestSuitesJson.length>2) {
@@ -128,6 +129,9 @@ define([
                     $("div.tooltip").remove();
                 }
             );
+
+            // Activate start button
+            $("#start-tests-confirm").removeClass('ui-disabled');
 
 
             // Test Object Type specific
@@ -311,12 +315,16 @@ define([
                 console.log(testObject);
 
                 var testRun = new v2.TestRun(testRunLabel, this.executableTestSuiteIds, this.getArguments(), testObject);
+                $("#start-tests-confirm").addClass('ui-disabled');
                 v2.startTestRun(testRun, function (data) {
                     if(!_.isUndefined(data.EtfItemCollection)) {
                         location.href = '#monitor-test-run?id=' + data.EtfItemCollection.testRuns.TestRun.id;
                     }else{
+                        $("#start-tests-confirm").removeClass('ui-disabled');
                         v2.apiCallError("Could not start test run: ", "Error", data);
                     }
+                }, function(data) {
+                    $("#start-tests-confirm").removeClass('ui-disabled');
                 });
             }
             // on succes: $.mobile.changePage("#start-tests-page", { reverse: true, transition: 'pop'} );
