@@ -58,7 +58,7 @@
             <h3 th:text="#{l.Loaded.components}">Loaded components</h3>
             <ul>
                 <li th:each="i : ${testDriversInfo}" th:title="${i.description}" th:text="${i.label} + ' ' + ${i.version}">Name</li>
-                <li><a target="_blank" th:href="${T(de.interactive_instruments.etf.webapp.helpers.View).baseUrl} + '/swagger-ui.html'">Web API v2-BETA</a></li>
+                <li><a target="_blank" th:href="${T(de.interactive_instruments.etf.webapp.helpers.View).baseUrl} + '/swagger-ui.html'">Web API v2</a></li>
             </ul>
         </div>
     </div>

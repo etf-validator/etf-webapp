@@ -37,6 +37,10 @@ define([
             this.translationTemplateBundleCollection = options.translationTemplateBundleCollection;
 
             // Load dependencies first
+            this.testObjectTypeCollection.deferred.resolve();
+            this.tagCollection.deferred.resolve();
+            this.translationTemplateBundleCollection.deferred.resolve();
+
             var self = this;
             this.deferred = $.when(
                 self.testObjectTypeCollection.deferred,
@@ -45,10 +49,6 @@ define([
             ).then(function() {
                 return self.fetch();
             });
-            // Resolve deferreds
-            this.testObjectTypeCollection.deferred.resolve();
-            this.tagCollection.deferred.resolve();
-            this.translationTemplateBundleCollection.deferred.resolve();
         },
 
         parse: function(response) {
@@ -101,6 +101,9 @@ define([
 
         fetch: function(options) {
             var _this = this;
+            console.log("Fetching Executable Test Suites");
+            console.log(new Error().stack);
+            this.testObjectTypeCollection.deferred.state()
             return Backbone.Collection.prototype.fetch.call(this, {
                 options: options,
                 success: function() {

@@ -53,6 +53,7 @@ define([
 
         fetch: function(options) {
             var self = this;
+            console.log("Fetching Test Object Types");
             return Backbone.Collection.prototype.fetch.call(this, {
                 options: options,
                 success: function() {

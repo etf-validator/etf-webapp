@@ -1,11 +1,11 @@
 /*
- * Copyright ${year} interactive instruments GmbH
+ * Copyright 2010-2017 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -132,6 +132,9 @@ define(['toastr'], function (toastr) {
                     c.push(fct(o));
                 }
             }else{
+                console.error(collection.deferred.state());
+                console.error(collection.length);
+                console.error(collection);
                 referenceError(t);
             }
         });
@@ -147,6 +150,9 @@ define(['toastr'], function (toastr) {
                 return fct(o);
             }
         }else{
+            console.error(collection.deferred.state());
+            console.error(collection.length);
+            console.error(collection);
             referenceError(refProperty);
         }
     };
@@ -261,18 +267,22 @@ define(['toastr'], function (toastr) {
         this.testObject = testObject;
     };
 
-    function startTestRun(testRun, successCallback) {
+    function startTestRun(testRun, successCallback, errorCallback) {
         console.log( JSON.stringify(testRun) );
+        $.mobile.loading( "show" );
         $.ajax({
             url: baseUrl()+"/TestRuns",
             type: 'POST',
             contentType: "application/json",
             data: JSON.stringify(testRun) ,
             error: function (xhr, status, error) {
+                $.mobile.loading( "hide" );
                 apiCallError(
                     "", "Test Run initialization failure", xhr);
+                errorCallback(xhr);
             },
             success: function (data) {
+                $.mobile.loading( "hide" );
                 successCallback(data);
                 toastr.success(
                     "Test Run '"+data.EtfItemCollection.testRuns.TestRun.label+"' submitted",

@@ -1,11 +1,11 @@
 /*
- * Copyright ${year} interactive instruments GmbH
+ * Copyright 2010-2017 interactive instruments GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,29 +43,33 @@ define([
         },
 
         render: function() {
-            console.log("Rendering Test Report view: %o", this.collection.toJSON());
-            this.container.html(
-                this.template({ "reportBaseUrl": this.reportBaseUrl,
-                    "moment": moment, v2: v2,
-                    "collection": this.collection.toJSON() })
-            );
+            var _this = this;
+            this.collection.deferred.done(function() {
+                console.log("Rendering Test Report view: %o", _this.collection.toJSON());
+                _this.container.html(
+                    _this.template({
+                        "reportBaseUrl": _this.reportBaseUrl,
+                        "moment": moment, v2: v2,
+                        "collection": _this.collection.toJSON()
+                    })
+                );
 
-            // Filter by date
-            this.container.listview({
-                autodividers: true,
-                autodividersSelector: function (li) {
-                    var date = $(li).find('.test-report-date');
-                    if ( date.length ) {
-                        return date.text();
-                    }else{
-                        return "";
+                // Filter by date
+                _this.container.listview({
+                    autodividers: true,
+                    autodividersSelector: function (li) {
+                        var date = $(li).find('.test-report-date');
+                        if (date.length) {
+                            return date.text();
+                        } else {
+                            return "";
+                        }
                     }
-                }
-            });
+                });
 
-            this.container.trigger('create');
-            this.container.listview().listview('refresh');
-            return this;
+                _this.container.trigger('create');
+                _this.container.listview().listview('refresh');
+            });
         },
 
         remove: function(model) {

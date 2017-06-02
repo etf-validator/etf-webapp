@@ -53,6 +53,7 @@ define([
 
         fetch: function(options) {
             var _this = this;
+            console.log("Fetching Translation Template Bundles");
             return Backbone.Collection.prototype.fetch.call(this, {
                 options: options,
                 success: function() {
