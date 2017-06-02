@@ -74,7 +74,6 @@ public class TestDriverController implements PreparedDtoResolver<ExecutableTestS
 	private TestDriverManager driverManager;
 	private MetadataFileTypeLoader metadataTypeLoader;
 	private Dao<ExecutableTestSuiteDto> etsDao;
-	private Dao<TestObjectTypeDto> testObjectTypesDao;
 	private final Logger logger = LoggerFactory.getLogger(TestDriverController.class);
 
 	private static final Filter FILTER_GET_ALL = new Filter() {
@@ -166,10 +165,6 @@ public class TestDriverController implements PreparedDtoResolver<ExecutableTestS
 	public PreparedDtoCollection<ExecutableTestSuiteDto> getByIds(final Set<EID> eids, final Filter filter)
 			throws StorageException, ObjectWithIdNotFoundException {
 		return this.etsDao.getByIds(eids, filter);
-	}
-
-	Collection<TestObjectTypeDto> getTestObjectTypes() throws ConfigurationException, StorageException {
-		return testObjectTypesDao.getAll(FILTER_GET_ALL).asCollection();
 	}
 
 	public Collection<ComponentDto> getTestDriverInfo() {

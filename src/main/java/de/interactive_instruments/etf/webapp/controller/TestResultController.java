@@ -280,7 +280,7 @@ public class TestResultController {
 
 	@ApiOperation(value = "Get a Test Run's log by ID", notes = "Retrieves all messages that were logged during a Test Run.", tags = {
 			TEST_RESULTS_TAG_NAME})
-	@RequestMapping(value = {TEST_RUNS_URL + "/{id}/log"}, method = RequestMethod.GET, produces = "text/plain")
+	@RequestMapping(value = {TEST_RUNS_URL + "/{id}/log"}, method = RequestMethod.GET)
 	public void testRunLog(
 			@ApiParam(value = "Test Run ID. "
 					+ EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,

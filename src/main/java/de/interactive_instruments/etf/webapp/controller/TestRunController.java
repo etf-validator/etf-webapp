@@ -181,7 +181,8 @@ public class TestRunController implements TestRunEventListener {
 			label = t.getLabel();
 			testTaskCount = t.getTestTasks().size();
 			startTimestamp = t.getProgress().getStartTimestamp();
-			percentStepsCompleted = t.getProgress().getPercentStepsCompleted();
+			final double p = t.getProgress().getPercentStepsCompleted();
+			percentStepsCompleted = p < 0.001 ? 0.001 : p;
 		}
 	}
 
@@ -487,18 +488,20 @@ public class TestRunController implements TestRunEventListener {
 			testRunDto.setDefaultLang(LocaleContextHolder.getLocale().getLanguage());
 
 			final TestObjectDto tO = testRunDto.getTestObjects().get(0);
+
+			tO.setAuthor(User.getUser(request));
+			testObjectController.initResourcesAndAdd(tO);
+
 			// Check if test object is already in use
-			// TODO check if Test Object is already in use
 			for (TestRun tR : taskPoolRegistry.getTasks()) {
 				if (!tR.getProgress().getState().isCompletedFailedCanceledOrFinalizing() &&
+						tR.getResult() != null && tR.getResult().getTestObjects() != null &&
+						tR.getResult().getTestObjects().get(0) != null &&
 						tO.getId().equals(tR.getResult().getTestObjects().get(0).getId())) {
 					logger.info("Rejecting test start: test object " + tO.getId() + " is in use");
 					throw new LocalizableApiError("l.testObject.lock", false, 409, tO.getLabel());
 				}
 			}
-
-			tO.setAuthor(User.getUser(request));
-			testObjectController.initResourcesAndAdd(tO);
 
 			// this will save the Dto
 			initAndSubmit(testRunDto);
