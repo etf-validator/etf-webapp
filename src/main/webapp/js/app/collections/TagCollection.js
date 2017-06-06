@@ -21,18 +21,14 @@
 define([
     "jquery",
     "backbone",
-    "toastr",
     "etf.webui/v2",
-    "../models/TagModel" ], function($, Backbone, toastr, v2, TagModel ) {
+    "etf.webui/collections/EtfCollection",
+    "../models/TagModel" ], function($, Backbone, v2, EtfCollection, TagModel ) {
 
-    var Collection = Backbone.Collection.extend( {
+    var Collection = EtfCollection.extend( {
 
         url: v2.baseUrl + "/Tags",
-
-        // The Collection constructor
-        initialize: function( models, options ) {
-            this.deferred = this.fetch();
-        },
+        collectionName: "Tags",
 
         parse: function(response) {
             if(_.isUndefined(response.EtfItemCollection.tags)) {
@@ -42,32 +38,6 @@ define([
         },
 
         model: TagModel,
-
-        sync: function(method, model, options) {
-            var deferred = $.Deferred();
-
-            Backbone.sync(method, model, options);
-
-            return deferred;
-        },
-
-        fetch: function(options) {
-            var _this = this;
-            console.log("Fetching Tags");
-            return Backbone.Collection.prototype.fetch.call(this, {
-                options: options,
-                success: function() {
-                    console.log("Successfully fetched Tags");
-                    _this.trigger("added");
-                    return;
-                },
-                error: function(response) {
-                    toastr["error"]("Could not fetch Tags !");
-                    console.log(response);
-                    return;
-                }
-            });
-        }
     });
 
     return Collection;

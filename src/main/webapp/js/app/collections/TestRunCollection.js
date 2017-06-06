@@ -24,26 +24,21 @@ define([
     "moment",
     "toastr",
     "etf.webui/v2",
-    "../models/TestRunModel" ], function($, Backbone, moment, toastr, v2, TestRunModel ) {
+    "etf.webui/collections/EtfCollection",
+    "../models/TestRunModel" ], function($, Backbone, moment, toastr, v2, EtfCollection, TestRunModel ) {
 
-    var Collection = Backbone.Collection.extend( {
+    var Collection = EtfCollection.extend( {
 
         url: v2.baseUrl + "/TestRuns",
+        collectionName: "Test Runs",
 
         // The Collection constructor
         initialize: function( models, options ) {
             this.testObjectCollection = options.testObjectCollection;
             this.etsCollection = options.etsCollection;
 
-            // Load dependencies first
-            var self = this;
-            self.deferred = $.when(
-                self.testObjectCollection.deferred,
-                self.etsCollection.deferred
-            ).then(function() {
-                return self.fetch();
-            });
-            // Both collections don't need to be resolved (promise objects not deferred)
+            this.collectionDependencies = [options.testObjectCollection.deferred, options.etsCollection.deferred];
+            EtfCollection.prototype.initialize.call(this, models, options);
         },
 
         parse: function(response) {
@@ -66,23 +61,6 @@ define([
         },
 
         model: TestRunModel,
-
-        fetch: function(options) {
-            var self = this;
-            return Backbone.Collection.prototype.fetch.call(this, {
-                options: options,
-                success: function() {
-                    console.log("Successfully fetched Test Runs");
-                    self.trigger("added");
-                    return;
-                },
-                error: function(response) {
-                    toastr["error"]("Could not fetch Test Runs !");
-                    console.log(response);
-                    return;
-                }
-            });
-        }
     });
 
     return Collection;

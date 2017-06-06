@@ -21,27 +21,21 @@
 define([
     "jquery",
     "backbone",
-    "toastr",
     "etf.webui/v2",
-    "../models/TestObjectModel" ], function($, Backbone, toastr, v2, TestObjectModel ) {
+    "etf.webui/collections/EtfCollection",
+    "../models/TestObjectModel" ], function($, Backbone, toastr, v2, EtfCollection, TestObjectModel ) {
 
-    var Collection = Backbone.Collection.extend( {
+    var Collection = EtfCollection.extend( {
 
         url: v2.baseUrl + "/TestObjects",
+        collectionName: "Test Objects",
 
         // The Collection constructor
         initialize: function( models, options ) {
             this.testObjectTypeCollection = options.testObjectTypeCollection;
 
-            // Load dependencies first
-            var self = this;
-            self.deferred = $.when(
-                self.testObjectTypeCollection.deferred
-            ).then(function() {
-                return self.fetch();
-            });
-            // Resolve deferreds
-            this.testObjectTypeCollection.deferred.resolve();
+            this.collectionDependencies = [options.testObjectTypeCollection.deferred];
+            EtfCollection.prototype.initialize.call(this, models, options);
         },
 
         parse: function(response) {
@@ -53,22 +47,6 @@ define([
 
         model: TestObjectModel,
 
-        fetch: function(options) {
-            var self = this;
-            return Backbone.Collection.prototype.fetch.call(this, {
-                options: options,
-                success: function() {
-                    console.log("Successfully fetched Test Objects");
-                    self.trigger("added");
-                    return;
-                },
-                error: function(response) {
-                    toastr["error"]("Could not fetch Test Objects !");
-                    console.log(response);
-                    return;
-                }
-            });
-        }
     });
 
     return Collection;

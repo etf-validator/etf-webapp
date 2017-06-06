@@ -22,13 +22,15 @@ define([
     "jquery",
     "backbone",
     "toastr",
+    "etf.webui/collections/EtfCollection",
     "etf.webui/v2",
-    "../models/ExecutableTestSuiteModel" ], function($, Backbone, toastr, v2, ExecutableTestSuiteModel ) {
+    "../models/ExecutableTestSuiteModel" ], function($, Backbone, toastr, EtfCollection, v2, ExecutableTestSuiteModel ) {
 
-    var Collection = Backbone.Collection.extend( {
+    var Collection = EtfCollection.extend( {
 
         url: v2.baseUrl+"/ExecutableTestSuites?fields=label,remoteResource,description,version,author,creationDate,"
         + "lastEditor,lastUpdateDate,tags,translationTemplateBundle,ParameterList,supportedTestObjectTypes,dependencies",
+        collectionName: "Executable Test Suites",
 
         // The Collection constructor
         initialize: function( models, options ) {
@@ -36,19 +38,10 @@ define([
             this.testObjectTypeCollection = options.testObjectTypeCollection;
             this.translationTemplateBundleCollection = options.translationTemplateBundleCollection;
 
-            // Load dependencies first
-            this.testObjectTypeCollection.deferred.resolve();
-            this.tagCollection.deferred.resolve();
-            this.translationTemplateBundleCollection.deferred.resolve();
-
-            var self = this;
-            this.deferred = $.when(
-                self.testObjectTypeCollection.deferred,
-                self.tagCollection.deferred,
-                self.translationTemplateBundleCollection.deferred
-            ).then(function() {
-                return self.fetch();
-            });
+            this.collectionDependencies = [options.tagCollection,
+                options.testObjectTypeCollection.deferred,
+                options.translationTemplateBundleCollection.deferred];
+            EtfCollection.prototype.initialize.call(this, models, options);
         },
 
         parse: function(response) {
@@ -98,26 +91,6 @@ define([
         },
 
         model: ExecutableTestSuiteModel,
-
-        fetch: function(options) {
-            var _this = this;
-            console.log("Fetching Executable Test Suites");
-            console.log(new Error().stack);
-            this.testObjectTypeCollection.deferred.state()
-            return Backbone.Collection.prototype.fetch.call(this, {
-                options: options,
-                success: function() {
-                    console.log("Successfully fetched Executable Test Suites");
-                    _this.trigger("added");
-                    return;
-                },
-                error: function(response) {
-                    toastr["error"]("Could not fetch Executable Test Suites !");
-                    console.log(response);
-                    return;
-                }
-            });
-        }
     });
 
     return Collection;

@@ -21,18 +21,14 @@
 define([
     "jquery",
     "backbone",
-    "toastr",
     "etf.webui/v2",
-    "../models/TranslationTemplateBundleModel" ], function($, Backbone, toastr, v2, TranslationTemplateBundleModel ) {
+    "etf.webui/collections/EtfCollection",
+    "../models/TranslationTemplateBundleModel" ], function($, Backbone, v2, EtfCollection, TranslationTemplateBundleModel ) {
 
-    var Collection = Backbone.Collection.extend( {
+    var Collection = EtfCollection.extend( {
 
         url: v2.baseUrl + "/TranslationTemplateBundles",
-
-        // The Collection constructor
-        initialize: function( models, options ) {
-            this.deferred = this.fetch();
-        },
+        collectionName: "Translation Templates",
 
         parse: function(response) {
             if(_.isUndefined(response.EtfItemCollection.translationTemplateBundles)) {
@@ -43,31 +39,6 @@ define([
 
         model: TranslationTemplateBundleModel,
 
-        sync: function(method, model, options) {
-            var deferred = $.Deferred();
-
-            Backbone.sync(method, model, options);
-
-            return deferred;
-        },
-
-        fetch: function(options) {
-            var _this = this;
-            console.log("Fetching Translation Template Bundles");
-            return Backbone.Collection.prototype.fetch.call(this, {
-                options: options,
-                success: function() {
-                    console.log("Successfully fetched Translation Template Bundles");
-                    _this.trigger("added");
-                    return;
-                },
-                error: function(response) {
-                    toastr["error"]("Could not fetch Translation Template Bundles!");
-                    console.log(response);
-                    return;
-                }
-            });
-        }
     });
 
     return Collection;

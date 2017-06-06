@@ -50,14 +50,23 @@ public class CacheControl {
 	 * Checks if the client send a request with the "If-Modified-Since" header
 	 * and compares it with the last modification date of the corresponding dao.
 	 *
-	 * Will set the last-modified and cache-control.
+	 * Will set the last-modified and cache-control header.
+	 *
+	 * If the Client sets the Cache-Control header to no-cache or max-age 0,
+	 * true is returned.
 	 *
 	 * @return true if client needs an update, false otherwise
 	 */
 	public static boolean clientNeedsUpdate(final Dao<? extends Dto> dao, final HttpServletRequest request,
 			final HttpServletResponse response, final long maxAge) {
+
 		if (SUtils.compareNullSafeIgnoreCase(
-				request.getParameter("nocache"), "true") == 0) {
+				request.getParameter("nocache"), "true") == 0 ||
+			SUtils.compareNullSafeIgnoreCase(
+				request.getHeader("Cache-Control"), "no-cache") == 0 ||
+			SUtils.compareNullSafeIgnoreCase(
+				request.getHeader("Cache-Control"), "max-age=0") == 0
+			) {
 			return true;
 		}
 		final Calendar lastModified = Calendar.getInstance(GMT);

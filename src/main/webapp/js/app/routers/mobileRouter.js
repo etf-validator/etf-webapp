@@ -322,10 +322,8 @@ define([
             }else{
                 var _this = this;
                 console.log("Waiting for collection %o", waitForCollection);
-                console.log("Waiting for collection %o", waitForCollection.deferred.state());
                 $.mobile.loading('show');
                 waitForCollection.deferred.done(function() {
-                    console.log("Waiting for collection %o", waitForCollection.deferred.state());
                     _this._changePage(page, options);
                     $.mobile.loading( "hide" );
                 });
@@ -344,9 +342,7 @@ define([
             }else{
                 var _this = this;
                 console.log("Waiting for collection %o", waitForCollection);
-                console.log("Waiting for collection %o", waitForCollection.deferred.state());
                 waitForCollection.deferred.done(function() {
-                    console.log("Waiting for collection %o", waitForCollection.deferred.state());
                     _this._showDialog(page, options);
                 });
             }
