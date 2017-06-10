@@ -21,10 +21,9 @@
 define([
     "jquery",
     "backbone",
-    "toastr",
     "etf.webui/collections/EtfCollection",
     "etf.webui/v2",
-    "../models/ExecutableTestSuiteModel" ], function($, Backbone, toastr, EtfCollection, v2, ExecutableTestSuiteModel ) {
+    "../models/ExecutableTestSuiteModel" ], function($, Backbone, EtfCollection, v2, ExecutableTestSuiteModel ) {
 
     var Collection = EtfCollection.extend( {
 

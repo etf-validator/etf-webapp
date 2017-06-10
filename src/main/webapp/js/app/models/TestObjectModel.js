@@ -28,7 +28,7 @@ define([
     var Model = Backbone.Model.extend( {
 
         initialize: function( attr, options ) {
-            this.testObjectTypeCollection = options.testObjectTypeCollection;
+            this.testObjectTypeCollection = options.collection.testObjectTypeCollection;
         },
 
         toJSON: function() {
