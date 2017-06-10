@@ -93,11 +93,3 @@ td:first-child {
     padding-top: 15px;
     padding-bottom: 30px;
 }
-
-.ReportDetail {
-    display: none;
-}
-
-.DoNotShowInSimpleView {
-    display: none;
-}
