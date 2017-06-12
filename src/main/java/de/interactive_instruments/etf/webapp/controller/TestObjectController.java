@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
@@ -212,20 +214,34 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 
 	private TestObjectDto createWithUrlResources(final TestObjectDto testObject) throws LocalizableApiError {
 
-		final URI serviceEndpoint = testObject.getResourceByName("serviceEndpoint");
 		final String hash;
 		try {
+			final URI serviceEndpoint = testObject.getResourceByName("serviceEndpoint");
+
 			if (etfConfig.getProperty("etf.testobject.allow.privatenet.access").equals("false")) {
 				if (UriUtils.isPrivateNet(serviceEndpoint)) {
 					throw new LocalizableApiError("l.rejected.private.subnet.access", false, 403);
 				}
 			}
+
 			hash = UriUtils.hashFromContent(serviceEndpoint,
 					Credentials.fromProperties(testObject.properties()));
+		} catch (final UriUtils.ConnectionException e) {
+			if((e.getResponseCode()==403 || e.getResponseCode()==401) && e.getUrl()!=null) {
+				throw new LocalizableApiError("l.url.secured", false, 400, e, e.getUrl().getHost());
+			}
+			if(e.getResponseCode()>=400 && e.getResponseCode()<500) {
+				throw new LocalizableApiError("l.url.client.error", e);
+			}else if(e.getResponseCode()!=-1) {
+				throw new LocalizableApiError("l.url.server.error", e);
+			}else if(e.getCause() instanceof UnknownHostException && e.getUrl()!=null) {
+				throw new LocalizableApiError("l.unknown.host", false, 400, e, e.getUrl().getHost());
+			}else{
+				throw new LocalizableApiError("l.invalid.url", e);
+			}
 		} catch (IllegalArgumentException | IOException e) {
 			throw new LocalizableApiError("l.invalid.url", e);
 		}
-
 		testObject.setItemHash(hash.getBytes());
 
 		return testObject;
