@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,6 +23,7 @@
 <li><a href="#_compiling_the_source_code">Compiling the source code</a></li>
 <li><a href="#_running_the_web_application">Running the web application</a></li>
 <li><a href="#_building_other_etf_components">Building other ETF components</a></li>
+<li><a href="#_faq">FAQ</a></li>
 </ul>
 </li>
 </ul>
@@ -282,10 +282,43 @@ gradle <strong>install</strong> command and be used by the etf-webapp component 
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_faq">FAQ</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Q: I get a <code>repository not found</code> error.</p>
+</div>
+<div class="paragraph">
+<p>A: The error occurs for example if the source code has been downloaded and not
+cloned with GIT -or the directory has been copied without the hidden .git
+directory. The build helper script (etf-bda) collects information from the
+locally cloned GIT repository and includes the property <code>Implementation-Revision</code>
+in the manifest file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Manifest-Version: 1.0
+Build-Date: 170601013212
+Implementation-Version: 2.0.0
+Build-Gradle: 3.5
+Build-ii-bda: 1.0.24.1
+Implementation-Revision: abf509f
+Source-Compatibility: 1.8
+Implementation-Build: 0
+Build-Host: JAX
+Build-User: herrmann
+Build-JDK: 1.8.0_102</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can fix the problem by cloning the repository from GitHub using GIT.</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-05-03 02:24:40 CEST
+Last updated 2017-06-13 14:56:34 CEST
 </div>
 </div>
 </body>

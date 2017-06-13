@@ -137,3 +137,26 @@ NOTE: because the ETF version 2 is not finally released, the next branches must 
 
 Changed components can be installed into the local maven repository with the
 gradle *install* command and be used by the etf-webapp component afterwards.
+
+== FAQ
+Q: I get a `repository not found` error.
+
+A: The error occurs for example if the source code has been downloaded and not
+cloned with GIT -or the directory has been copied without the hidden .git
+directory. The build helper script (etf-bda) collects information from the
+locally cloned GIT repository and includes the property `Implementation-Revision`
+in the manifest file:
+----
+Manifest-Version: 1.0
+Build-Date: 170601013212
+Implementation-Version: 2.0.0
+Build-Gradle: 3.5
+Build-ii-bda: 1.0.24.1
+Implementation-Revision: abf509f
+Source-Compatibility: 1.8
+Implementation-Build: 0
+Build-Host: JAX
+Build-User: herrmann
+Build-JDK: 1.8.0_102
+----
+You can fix the problem by cloning the repository from GitHub using GIT.
