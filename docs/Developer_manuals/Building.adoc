@@ -131,7 +131,8 @@ The web application depends on several other ETF components:
 - link:https://github.com/interactive-instruments/etf-sui-ae[etf-sui-ae] ETF test driver adapter and extensions for SoapUI
 - link:https://github.com/interactive-instruments/etf-sui-ae[etf-bsxtd] ETF BaseX test driver
 
-The source code of the components can be cloned with git.
+The source code of the components must be cloned using GIT
+(otherwise a 'repository not found' error occurs).
 
 NOTE: because the ETF version 2 is not finally released, the next branches must be used.
 
