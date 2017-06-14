@@ -1,0 +1,18 @@
+=== Development environment
+
+A SoapUI Executable Test Suite is developed and tested using the
+SoapUI GUI application.
+
+==== Installation
+
+For guidance on downloading and installing SoapUI and the ETS extensions see
+link:https://github.com/interactive-instruments/etf-sui-ae#develop-soapui-based-executable-test-suites[these installation notes].
+
+==== Executing tests
+
+To execute a test suite against a web service set the serviceEndpoint property
+and the username and password (authUser and authPwd properties) if the service
+requires authentication.
+
+Double click on the Test project, click on the 'Test Suites' tab and start the
+test run with a click on the green arrow.

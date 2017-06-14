@@ -27,11 +27,9 @@ testing framework for geo network services and data#
 
 = ETF manuals
 
-WARNING: WORK IN PROGRESS
-
 == User manuals
 * link:User_manuals/Simplified_workflows.html[User manual for central deployments]
-* #User manual for organization internal deployments (todo)#
+* #User manual for organization internal deployments (in progress)#
 
 == Administrator manual
 * link:https://github.com/interactive-instruments/etf-webapp-docker#setup-etf-with-docker-compose[Docker image]
@@ -42,5 +40,5 @@ WARNING: WORK IN PROGRESS
 
 == Developer manuals
 * link:Developer_manuals/WEB-API.html[Workflow automation with the Web API]
-* #Developing Executable Test Suites (todo)#
+* link:Developer_manuals/Developing_Executable_Test_Suites.html[Developing Executable Test Suites]
 * link:Developer_manuals/Building.html[Building ETF]

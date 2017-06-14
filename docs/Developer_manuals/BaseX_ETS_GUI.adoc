@@ -1,0 +1,75 @@
+=== Development environment
+
+An BaseX Executable Test Suite is typically developed and tested using the
+BaseX GUI application.
+
+==== Installation
+
+For guidance on downloading and installing BaseX see the
+http://basex.org/products/download/all-downloads/[BaseX website]. It is
+recommended to use the same version that is also used by ETF, currently
+version 8.6.
+
+Two additional modules should be installed in the local BaseX
+installation as they are frequently used in Executable Test Suites:
+
+* the standard functx module
+* the https://github.com/interactive-instruments/etf-gmlgeox[GmlGeoX
+module] for spatial extensions
+
+To add the functx module, select "Options", then "Packages...", then
+"Install from URI...", enter the URI
+"http://files.basex.org/modules/expath/functx-1.0.xar" and press "OK".
+
+To add the GmlGeoX module,
+https://services.interactive-instruments.de//etfdev-af/etf-public-releases/de/interactive_instruments/etf/bsxm/etf-gmlgeox/[download
+the latest version of the JAR file] using `etf-public-releases` as user
+and password. Select again "Options", then "Packages...", then
+"Install..." and navigate to the JAR file. Press "Choose".
+
+==== Executing tests
+
+To execute a test suite against a set of XML documents follow these
+steps:
+
+* Load the XML documents into a new database
+* Select "Database" > "New..." in the menu.
+* Select the XML document or the directory with the XML document or a
+ZIP file with the XML documents.
+* Use a database name that ends in "-0".
+* If necessary, add additional file patterns beside "*.xml".
+* In the tab "Parsing" check "Use internal XML parser".
+* Leave all other options unchanged and press "OK".
+* Open the XQuery document in the editor.
+* Search for the declaration of the following variables and set their
+default values:
+* Set `$projDir` to the local file path where the project files are
+located.
+* Set `$dbBaseName` to the name of the database with the "-0" suffix.
+* Set `$etsFile`to the file path of the `etf:ExecutableTestSuite`
+document.
++
+Example:
++
+----------------------------------------------------------------------------------------------------
+declare variable $projDir external := "/home/user/Documents/ETF/ets-repository/generic";
+declare variable $dbBaseName external := "errors";
+declare variable $etsFile external := $projDir || file:dir-separator() || "ets-template-bsxets.xml";
+----------------------------------------------------------------------------------------------------
+
+Executing the XQuery should now execute the test suite.
+
+==== Best practices
+
+During the development of a test suite, it may be handy to compile a
+special XQuery that
+
+* loads a test file using the doc() function
+* includes the functions that will be called from expressions in
+assertions
+* sets the relevant variables used in expressions in assertions
+* adds the expression of a single assertion that should be tested
+
+This approach may speed up testing during the development. For example,
+loading a test document using the doc() function allows to make
+immediate changes to a test file without reloading a database.

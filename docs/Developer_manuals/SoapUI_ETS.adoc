@@ -1,0 +1,160 @@
+== SoapUI based Test Suites
+
+=== Required knowledge
+You should be familiar with:
+
+* link:https://www.soapui.org/getting-started/your-first-soapui-project.html[SoapUI]
+* link:http://groovy-lang.org/[Groovy]
+
+
+include::SoapUI_ETS_GUI.adoc[]
+
+=== Introduction
+link:http://www.soapui.org[SoapUI] is an open-source web service testing
+application originally developed for testing service-oriented architectures
+(SOA) and REST services. In ETF, it is extended via plugins and used to test
+geo network services.
+
+Start the GUI with the batch file and click on 'File' and then on
+'Create Empty project'. The name can be changed by right-clicking on the test
+project and selecting 'Rename'.
+
+SoapUI and ETF are using a slightly different terminology for test items, as the
+following table shows.
+
+[width="100%",options="header"]
+|===
+|  *SoapUI* | *ETF*
+| Test Project | Executable Test Suite
+| Test Suite | Test Module
+| Test Case | Test Case
+| Test Step | Test Step
+| Test Assertion | Test Assertion
+|===
+
+Each project must possess properties which are used to provide metadata for ETF
+and for passing user data into SoapUI, for example the service URL to test.
+
+image:https://user-images.githubusercontent.com/13570741/27132670-fb733832-510f-11e7-941d-f328250e7fd0.png[]
+
+Create a serviceEndpoint property and set a web service, for example
+an Atom service feed.
+
+Properties on the Test project level can be referenced within SoapUI with the
+expression `${#Project#PROPERTY}`.
+
+To test whether a atom service feed is available, create new
+SoapUI Test Suite, a Test Case and a HTTP Test Step. The Request URL of each
+HTTP Test Step must be set to `${#Project#serviceEndpoint}`.
+
+image:https://user-images.githubusercontent.com/13570741/27137321-eaecce0c-511d-11e7-8f0b-93361d0ba26b.png[]
+
+Add a new Assertion with the plus sign, select 'Script' and 'Script Assertion'
+and add the following content to check if the 'atom:feed' element exists in
+the response:
+
+[source,Groovy]
+----
+import de.interactive_instruments.etf.suim.*
+Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)
+a.exists("/atom:feed", "TR.missingFeedRootElement")
+----
+
+When you click on the green arrow to run the Assertion you will most likely get
+this error:
+
+image:https://user-images.githubusercontent.com/13570741/27138183-306dad32-5120-11e7-81de-71c8408922d7.png[]
+
+The error is preprocessed for ETF and will, when SoapUI is run from within the
+ETF, reference the 'TR.noDataReturned' translation and output a
+error text like
+'Expected a response but the service did not return any data. Verify that the used endpoint URL is correct and accessible from outside your organization. If the service requires authentication, then check that the correct credentials are used by the validator or verify that upstream firewalls/proxy servers do not prevent access.'
+from the loaded link:https://github.com/inspire-eu-validation/ets-repository/blob/master/include-metadata/TranslationTemplateBundle-EIDfadd4929-fa60-4781-b658-703bbfe3f4eb.xml#L13[Translation Template collection].
+
+This error occurs when no data has been received. Close the assertion and
+click on the green arrow in the HTTP test step to execute the HTTP request and
+execute the assertion against the response.
+
+Depending on the received data, you may now get a passed assertion or get a error
+with the 'TR.missingFeedRootElement' code.
+
+=== Parameters and metadata properties
+
+The standard properties are described in the following table.
+
+Description of standard properties
+[width="100%",options="header"]
+|===
+|  *Property name* | *Description*
+| serviceEndpoint | URL of the service to test
+| authUser | optional username for authentication
+| authPwd | optional password for authentication
+| authMethod | only the value 'basic' for HTTP basic authentication is supported yet
+| etf.ignore.properties | If properties are added, that are not known to ETF,
+they are expected to be parameters for the Test Suite and appear on Test start up.
+This can be avoided by using this property, which can contain a list of property names that should not be interpreted as parameters.
+| etf.tag.ids | EID reference to one or multiple Tags, separated with an comma
+| etf.translation.template.collection.id | EID reference to an Translation Template collection
+| etf.supported.test.object.type.ids | EID reference to a supported Test Object Type
+| etf.dependency.ids | optional EID reference to one ore multiple Executable Test
+Suites this Test Suite depends on
+| etf.author | Author of the Test Suite
+| etf.last.editor | Last editor
+| etf.creation.date | Date when the Test Suite was created as ISO 8601 string
+| etf.last.update.date | Date when the Test Suite was updated as ISO 8601 string
+| etf.version | Test Suite version
+|===
+
+=== Assertion library
+
+The SoapUI extension library provides various functions for evaluating an XPath
+expression against the received response. The functions are called on an
+link:http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html[Assert]
+object:
+
+[source,Groovy]
+----
+import de.interactive_instruments.etf.suim.*
+Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)
+----
+
+For further information see the
+link:http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html[Assert API documentation]
+
+=== Test Object Types
+
+SoapUI Executable Test Suites support 3 Test Object Types which are predefined by
+the test driver:
+
+* Web Service
+* Web Feature Service 2.0
+* Web Feed
+
+The Test Object Types are used to check whether two or more test suites can
+be run together in one Test Run.
+
+The Test Object Types are defined as follows:
+[source,XML]
+----
+<testObjectTypes xmlns:etf="http://www.interactive-instruments.de/etf/2.0">
+    <etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
+        id="EID9b6ef734-981e-4d60-aa81-d6730a1c6389">
+        <label>Web Feature Service 2.0</label>
+        <description>A Web Service implementing ISO 19142 Web Feature Service and ISO 19143 Filter
+            Encoding</description>
+        <parent xsi:type="loc" ref="EID88311f83-818c-46ed-8a9a-cec4f3707365"/>
+    </etf:TestObjectType>
+    <etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
+        id="EID49d881ae-b115-4b91-aabe-31d5791bce52">
+        <label>Web Feed</label>
+        <description>A Web Feed implementing the Atom Syndication Format, describing update
+            information about published data.</description>
+    </etf:TestObjectType>
+    <etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
+        id="EID88311f83-818c-46ed-8a9a-cec4f3707365">
+        <label>Web Service</label>
+        <description>A web Service with a HTTP interface that is not described in more
+            detail.</description>
+    </etf:TestObjectType>
+</testObjectTypes>
+----

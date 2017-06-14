@@ -1,0 +1,10 @@
+== Introduction
+
+The ETF validator provides a framework for executing test suites in various test
+engines. Currently three test engines are supported: SoapUI,
+BaseX and the TEAM Engine. SoapUI and the TEAM Engine are used for web service
+based tests, BaseX is used for testing huge sets of XML documents.
+This document provides a guide on how test suites for the test engines SoapUI
+and BaseX can be developed. Please see
+link:http://opengeospatial.github.io/teamengine/testng-essentials.html[this manual]
+for developing test suites for the Team Engine.

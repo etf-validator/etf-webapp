@@ -13,7 +13,7 @@ short time and list the Test Suites in the *Start Tests* view.
 
 === Official Executable Test Suite repositories
 
-NOTE: The Executable Test Suite in the listed repositories only work with ETF version 2
+NOTE: The Executable Test Suites in the listed repositories only work with ETF version 2
 
 List of official supported Executable Test Suite repositories:
 

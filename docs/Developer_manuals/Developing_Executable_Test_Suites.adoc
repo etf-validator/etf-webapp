@@ -1,0 +1,78 @@
+:doctype: book
+
+:stylesdir: ../stylesheets/
+:stylesheet: etf.css
+:linkcss:
+
+:toc: macro
+:toc-title: Table of contents
+:toclevels: 4
+:toc-position: left
+:appendix-caption: Annex
+
+:icons: font
+
+:source-highlighter: pygments
+:pygments-style: autumn
+:pygments-linenums-mode: inline
+
+[[ii_logo]]
+image::http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png["Interactive instruments logo",150,align="center",link=http://www.interactive-instruments.de/en]
+
+[frame="none",grid="none",cols="^25,<.^75"]
+|===
+| image:../images/ETF_logo.png["ETF Logo",125,link=http://www.etf-validator.net] | [etf_headline]#ETF +
+testing framework for geo network services and data#
+|===
+
+= Developing Executable Test Suites
+[frame="topbot",grid="none"]
+|===
+| *Status* | in review
+| *Date* | 2017-06-12
+| *Description* | This manual is intended for test developers for developing the Executable Test Suites for the validator. Basic knowledge about the validator, XML, Groovy and SoapUI for SoapUI based tests or XQUery for BaseX based tests are required.
+| *Licence* | https://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution (cc-by) 4.0]
+| *Identifier* | https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Developer_manuals/Building.adoc
+| *Language* | EN
+|===
+
+WARNING: WORK IN PROGRESS
+
+== Changelog
+[width="100%",options="header"]
+|===
+|  *Date* | *Editor* | *Comments*
+| 2016-09-08 | Clemens Portele | BaseX documentation created
+| 2017-06-09 | Jon Herrmann | BaseX documentation updated and merged
+| 2017-06-13 | Jon Herrmann | SoapUI documentation
+|===
+
+
+<<<
+
+toc::[]
+
+<<<
+
+:leveloffset: +1
+
+:numbered:
+include::Introduction.adoc[]
+
+== Test suite overlapping metadata types
+
+The types presented in this section must be stored in an `include-metadata`
+directory. The referencing of the types is explained in the sections of the
+respective Test Suites.
+
+include::Translation_Template.adoc[]
+
+include::Tag.adoc[]
+
+include::BaseX_ETS.adoc[]
+
+include::SoapUI_ETS.adoc[]
+
+:numbered!:
+
+:leveloffset: -1
