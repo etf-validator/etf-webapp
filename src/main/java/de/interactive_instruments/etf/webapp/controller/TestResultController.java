@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
 
-import de.interactive_instruments.etf.webapp.dto.AttachmentCollection;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +60,7 @@ import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.model.OutputFormat;
 import de.interactive_instruments.etf.testdriver.TestRun;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
+import de.interactive_instruments.etf.webapp.dto.AttachmentCollection;
 import de.interactive_instruments.etf.webapp.helpers.CacheControl;
 import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
 import de.interactive_instruments.exceptions.InitializationException;

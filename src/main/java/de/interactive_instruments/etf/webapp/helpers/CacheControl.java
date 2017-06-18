@@ -62,11 +62,11 @@ public class CacheControl {
 
 		if (SUtils.compareNullSafeIgnoreCase(
 				request.getParameter("nocache"), "true") == 0 ||
-			SUtils.compareNullSafeIgnoreCase(
-				request.getHeader("Cache-Control"), "no-cache") == 0 ||
-			SUtils.compareNullSafeIgnoreCase(
-				request.getHeader("Cache-Control"), "max-age=0") == 0
-			) {
+				SUtils.compareNullSafeIgnoreCase(
+						request.getHeader("Cache-Control"), "no-cache") == 0
+				||
+				SUtils.compareNullSafeIgnoreCase(
+						request.getHeader("Cache-Control"), "max-age=0") == 0) {
 			return true;
 		}
 		final Calendar lastModified = Calendar.getInstance(GMT);

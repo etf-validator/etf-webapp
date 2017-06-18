@@ -101,7 +101,6 @@ public class TestDriverController implements PreparedDtoResolver<ExecutableTestS
 
 		etsDao = dataStorageService.getDataStorage().getDao(ExecutableTestSuiteDto.class);
 
-
 		// Deactivate all ETS first and ensure that drivers only reactivate existing ETS
 		try {
 			// keyset() does not invoke full Dto resolution, so invalid Dtos are ingored.

@@ -53,12 +53,14 @@ import de.interactive_instruments.etf.dal.dto.run.TestRunDto;
 import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.testdriver.*;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
+import de.interactive_instruments.etf.webapp.dto.ApiError;
 import de.interactive_instruments.etf.webapp.dto.StartTestRunRequest;
 import de.interactive_instruments.etf.webapp.helpers.User;
 import de.interactive_instruments.exceptions.ExcUtils;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
+import de.interactive_instruments.exceptions.config.InvalidPropertyException;
 import io.swagger.annotations.*;
 
 /**
@@ -288,8 +290,7 @@ public class TestRunController implements TestRunEventListener {
 					+ "so that the service can skip the known messages and return only new ones. "
 					+ "Example: the client received 3 log messages and should therefore invoke this interface with pos=3. "
 					+ "In the meantime the service logged a total of 13 messages. As the client knows the first three "
-					+ "messages the service will skip the first 3 messages and return the 10 new messages.", example = "13",
-					required = false, defaultValue = "0") @RequestParam(value = "pos", required = false) String strPos,
+					+ "messages the service will skip the first 3 messages and return the 10 new messages.", example = "13", required = false, defaultValue = "0") @RequestParam(value = "pos", required = false) String strPos,
 			final HttpServletResponse response) throws StorageException {
 
 		long position = 0;
@@ -377,7 +378,7 @@ public class TestRunController implements TestRunEventListener {
 			@ApiResponse(code = 204, message = "Test Run deleted", responseHeaders = {
 					@ResponseHeader(name = "action", description = "Set to 'canceled' if the Test Run was canceled or "
 							+ "'deleted' if a persisted Test Run was removed")}),
-			@ApiResponse(code = 404, message = "Test Run not found", response = RestExceptionHandler.ApiError.class)
+			@ApiResponse(code = 404, message = "Test Run not found", response = ApiError.class)
 	})
 	@RequestMapping(value = TEST_RUNS_URL + "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity delete(
@@ -466,15 +467,15 @@ public class TestRunController implements TestRunEventListener {
 			+ "\n\n", tags = {TEST_RUNS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 201, message = "Test Run created"),
-			@ApiResponse(code = 400, message = "Invalid request", response = RestExceptionHandler.ApiError.class),
-			@ApiResponse(code = 404, message = "Test Object or Executable Test Suite with ID not found", response = RestExceptionHandler.ApiError.class),
-			@ApiResponse(code = 409, message = "Test Object already in use", response = RestExceptionHandler.ApiError.class),
-			@ApiResponse(code = 500, message = "Internal error", response = RestExceptionHandler.ApiError.class),
+			@ApiResponse(code = 400, message = "Invalid request", response = ApiError.class),
+			@ApiResponse(code = 404, message = "Test Object or Executable Test Suite with ID not found", response = ApiError.class),
+			@ApiResponse(code = 409, message = "Test Object already in use", response = ApiError.class),
+			@ApiResponse(code = 500, message = "Internal error", response = ApiError.class),
 	})
 	@RequestMapping(value = TEST_RUNS_URL, method = RequestMethod.POST)
 	public void start(@RequestBody @Valid StartTestRunRequest testRunRequest, BindingResult result, HttpServletRequest request,
 			HttpServletResponse response)
-			throws LocalizableApiError {
+			throws LocalizableApiError, InvalidPropertyException {
 
 		if (result.hasErrors()) {
 			throw new LocalizableApiError(result.getFieldError());

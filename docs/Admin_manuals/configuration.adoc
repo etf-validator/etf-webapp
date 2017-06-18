@@ -83,6 +83,12 @@ etf.webapp.base.url = http://localhost:8080/etf-webapp
 # Default: false
 # etf.testobject.allow.privatenet.access = false
 
+# Max file upload size for test data in bytes.
+# By default the max upload size is estimated based on presumable free memory
+# during the start of the application.
+# Default: auto
+# etf.max.upload.size = auto
+
 # Recreate internal BaseX configuration path (.basex) on startup. "true" is
 # recommended.
 # Default: true

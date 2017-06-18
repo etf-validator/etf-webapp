@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
 
-import de.interactive_instruments.etf.model.EID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +40,7 @@ import de.interactive_instruments.etf.dal.dao.Dao;
 import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
 import de.interactive_instruments.etf.dal.dto.translation.TranslationTemplateBundleDto;
 import de.interactive_instruments.etf.dal.dto.translation.TranslationTemplateDto;
+import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.model.OutputFormat;
 import de.interactive_instruments.etf.model.ParameterSet;
 import de.interactive_instruments.etf.model.Parameterizable;
@@ -154,29 +154,30 @@ public class EtsController {
 	@ApiOperation(value = "Check if Executable Test Suite exists", tags = {SERVICE_CAP_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 204, message = "Executable Test Suite exists"),
-			@ApiResponse(code = 301, message = "Executable Test Suite exists but has been replaced by a newer version"),
+			@ApiResponse(code = 308, message = "Executable Test Suite exists but has been replaced by a newer version. "
+					+ "The URL to the newer version is provided in the 'Location'-Header field and identical with "
+					+ "the 'replacedBy' model property."),
 			@ApiResponse(code = 423, message = "Executable Test Suite exists but is disabled and can not be executed"),
 			@ApiResponse(code = 404, message = "Executable Test Suite does not exist")
 	})
 	@RequestMapping(value = {ETS_URL + "/{id}"}, method = RequestMethod.HEAD)
 	public ResponseEntity<String> exists(
 			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE) @PathVariable String id)
-			throws IOException, StorageException, ObjectWithIdNotFoundException {
+			throws IOException, ObjectWithIdNotFoundException {
 		final EID eid = EidConverter.toEid(id);
-		if(etsDao.exists(eid)) {
-			if(etsDao.isDisabled(eid)) {
+		if (etsDao.exists(eid)) {
+			if (etsDao.isDisabled(eid)) {
 				return new ResponseEntity(HttpStatus.LOCKED);
-			}else{
+			} else {
 				return new ResponseEntity(HttpStatus.NO_CONTENT);
 			}
-		}else{
+		} else {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@ApiOperation(value = "Get the parameter of an Executable Test Suite ",
-			notes = "Get the parameter of an Executable Test Suite as JSON",
-			tags = {SERVICE_CAP_TAG_NAME}, response = Parameterizable.Parameter.class, responseContainer = "List")
+	@ApiOperation(value = "Get the parameter of an Executable Test Suite ", notes = "Get the parameter of an Executable Test Suite as JSON", tags = {
+			SERVICE_CAP_TAG_NAME}, response = Parameterizable.Parameter.class, responseContainer = "List")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Arguments"),
 			@ApiResponse(code = 404, message = "Executable Test Suite not found")
@@ -216,9 +217,8 @@ public class EtsController {
 		}
 	}
 
-	@ApiOperation(value = "Get the dependencies of an Executable Test Suite",
-			notes = "Get the dependencies of an Executable Test Suite as JSON",
-			tags = {SERVICE_CAP_TAG_NAME}, response = DependenciesJsonView.class, responseContainer = "List")
+	@ApiOperation(value = "Get the dependencies of an Executable Test Suite", notes = "Get the dependencies of an Executable Test Suite as JSON", tags = {
+			SERVICE_CAP_TAG_NAME}, response = DependenciesJsonView.class, responseContainer = "List")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Dependencies"),
 			@ApiResponse(code = 404, message = "Executable Test Suite not found")

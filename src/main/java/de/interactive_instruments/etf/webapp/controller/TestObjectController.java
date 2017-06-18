@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
@@ -67,6 +66,7 @@ import de.interactive_instruments.etf.model.EidFactory;
 import de.interactive_instruments.etf.model.OutputFormat;
 import de.interactive_instruments.etf.webapp.WebAppConstants;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
+import de.interactive_instruments.etf.webapp.dto.ApiError;
 import de.interactive_instruments.etf.webapp.dto.SimpleTestObject;
 import de.interactive_instruments.etf.webapp.dto.TObjectValidator;
 import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
@@ -75,6 +75,7 @@ import de.interactive_instruments.etf.webapp.helpers.View;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
+import de.interactive_instruments.exceptions.config.InvalidPropertyException;
 import de.interactive_instruments.exceptions.config.MissingPropertyException;
 import de.interactive_instruments.io.*;
 import de.interactive_instruments.properties.PropertyHolder;
@@ -227,16 +228,16 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			hash = UriUtils.hashFromContent(serviceEndpoint,
 					Credentials.fromProperties(testObject.properties()));
 		} catch (final UriUtils.ConnectionException e) {
-			if((e.getResponseCode()==403 || e.getResponseCode()==401) && e.getUrl()!=null) {
+			if ((e.getResponseCode() == 403 || e.getResponseCode() == 401) && e.getUrl() != null) {
 				throw new LocalizableApiError("l.url.secured", false, 400, e, e.getUrl().getHost());
 			}
-			if(e.getResponseCode()>=400 && e.getResponseCode()<500) {
+			if (e.getResponseCode() >= 400 && e.getResponseCode() < 500) {
 				throw new LocalizableApiError("l.url.client.error", e);
-			}else if(e.getResponseCode()!=-1) {
+			} else if (e.getResponseCode() != -1) {
 				throw new LocalizableApiError("l.url.server.error", e);
-			}else if(e.getCause() instanceof UnknownHostException && e.getUrl()!=null) {
+			} else if (e.getCause() instanceof UnknownHostException && e.getUrl() != null) {
 				throw new LocalizableApiError("l.unknown.host", false, 400, e, e.getUrl().getHost());
-			}else{
+			} else {
 				throw new LocalizableApiError("l.invalid.url", e);
 			}
 		} catch (IllegalArgumentException | IOException e) {
@@ -248,7 +249,21 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	}
 
 	private TestObjectDto createWithFileResources(final TestObjectDto testObject,
-			final Collection<List<MultipartFile>> uploadFiles) throws IOException, LocalizableApiError {
+			final Collection<List<MultipartFile>> uploadFiles)
+			throws IOException, LocalizableApiError, InvalidPropertyException {
+
+		if (uploadFiles != null && !uploadFiles.isEmpty()) {
+			long size = 0;
+			for (final List<MultipartFile> uploadFileL : uploadFiles) {
+				for (final MultipartFile multipartFile : uploadFileL) {
+					size += multipartFile.getSize();
+				}
+			}
+			if (size > etfConfig.getPropertyAsLong(EtfConfigController.ETF_MAX_UPLOAD_SIZE)) {
+				throw new LocalizableApiError("l.max.upload.size.exceeded", false, 400);
+			}
+		}
+
 		// Regex
 		final String regex = testObject.properties().getProperty("regex");
 		final MultiFileFilter combinedFileFilter;
@@ -325,7 +340,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 
 	// Main entry point for Test Run contoller
 	public void initResourcesAndAdd(final TestObjectDto testObject)
-			throws StorageException, IOException, ObjectWithIdNotFoundException, LocalizableApiError {
+			throws StorageException, IOException, ObjectWithIdNotFoundException, LocalizableApiError, InvalidPropertyException {
 
 		// If the ID is null, the Test Object references external data
 		if (testObject.getId() == null) {
@@ -522,8 +537,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		}
 	}
 
-	@ApiOperation(value = "Upload a file for the Test Object using a MULTIPART upload request",
-			notes = "On success the service will internally create a TEMPORARY new Test Object and "
+	@ApiOperation(value = "Upload a file for the Test Object using a MULTIPART upload request", notes = "On success the service will internally create a TEMPORARY new Test Object and "
 			+ "return it's ID which afterwards can be used to start a new Test Run. "
 			+ "If the Test Object ID is not used within 5 minutes, the Test Object and all uploaded data will be deleted automatically. "
 			+ "PLEASE NOTE: This interface will create a TEMPORARY Test Object that will not be persisted as long as it is not used in a Test Run. "
@@ -538,11 +552,12 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	})
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "File uploaded and temporary Test Object created", response = TestObjectUpload.class),
-			@ApiResponse(code = 400, message = "File upload failed", response = RestExceptionHandler.ApiError.class)
+			@ApiResponse(code = 400, message = "File upload failed", response = ApiError.class),
+			@ApiResponse(code = 413, message = "Uploaded test data are too large", response = ApiError.class)
 	})
 	@RequestMapping(value = {TESTOBJECTS_URL}, params = "action=upload", method = RequestMethod.POST)
 	public TestObjectUpload uploadData(
-			@ApiIgnore final MultipartHttpServletRequest request) throws LocalizableApiError {
+			@ApiIgnore final MultipartHttpServletRequest request) throws LocalizableApiError, InvalidPropertyException {
 		final TestObjectDto testObject = new TestObjectDto();
 		testObject.setId(EidFactory.getDefault().createRandomId());
 
@@ -575,7 +590,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			tags = {TEST_OBJECTS_TAG_NAME}, produces = "application/json")
 	@ApiResponses(value = {
 			@ApiResponse(code = 201, message = "Test Object created", response = TestObjectUpload.class),
-			@ApiResponse(code = 400, message = "Invalid Test Object data", response = RestExceptionHandler.ApiError.class)
+			@ApiResponse(code = 400, message = "Invalid Test Object data", response = ApiError.class)
 	})
 	@RequestMapping(
 			value = {TESTOBJECTS_URL},
@@ -601,9 +616,9 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			TEST_OBJECTS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Test Object resources returned"),
-			@ApiResponse(code = 400, message = "Invalid Test Object ID", response = RestExceptionHandler.ApiError.class),
+			@ApiResponse(code = 400, message = "Invalid Test Object ID", response = ApiError.class),
 			@ApiResponse(code = 403, message = "Resource download forbidden"),
-			@ApiResponse(code = 404, message = "Test Object not found", response = RestExceptionHandler.ApiError.class)
+			@ApiResponse(code = 404, message = "Test Object not found", response = ApiError.class)
 	})
 	@RequestMapping(value = {TESTOBJECTS_URL + "/{id}/data"}, method = RequestMethod.GET)
 	public void getResources(

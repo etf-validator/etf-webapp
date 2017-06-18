@@ -144,6 +144,24 @@ define([
                     dataType: 'json',
                     url: v2.baseUrl + '/TestObjects?action=upload',
                     singleFileUploads: false,
+                    maxFileSize: maxUploadSize,
+                    minFileSize: 20,
+                    maxNumberOfFiles: 10,
+                    add: function(e, data) {
+                        var uploadSize = 0;
+                        $.each(data.originalFiles, function (i, f) {
+                            uploadSize += f['size'];
+                        });
+                        if(uploadSize> maxUploadSize) {
+                            _this.testObjectCallbackId=null;
+                            $('#start-tests-confirm').addClass('ui-disabled');
+                            $('#fileupload').removeClass('ui-disabled');
+                            toastr.error("The maximum file upload size ("+maxUploadSizeHr+
+                                ") has been exceeded", "Upload failed", {timeOut: 0, extendedTimeOut: 0});
+                        }else{
+                            data.submit();
+                        }
+                    },
                     done: function (e, data) {
                         console.log("Upload data received %o", data);
                         if(!_.isUndefined(data.jqXHR) && !_.isUndefined(data.jqXHR.responseJSON.testObject)) {

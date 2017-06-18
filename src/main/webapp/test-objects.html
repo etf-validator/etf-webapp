@@ -41,6 +41,9 @@
 
 <!-- Underscore Template that is used to display Test Objects -->
 <script tiles:fragment="test-objects-page" id="test-object-items-template" type="text/template">
+    <![CDATA[
+    <!-- guard comment -->
+
     <% v2.jeach( collection, function( testObject ) { %>
     <div id="test-object-item-<%= testObject.id %>" data-role="collapsible" data-iconpos="right" data-shadow="false" data-corners="false" data-filter-placeholder="Filter Test Objects...">
         <h2>
@@ -93,6 +96,7 @@
     </div>
 
     <% }); %>
+    <!-- ]]> -->
 </script>
 
 <div tiles:fragment="test-objects-page" id="delete-testobject-dialog" data-role="dialog" data-title="Delete Test Object?">

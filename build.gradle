@@ -220,7 +220,6 @@ war {
 if(project.hasProperty("opbeat.organizationId")) {
     task opbeatRelease {
         doLast {
-
             final String reqPath = "/api/v1/organizations/" +
                     project.getProperty("opbeat.organizationId") +
                     "/apps/" +

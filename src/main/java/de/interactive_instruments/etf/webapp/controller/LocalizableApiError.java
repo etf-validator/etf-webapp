@@ -25,6 +25,7 @@ import javax.validation.ConstraintViolation;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import org.apache.commons.fileupload.FileUploadBase;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 
@@ -96,6 +97,12 @@ public class LocalizableApiError extends LocalizableError {
 		super(e.getMessage().contains("Required request body is missing:") ? "l.json.request.body.missing" : "", e);
 		sensitiveInformation = false;
 		sc = 400;
+	}
+
+	public LocalizableApiError(final FileUploadBase.SizeLimitExceededException exception) {
+		super("l.max.upload.size.exceeded");
+		sensitiveInformation = false;
+		sc = 413;
 	}
 
 	public boolean isSensitiveInformation() {

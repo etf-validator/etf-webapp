@@ -25,13 +25,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import de.interactive_instruments.etf.webapp.controller.EtfConfigController;
+import de.interactive_instruments.etf.webapp.controller.LocalizableApiError;
+import de.interactive_instruments.etf.webapp.dto.ApiError;
+import de.interactive_instruments.exceptions.ExcUtils;
 
 @Component("ApiFilter")
 public class ApiFilter extends OncePerRequestFilter {
@@ -41,6 +48,9 @@ public class ApiFilter extends OncePerRequestFilter {
 	@Autowired
 	private EtfConfigController etfConfig;
 	private String allowOrigin;
+
+	@Autowired
+	private ApplicationContext applicationContext;
 
 	@PostConstruct
 	private void init() {
@@ -64,7 +74,23 @@ public class ApiFilter extends OncePerRequestFilter {
 				return;
 			}
 		}
-		filterChain.doFilter(request, response);
+		try {
+			filterChain.doFilter(request, response);
+		} catch (final ServletException e) {
+			if (e.getRootCause() instanceof MaxUploadSizeExceededException) {
+				try {
+					Thread.sleep(1500);
+				} catch (InterruptedException e1) {
+					ExcUtils.suppress(e1);
+				}
+				final ObjectMapper mapper = new ObjectMapper();
+				response.setStatus(413);
+				response.setHeader("Content-Type", "application/json");
+				mapper.writeValue(response.getWriter(), new ApiError(new LocalizableApiError(
+						"l.max.upload.size.exceeded", false, 413), request.getRequestURL().toString(), applicationContext));
+				response.getWriter().flush();
+			}
+		}
 	}
 
 }

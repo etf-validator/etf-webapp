@@ -61,7 +61,7 @@ public class StreamingService {
 	private long initCacheSize() {
 		final long defaultVal = 30;
 		final long size = PropertyUtils.getenvOrProperty("ETF_STREAMING_CACHE_SIZE", defaultVal);
-		if(size!=defaultVal) {
+		if (size != defaultVal) {
 			LoggerFactory.getLogger(StreamingService.class).info("Streaming cache set to: {}", size);
 		}
 		return size;

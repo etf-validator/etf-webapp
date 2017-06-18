@@ -24,7 +24,7 @@
     <script th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).submitAnalysisData == 'true'}"
             src="https://d3tvtfb6518e3e.cloudfront.net/1/opbeat.min.js"
             data-org-id="51578fc580a94ef3a79e0d4f94769114"
-            data-app-id="ea471c7d24" async>
+            data-app-id="ea471c7d24" async="async">
     </script>
     <script type="text/javascript">
         _opbeat = window._opbeat || function() {
@@ -35,8 +35,8 @@
         });
     </script>
 
-    <link rel="fluid-icon" th:href="@{/310x310.png}" th:title="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}">
-    <link rel="mask-icon" th:href="@{/icon-mono.svg}" color="#000000">
+    <link rel="fluid-icon" th:href="@{/310x310.png}" th:title="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}" />
+    <link rel="mask-icon" th:href="@{/icon-mono.svg}" color="#000000" />
     <link rel="shortcut icon" th:href="@{/favicon.ico}" href="/favicon.ico" type="image/vnd.microsoft.icon" />
 
     <link rel="apple-touch-icon-precomposed" sizes="60x60" th:href="@{/apple-touch-icon-60x60.png}" />

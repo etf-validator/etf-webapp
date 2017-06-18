@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import de.interactive_instruments.etf.model.exceptions.IllegalEidException;
+import de.interactive_instruments.etf.webapp.dto.ApiError;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 
 import io.swagger.annotations.ApiModel;
@@ -57,80 +60,6 @@ class RestExceptionHandler {
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
 
 	private static byte[] reserve = new byte[30 * 1024 * 1024]; // Reserve 30 MB
-
-	@ApiModel(value = "ApiError")
-	public static class ApiError {
-
-		@ApiModelProperty(value = "Error message", example = "Error message")
-		private final String error;
-
-		@ApiModelProperty(value = "Timestamp in milliseconds, measured between the time the error occurred "
-				+ "and midnight, January 1, 1970 UTC(coordinated universal time).", example = "1488469744783")
-		private final String timestamp = String.valueOf(System.currentTimeMillis());
-
-		@ApiModelProperty(value = "URL that was invoked before the error occured", example = "http://localhost:8080/v2/X")
-		private final String url;
-
-		@ApiModelProperty(value = "Optional error ID which was used to translate the error message", example = "l.invalid.fooBar")
-		private final String id;
-
-		@ApiModelProperty(value = "Optional stacktrace which will only be attached in ETF development mode")
-		private final String[] stacktrace;
-
-		public ApiError(final Throwable e, final String url, final ApplicationContext applicationContext) {
-			logger.error(
-					"EXID-" + timestamp + ": An exception occurred while trying to invoke \"" +
-							url + "\"",
-					e);
-			final LocalizableApiError localizableApiError;
-			if (e instanceof LocalizableApiError) {
-				localizableApiError = (LocalizableApiError) e;
-			} else if (e.getCause() instanceof LocalizableApiError) {
-				localizableApiError = (LocalizableApiError) e.getCause();
-			} else {
-				localizableApiError = null;
-			}
-			if (localizableApiError != null) {
-				this.id = localizableApiError.getId();
-				final String err = applicationContext.getMessage(localizableApiError.getId(),
-						localizableApiError.getArgumentValueArr(), null,
-						// localizableApiError.getUserLocale());
-						LocaleContextHolder.getLocale());
-				if (err == null) {
-					// Unknown
-					this.error = ExceptionUtils.getRootCause(e).getMessage();
-				} else {
-					this.error = err;
-				}
-			} else {
-				this.id = null;
-				if (e != null) {
-					final Throwable rootCause = ExceptionUtils.getRootCause(e);
-					this.error = rootCause != null ? rootCause.getMessage() : e.getMessage();
-				} else {
-					this.error = "Internal error";
-				}
-			}
-			stacktrace = ExceptionUtils.getRootCauseStackTrace(e);
-			this.url = url;
-		}
-
-		public String getError() {
-			return error;
-		}
-
-		public String getUrl() {
-			return url;
-		}
-
-		public String getId() {
-			return id;
-		}
-
-		public String[] getStacktrace() {
-			return stacktrace;
-		}
-	}
 
 	@ExceptionHandler(value = Exception.class)
 	@ResponseBody
@@ -153,21 +82,23 @@ class RestExceptionHandler {
 			statusController.triggerMaintenance();
 			return new ApiError(exception, request.getRequestURL().toString(), applicationContext);
 		}
-
 		if (exception instanceof IllegalEidException) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		} else if (exception instanceof ObjectWithIdNotFoundException) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		} else if (exception != null && exception.getCause() instanceof LocalizableApiError) {
+		} else if (exception.getCause() instanceof LocalizableApiError) {
 			response.setStatus(((LocalizableApiError) exception.getCause()).getStatus());
-		} else if (exception != null && exception.getCause() instanceof JsonMappingException) {
+		} else if (exception.getCause() instanceof JsonMappingException) {
 			final Throwable e = new LocalizableApiError((JsonMappingException) exception.getCause());
 			return new ApiError(e, request.getRequestURL().toString(), applicationContext);
-		} else if (exception != null && exception.getCause() instanceof JsonParseException) {
+		} else if (exception.getCause() instanceof JsonParseException) {
 			final Throwable e = new LocalizableApiError((JsonParseException) exception.getCause());
 			return new ApiError(e, request.getRequestURL().toString(), applicationContext);
 		} else if (exception instanceof HttpMessageNotReadableException) {
 			final Throwable e = new LocalizableApiError((HttpMessageNotReadableException) exception);
+			return new ApiError(e, request.getRequestURL().toString(), applicationContext);
+		} else if (exception instanceof FileUploadBase.SizeLimitExceededException) {
+			final Throwable e = new LocalizableApiError((FileUploadBase.SizeLimitExceededException) exception);
 			return new ApiError(e, request.getRequestURL().toString(), applicationContext);
 		} else {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

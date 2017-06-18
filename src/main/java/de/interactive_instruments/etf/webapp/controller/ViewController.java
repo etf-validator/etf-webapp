@@ -15,6 +15,9 @@
  */
 package de.interactive_instruments.etf.webapp.controller;
 
+import static de.interactive_instruments.etf.webapp.controller.EtfConfigController.ETF_MAX_UPLOAD_SIZE;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,9 +36,16 @@ public class ViewController {
 	@Autowired
 	TestRunController testRunController;
 
+	@Autowired
+	EtfConfigController configController;
+
 	@RequestMapping(value = {"/", "/etf", "/index.html"}, method = RequestMethod.GET)
 	public String overview(Model model) throws StorageException, ConfigurationException {
 		testRunController.addMetaData(model);
+		model.addAttribute("maxUploadSizeHr", FileUtils.byteCountToDisplaySize(
+				configController.getPropertyAsLong(ETF_MAX_UPLOAD_SIZE)));
+		model.addAttribute("maxUploadSize",
+				configController.getPropertyAsLong(ETF_MAX_UPLOAD_SIZE));
 		return "etf";
 	}
 

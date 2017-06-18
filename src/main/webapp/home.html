@@ -51,7 +51,7 @@
 
         <p th:text="#{l.parallel.runs(${T(de.interactive_instruments.etf.webapp.controller.TestRunController).MAX_PARALLEL_RUNS})}"></p>
 
-        <br>
+        <br/>
         <p th:if="${testDriversInfo == null or #lists.isEmpty(testDriversInfo) }" style="color:red">No test drivers loaded</p>
 
         <div th:if="${testDriversInfo != null and not #lists.isEmpty(testDriversInfo) }">
@@ -69,9 +69,11 @@
 </div>
 
 <script tiles:fragment="home-page" id="home-test-runs-list-template" type="text/template">
+    <![CDATA[
+    <!-- guard comment -->
 
     <% if (_.isEmpty(testRuns)) { %>
-        <p th:text="#{l.no.testruns}">Keine laufenden Tests</p>
+        <p th:text="#{l.no.testruns}">No running tests</p>
     <% }else{ %>
         <p th:text="#{l.term.testruns.are.removed}">Finished test runs will be removed in 7 minutes automatically from this view.</p>
         <ul data-role="listview" data-inset="true" class="ui-listview-outer">
@@ -87,6 +89,7 @@
         </ul>
     <% } %>
 
+    <!-- ]]> -->
 </script>
 
 

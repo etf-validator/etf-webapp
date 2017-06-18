@@ -36,10 +36,14 @@ import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import de.interactive_instruments.IFile;
 import de.interactive_instruments.II_Constants;
@@ -89,12 +93,16 @@ public class EtfConfigController implements PropertyHolder {
 	public static final String ETF_META_PRIVACYSTATEMENT_TEXT = "etf.meta.privacystatement.text";
 
 	public static final String ETF_SUBMIT_ERRORS = "etf.errors.autoreport";
+	public static final String ETF_MAX_UPLOAD_SIZE = "etf.max.upload.size";
 
 	private static final String ETF_CONFIG_PROPERTY_FILENAME = "etf-config.properties";
 	private static final String ETF_CONFIG_DIR_NAME = "config";
 
 	@Autowired
 	private ServletContext servletContext;
+
+	@Autowired
+	private ApplicationContext appContext;
 
 	private final Properties configProperties = new Properties();
 
@@ -121,6 +129,7 @@ public class EtfConfigController implements PropertyHolder {
 					"http://docs.etf-validator.net/User_manuals/Simplified_workflows.html");
 			put(ETF_BSX_RECREATE_CONFIG, "true");
 			put(ETF_SUBMIT_ERRORS, "false");
+			put(ETF_MAX_UPLOAD_SIZE, "auto");
 			put(ETF_WORKFLOWS, "simplified");
 			put(EtfConstants.ETF_PROJECTS_DIR, "projects");
 			put(EtfConstants.ETF_REPORTSTYLES_DIR, "reportstyles");
@@ -335,9 +344,34 @@ public class EtfConfigController implements PropertyHolder {
 			configProperties.setProperty(ETF_API_ALLOW_ORIGIN, configProperties.getProperty(ETF_WEBAPP_BASE_URL));
 		}
 
+		// Workflow
 		if (!this.getProperty(ETF_WORKFLOWS).equals("simplified")) {
 			logger.error("Workflow types other than 'simplified', are not supported yet!");
 			throw new RuntimeException("Workflow types other than 'simplified' are not supported yet!");
+		}
+
+		// Max upload size
+		try {
+			final Object multipartResolverObj = appContext.getBean("multipartResolver");
+			if (multipartResolverObj != null) {
+				final CommonsMultipartResolver multipartResolver = (CommonsMultipartResolver) multipartResolverObj;
+				final String maxUploadSize = configProperties.getProperty(ETF_MAX_UPLOAD_SIZE);
+				if (maxUploadSize.equalsIgnoreCase("auto")) {
+					logger.info("Automatic setting max upload size based on presumable free memory");
+					final long allocatedMemory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
+					final long presumableFreeMemory = Runtime.getRuntime().maxMemory() - allocatedMemory;
+					final long maxTestDatabaseSize = presumableFreeMemory * 2;
+					final long maxCompressedFileUploadSize = maxTestDatabaseSize / 15;
+					multipartResolver.setMaxUploadSize(maxCompressedFileUploadSize);
+					configProperties.setProperty(ETF_MAX_UPLOAD_SIZE, String.valueOf(maxCompressedFileUploadSize));
+				} else {
+					multipartResolver.setMaxUploadSize(Long.valueOf(maxUploadSize));
+				}
+			}
+		} catch (final NoSuchBeanDefinitionException e) {
+			logger.error("MultipartResolver not found: max upload size cannot be checked.");
+			// Fallback limit 100 MB, only checked in the web interface
+			configProperties.setProperty(ETF_MAX_UPLOAD_SIZE, String.valueOf("104857600"));
 		}
 
 		configProperties.forEach((k, v) -> logger.info(k + " = " + v));

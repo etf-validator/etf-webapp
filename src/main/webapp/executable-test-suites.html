@@ -64,11 +64,21 @@
     <div tiles:replace="footer">
         <!-- Footer -->
     </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+            var maxUploadSize = /*[[${maxUploadSize}]]*/ '104857600';
+            var maxUploadSizeHr =  /*[[${maxUploadSizeHr}]]*/ '100 MB';
+        /*]]>*/
+    </script>
 </div>
 
 
 <!-- Underscore Template -->
-<script tiles:fragment="start-tests-page" id="executable-test-suite-items-template" type="text/template">
+<script tiles:fragment="start-tests-page" id="executable-test-suite-items-template" type="text/template" th:inline="text">
+    <![CDATA[
+    <!-- guard comment -->
+
     <% v2.jeach( collection, function( executableTestSuite ) { %>
 
     <%
@@ -93,13 +103,13 @@
         </h2>
 
         <% if (!_.isUndefined(executableTestSuite.description)) { %>
-        <h3><span th:text="#{l.Description}">Description</span>:</h3>
+        <h3><span th:text="#{l.Description}">[[#{l.Description}]]</span>:</h3>
         <span><%= executableTestSuite.description %></span>
         <% } %>
 
         <% if (!_.isUndefined(executableTestSuite.tags)) {  %>
         <div class="tags">
-            <h3><span th:text="#{l.Tags}">Tags</span>:</h3>
+            <h3><span th:text="#{l.Tags}">[[#{l.Tags}]]</span>:</h3>
             <% v2.jeach( executableTestSuite.tags, function( t ) { %>
             <ul>
                 <li>
@@ -111,7 +121,7 @@
         <% } %>
 
         <div>
-            <h3><span>Applicable to Test Object Types</span>: </h3>
+            <h3><span>[[#{l.Applicable.to.Test.Object.Types}]]</span>: </h3>
             <ul>
                 <% v2.jeach( executableTestSuite.supportedTestObjectTypes, function( testObjectType ) { %>
                     <li><%= testObjectType.label %></li>
@@ -120,7 +130,7 @@
         </div>
 
         <div>
-            <h3><span>General</span>: </h3>
+            <h3><span>[[#{l.General}]]</span>: </h3>
             <ul>
                 <li>Version<span>: </span><%= executableTestSuite.version %></li>
                 <li>Author<span>: </span><%= executableTestSuite.author %></li>
@@ -131,6 +141,8 @@
         </div>
     </li>
     <% }); %>
+
+    <!-- ]]> -->
 </script>
 
 
@@ -163,7 +175,9 @@
 </div>
 
 <!-- Underscore Template -->
-<script tiles:fragment="start-tests-page" id="start-tests-configuration-template" type="text/template">
+<script tiles:fragment="start-tests-page" id="start-tests-configuration-template" type="text/template" th:inline="text">
+    <![CDATA[
+    <!-- guard comment -->
 
     <div class="ui-field-contain">
         <label for="testRunLabel">
@@ -184,16 +198,15 @@
         <div id="uploadTestObj" data-role="fieldcontain">
             <div id="dataSourceSelectionContainer">
                 <div class="ui-field-contain">
-                    <label for="dataSourceSelection" class="select" th:text="#{l.Data.source}">Data source:</label>
+                    <label for="dataSourceSelection" class="select" th:text="#{l.Data.source}">[[#{l.Data.source}]]:</label>
                     <select data-inline="true" name="dataSourceSelection" id="dataSourceSelection">
-                        <option value="fileUpload" th:text="#{l.File.upload}">File upload</option>
-                        <option value="remoteUrl" th:text="#{l.Remote.file.Url}">Remote file (URL)</option>
+                        <option value="fileUpload" th:text="#{l.File.upload}">[[#{l.File.upload}]]</option>
+                        <option value="remoteUrl" th:text="#{l.Remote.file.Url}">[[#{l.Remote.file.Url}]]</option>
                     </select>
                 </div>
                 <div id="fileUploadSelection" class="ui-field-contain">
                     <label><span th:text="#{l.ZipOrXmlFile}" for="fileupload">ZIP or XML file </span> <span class="question"
-                        help="Select one or multiple XML/GML files or ZIP files containing XML/GML files. The Maximum size of each uploaded file is 500 Megabytes.
-                        The upload starts immediately after selecting the files. The 'Start' button is unlocked when the upload has been successfully completed."> ?</span></label>
+                        help="[[#{l.help.upload.test.data( ${maxUploadSizeHr} )}]]"> ?</span></label>
                     <input class="testObjectResourceInput" id="fileupload" type="file" accept="application/zip,text/xml,application/xml+gml,.gml" name="files[]" multiple>
                 </div>
                 <div id="remoteUrlSelection" style="display: none" class="ui-field-contain">
@@ -273,6 +286,7 @@
         <% } %>
     </div>
 
+    <!-- ]]> -->
 </script>
 
 <div tiles:fragment="start-tests-page" id="monitor-test-run-dialog" data-role="dialog" data-title="Monitor Test Run">
