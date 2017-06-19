@@ -1,0 +1,9 @@
+= About ETF
+
+ETF is an open source testing framework for validating spatial data, metadata and web services in Spatial Data Infrastructures (SDIs). It can be used via a responsive web application or via a REST API.
+
+The design of ETF is driven by three goals: be user-friendly, consistency with the standards and the capability to test all resources in an SDI.
+
+link:http://www.interactive-instruments.de/[interactive instruments] has developed ETF and is the primary maintainer of the software.
+
+link:http://docs.etf-validator.net/[More information about ETF...]

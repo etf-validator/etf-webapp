@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.5">
-<title>ETF manuals</title>
+<title>About ETF</title>
 <link rel="stylesheet" href="stylesheets/etf.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 <link rel="stylesheet" href="stylesheets/pygments-autumn.css">
@@ -15,6 +15,7 @@
 <div id="toc" class="toc2">
 <div id="toctitle">Table of contents</div>
 <ul class="sectlevel0">
+<li><a href="#_about_etf">About ETF</a></li>
 <li><a href="#_etf_manuals">ETF manuals</a>
 <ul class="sectlevel1">
 <li><a href="#_user_manuals">User manuals</a></li>
@@ -28,11 +29,6 @@
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<div id="ii_logo" class="imageblock" style="text-align: center">
-<div class="content">
-<a class="image" href="http://www.interactive-instruments.de/en"><img src="http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png" alt="Interactive instruments logo" width="150"></a>
-</div>
-</div>
 <table class="tableblock frame-none grid-none spread">
 <colgroup>
 <col style="width: 25%;">
@@ -42,10 +38,55 @@
 <tr>
 <td class="tableblock halign-center valign-top"><p class="tableblock"><span class="image"><a class="image" href="http://www.etf-validator.net"><img src="images/ETF_logo.png" alt="ETF Logo" width="125"></a></span></p></td>
 <td class="tableblock halign-left valign-middle"><p class="tableblock"><span class="etf_headline">ETF<br>
-testing framework for geo network services and data</span></p></td>
+Testing framework for spatial data and services</span></p></td>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+<h1 id="_about_etf" class="sect0">About ETF</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>ETF is an open source testing framework for validating spatial data, metadata and web services in Spatial Data Infrastructures (SDIs).</p>
+</div>
+<div class="paragraph">
+<p>The design of ETF is driven by three goals: be user-friendly, consistency with the standards and the capability to test all resources in an SDI.</p>
+</div>
+<div class="paragraph">
+<p>User-friendly means that you do not have to be a developer to use it and that test reports include sufficient information for technical staff to understand the reasons for warnings and errors detected during the execution of tests. The user interface and the test reports support multiple languages, too.</p>
+</div>
+<div class="paragraph">
+<p>The concepts in ETF are based on ISO 19105 and the OGC Specification Model which underpin the standards used in SDIs. Tests are organized in Executable Test Suites, which may be developed and executed using different tools to properly support all kinds of resources in an SDI. Currently supported are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://soapui.org/">SoapUI</a>, a widely used tool for testing web services</p>
+</li>
+<li>
+<p><a href="http://basex.org/">BaseX</a>, an XML database, for testing sets of XML documents - including very large ones</p>
+</li>
+<li>
+<p><a href="http://opengeospatial.github.io/teamengine">TEAM Engine</a>, the tool used by the OGC CITE tests, to support the modern CITE tests developed using TestNG</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The BaseX extension module <a href="https://github.com/interactive-instruments/etf-gmlgeox">GmlGeoX</a> extends XQuery to enable testing spatial aspects of GML features (geometry validation, spatial indexing, spatial predicates).</p>
+</div>
+<div class="paragraph">
+<p>ETF can be used via a responsive web application or via a REST API.</p>
+</div>
+<div class="paragraph">
+<p>The easiest way to deploy ETF is a Docker container, available on Docker Hub.</p>
+</div>
+<div class="paragraph">
+<p>The source code is published under the Apache 2.0 License.</p>
+</div>
+<div class="paragraph">
+<p><a href="http://www.interactive-instruments.de/">interactive instruments</a> has developed ETF and is the primary maintainer of the software.</p>
+</div>
 </div>
 </div>
 <h1 id="_etf_manuals" class="sect0">ETF manuals</h1>
@@ -109,7 +150,7 @@ testing framework for geo network services and data</span></p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-06-13 11:03:20 CEST
+Last updated 2017-06-16 12:45:04 CEST
 </div>
 </div>
 </body>

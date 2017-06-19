@@ -1,26 +1,25 @@
+[[tags]]
 === Tags
 
-Items may be associated with tags. If `etf:ExecutableTestSuite`s are
-associated with tags, the ETF web application groups the Executable Test
-Suites by tags.
+Items may be associated with tags. If Executable Test Suites are
+associated with tags, the ETF web application groups them by tags.
+
+NOTE: How Execuable Test Suites are associated with tags differs between test engines and is described in the test engine sections.
+
+Tags are an XML document with a root element `etf:Tag`. The file name must start with the prefix "Tag" and must be located in the directory `include-metadata`. The `id` attribute must be a unique UUID, prefixed with "EID".
+
+The tag has a label and a description. If a priority value is provided for a tag, the web application sorts the tags in the order of ascending priority values.
+
+.Tags defined in the INSPIRE validator
+=====================================================================
+The INSPIRE validator uses link:https://github.com/inspire-eu-validation/ets-repository/tree/master/include-metadata[several tags] to organize its Executable Test Suites. One of the tags is:
 
 [source,XML]
 ----
-    <tags>
-        <tag ref="EID7f57420f-b228-41ae-9467-86e7ffef6e7e"/>
-    </tags>
-----
-
-where the tag is declared in XML (in a separate document, in the
-`include-metadata` directory) as:
-
-[source,XML]
-----
-<Tag xmlns="http://www.interactive-instruments.de/etf/2.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 http://services.interactive-instruments.de/etf/schema/model/resultSet.xsd"
-id="EID7f57420f-b228-41ae-9467-86e7ffef6e7e">
-    <label>Data sets in GML</label>
-    <description>Tests for conformance classes specific to data sets encoded in GML.</description>
+<Tag xmlns="http://www.interactive-instruments.de/etf/2.0" id="EIDfe1f3796-0ebf-4960-a6f7-f935e087fa4b" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 http://resources.etf-validator.net/schema/v2/model/resultSet.xsd">
+	<label>Data Theme: Administrative Units (Data Specification version 3.1)</label>
+	<description>Tests for conformance classes specific to features of the data theme 'Administrative Units'.</description>
+	<priority>202</priority>
 </Tag>
 ----
+=====================================================================
