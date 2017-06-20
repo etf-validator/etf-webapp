@@ -568,7 +568,9 @@ Once the listener is implemented, the whole generation of the
 [[spatial-tests]]
 === Testing spatial aspects
 
-#Add more information how to use the GmlGeoX functions. Sources: https://github.com/interactive-instruments/etf-gmlgeox/blob/master/Readme.md and https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox#
+#CP: Add more information how to use the GmlGeoX functions. Sources: https://github.com/interactive-instruments/etf-gmlgeox/blob/master/Readme.md and https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox#
+
+#JFH: Publish JavaDoc and link from here#
 
 [[parameters]]
 Parameters
@@ -609,30 +611,96 @@ Here is the XML snippet for these parameters:
     </ParameterList>
 ----
 
+[[basex-test-object-types]]
 === Test Object Types
 
-Currently only one Test Object Type is supported and statically
-predefined by the Test Driver:
+==== Overview
 
-[source,XML]
-----
-<etf:TestObjectType xmlns="http://www.interactive-instruments.de/etf/2.0"
-    xmlns:etf="http://www.interactive-instruments.de/etf/2.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 http://services.interactive-instruments.de/etf/schema/model/resultSet.xsd"
-    id="EIDe1d4a306-7a78-4a3b-ae2d-cf5f0810853e">
-    <label>INSPIRE data set in GML</label>
-    <description>A set of XML documents. Each document is either a WFS 2.0 FeatureCollection, a GML
-        3.2 Feature Collection or an INSPIRE Base 3.2 or 3.3 SpatialDataSet. All features are GML
-        3.2 Features.</description>
-</etf:TestObjectType>
-----
+This section lists all Test Object Types that are pre-defined in the BaseX test driver.
 
-In future versions of ETF it is planned that new Test Object Types may
+For each Test Object Type, the following information is provided:
+
+* a description
+* the ID that must be used to reference the Test Object Type from an Executable Test Suite
+* the parent Test Object Type in the hierarchy; for root nodes "-" is shown
+* an XPath expression that can be used to detect a Test Object Type (for XML documents), if one exists
+
+NOTE: In future versions of ETF it is planned that new Test Object Types may
 be specified by a test developer defined and declared in XML in the
 `include-metadata` directory.
 
-CAUTION: #Is this correct? There are also metadata records, for example. But if the test object type is pre-defined, it needs to be changed as this is INSPIRE specific and others may want to test, for example, different types of feature collections.#
+[[tot-documents]]
+==== Set of documents
+A set of documents.
+
+ID:: EIDbec4dd69-72b9-498e-a693-88e3d59d2552
+Parent:: -
+XPath:: -
+
+[[tot-xml]]
+==== Set of XML documents
+A set of XML documents.
+
+ID:: EID810fce18-4bf5-4c6c-a972-6962bbe3b76b
+Parent:: link:#tot-documents[Set of documents]
+XPath:: -
+
+==== Metadata records
+A set of XML documents. Each document contains one or more gmd:MD_Metadata elements.
+
+ID:: EID5a60dded-0cb0-4977-9b06-16c6c2321d2e
+Parent:: link:#tot-xml[Set of XML documents]
+XPath:: /\*[local-name() = 'GetRecordsResponse' and starts-with(namespace-uri() = 'http://www.opengis.net/cat/csw/')] | /*[local-name() = 'MD_Metadata' and namespace-uri() = 'http://www.isotc211.org/2005/gmd']
+
+[[tot-gml]]
+==== GML feature collections
+A set of XML documents. Each document contains a GML feature collection.
+
+ID:: EIDe1d4a306-7a78-4a3b-ae2d-cf5f0810853e
+Parent:: link:#tot-xml[Set of XML documents]
+XPath:: -
+
+==== WFS 2.0 feature collections
+A set of XML documents. Each document contains a WFS 2.0 feature collection.
+
+ID:: EIDa8a1b437-0ebf-454c-8204-bcf0b8548d8c
+Parent:: link:#tot-gml[GML feature collections]
+XPath:: /*[local-name() = 'FeatureCollection' and namespace-uri() = 'http://www.opengis.net/wfs/2.0']
+
+==== GML 3.2 feature collections
+A set of XML documents. Each document contains a GML 3.2 feature collection.
+
+ID:: EIDc8aaacd7-df33-4d64-89af-fabeae63a958
+Parent:: link:#tot-gml[GML feature collections]
+XPath:: /*[local-name() = 'FeatureCollection' and namespace-uri() = 'http://www.opengis.net/gml/3.2']
+
+==== GML 2.1/GML 3.1 feature collections
+A set of XML documents. Each document contains a GML 2.1 or GML 3.1 feature collection.
+
+ID:: EID123b2f9b-c9f4-4379-8bf1-e9a656a14bd0
+Parent:: link:#tot-gml[GML feature collections]
+XPath:: /*[local-name() = 'FeatureCollection' and namespace-uri() = 'http://www.opengis.net/gml']
+
+==== INSPIRE SpatialDataSet documents
+A set of XML documents. Each document contains an INSPIRE SpatialDataSet.
+
+ID:: EID057d7919-d7b8-4d77-adb8-0d3118b3d220
+Parent:: link:#tot-gml[GML feature collections]
+XPath:: /*[local-name() = 'SpatialDataSet' and starts-with(namespace-uri(), 'http://inspire.ec.europa.eu/schemas/base/')]
+
+==== CityGML 2.0 CityModel documents
+A set of XML documents. Each document contains a CityGML 2.0 CityModel.
+
+ID:: EID3e3639b1-f6b7-4d62-9160-963cfb2ea300
+Parent:: link:#tot-gml[GML feature collections]
+XPath:: /*[local-name() = 'CityModel' and namespace-uri() = 'http://www.opengis.net/citygml/2.0']
+
+==== CityGML 1.0 CityModel documents
+A set of XML documents. Each document contains a CityGML 1.0 CityModel.
+
+ID:: EIDd9371e42-2bf4-420c-84a5-4ab9055a8706
+Parent:: link:#tot-gml[GML feature collections]
+XPath:: /*[local-name() = 'CityModel' and namespace-uri() = 'http://www.opengis.net/citygml/1.0']
 
 === Dependencies
 
@@ -643,8 +711,10 @@ suite A depends on test suite B which in turn depends on test suite C.
 * If a user starts a test run for suite A on a set of XML documents, the
 test run will first test the XML documents against test suite C, then
 against test suite B and finally test suite A.
-* If a test suite fails then all dependent test suites will be skipped.
-For example, if test suite B fails, test suite A will be skipped. #This is not really the case for test suites, correct?#
+* If a test suite fails, all dependent test suites will still be executed
+- in order to provide a complete picture. Otherwise a small error in a
+test suite for some basic tests would block all further tests.
+For example, if test suite B fails, test suite A will still be executed.
 * The user will be prompted to set parameters for test suite A, which
 will also be passed to test suite B and C. If test suite B or C declare
 different parameters than test suite A, the default values for these

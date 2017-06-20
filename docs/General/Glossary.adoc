@@ -1,0 +1,92 @@
+= Glossary
+
+The table below lists key terms and definitions.
+
+[width="100%",options="header"]
+|===
+|  *Term / Synonyms* | *Definition*
+|abstract test case
+
+conformance test case |test for a particular requirement or a set of related requirements
+
+_Source: OGC Specification Model_
+
+NOTE: An abstract or conformance test case is a formal basis for deriving executable test cases. It should be complete in the sense that it is sufficient to enable a test verdict to be assigned unambiguously to each potentially observable test outcome.
+
+
+|abstract test module
+
+conformance test module |set of related tests, all within a single conformance class
+
+_Source: OGC Specification Model_
+
+|abstract test suite
+
+ATS | set of conformance classes that define tests for all requirements of a specification
+
+_Source: derived from OGC Specification Model and ISO 19105_
+
+|API | set of routines, protocols, and tools for building software and applications
+
+_Source: Wikipedia_
+
+NOTE: In the INSPIRE Test Framework, APIs are used for the internal communication between the components of the test framework and to allow machines to communicate with the INSPIRE Test Framework.
+
+|conformance class |set of conformance test modules that must be applied to receive a single certificate of conformance
+
+_Source: OGC Specification Model_
+
+|consistency test |test case that includes one or more test assertions involving information from both the test object and from a resource referenced from the test object
+|executable test suite
+
+ETS |set of executable test cases
+
+_Source: ISO 19105_
+
+|executable test suite set |set of executable test suites
+|requirement |expression in the content of a document conveying criteria to be fulfilled if compliance with the document is to be claimed and from which no deviation is permitted
+
+_Source: ISO Directives Part 2_
+
+|specification |document containing recommendations, requirements and conformance tests for those requirements
+
+_Source: OGC Specification Model_
+
+|test assertion |atomic test in a test step
+
+NOTE: The assertion tests information retrieved from the test object in a test step against the an expected value based on the requirements associated with the test case.
+
+|test case
+
+executable test case |specific test of an implementation to meet particular requirements
+
+_Source: ISO 19105_
+
+NOTE: Instantiation of an abstract test case with values.
+
+|test driver |component of the test framework that communicates with a test engine during a test run
+|test engine |a tool that executes an Executable Test Suite
+|test framework |platform that supports multiple test engines, multiple test object types and the generation of harmonised test reports across the different test engines
+|test object
+
+SUT | asset / system under test
+|test object type |classification of a test object
+
+NOTE: An Executable Test Suite declares which types of test objects it supports. This allows to determine which Executable Test Suites may be included in a test run against a test object. Test object types are structured in a hierarchical vocabulary.
+
+|test report |report derived from the test result
+
+NOTE: reports may be human readable (HTML) or machine-readable (XML, JSON) and they may be structured in different ways (usually by test suite, module, case, step and assertion).
+
+|test result |result of a test run
+|test run |execution of one or more test tasks
+
+NOTE: in a test run one or more Executable Test Suites will be executed against one or more test objects.
+
+|test step |an interaction with a test object as part of a test case
+
+NOTE: Multiple steps may be necessary to execute a test case. A test step will be, for example, a query on data or a request on a web service. The result of the interaction is then subject to assertions.
+
+|test task |execution of an Executable Test Suite against a test object
+|validation test |test case that is executed on the test object alone
+|===

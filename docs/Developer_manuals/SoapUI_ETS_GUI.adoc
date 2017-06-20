@@ -24,7 +24,7 @@ NOTE: This procedure is required as link:https://github.com/SmartBear/soapui/pul
 
 ==== Executing tests
 
-#This is not understandable at this point. I have only set up the environment, but there is no SoapUI project yet, where I could set serviceEndpoint, etc. It is also unclear on which "Test project" I should double click and where.#
+#JFH: This is not understandable at this point. I have only set up the environment, but there is no SoapUI project yet, where I could set serviceEndpoint, etc. It is also unclear on which "Test project" I should double click and where. --> Include a very simple test workspace/project in the ZIP file and document how a user should test the installation with it. Include a screenshot.#
 
 To execute a test suite against a web service set the serviceEndpoint property
 and the username and password (authUser and authPwd properties) if the service
@@ -32,5 +32,3 @@ requires authentication.
 
 Double click on the Test project, click on the 'Test Suites' tab and start the
 test run with a click on the green arrow.
-
-#Screenshot?#

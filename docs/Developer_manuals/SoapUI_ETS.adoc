@@ -74,7 +74,7 @@ The error message in the INSPIRE validator would be (see the entry in the link:h
 > 'Expected a response but the service did not return any data. Verify that the used endpoint URL is correct and accessible from outside your organization. If the service requires authentication, then check that the correct credentials are used by the validator or verify that upstream firewalls/proxy servers do not prevent access.'
 =========================================
 
-#So every Translation Template Collection for SoapUI tests must at least have texts for all TR.xxx-messages that are defined in the predefined functions. The codes and their meaning needs to be listed in this manual along with the parameters of each message.#
+#JFH: Every Translation Template Collection for SoapUI tests must at least have texts for all TR.xxx-messages that are defined in the predefined functions. The codes and their meaning needs to be listed in this manual along with the parameters of each message.#
 
 This error occurs when no data has been received. Close the assertion (click on 'OK') and
 click on the green arrow in the HTTP test step to execute the HTTP request and
@@ -95,14 +95,14 @@ Description of standard properties
 | authUser | optional username for authentication
 | authPwd | optional password for authentication
 | authMethod | only the value 'basic' for HTTP basic authentication is supported yet
-| etf.ignore.properties | If properties are added #(where?)#, that are not known to ETF,
-they are expected to be parameters for the Test Suite and appear on Test start up #(=start of a test run?)#.
+| etf.ignore.properties | If properties are added in the SoapUI test project, which are not known to ETF,
+it is assumed that these are parameters for the test suite and their input is required during the start of a test run.
 This can be avoided by using this property, which can contain a list of property names that should not be interpreted as parameters.
-| etf.tag.ids | EID reference to one or multiple link:#tags[Tags], separated by commas #(whitespace allowed?)#
+| etf.tag.ids | EID reference to one or multiple link:#tags[Tags], separated by commas (whitespace is allowed)#
 | etf.translation.template.collection.id | EID reference to a collection of link:#message-template-bundles[Translation Templates]
-| etf.supported.test.object.type.ids | EID reference to one or more supported link:#test-object-types[Test Object Types], separated by commas #correct?#
+| etf.supported.test.object.type.ids | EID reference to one or more supported link:#soapui-test-object-types[Test Object Types], separated by commas (whitespace is allowed)#
 | etf.dependency.ids | optional EID reference to one ore multiple Executable Test
-Suites this test suite depends on, separated by commas #correct?#
+Suites this test suite depends on, separated by commas (whitespace is allowed)
 | etf.author | Name of the author of the test suite
 | etf.last.editor | Name of the last editor of the test suite
 | etf.creation.date | Date when the test suite was created as ISO 8601 string
@@ -110,46 +110,180 @@ Suites this test suite depends on, separated by commas #correct?#
 | etf.version | Version of the test suite
 |===
 
-[[test-object-types]]
+[[soapui-test-object-types]]
 === Test Object Types
 
-SoapUI Executable Test Suites support 3 Test Object Types which are predefined by
-the test driver:
+==== Overview
 
-* Web Service
-* Web Feature Service 2.0
-* Web Feed
+This section lists all Test Object Types that are pre-defined in the SoapUI test driver.
 
-#If these are pre-defined only, we need to add many more to allow others to develop their own ETS! At least WFS 1.0, WFS 1.1, WMS 1.1, WMS 1.3, WMTS 1.0, CSW 2.0, CSW 3.0, SOS 2.0, WCS 1.0, WCS 1.1, WCS 2.0, GeoServices REST API, but the list may grow quickly#
+For each Test Object Type, the following information is provided:
 
-#Probably we also need to provide namespace lists like INSPIRE_DS_NS for other specs?#
+* a description
+* the ID that must be used to reference the Test Object Type from an Executable Test Suite
+* the parent Test Object Type in the hierarchy; for root nodes "-" is shown
+* an XPath expression that can be used to detect a Test Object Type (for XML documents), if one exists
 
-The Test Object Types are used to check whether two or more test suites can
-be executed on the same test object together in one Test Run.
+NOTE: In future versions of ETF it is planned that new Test Object Types may
+be specified by a test developer defined and declared in XML in the
+`include-metadata` directory.
 
-The pre-defined Test Object Types are defined as follows: #etfAppinfo is not used - delete?#
-[source,XML]
-----
-<testObjectTypes xmlns:etf="http://www.interactive-instruments.de/etf/2.0">
-  <etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
-      id="EID88311f83-818c-46ed-8a9a-cec4f3707365">
-      <label>Web Service</label>
-      <description>Any service with an interface using HTTP(S).</description>
-  </etf:TestObjectType>
-  <etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
-      id="EID9b6ef734-981e-4d60-aa81-d6730a1c6389">
-      <label>Web Feature Service 2.0</label>
-      <description>A Web Service implementing OGC Web Feature Service 2.0 and OGC Filter Encoding 2.0</description>
-      <parent xsi:type="loc" ref="EID88311f83-818c-46ed-8a9a-cec4f3707365"/>
-  </etf:TestObjectType>
-  <etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
-      id="EID49d881ae-b115-4b91-aabe-31d5791bce52">
-      <label>Web Feed</label>
-      <description>A feed implementing the Atom Syndication Format that can be accessed using HTTP(S).</description>
-      <parent xsi:type="loc" ref="EID88311f83-818c-46ed-8a9a-cec4f3707365"/>
-  </etf:TestObjectType>
-</testObjectTypes>
-----
+#CP: Provide namespace lists like INSPIRE_DS_NS for other specs.#
+
+[[tot-service]]
+==== Web service
+Any service with an interface using HTTP(S).
+
+ID:: EID88311f83-818c-46ed-8a9a-cec4f3707365
+Parent:: -
+XPath:: -
+
+[[tot-wfs]]
+==== OGC Web Feature Service
+A web service implementing the OGC Web Feature Service standard.
+
+ID:: EIDdb12feeb-0086-4006-bc74-28f4fdef0171
+Parent:: link:#tot-service[Web service]
+XPath:: -
+
+==== OGC Web Feature Service 2.0
+A web service implementing OGC Web Feature Service 2.0 and OGC Filter Encoding 2.0.
+
+ID:: EID9b6ef734-981e-4d60-aa81-d6730a1c6389
+Parent:: link:#tot-wfs[OGC Web Feature Service]
+XPath:: /*[local-name() = 'WFS_Capabilities' and namespace-uri() = 'http://www.opengis.net/wfs/2.0']
+
+==== OGC Web Feature Service 1.1
+A web service implementing OGC Web Feature Service 1.1 and OGC Filter Encoding 1.1.
+
+ID:: EIDbc6384f3-2652-4c7b-bc45-20cec488ecd0
+Parent:: link:#tot-wfs[OGC Web Feature Service]
+XPath:: /*[local-name() = 'WFS_Capabilities' and namespace-uri() = 'http://www.opengis.net/wfs' and starts-with(@version,'1.1')]
+
+==== OGC Web Feature Service 1.0.0
+A web service implementing OGC Web Feature Service 1.0 and OGC Filter Encoding 1.0.0.
+
+ID:: EID8a560e6a-043f-42ca-b0a3-31b115899593
+Parent:: link:#tot-wfs[OGC Web Feature Service]
+XPath:: /*[local-name() = 'WFS_Capabilities' and namespace-uri() = 'http://www.opengis.net/wfs' and @version='1.0.0']
+
+[[tot-wms]]
+==== OGC Web Map Service
+A web service implementing the OGC Web Map Service standard.
+
+ID:: EIDbae0df71-0553-438d-938f-028b53ba8aa7
+Parent:: link:#tot-service[Web service]
+XPath:: -
+
+==== OGC Web Map Service 1.3.0
+A web service implementing OGC Web Map Service 1.3.0.
+
+ID:: EID9981e87e-d642-43b3-ad5f-e77469075e74
+Parent:: link:#tot-wms[OGC Web Map Service]
+XPath:: /*[local-name() = 'WMS_Capabilities' and namespace-uri() = 'http://www.opengis.net/wms' and @version = '1.3.0']
+
+==== OGC Web Map Service 1.1.1
+A web service implementing OGC Web Map Service 1.1.1.
+
+ID:: EIDd1836a8d-9909-4899-a0bc-67f512f5f5ac
+Parent:: link:#tot-wms[OGC Web Map Service]
+XPath:: /*[local-name() = 'WMT_MS_Capabilities' and @version = '1.1.1']
+
+[[tot-wmts]]
+==== OGC Web Map Tile Service
+A web service implementing the OGC Web Map Tile Service standard.
+
+ID:: EID380b969c-215e-46f8-a4e9-16f002f7d6c3
+Parent:: link:#tot-service[Web service]
+XPath:: -
+
+==== OGC Web Map Tile Service 1.0
+A web service implementing OGC Web Map Tile Service 1.0.
+
+ID:: EIDae35f7cd-86d9-475a-aa3a-e0bfbda2bb5f
+Parent:: link:#tot-wmts[OGC Web Map Tile Service]
+XPath:: /*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/wmts/1.0']
+
+[[tot-wcs]]
+==== OGC Web Coverage Service
+A web service implementing the OGC Web Coverage Service standard.
+
+ID:: EIDdf841ddd-20d4-4551-8bc2-a4f7267e39e0
+Parent:: link:#tot-service[Web service]
+XPath:: -
+
+==== OGC Web Coverage Service 2.0
+A web service implementing OGC Web Coverage Service 2.0 and OGC Filter Encoding 2.0.
+
+ID:: EIDdac58b52-3ffd-4eb5-96e3-64723d8f0f51
+Parent:: link:#tot-wcs[OGC Web Coverage Service]
+XPath:: /*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/wcs/2.0']
+
+==== OGC Web Coverage Service 1.1
+A web service implementing OGC Web Coverage Service 1.1.
+
+ID:: EID824596fa-ec04-4314-bf1a-f1e6ee119bf0
+Parent:: link:#tot-wcs[OGC Web Coverage Service]
+XPath:: /*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/wcs/1.1']
+
+==== OGC Web Coverage Service 1.0.0
+A web service implementing OGC Web Coverage Service 1.0.
+
+ID:: EID4d4bffed-0a18-43d3-98f4-f5e7055b02e4
+Parent:: link:#tot-wcs[OGC Web Coverage Service]
+XPath:: /*[local-name() = 'WCS_Capabilities' and namespace-uri() = 'http://www.opengis.net/wcs']
+
+[[tot-sos]]
+==== OGC Sensor Observation Service
+A web service implementing the OGC Sensor Observation Service standard.
+
+ID:: EIDadeb8bc4-c49b-4704-ba88-813aea5de31d
+Parent:: link:#tot-service[Web service]
+XPath:: -
+
+==== OGC Sensor Observation Service 2.0
+A web service implementing OGC Sensor Observation Service 2.0.
+
+ID:: EIDf897f313-55f0-4e51-928a-0e9869f5a1d6
+Parent:: link:#tot-sos[OGC Sensor Observation Service]
+XPath:: /*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/sos/2.0']
+
+[[tot-csw]]
+==== OGC Catalogue Service
+A web service implementing the OGC Catalogue Service standard.
+
+ID:: EID18bcbc68-56b9-4e8e-b0d1-90de324d0cc8
+Parent:: link:#tot-service[Web service]
+XPath:: -
+
+==== OGC Catalogue Service 3.0
+A web service implementing OGC Catalogue Service 3.0.
+
+ID:: EIDb2a780a8-5bba-4780-bcd5-c8c909ac407d
+Parent:: link:#tot-csw[OGC Catalogue Service]
+XPath:: /*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/cat/csw/3.0']
+
+[[tot-csw-202]]
+==== OGC Catalogue Service 2.0.2
+A web service implementing OGC Catalogue Service 2.0.2.
+
+ID:: EID4b0fb35d-10f0-47df-bc0b-6d4548035ae2
+Parent:: link:#tot-csw[OGC Catalogue Service]
+XPath:: /*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/cat/csw/2.0.2']
+
+==== OGC CSW-ebRIM Registry Service 1.0
+A web service implementing the CSW-ebRIM Registry Service 1.0.
+
+ID:: EID9b101002-e65e-4d96-ac45-fcb95ac6f507
+Parent:: link:#tot-csw-202[OGC Catalogue Service 2.0.2]
+XPath:: /*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/cat/wfs/1.0']
+
+==== Atom feed
+A feed implementing the Atom Syndication Format that can be accessed using HTTP(S).
+
+ID:: EID49d881ae-b115-4b91-aabe-31d5791bce52
+Parent:: link:#tot-service[Web service]
+XPath:: /*[local-name() = 'feed' and namespace-uri() = 'http://www.w3.org/2005/Atom']
 
 === Assertion library
 
@@ -164,13 +298,13 @@ import de.interactive_instruments.etf.suim.*
 Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)
 ----
 
-#'messageExchange', 'context' and 'log' are pre-defined and have to be used as-is?#
+The parameters `messageExchange`, `context` and `log` are pre-defined in the context of the assertion.
+
+#JFH: add screenshot#
 
 For further information see the
 link:http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html[Assert API documentation]
 
 === Tips for creating helpful test suites
 
-#We need to be more explicit how to create useful tests, what challenges are typically encountered and how these can be addressed.#
-
-#Don't we also need to document the rules/decisions somewhere, how certain situations are handled by the test driver? Technical test cases, etc.#
+#JFH: Be more explicit how to create useful tests, what challenges are typically encountered and how these can be addressed. Examples: Dependencies, technical test steps vs HTTP test steps, iterations based on an OGC web service response, etc#

@@ -23,30 +23,28 @@
 <li><a href="#_about_etf">About ETF</a>
 <ul class="sectlevel1">
 <li><a href="#_introduction">1. Introduction</a></li>
-<li><a href="#_information_used_by_all_executable_test_suites">2. Information used by all Executable Test Suites</a>
+<li><a href="#_information_and_concepts_used_by_all_executable_test_suites">2. Information and concepts used by all Executable Test Suites</a>
 <ul class="sectlevel2">
 <li><a href="#_overview">2.1. Overview</a></li>
 <li><a href="#message-template-bundles">2.2. Message template bundles</a></li>
 <li><a href="#tags">2.3. Tags</a></li>
+<li><a href="#_test_object_types">2.4. Test object types</a></li>
+<li><a href="#_test_item_types">2.5. Test item types</a></li>
+<li><a href="#_statistical_information">2.6. Statistical information</a></li>
+<li><a href="#_attachment_types">2.7. Attachment types</a></li>
 </ul>
 </li>
 <li><a href="#_basex_based_test_suites">3. BaseX-based test suites</a>
 <ul class="sectlevel2">
 <li><a href="#_required_knowledge">3.1. Required knowledge</a></li>
-<li><a href="#_development_environment">3.2. Development environment</a>
-<ul class="sectlevel3">
-<li><a href="#_installation">3.2.1. Installation</a></li>
-<li><a href="#_executing_tests">3.2.2. Executing tests</a></li>
-<li><a href="#_best_practices">3.2.3. Best practices</a></li>
-</ul>
-</li>
+<li><a href="#_development_environment">3.2. Development environment</a></li>
 <li><a href="#_basics">3.3. Basics</a></li>
 <li><a href="#typical-setup">3.4. Typical setup</a></li>
 <li><a href="#xml-document-of-an-executable-test-suite">3.5. XML document of an Executable Test Suite</a></li>
 <li><a href="#the-xquery-document">3.6. The XQuery document</a></li>
 <li><a href="#spatial-tests">3.7. Testing spatial aspects</a></li>
 <li><a href="#parameters">3.8. Parameters</a></li>
-<li><a href="#_test_object_types">3.9. Test Object Types</a></li>
+<li><a href="#basex-test-object-types">3.9. Test Object Types</a></li>
 <li><a href="#_dependencies">3.10. Dependencies</a></li>
 <li><a href="#_tags">3.11. Tags</a></li>
 <li><a href="#_attachments">3.12. Attachments</a></li>
@@ -55,27 +53,24 @@
 <li><a href="#_soapui_based_test_suites">4. SoapUI based Test Suites</a>
 <ul class="sectlevel2">
 <li><a href="#_required_knowledge_2">4.1. Required knowledge</a></li>
-<li><a href="#_development_environment_2">4.2. Development environment</a>
-<ul class="sectlevel3">
-<li><a href="#_installation_2">4.2.1. Installation</a></li>
-<li><a href="#_executing_tests_2">4.2.2. Executing tests</a></li>
-</ul>
-</li>
+<li><a href="#_development_environment_2">4.2. Development environment</a></li>
 <li><a href="#_basics_2">4.3. Basics</a></li>
 <li><a href="#_parameters_and_metadata_properties">4.4. Parameters and metadata properties</a></li>
-<li><a href="#test-object-types">4.5. Test Object Types</a></li>
+<li><a href="#soapui-test-object-types">4.5. Test Object Types</a></li>
 <li><a href="#_assertion_library">4.6. Assertion library</a></li>
 <li><a href="#_tips_for_creating_helpful_test_suites">4.7. Tips for creating helpful test suites</a></li>
 </ul>
 </li>
 <li><a href="#_team_engine_based_test_suites">5. TEAM-Engine-based test suites</a>
 <ul class="sectlevel2">
-<li><a href="#_team_engine_test_suites_supported_by_etf">5.1. TEAM Engine test suites supported by ETF</a></li>
-<li><a href="#_how_to_register_a_team_engine_test_suites_as_an_exectuable_test_suite_in_etf">5.2. How to register a TEAM Engine test suites as an Exectuable Test Suite in ETF</a></li>
+<li><a href="#_overview_4">5.1. Overview</a></li>
+<li><a href="#_team_engine_test_suites_supported_by_etf">5.2. TEAM Engine test suites supported by ETF</a></li>
+<li><a href="#_mapping_from_team_engine_testng_concepts_to_etf">5.3. Mapping from TEAM Engine / TestNG concepts to ETF</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li><a href="#_glossary">Glossary</a></li>
 </ul>
 </div>
 </div>
@@ -112,7 +107,7 @@ Testing framework for spatial data and services</span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Date</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2017-06-16</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-06-20</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
@@ -269,27 +264,10 @@ WORK IN PROGRESS
 <div class="paragraph">
 <p>This guide, therefore, describes how to use the test engines in a way that is consistent with the ETC concepts. It is <strong>not</strong> a tutorial for the test engines (SoapUI, BaseX, TEAM Engine) or the relevant technologies (XML, XQuery, HTTP, Groovy, etc.). We assume working knowledge with the relevant tools and technologies. We have included links that should help to familiarize yourself with the relevant tools and technologies, where this is needed.</p>
 </div>
-<div class="paragraph">
-<p>Please see
-<a href="http://opengeospatial.github.io/teamengine/testng-essentials.html">this manual</a>
-for developing test suites for the Team Engine.</p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-!!! The last paragraph needs to go to the relevant section.
-</td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_information_used_by_all_executable_test_suites">2. Information used by all Executable Test Suites</h2>
+<h2 id="_information_and_concepts_used_by_all_executable_test_suites">2. Information and concepts used by all Executable Test Suites</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_overview">2.1. Overview</h3>
@@ -312,21 +290,9 @@ for developing test suites for the Team Engine.</p>
 </li>
 </ul>
 </div>
-<div class="admonitionblock caution">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-caution" title="Caution"></i>
-</td>
-<td class="content">
-<mark>What about TestObjectType and StatisticalReportTableType?</mark>
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
 <p>These items that stored as XML documents in the  <code>include-metadata</code>
-directory of an ETF deployment (see <a href="http://"><mark>add link where the directory structure is described</mark></a>).</p>
+directory of an ETF deployment (see the <a href="http://docs.etf-validator.net/Admin_manuals/index.html#_etf_data_directory_structure">description of the ETF directory structure</a>).</p>
 </div>
 </div>
 <div class="sect2">
@@ -380,7 +346,7 @@ language codes used in HTTP headers, e.g. "en" for English.</p>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-All names must start with "TR." and may only use the following characters: <mark>add list of characters</mark>.
+All names must start with "TR." and may only use the following characters: "a"-"z", "A"-"Z", "0"-"9", ".", "-", "_". The length is restricted to 45 characters.
 </td>
 </tr>
 </table>
@@ -460,6 +426,36 @@ How Execuable Test Suites are associated with tags differs between test engines 
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_test_object_types">2.4. Test object types</h3>
+<div class="paragraph">
+<p>A Test Object Type is a classification of a test object. Every Executable Test Suite in ETF declares which types of test objects it supports. This allows to determine which Executable Test Suites may be included in a test run against a test object. Test object types are structured in a hierarchical vocabulary.</p>
+</div>
+<div class="paragraph">
+<p>The Test Object Types are used to check whether two or more Executable Test Suites can be executed on the same test object together in one Test Run.</p>
+</div>
+<div class="paragraph">
+<p>Every test engine supports one or more Test Object Types. The types supported by each test engine are described in the section on the test engines (<a href="#basex-test-object-types">BaseX</a>, <a href="#soapui-test-object-types">SoapUI</a>).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_test_item_types">2.5. Test item types</h3>
+<div class="paragraph">
+<p><mark>CP: add text</mark></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_statistical_information">2.6. Statistical information</h3>
+<div class="paragraph">
+<p><mark>CP: describe (move to BaseX for now?)</mark></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_attachment_types">2.7. Attachment types</h3>
+<div class="paragraph">
+<p><mark>CP: add text</mark></p>
 </div>
 </div>
 </div>
@@ -1409,7 +1405,10 @@ currently defined in generic-query-prolog.xq:</p>
 <div class="sect2">
 <h3 id="spatial-tests">3.7. Testing spatial aspects</h3>
 <div class="paragraph">
-<p><mark>Add more information how to use the GmlGeoX functions. Sources: <a href="https://github.com/interactive-instruments/etf-gmlgeox/blob/master/Readme.md" class="bare">https://github.com/interactive-instruments/etf-gmlgeox/blob/master/Readme.md</a> and <a href="https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox" class="bare">https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox</a></mark></p>
+<p><mark>CP: Add more information how to use the GmlGeoX functions. Sources: <a href="https://github.com/interactive-instruments/etf-gmlgeox/blob/master/Readme.md" class="bare">https://github.com/interactive-instruments/etf-gmlgeox/blob/master/Readme.md</a> and <a href="https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox" class="bare">https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox</a></mark></p>
+</div>
+<div class="paragraph">
+<p><mark>JFH: Publish JavaDoc and link from here</mark></p>
 </div>
 </div>
 <div class="sect2">
@@ -1461,41 +1460,265 @@ value '.*' matches all test assertions.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_test_object_types">3.9. Test Object Types</h3>
+<h3 id="basex-test-object-types">3.9. Test Object Types</h3>
+<div class="sect3">
+<h4 id="_overview_2">3.9.1. Overview</h4>
 <div class="paragraph">
-<p>Currently only one Test Object Type is supported and statically
-predefined by the Test Driver:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="XML">&lt;etf:TestObjectType xmlns="http://www.interactive-instruments.de/etf/2.0"
-    xmlns:etf="http://www.interactive-instruments.de/etf/2.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 http://services.interactive-instruments.de/etf/schema/model/resultSet.xsd"
-    id="EIDe1d4a306-7a78-4a3b-ae2d-cf5f0810853e"&gt;
-    &lt;label&gt;INSPIRE data set in GML&lt;/label&gt;
-    &lt;description&gt;A set of XML documents. Each document is either a WFS 2.0 FeatureCollection, a GML
-        3.2 Feature Collection or an INSPIRE Base 3.2 or 3.3 SpatialDataSet. All features are GML
-        3.2 Features.&lt;/description&gt;
-&lt;/etf:TestObjectType&gt;</code></pre>
-</div>
+<p>This section lists all Test Object Types that are pre-defined in the BaseX test driver.</p>
 </div>
 <div class="paragraph">
-<p>In future versions of ETF it is planned that new Test Object Types may
-be specified by a test developer defined and declared in XML in the
-<code>include-metadata</code> directory.</p>
+<p>For each Test Object Type, the following information is provided:</p>
 </div>
-<div class="admonitionblock caution">
+<div class="ulist">
+<ul>
+<li>
+<p>a description</p>
+</li>
+<li>
+<p>the ID that must be used to reference the Test Object Type from an Executable Test Suite</p>
+</li>
+<li>
+<p>the parent Test Object Type in the hierarchy; for root nodes "-" is shown</p>
+</li>
+<li>
+<p>an XPath expression that can be used to detect a Test Object Type (for XML documents), if one exists</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-caution" title="Caution"></i>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<mark>Is this correct? There are also metadata records, for example. But if the test object type is pre-defined, it needs to be changed as this is INSPIRE specific and others may want to test, for example, different types of feature collections.</mark>
+In future versions of ETF it is planned that new Test Object Types may
+be specified by a test developer defined and declared in XML in the
+<code>include-metadata</code> directory.
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tot-documents">3.9.2. Set of documents</h4>
+<div class="paragraph">
+<p>A set of documents.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDbec4dd69-72b9-498e-a693-88e3d59d2552</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p>-</p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>-</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tot-xml">3.9.3. Set of XML documents</h4>
+<div class="paragraph">
+<p>A set of XML documents.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID810fce18-4bf5-4c6c-a972-6962bbe3b76b</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-documents">Set of documents</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>-</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_metadata_records">3.9.4. Metadata records</h4>
+<div class="paragraph">
+<p>A set of XML documents. Each document contains one or more gmd:MD_Metadata elements.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID5a60dded-0cb0-4977-9b06-16c6c2321d2e</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-xml">Set of XML documents</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'GetRecordsResponse' and starts-with(namespace-uri() = 'http://www.opengis.net/cat/csw/')] | /*[local-name() = 'MD_Metadata' and namespace-uri() = 'http://www.isotc211.org/2005/gmd']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tot-gml">3.9.5. GML feature collections</h4>
+<div class="paragraph">
+<p>A set of XML documents. Each document contains a GML feature collection.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDe1d4a306-7a78-4a3b-ae2d-cf5f0810853e</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-xml">Set of XML documents</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>-</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_wfs_2_0_feature_collections">3.9.6. WFS 2.0 feature collections</h4>
+<div class="paragraph">
+<p>A set of XML documents. Each document contains a WFS 2.0 feature collection.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDa8a1b437-0ebf-454c-8204-bcf0b8548d8c</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-gml">GML feature collections</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'FeatureCollection' and namespace-uri() = 'http://www.opengis.net/wfs/2.0']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_gml_3_2_feature_collections">3.9.7. GML 3.2 feature collections</h4>
+<div class="paragraph">
+<p>A set of XML documents. Each document contains a GML 3.2 feature collection.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDc8aaacd7-df33-4d64-89af-fabeae63a958</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-gml">GML feature collections</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'FeatureCollection' and namespace-uri() = 'http://www.opengis.net/gml/3.2']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_gml_2_1_gml_3_1_feature_collections">3.9.8. GML 2.1/GML 3.1 feature collections</h4>
+<div class="paragraph">
+<p>A set of XML documents. Each document contains a GML 2.1 or GML 3.1 feature collection.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID123b2f9b-c9f4-4379-8bf1-e9a656a14bd0</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-gml">GML feature collections</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'FeatureCollection' and namespace-uri() = 'http://www.opengis.net/gml']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_inspire_spatialdataset_documents">3.9.9. INSPIRE SpatialDataSet documents</h4>
+<div class="paragraph">
+<p>A set of XML documents. Each document contains an INSPIRE SpatialDataSet.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID057d7919-d7b8-4d77-adb8-0d3118b3d220</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-gml">GML feature collections</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'SpatialDataSet' and starts-with(namespace-uri(), 'http://inspire.ec.europa.eu/schemas/base/')]</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_citygml_2_0_citymodel_documents">3.9.10. CityGML 2.0 CityModel documents</h4>
+<div class="paragraph">
+<p>A set of XML documents. Each document contains a CityGML 2.0 CityModel.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID3e3639b1-f6b7-4d62-9160-963cfb2ea300</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-gml">GML feature collections</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'CityModel' and namespace-uri() = 'http://www.opengis.net/citygml/2.0']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_citygml_1_0_citymodel_documents">3.9.11. CityGML 1.0 CityModel documents</h4>
+<div class="paragraph">
+<p>A set of XML documents. Each document contains a CityGML 1.0 CityModel.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDd9371e42-2bf4-420c-84a5-4ab9055a8706</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-gml">GML feature collections</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'CityModel' and namespace-uri() = 'http://www.opengis.net/citygml/1.0']</p>
+</dd>
+</dl>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1513,8 +1736,16 @@ test run will first test the XML documents against test suite C, then
 against test suite B and finally test suite A.</p>
 </li>
 <li>
-<p>If a test suite fails then all dependent test suites will be skipped.
-For example, if test suite B fails, test suite A will be skipped. <mark>This is not really the case for test suites, correct?</mark></p>
+<p>If a test suite fails, all dependent test suites will still be executed</p>
+<div class="ulist">
+<ul>
+<li>
+<p>in order to provide a complete picture. Otherwise a small error in a
+test suite for some basic tests would block all further tests.
+For example, if test suite B fails, test suite A will still be executed.</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p>The user will be prompted to set parameters for test suite A, which
@@ -1759,7 +1990,7 @@ This procedure is required as <a href="https://github.com/SmartBear/soapui/pull/
 <div class="sect3">
 <h4 id="_executing_tests_2">4.2.2. Executing tests</h4>
 <div class="paragraph">
-<p><mark>This is not understandable at this point. I have only set up the environment, but there is no SoapUI project yet, where I could set serviceEndpoint, etc. It is also unclear on which "Test project" I should double click and where.</mark></p>
+<p><mark>JFH: This is not understandable at this point. I have only set up the environment, but there is no SoapUI project yet, where I could set serviceEndpoint, etc. It is also unclear on which "Test project" I should double click and where. -&#8594; Include a very simple test workspace/project in the ZIP file and document how a user should test the installation with it. Include a screenshot.</mark></p>
 </div>
 <div class="paragraph">
 <p>To execute a test suite against a web service set the serviceEndpoint property
@@ -1769,9 +2000,6 @@ requires authentication.</p>
 <div class="paragraph">
 <p>Double click on the Test project, click on the 'Test Suites' tab and start the
 test run with a click on the green arrow.</p>
-</div>
-<div class="paragraph">
-<p><mark>Screenshot?</mark></p>
 </div>
 </div>
 </div>
@@ -1887,7 +2115,7 @@ ETF, reference the 'TR.noDataReturned' translation and output the corresponding 
 </div>
 </div>
 <div class="paragraph">
-<p><mark>So every Translation Template Collection for SoapUI tests must at least have texts for all TR.xxx-messages that are defined in the predefined functions. The codes and their meaning needs to be listed in this manual along with the parameters of each message.</mark></p>
+<p><mark>JFH: Every Translation Template Collection for SoapUI tests must at least have texts for all TR.xxx-messages that are defined in the predefined functions. The codes and their meaning needs to be listed in this manual along with the parameters of each message.</mark></p>
 </div>
 <div class="paragraph">
 <p>This error occurs when no data has been received. Close the assertion (click on 'OK') and
@@ -1937,13 +2165,13 @@ with the 'TR.missingFeedRootElement' code.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">etf.ignore.properties</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If properties are added <mark>(where?)</mark>, that are not known to ETF,
-they are expected to be parameters for the Test Suite and appear on Test start up <mark>(=start of a test run?)</mark>.
+<td class="tableblock halign-left valign-top"><p class="tableblock">If properties are added in the SoapUI test project, which are not known to ETF,
+it is assumed that these are parameters for the test suite and their input is required during the start of a test run.
 This can be avoided by using this property, which can contain a list of property names that should not be interpreted as parameters.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">etf.tag.ids</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EID reference to one or multiple <a href="#tags">Tags</a>, separated by commas <mark>(whitespace allowed?)</mark></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EID reference to one or multiple <a href="#tags">Tags</a>, separated by commas (whitespace is allowed)#</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">etf.translation.template.collection.id</p></td>
@@ -1951,12 +2179,12 @@ This can be avoided by using this property, which can contain a list of property
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">etf.supported.test.object.type.ids</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EID reference to one or more supported <a href="#test-object-types">Test Object Types</a>, separated by commas <mark>correct?</mark></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EID reference to one or more supported <a href="#soapui-test-object-types">Test Object Types</a>, separated by commas (whitespace is allowed)#</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">etf.dependency.ids</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">optional EID reference to one ore multiple Executable Test
-Suites this test suite depends on, separated by commas <mark>correct?</mark></p></td>
+Suites this test suite depends on, separated by commas (whitespace is allowed)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">etf.author</p></td>
@@ -1982,58 +2210,509 @@ Suites this test suite depends on, separated by commas <mark>correct?</mark></p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="test-object-types">4.5. Test Object Types</h3>
+<h3 id="soapui-test-object-types">4.5. Test Object Types</h3>
+<div class="sect3">
+<h4 id="_overview_3">4.5.1. Overview</h4>
 <div class="paragraph">
-<p>SoapUI Executable Test Suites support 3 Test Object Types which are predefined by
-the test driver:</p>
+<p>This section lists all Test Object Types that are pre-defined in the SoapUI test driver.</p>
+</div>
+<div class="paragraph">
+<p>For each Test Object Type, the following information is provided:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Web Service</p>
+<p>a description</p>
 </li>
 <li>
-<p>Web Feature Service 2.0</p>
+<p>the ID that must be used to reference the Test Object Type from an Executable Test Suite</p>
 </li>
 <li>
-<p>Web Feed</p>
+<p>the parent Test Object Type in the hierarchy; for root nodes "-" is shown</p>
+</li>
+<li>
+<p>an XPath expression that can be used to detect a Test Object Type (for XML documents), if one exists</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p><mark>If these are pre-defined only, we need to add many more to allow others to develop their own ETS! At least WFS 1.0, WFS 1.1, WMS 1.1, WMS 1.3, WMTS 1.0, CSW 2.0, CSW 3.0, SOS 2.0, WCS 1.0, WCS 1.1, WCS 2.0, GeoServices REST API, but the list may grow quickly</mark></p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In future versions of ETF it is planned that new Test Object Types may
+be specified by a test developer defined and declared in XML in the
+<code>include-metadata</code> directory.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p><mark>Probably we also need to provide namespace lists like INSPIRE_DS_NS for other specs?</mark></p>
+<p><mark>CP: Provide namespace lists like INSPIRE_DS_NS for other specs.</mark></p>
 </div>
+</div>
+<div class="sect3">
+<h4 id="tot-service">4.5.2. Web service</h4>
 <div class="paragraph">
-<p>The Test Object Types are used to check whether two or more test suites can
-be executed on the same test object together in one Test Run.</p>
+<p>Any service with an interface using HTTP(S).</p>
 </div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID88311f83-818c-46ed-8a9a-cec4f3707365</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p>-</p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>-</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tot-wfs">4.5.3. OGC Web Feature Service</h4>
 <div class="paragraph">
-<p>The pre-defined Test Object Types are defined as follows: <mark>etfAppinfo is not used - delete?</mark></p>
+<p>A web service implementing the OGC Web Feature Service standard.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="XML">&lt;testObjectTypes xmlns:etf="http://www.interactive-instruments.de/etf/2.0"&gt;
-  &lt;etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
-      id="EID88311f83-818c-46ed-8a9a-cec4f3707365"&gt;
-      &lt;label&gt;Web Service&lt;/label&gt;
-      &lt;description&gt;Any service with an interface using HTTP(S).&lt;/description&gt;
-  &lt;/etf:TestObjectType&gt;
-  &lt;etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
-      id="EID9b6ef734-981e-4d60-aa81-d6730a1c6389"&gt;
-      &lt;label&gt;Web Feature Service 2.0&lt;/label&gt;
-      &lt;description&gt;A Web Service implementing OGC Web Feature Service 2.0 and OGC Filter Encoding 2.0&lt;/description&gt;
-      &lt;parent xsi:type="loc" ref="EID88311f83-818c-46ed-8a9a-cec4f3707365"/&gt;
-  &lt;/etf:TestObjectType&gt;
-  &lt;etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
-      id="EID49d881ae-b115-4b91-aabe-31d5791bce52"&gt;
-      &lt;label&gt;Web Feed&lt;/label&gt;
-      &lt;description&gt;A feed implementing the Atom Syndication Format that can be accessed using HTTP(S).&lt;/description&gt;
-      &lt;parent xsi:type="loc" ref="EID88311f83-818c-46ed-8a9a-cec4f3707365"/&gt;
-  &lt;/etf:TestObjectType&gt;
-&lt;/testObjectTypes&gt;</code></pre>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDdb12feeb-0086-4006-bc74-28f4fdef0171</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-service">Web service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>-</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ogc_web_feature_service_2_0">4.5.4. OGC Web Feature Service 2.0</h4>
+<div class="paragraph">
+<p>A web service implementing OGC Web Feature Service 2.0 and OGC Filter Encoding 2.0.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID9b6ef734-981e-4d60-aa81-d6730a1c6389</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-wfs">OGC Web Feature Service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'WFS_Capabilities' and namespace-uri() = 'http://www.opengis.net/wfs/2.0']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ogc_web_feature_service_1_1">4.5.5. OGC Web Feature Service 1.1</h4>
+<div class="paragraph">
+<p>A web service implementing OGC Web Feature Service 1.1 and OGC Filter Encoding 1.1.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDbc6384f3-2652-4c7b-bc45-20cec488ecd0</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-wfs">OGC Web Feature Service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'WFS_Capabilities' and namespace-uri() = 'http://www.opengis.net/wfs' and starts-with(@version,'1.1')]</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ogc_web_feature_service_1_0_0">4.5.6. OGC Web Feature Service 1.0.0</h4>
+<div class="paragraph">
+<p>A web service implementing OGC Web Feature Service 1.0 and OGC Filter Encoding 1.0.0.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID8a560e6a-043f-42ca-b0a3-31b115899593</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-wfs">OGC Web Feature Service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'WFS_Capabilities' and namespace-uri() = 'http://www.opengis.net/wfs' and @version='1.0.0']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tot-wms">4.5.7. OGC Web Map Service</h4>
+<div class="paragraph">
+<p>A web service implementing the OGC Web Map Service standard.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDbae0df71-0553-438d-938f-028b53ba8aa7</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-service">Web service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>-</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ogc_web_map_service_1_3_0">4.5.8. OGC Web Map Service 1.3.0</h4>
+<div class="paragraph">
+<p>A web service implementing OGC Web Map Service 1.3.0.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID9981e87e-d642-43b3-ad5f-e77469075e74</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-wms">OGC Web Map Service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'WMS_Capabilities' and namespace-uri() = 'http://www.opengis.net/wms' and @version = '1.3.0']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ogc_web_map_service_1_1_1">4.5.9. OGC Web Map Service 1.1.1</h4>
+<div class="paragraph">
+<p>A web service implementing OGC Web Map Service 1.1.1.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDd1836a8d-9909-4899-a0bc-67f512f5f5ac</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-wms">OGC Web Map Service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'WMT_MS_Capabilities' and @version = '1.1.1']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tot-wmts">4.5.10. OGC Web Map Tile Service</h4>
+<div class="paragraph">
+<p>A web service implementing the OGC Web Map Tile Service standard.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID380b969c-215e-46f8-a4e9-16f002f7d6c3</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-service">Web service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>-</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ogc_web_map_tile_service_1_0">4.5.11. OGC Web Map Tile Service 1.0</h4>
+<div class="paragraph">
+<p>A web service implementing OGC Web Map Tile Service 1.0.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDae35f7cd-86d9-475a-aa3a-e0bfbda2bb5f</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-wmts">OGC Web Map Tile Service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/wmts/1.0']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tot-wcs">4.5.12. OGC Web Coverage Service</h4>
+<div class="paragraph">
+<p>A web service implementing the OGC Web Coverage Service standard.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDdf841ddd-20d4-4551-8bc2-a4f7267e39e0</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-service">Web service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>-</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ogc_web_coverage_service_2_0">4.5.13. OGC Web Coverage Service 2.0</h4>
+<div class="paragraph">
+<p>A web service implementing OGC Web Coverage Service 2.0 and OGC Filter Encoding 2.0.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDdac58b52-3ffd-4eb5-96e3-64723d8f0f51</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-wcs">OGC Web Coverage Service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/wcs/2.0']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ogc_web_coverage_service_1_1">4.5.14. OGC Web Coverage Service 1.1</h4>
+<div class="paragraph">
+<p>A web service implementing OGC Web Coverage Service 1.1.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID824596fa-ec04-4314-bf1a-f1e6ee119bf0</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-wcs">OGC Web Coverage Service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/wcs/1.1']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ogc_web_coverage_service_1_0_0">4.5.15. OGC Web Coverage Service 1.0.0</h4>
+<div class="paragraph">
+<p>A web service implementing OGC Web Coverage Service 1.0.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID4d4bffed-0a18-43d3-98f4-f5e7055b02e4</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-wcs">OGC Web Coverage Service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'WCS_Capabilities' and namespace-uri() = 'http://www.opengis.net/wcs']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tot-sos">4.5.16. OGC Sensor Observation Service</h4>
+<div class="paragraph">
+<p>A web service implementing the OGC Sensor Observation Service standard.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDadeb8bc4-c49b-4704-ba88-813aea5de31d</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-service">Web service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>-</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ogc_sensor_observation_service_2_0">4.5.17. OGC Sensor Observation Service 2.0</h4>
+<div class="paragraph">
+<p>A web service implementing OGC Sensor Observation Service 2.0.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDf897f313-55f0-4e51-928a-0e9869f5a1d6</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-sos">OGC Sensor Observation Service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/sos/2.0']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tot-csw">4.5.18. OGC Catalogue Service</h4>
+<div class="paragraph">
+<p>A web service implementing the OGC Catalogue Service standard.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID18bcbc68-56b9-4e8e-b0d1-90de324d0cc8</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-service">Web service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>-</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ogc_catalogue_service_3_0">4.5.19. OGC Catalogue Service 3.0</h4>
+<div class="paragraph">
+<p>A web service implementing OGC Catalogue Service 3.0.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDb2a780a8-5bba-4780-bcd5-c8c909ac407d</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-csw">OGC Catalogue Service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/cat/csw/3.0']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tot-csw-202">4.5.20. OGC Catalogue Service 2.0.2</h4>
+<div class="paragraph">
+<p>A web service implementing OGC Catalogue Service 2.0.2.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID4b0fb35d-10f0-47df-bc0b-6d4548035ae2</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-csw">OGC Catalogue Service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/cat/csw/2.0.2']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ogc_csw_ebrim_registry_service_1_0">4.5.21. OGC CSW-ebRIM Registry Service 1.0</h4>
+<div class="paragraph">
+<p>A web service implementing the CSW-ebRIM Registry Service 1.0.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID9b101002-e65e-4d96-ac45-fcb95ac6f507</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-csw-202">OGC Catalogue Service 2.0.2</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'Capabilities' and namespace-uri() = 'http://www.opengis.net/cat/wfs/1.0']</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_atom_feed">4.5.22. Atom feed</h4>
+<div class="paragraph">
+<p>A feed implementing the Atom Syndication Format that can be accessed using HTTP(S).</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID49d881ae-b115-4b91-aabe-31d5791bce52</p>
+</dd>
+<dt class="hdlist1">Parent</dt>
+<dd>
+<p><a href="#tot-service">Web service</a></p>
+</dd>
+<dt class="hdlist1">XPath</dt>
+<dd>
+<p>/*[local-name() = 'feed' and namespace-uri() = 'http://www.w3.org/2005/Atom']</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>
@@ -2052,7 +2731,10 @@ Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)</code
 </div>
 </div>
 <div class="paragraph">
-<p><mark>'messageExchange', 'context' and 'log' are pre-defined and have to be used as-is?</mark></p>
+<p>The parameters <code>messageExchange</code>, <code>context</code> and <code>log</code> are pre-defined in the context of the assertion.</p>
+</div>
+<div class="paragraph">
+<p><mark>JFH: add screenshot</mark></p>
 </div>
 <div class="paragraph">
 <p>For further information see the
@@ -2062,10 +2744,7 @@ Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)</code
 <div class="sect2">
 <h3 id="_tips_for_creating_helpful_test_suites">4.7. Tips for creating helpful test suites</h3>
 <div class="paragraph">
-<p><mark>We need to be more explicit how to create useful tests, what challenges are typically encountered and how these can be addressed.</mark></p>
-</div>
-<div class="paragraph">
-<p><mark>Don&#8217;t we also need to document the rules/decisions somewhere, how certain situations are handled by the test driver? Technical test cases, etc.</mark></p>
+<p><mark>JFH: Be more explicit how to create useful tests, what challenges are typically encountered and how these can be addressed. Examples: Dependencies, technical test steps vs HTTP test steps, iterations based on an OGC web service response, etc</mark></p>
 </div>
 </div>
 </div>
@@ -2073,6 +2752,8 @@ Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)</code
 <div class="sect1">
 <h2 id="_team_engine_based_test_suites">5. TEAM-Engine-based test suites</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_overview_4">5.1. Overview</h3>
 <div class="paragraph">
 <p>Support for the TEAM Engine is different then for the other test engines.</p>
 </div>
@@ -2097,31 +2778,84 @@ This <a href="http://opengeospatial.github.io/teamengine/testng-essentials.html"
 <div class="paragraph">
 <p>The test results reported by the TEAM Engine are transformed by ETF into the model of ETF for test results.</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Some information that is typically included in ETF test results is not included in the TEAM Engine reports and, therefore, cannot be included in the ETF test reports.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p><mark>Explain rules how the results are mapped.</mark></p>
 </div>
 <div class="sect2">
-<h3 id="_team_engine_test_suites_supported_by_etf">5.1. TEAM Engine test suites supported by ETF</h3>
+<h3 id="_team_engine_test_suites_supported_by_etf">5.2. TEAM Engine test suites supported by ETF</h3>
 <div class="paragraph">
 <p>Test suites for the TEAM Engine may be written in CTL or TestNG.</p>
 </div>
 <div class="paragraph">
-<p>All recent and future test suites are planned to be developed using TestNG and accessible using a simple API. These test suites are supported by ETF as long as they do not require that any data is pre-loaded into the service under test.</p>
+<p>A TEAM Engine test suite may be used in ETF, if it meets the following requirements:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The test suite has been developed in TestNG (most recent and all new test suites are planned to be developed using TestNG).</p>
+</li>
+<li>
+<p>The test suite can be invoked using a <a href="http://cite.opengeospatial.org/teamengine/rest/suites">simple REST API</a>.</p>
+</li>
+<li>
+<p>The test suite accepts the same test objects as the ETF test suite (the OGC CITE WFS 2.0 test accepts a WFS 2.0 URL, which is also a well-known ETF Test Object Type; however, the OGC CITE GML 3.2 test accepts a URL of the single GML file whereas ETF accepts also multiple files in a ZIP archive as well as data upload instead of a public URL)</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>CTL was used in the past for developing test suites that typically depend on a reference dataset. These tests are not useful in ETF as these test suites are only useful for testing the compliance of a product through a reference deployment, not for validating a specific service endpoint. Therefore, ETF does not support any CTL-based tests, which return test results in a completely different XML structure.</p>
+<p>TEAM Engine test suites that are currently registered in ETF as Executable Test Suite are listed in the following table:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>TEAM Engine test suite</strong></th>
+<th class="tableblock halign-left valign-top"><strong>ID in ETF</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Supported ETF Test Object Types</strong></th>
+<th class="tableblock halign-left valign-top"><strong>URL</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WFS 2.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EID95a1b6fc-2b55-3d43-9502-3b8b605bda10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#soapui-test-object-types">OGC Web Feature Service 2.0</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://cite.opengeospatial.org/teamengine/rest/suites/wfs20/1.26/">Link</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The ID must used in other Executable Test Suites to establish a dependency to a TEAM Engine test suite.</p>
+</div>
+<div class="paragraph">
+<p>The TEAM Engine test suite is associated with a pre-defined Tag:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="XML">&lt;etf:Tag id="EID268af871-5cf0-443e-834a-ce40bed6c0e3"&gt;
+  &lt;label&gt;OGC Test Suites (remote execution)&lt;/label&gt;
+  &lt;description&gt;Executable Test Suites that are executed on a remote OGC TEAM Engine instance&lt;/description&gt;
+  &lt;priority&gt;1000&lt;/priority&gt;
+&lt;/etf:Tag&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ETF currently does not support any CTL-based tests, which return test results in a different XML structure.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+One pre-condition for using an OGC CITE test suite is that it does not require pre-loading any data into the service under test. For older tests (for example, the WMS 1.x and WFS 1.x test suites) loading a pre-defined test dataset was a typical requirement. Those OGC CITE test suites may only be used to test a resource that uses the test data.
+</td>
+</tr>
+</table>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2137,17 +2871,166 @@ In the future, it is planned to harmonize the XML format of all TEAM Engine test
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_to_register_a_team_engine_test_suites_as_an_exectuable_test_suite_in_etf">5.2. How to register a TEAM Engine test suites as an Exectuable Test Suite in ETF</h3>
+<h3 id="_mapping_from_team_engine_testng_concepts_to_etf">5.3. Mapping from TEAM Engine / TestNG concepts to ETF</h3>
 <div class="paragraph">
-<p><mark>I did not find information about this. How to set dependecies, add tags, etc. I did not find the definition of EID95a1b6fc-2b55-3d43-9502-3b8b605bda10 either.</mark></p>
+<p><mark>JFH: Explain rules how the results are mapped.</mark></p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Some information that is typically included in ETF test results is not included in the TEAM Engine reports and, therefore, cannot be included in the ETF test reports.
+</td>
+</tr>
+</table>
 </div>
 </div>
+</div>
+</div>
+<h1 id="_glossary" class="sect0">Glossary</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>The table below lists key terms and definitions.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Term / Synonyms</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Definition</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">abstract test case
+</p><p class="tableblock">conformance test case</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test for a particular requirement or a set of related requirements
+</p><p class="tableblock"><em>Source: OGC Specification Model</em>
+</p><p class="tableblock">NOTE: An abstract or conformance test case is a formal basis for deriving executable test cases. It should be complete in the sense that it is sufficient to enable a test verdict to be assigned unambiguously to each potentially observable test outcome.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">abstract test module
+</p><p class="tableblock">conformance test module</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">set of related tests, all within a single conformance class
+</p><p class="tableblock"><em>Source: OGC Specification Model</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">abstract test suite
+</p><p class="tableblock">ATS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"> set of conformance classes that define tests for all requirements of a specification
+</p><p class="tableblock"><em>Source: derived from OGC Specification Model and ISO 19105</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">set of routines, protocols, and tools for building software and applications
+</p><p class="tableblock"><em>Source: Wikipedia</em>
+</p><p class="tableblock">NOTE: In the INSPIRE Test Framework, APIs are used for the internal communication between the components of the test framework and to allow machines to communicate with the INSPIRE Test Framework.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">conformance class</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">set of conformance test modules that must be applied to receive a single certificate of conformance
+</p><p class="tableblock"><em>Source: OGC Specification Model</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">consistency test</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test case that includes one or more test assertions involving information from both the test object and from a resource referenced from the test object</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">executable test suite
+</p><p class="tableblock">ETS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">set of executable test cases
+</p><p class="tableblock"><em>Source: ISO 19105</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">executable test suite set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">set of executable test suites</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">requirement</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">expression in the content of a document conveying criteria to be fulfilled if compliance with the document is to be claimed and from which no deviation is permitted
+</p><p class="tableblock"><em>Source: ISO Directives Part 2</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">specification</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">document containing recommendations, requirements and conformance tests for those requirements
+</p><p class="tableblock"><em>Source: OGC Specification Model</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test assertion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">atomic test in a test step
+</p><p class="tableblock">NOTE: The assertion tests information retrieved from the test object in a test step against the an expected value based on the requirements associated with the test case.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test case
+</p><p class="tableblock">executable test case</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">specific test of an implementation to meet particular requirements
+</p><p class="tableblock"><em>Source: ISO 19105</em>
+</p><p class="tableblock">NOTE: Instantiation of an abstract test case with values.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test driver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">component of the test framework that communicates with a test engine during a test run</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test engine</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a tool that executes an Executable Test Suite</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test framework</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">platform that supports multiple test engines, multiple test object types and the generation of harmonised test reports across the different test engines</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test object
+</p><p class="tableblock">SUT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"> asset / system under test</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test object type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classification of a test object
+</p><p class="tableblock">NOTE: An Executable Test Suite declares which types of test objects it supports. This allows to determine which Executable Test Suites may be included in a test run against a test object. Test object types are structured in a hierarchical vocabulary.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test report</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">report derived from the test result
+</p><p class="tableblock">NOTE: reports may be human readable (HTML) or machine-readable (XML, JSON) and they may be structured in different ways (usually by test suite, module, case, step and assertion).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test result</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">result of a test run</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test run</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">execution of one or more test tasks
+</p><p class="tableblock">NOTE: in a test run one or more Executable Test Suites will be executed against one or more test objects.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test step</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">an interaction with a test object as part of a test case
+</p><p class="tableblock">NOTE: Multiple steps may be necessary to execute a test case. A test step will be, for example, a query on data or a request on a web service. The result of the interaction is then subject to assertions.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test task</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">execution of an Executable Test Suite against a test object</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">validation test</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test case that is executed on the test object alone</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-06-19 13:12:26 CEST
+Last updated 2017-06-20 17:45:56 CEST
 </div>
 </div>
 </body>

@@ -31,9 +31,3 @@ Due to the different characteristics of the test engines, the development of an 
 For each of the supported test engines, ETF has specified a mapping from the concepts of the test engine to the ETF concepts so that test results in ETF are homogenous - whatever test engines are used in a test run.
 
 This guide, therefore, describes how to use the test engines in a way that is consistent with the ETC concepts. It is *not* a tutorial for the test engines (SoapUI, BaseX, TEAM Engine) or the relevant technologies (XML, XQuery, HTTP, Groovy, etc.). We assume working knowledge with the relevant tools and technologies. We have included links that should help to familiarize yourself with the relevant tools and technologies, where this is needed.
-
-Please see
-link:http://opengeospatial.github.io/teamengine/testng-essentials.html[this manual]
-for developing test suites for the Team Engine.
-
-WARNING: !!! The last paragraph needs to go to the relevant section.

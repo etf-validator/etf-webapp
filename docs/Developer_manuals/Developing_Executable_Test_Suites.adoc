@@ -6,7 +6,7 @@
 
 :toc: macro
 :toc-title: Table of contents
-:toclevels: 4
+:toclevels: 2
 :toc-position: left
 :appendix-caption: Annex
 
@@ -31,7 +31,7 @@ Testing framework for spatial data and services#
 [frame="topbot",grid="none"]
 |===
 | *Status* | in review
-| *Date* | 2017-06-16
+| *Date* | 2017-06-20
 | *Description* | This document is a guide on how to develop Executable Test Suites for ETF using the test engines SoapUI, BaseX and the TEAM Engine.
 | *Target audience* | Everyone planning to develop or edit Executable Test Suites
 | *Licence* | https://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution (cc-by) 4.0]
@@ -65,27 +65,7 @@ include::../General/About-short.adoc[]
 :numbered:
 include::Introduction.adoc[]
 
-== Information used by all Executable Test Suites
-
-=== Overview
-
-All Executable Test Suites can make use of and reference generic information items that is used by ETF to organize Executable Test Suites and present test reports to a user.
-
-How these items are referenced in the different types of Executable Test Suites is described in the section for each test engine.
-
-These items are:
-
-* Collections of multi-lingual message templates for use in test reports for one or more Executable Test Suites
-* Tags that may be associated with an Executable Test Suite to support grouping and filtering
-
-CAUTION: #What about TestObjectType and StatisticalReportTableType?#
-
-These items that stored as XML documents in the  `include-metadata`
-directory of an ETF deployment (see link:http://[#add link where the directory structure is described#]).
-
-include::Translation_Template.adoc[]
-
-include::Tag.adoc[]
+include::Metadata.adoc[]
 
 include::BaseX_ETS.adoc[]
 
@@ -94,5 +74,7 @@ include::SoapUI_ETS.adoc[]
 include::TEAM_Engine_ETS.adoc[]
 
 :numbered!:
+
+include::../General/Glossary.adoc[]
 
 //:leveloffset: -1
