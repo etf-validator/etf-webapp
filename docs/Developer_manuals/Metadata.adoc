@@ -1,0 +1,39 @@
+== Information and concepts used by all Executable Test Suites
+
+=== Overview
+
+All Executable Test Suites can make use of and reference generic information items that is used by ETF to organize Executable Test Suites and present test reports to a user.
+
+How these items are referenced in the different types of Executable Test Suites is described in the section for each test engine.
+
+These items are:
+
+* Collections of multi-lingual message templates for use in test reports for one or more Executable Test Suites
+* Tags that may be associated with an Executable Test Suite to support grouping and filtering
+
+These items that stored as XML documents in the  `include-metadata`
+directory of an ETF deployment (see the link:http://docs.etf-validator.net/Admin_manuals/index.html#_etf_data_directory_structure[description of the ETF directory structure]).
+
+include::Translation_Template.adoc[]
+
+include::Tag.adoc[]
+
+=== Test object types
+
+A Test Object Type is a classification of a test object. Every Executable Test Suite in ETF declares which types of test objects it supports. This allows to determine which Executable Test Suites may be included in a test run against a test object. Test object types are structured in a hierarchical vocabulary.
+
+The Test Object Types are used to check whether two or more Executable Test Suites can be executed on the same test object together in one Test Run.
+
+Every test engine supports one or more Test Object Types. The types supported by each test engine are described in the section on the test engines (link:#basex-test-object-types[BaseX], link:#soapui-test-object-types[SoapUI]).
+
+=== Test item types
+
+#CP: add text#
+
+=== Statistical information
+
+#CP: describe (move to BaseX for now?)#
+
+=== Attachment types
+
+#CP: add text#

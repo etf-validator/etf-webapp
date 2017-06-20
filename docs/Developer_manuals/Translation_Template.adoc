@@ -26,7 +26,7 @@ language codes used in HTTP headers, e.g. "en" for English.
 
 The placeholders are embedded in curly brackets, e.g. "\{filename}".
 
-IMPORTANT: All names must start with "TR." and may only use the following characters: #add list of characters#.
+IMPORTANT: All names must start with "TR." and may only use the following characters: "a"-"z", "A"-"Z", "0"-"9", ".", "-", "_". The length is restricted to 45 characters.
 
 IMPORTANT: The `name` attribute values of an `etf:LangTranslationTemplateCollection` element and its `etf:TranslationTemplate` elements must be identical.
 
