@@ -6,14 +6,14 @@ You should be familiar with:
 * link:https://www.soapui.org/getting-started/your-first-soapui-project.html[SoapUI]
 * link:http://groovy-lang.org/[Groovy]
 
-
 include::SoapUI_ETS_GUI.adoc[]
 
-=== Introduction
+=== Basics
+
 link:http://www.soapui.org[SoapUI] is an open-source web service testing
 application originally developed for testing service-oriented architectures
 (SOA) and REST services. In ETF, it is extended via plugins and used to test
-geo network services.
+spatial web services.
 
 Start the GUI with the batch file and click on 'File' and then on
 'Create Empty project'. The name can be changed by right-clicking on the test
@@ -37,14 +37,13 @@ and for passing user data into SoapUI, for example the service URL to test.
 
 image:https://user-images.githubusercontent.com/13570741/27132670-fb733832-510f-11e7-941d-f328250e7fd0.png[]
 
-Create a serviceEndpoint property and set a web service, for example
-an Atom service feed.
+Create a serviceEndpoint property in the "Custom Properties" tab and set a web service, for example an Atom service feed.
 
 Properties on the Test project level can be referenced within SoapUI with the
 expression `${#Project#PROPERTY}`.
 
 To test whether a atom service feed is available, create new
-SoapUI Test Suite, a Test Case and a HTTP Test Step. The Request URL of each
+SoapUI Test Suite, a Test Case and a HTTP Test Step. The Request URL ("Endpoint") of each
 HTTP Test Step must be set to `${#Project#serviceEndpoint}`.
 
 image:https://user-images.githubusercontent.com/13570741/27137321-eaecce0c-511d-11e7-8f0b-93361d0ba26b.png[]
@@ -66,12 +65,18 @@ this error:
 image:https://user-images.githubusercontent.com/13570741/27138183-306dad32-5120-11e7-81de-71c8408922d7.png[]
 
 The error is preprocessed for ETF and will, when SoapUI is run from within the
-ETF, reference the 'TR.noDataReturned' translation and output a
-error text like
-'Expected a response but the service did not return any data. Verify that the used endpoint URL is correct and accessible from outside your organization. If the service requires authentication, then check that the correct credentials are used by the validator or verify that upstream firewalls/proxy servers do not prevent access.'
-from the loaded link:https://github.com/inspire-eu-validation/ets-repository/blob/master/include-metadata/TranslationTemplateBundle-EIDfadd4929-fa60-4781-b658-703bbfe3f4eb.xml#L13[Translation Template collection].
+ETF, reference the 'TR.noDataReturned' translation and output the corresponding error message from the loaded Translation Template Collection (see the parameter etf.translation.template.collection.id below).
 
-This error occurs when no data has been received. Close the assertion and
+.Error message in the INSPIRE validator
+=========================================
+The error message in the INSPIRE validator would be (see the entry in the link:https://github.com/inspire-eu-validation/ets-repository/blob/master/include-metadata/TranslationTemplateBundle-EIDfadd4929-fa60-4781-b658-703bbfe3f4eb.xml#L13[Translation Template collection]):
+
+> 'Expected a response but the service did not return any data. Verify that the used endpoint URL is correct and accessible from outside your organization. If the service requires authentication, then check that the correct credentials are used by the validator or verify that upstream firewalls/proxy servers do not prevent access.'
+=========================================
+
+#So every Translation Template Collection for SoapUI tests must at least have texts for all TR.xxx-messages that are defined in the predefined functions. The codes and their meaning needs to be listed in this manual along with the parameters of each message.#
+
+This error occurs when no data has been received. Close the assertion (click on 'OK') and
 click on the green arrow in the HTTP test step to execute the HTTP request and
 execute the assertion against the response.
 
@@ -80,7 +85,7 @@ with the 'TR.missingFeedRootElement' code.
 
 === Parameters and metadata properties
 
-The standard properties are described in the following table.
+Properties are used to parameterize an Executable Test Suite ('Test Project' in SoapUI terminology) as well as to associate it with other resources of ETF like Tags, Test Object Types etc. The standard properties are described in the following table.
 
 Description of standard properties
 [width="100%",options="header"]
@@ -90,20 +95,61 @@ Description of standard properties
 | authUser | optional username for authentication
 | authPwd | optional password for authentication
 | authMethod | only the value 'basic' for HTTP basic authentication is supported yet
-| etf.ignore.properties | If properties are added, that are not known to ETF,
-they are expected to be parameters for the Test Suite and appear on Test start up.
+| etf.ignore.properties | If properties are added #(where?)#, that are not known to ETF,
+they are expected to be parameters for the Test Suite and appear on Test start up #(=start of a test run?)#.
 This can be avoided by using this property, which can contain a list of property names that should not be interpreted as parameters.
-| etf.tag.ids | EID reference to one or multiple Tags, separated with an comma
-| etf.translation.template.collection.id | EID reference to an Translation Template collection
-| etf.supported.test.object.type.ids | EID reference to a supported Test Object Type
+| etf.tag.ids | EID reference to one or multiple link:#tags[Tags], separated by commas #(whitespace allowed?)#
+| etf.translation.template.collection.id | EID reference to a collection of link:#message-template-bundles[Translation Templates]
+| etf.supported.test.object.type.ids | EID reference to one or more supported link:#test-object-types[Test Object Types], separated by commas #correct?#
 | etf.dependency.ids | optional EID reference to one ore multiple Executable Test
-Suites this Test Suite depends on
-| etf.author | Author of the Test Suite
-| etf.last.editor | Last editor
-| etf.creation.date | Date when the Test Suite was created as ISO 8601 string
-| etf.last.update.date | Date when the Test Suite was updated as ISO 8601 string
-| etf.version | Test Suite version
+Suites this test suite depends on, separated by commas #correct?#
+| etf.author | Name of the author of the test suite
+| etf.last.editor | Name of the last editor of the test suite
+| etf.creation.date | Date when the test suite was created as ISO 8601 string
+| etf.last.update.date | Date when the test suite was updated as ISO 8601 string
+| etf.version | Version of the test suite
 |===
+
+[[test-object-types]]
+=== Test Object Types
+
+SoapUI Executable Test Suites support 3 Test Object Types which are predefined by
+the test driver:
+
+* Web Service
+* Web Feature Service 2.0
+* Web Feed
+
+#If these are pre-defined only, we need to add many more to allow others to develop their own ETS! At least WFS 1.0, WFS 1.1, WMS 1.1, WMS 1.3, WMTS 1.0, CSW 2.0, CSW 3.0, SOS 2.0, WCS 1.0, WCS 1.1, WCS 2.0, GeoServices REST API, but the list may grow quickly#
+
+#Probably we also need to provide namespace lists like INSPIRE_DS_NS for other specs?#
+
+The Test Object Types are used to check whether two or more test suites can
+be executed on the same test object together in one Test Run.
+
+The pre-defined Test Object Types are defined as follows: #etfAppinfo is not used - delete?#
+[source,XML]
+----
+<testObjectTypes xmlns:etf="http://www.interactive-instruments.de/etf/2.0">
+  <etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
+      id="EID88311f83-818c-46ed-8a9a-cec4f3707365">
+      <label>Web Service</label>
+      <description>Any service with an interface using HTTP(S).</description>
+  </etf:TestObjectType>
+  <etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
+      id="EID9b6ef734-981e-4d60-aa81-d6730a1c6389">
+      <label>Web Feature Service 2.0</label>
+      <description>A Web Service implementing OGC Web Feature Service 2.0 and OGC Filter Encoding 2.0</description>
+      <parent xsi:type="loc" ref="EID88311f83-818c-46ed-8a9a-cec4f3707365"/>
+  </etf:TestObjectType>
+  <etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
+      id="EID49d881ae-b115-4b91-aabe-31d5791bce52">
+      <label>Web Feed</label>
+      <description>A feed implementing the Atom Syndication Format that can be accessed using HTTP(S).</description>
+      <parent xsi:type="loc" ref="EID88311f83-818c-46ed-8a9a-cec4f3707365"/>
+  </etf:TestObjectType>
+</testObjectTypes>
+----
 
 === Assertion library
 
@@ -118,43 +164,13 @@ import de.interactive_instruments.etf.suim.*
 Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)
 ----
 
+#'messageExchange', 'context' and 'log' are pre-defined and have to be used as-is?#
+
 For further information see the
 link:http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html[Assert API documentation]
 
-=== Test Object Types
+=== Tips for creating helpful test suites
 
-SoapUI Executable Test Suites support 3 Test Object Types which are predefined by
-the test driver:
+#We need to be more explicit how to create useful tests, what challenges are typically encountered and how these can be addressed.#
 
-* Web Service
-* Web Feature Service 2.0
-* Web Feed
-
-The Test Object Types are used to check whether two or more test suites can
-be run together in one Test Run.
-
-The Test Object Types are defined as follows:
-[source,XML]
-----
-<testObjectTypes xmlns:etf="http://www.interactive-instruments.de/etf/2.0">
-    <etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
-        id="EID9b6ef734-981e-4d60-aa81-d6730a1c6389">
-        <label>Web Feature Service 2.0</label>
-        <description>A Web Service implementing ISO 19142 Web Feature Service and ISO 19143 Filter
-            Encoding</description>
-        <parent xsi:type="loc" ref="EID88311f83-818c-46ed-8a9a-cec4f3707365"/>
-    </etf:TestObjectType>
-    <etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
-        id="EID49d881ae-b115-4b91-aabe-31d5791bce52">
-        <label>Web Feed</label>
-        <description>A Web Feed implementing the Atom Syndication Format, describing update
-            information about published data.</description>
-    </etf:TestObjectType>
-    <etf:TestObjectType xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
-        id="EID88311f83-818c-46ed-8a9a-cec4f3707365">
-        <label>Web Service</label>
-        <description>A web Service with a HTTP interface that is not described in more
-            detail.</description>
-    </etf:TestObjectType>
-</testObjectTypes>
-----
+#Don't we also need to document the rules/decisions somewhere, how certain situations are handled by the test driver? Technical test cases, etc.#

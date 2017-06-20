@@ -40,7 +40,7 @@ ZIP file with the XML documents.
 * If necessary, add additional file patterns beside "*.xml".
 * In the tab "Parsing" check "Use internal XML parser".
 * Leave all other options unchanged and press "OK".
-* Open the XQuery document in the editor.
+* Open the XQuery document (see link:#the-xquery-document[below] for more information) in the editor.
 * Search for the declaration of the following variables and set their
 default values:
 * Set `$projDir` to the local file path where the project files are
@@ -49,13 +49,14 @@ located.
 * Set `$etsFile`to the file path of the `etf:ExecutableTestSuite`
 document.
 +
-Example:
-+
+.XQuery declarations of standard variables
+=====================================================================
 ----------------------------------------------------------------------------------------------------
 declare variable $projDir external := "/home/user/Documents/ETF/ets-repository/generic";
 declare variable $dbBaseName external := "errors";
 declare variable $etsFile external := $projDir || file:dir-separator() || "ets-template-bsxets.xml";
 ----------------------------------------------------------------------------------------------------
+=====================================================================
 
 Executing the XQuery should now execute the test suite.
 

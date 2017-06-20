@@ -16,14 +16,18 @@
 :pygments-style: autumn
 :pygments-linenums-mode: inline
 
+////
 [[ii_logo]]
 image::http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png["Interactive instruments logo",150,align="center",link=http://www.interactive-instruments.de/en]
+////
 
 [frame="none",grid="none",cols="^25,<.^75"]
 |===
 | image:images/ETF_logo.png["ETF Logo",125,link=http://www.etf-validator.net] | [etf_headline]#ETF +
-testing framework for geo network services and data#
+Testing framework for spatial data and services#
 |===
+
+include::General/about.adoc[]
 
 = ETF manuals
 

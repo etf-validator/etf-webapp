@@ -1,0 +1,29 @@
+== TEAM-Engine-based test suites
+
+Support for the TEAM Engine is different then for the other test engines.
+
+While it would be possible to develop new test suites in the TEAM Engine, this is not recommended as the TEAM Engine does not support many aspects of the ETF information model.
+
+NOTE: This link:http://opengeospatial.github.io/teamengine/testng-essentials.html[manual] has information for developing test suites for the Team Engine.
+
+The TEAM Engine is primarily supported by ETF to allow that "native" Executable Test Suites for the test engines BaseX and SoapUI can declare dependencies to test suites developed for the TEAM Engine and so that ETF can execute these test suites using a remote TEAM Engine instance, typically the one hosted by OGC for their Compliance Program (CITE).
+
+The test results reported by the TEAM Engine are transformed by ETF into the model of ETF for test results.
+
+NOTE: Some information that is typically included in ETF test results is not included in the TEAM Engine reports and, therefore, cannot be included in the ETF test reports.
+
+#Explain rules how the results are mapped.#
+
+=== TEAM Engine test suites supported by ETF
+
+Test suites for the TEAM Engine may be written in CTL or TestNG.
+
+All recent and future test suites are planned to be developed using TestNG and accessible using a simple API. These test suites are supported by ETF as long as they do not require that any data is pre-loaded into the service under test.
+
+CTL was used in the past for developing test suites that typically depend on a reference dataset. These tests are not useful in ETF as these test suites are only useful for testing the compliance of a product through a reference deployment, not for validating a specific service endpoint. Therefore, ETF does not support any CTL-based tests, which return test results in a completely different XML structure.
+
+NOTE: In the future, it is planned to harmonize the XML format of all TEAM Engine test results using W3C EARL. Once that has been implemented - and ETF supports the EARL-based result format - also CTL-based test suites should be usable as long as they do not require any pre-loaded data and are accessible via the simple API.
+
+=== How to register a TEAM Engine test suites as an Exectuable Test Suite in ETF
+
+#I did not find information about this. How to set dependecies, add tags, etc. I did not find the definition of EID95a1b6fc-2b55-3d43-9502-3b8b605bda10 either.#

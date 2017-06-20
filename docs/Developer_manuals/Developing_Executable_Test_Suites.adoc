@@ -16,23 +16,26 @@
 :pygments-style: autumn
 :pygments-linenums-mode: inline
 
+////
 [[ii_logo]]
 image::http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png["Interactive instruments logo",150,align="center",link=http://www.interactive-instruments.de/en]
+////
 
 [frame="none",grid="none",cols="^25,<.^75"]
 |===
 | image:../images/ETF_logo.png["ETF Logo",125,link=http://www.etf-validator.net] | [etf_headline]#ETF +
-testing framework for geo network services and data#
+Testing framework for spatial data and services#
 |===
 
 = Developing Executable Test Suites
 [frame="topbot",grid="none"]
 |===
 | *Status* | in review
-| *Date* | 2017-06-12
-| *Description* | This manual is intended for test developers for developing the Executable Test Suites for the validator. Basic knowledge about the validator, XML, Groovy and SoapUI for SoapUI based tests or XQUery for BaseX based tests are required.
+| *Date* | 2017-06-16
+| *Description* | This document is a guide on how to develop Executable Test Suites for ETF using the test engines SoapUI, BaseX and the TEAM Engine.
+| *Target audience* | Everyone planning to develop or edit Executable Test Suites
 | *Licence* | https://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution (cc-by) 4.0]
-| *Identifier* | https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Developer_manuals/Building.adoc
+| *Identifier* | http://docs.etf-validator.net/Developer_manuals/Developing_Executable_Test_Suites.html
 | *Language* | EN
 |===
 
@@ -45,6 +48,7 @@ WARNING: WORK IN PROGRESS
 | 2016-09-08 | Clemens Portele | BaseX documentation created
 | 2017-06-09 | Jon Herrmann | BaseX documentation updated and merged
 | 2017-06-13 | Jon Herrmann | SoapUI documentation
+| 2017-06-xx | Jon Herrmann, Clemens Portele | Revision after review
 |===
 
 
@@ -54,16 +58,30 @@ toc::[]
 
 <<<
 
-:leveloffset: +1
+//:leveloffset: +1
+
+include::../General/About-short.adoc[]
 
 :numbered:
 include::Introduction.adoc[]
 
-== Test suite overlapping metadata types
+== Information used by all Executable Test Suites
 
-The types presented in this section must be stored in an `include-metadata`
-directory. The referencing of the types is explained in the sections of the
-respective Test Suites.
+=== Overview
+
+All Executable Test Suites can make use of and reference generic information items that is used by ETF to organize Executable Test Suites and present test reports to a user.
+
+How these items are referenced in the different types of Executable Test Suites is described in the section for each test engine.
+
+These items are:
+
+* Collections of multi-lingual message templates for use in test reports for one or more Executable Test Suites
+* Tags that may be associated with an Executable Test Suite to support grouping and filtering
+
+CAUTION: #What about TestObjectType and StatisticalReportTableType?#
+
+These items that stored as XML documents in the  `include-metadata`
+directory of an ETF deployment (see link:http://[#add link where the directory structure is described#]).
 
 include::Translation_Template.adoc[]
 
@@ -73,6 +91,8 @@ include::BaseX_ETS.adoc[]
 
 include::SoapUI_ETS.adoc[]
 
+include::TEAM_Engine_ETS.adoc[]
+
 :numbered!:
 
-:leveloffset: -1
+//:leveloffset: -1
