@@ -568,9 +568,151 @@ Once the listener is implemented, the whole generation of the
 [[spatial-tests]]
 === Testing spatial aspects
 
-#CP: Add more information how to use the GmlGeoX functions. Sources: https://github.com/interactive-instruments/etf-gmlgeox/blob/master/Readme.md and https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox#
+==== Overview
 
-#JFH: Publish JavaDoc and link from here#
+The GmlGeoX extension module extends XQuery with additional capabilities:
+
+* Spatial indexing of features
+* Caching of feature geometries
+* Validation of feature geometries
+* Evaluation of topological predicates
+//* Computation of new geometries - not included in the wiki yet
+
+The complete documentation of the module is available in the JavaDoc description. #JFH: Publish JavaDoc and link from here#
+
+==== Spatial indexing
+
+Feature geometries can be indexed using an r*-tree. To index a feature execute `ggeo:index( int pre, String dbName, String id, Node xmlGeometry )`.
+
+* 'pre' is the index of the feature node in the database table that can be obtained using `db:node-pre($node)`. It is essential that the XML database is not updated as this will change the pre values.
+* 'dbName' is the name of the database that contains the feature node and can be obtained using `db:name($node)`.
+* 'id' is a String id used for the geometry cache. Typically the gml:id of the feature is used.
+* 'xmlGeometry' is the XML node with the GML geometry element to index.
+
+.Indexing a list of features
+====
+To index a node list of features (`$features`) simply execute (where `ns:geometry` is the primary geometry property):
+
+[source,XQuery]
+----
+let $dummy := for $feature in $features
+	return ggeo:index(db:node-pre($feature),db:name($feature),$feature/@gml:id,$feature/ns:geometry/*[1])
+----
+====
+
+Once the index has been established, it can be searched to find all features whose bounding box overlaps with another bounding box. The `ggeo:search( number minx, number miny, number maxx, number maxy )` function returns a node list of indexed features overlapping with the search bounding box:
+
+.Search all indexed features in a bounding box
+====
+[source,XQuery]
+----
+let $env := ggeo:envelope($candidate_geometry)
+let $overlapping_features := ggeo:search($env[1],$env[2],$env[3],$env[4])
+----
+====
+
+.Select the candidate geometries that may intersect the search bounding box
+====
+[source,XQuery]
+----
+let $geometries :=
+	for $feature in ggeo:search($env[1],$env[2],$env[3],$env[4])
+		return ggeo:getGeometry($feature/@gml:id,$feature/ns:geometry/*[1])
+----
+====
+
+==== Geometry caching
+
+The parsed geometries are cached during indexing to avoid multiple computations of the geometries from the XML. The cache size can be set before the indexing is started using `ggeo:cacheSize( int size )`, the default size is 100000 geometries. The cache is transparent to the user of the GmlGeoX module.
+
+Geometries are accessed from the index using `geo:getGeometry( String id, Node xmlGeometry )`. The `id` is specified during the indexing, typically the gml:id attribute of the GML feature is used. If the geometry with the id is currently in the cache, it is returned. Otherwise the geometry is computed from the XML and put into the cache.
+
+==== Geometry Validation
+
+Validation of GML geometry elements within a given XML node is basically a SAX-based scan for recognized GML geometry elements, and subsequent validation of these elements. The default set of recognized element names is a subset of GML. Functions offered by the module can be used to modify this set within an XQuery. See the link:https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox[test project developer documentation for this module] for further details.
+
+.Validation of feature geometries
+====
+In this XQuery expression, the feature geometries are all validated (test mask '110' means general validation and polygon patch connectivity are evaluated) and error messages returned from the GmlGeoX module are included in the test result.
+
+[source,XQuery]
+----
+let $messages := for $feature in $features
+  return
+	try {
+		let $vr := ggeo:validateAndReport($feature,'110')
+		return
+	   if (xs:boolean($vr/ggeo:isValid)) then ()
+	   else
+	   	for $message in $vr/ggeo:message[@type='ERROR']
+			return
+				local:addMessage('TR.invalidGeometry', map { 'filename': local:filename($feature), 'featureType': local-name($feature), 'gmlid': string($feature/@gml:id), 'text': $message/text() })
+	} catch * {
+		return () (: do not raise an error for parsing exceptions, if these are tested already elsewhere :)
+	}
+return
+(if ($messages) then 'FAILED' else 'PASSED',
+ local:error-statistics('TR.featuresWithErrors', count(fn:distinct-values($messages//etf:argument[@token='gmlid']/text()))),
+ $messages)
+----
+====
+
+==== Evaluation of topological predicates
+
+Topological predicates between two geometries are evaluated using the JTS library. The standard predicates specified in the OGC Simple Feature standard are supported. See the link:https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox[test project developer documentation for this module] for further details.
+
+.Testing
+====
+In this XQuery expression, the feature geometries are all evaluated to determine overlaps. This assumes that all features have surface geometries.
+
+[source,XQuery]
+----
+let $messages :=
+(for $candidate in $features
+ return
+ try {
+  let $candidate_geometry := ggeo:getGeometry($candidate/@gml:id,$candidate/*:geometry/*[1])
+  let $env := ggeo:envelope($candidate_geometry)
+  let $other_features := ggeo:search($env[1],$env[2],$env[3],$env[4])
+  for $feature in $other_features[not (@gml:id = $candidate/@gml:id)]
+   order by $candidate/@gml:id, $feature/@gml:id
+   return
+   try {
+   let $other_geometry := ggeo:getGeometry($feature/@gml:id,$feature/*:geometry/*[1])
+   let $check := ggeo:relate($candidate_geometry, $other_geometry, 'F********')
+	return
+	if ($check) then ()
+	else
+	let $intersection := string(ggeo:intersection($candidate_geometry, $other_geometry))
+	let $polygons := functx:get-matches($intersection,'POLYGON\s?\(\s?\([\d,\.\s]+\)\s?\)')[fn:string-length(.)>0]
+	return local:addMessage('TR.Overlap', map { 'filename': local:filename($candidate), 'featureType' : local-name($candidate), 'gmlid': string($candidate/@gml:id), 'gmlid2': string($feature/@gml:id), 'sharedArea': fn:string-join($polygons, ', ') })
+	} catch * {
+    return () (: do not raise an error for parsing exceptions, if these are tested already elsewhere :)
+	}
+ } catch * {
+   return () (: do not raise an error for parsing exceptions, if these are tested already elsewhere :)
+ }
+)[position() le $limitErrors]
+return
+(if ($messages) then 'FAILED' else 'PASSED',
+ local:error-statistics('TR.featuresWithErrors', count(fn:distinct-values($messages//etf:argument[@token='gmlid']/text()))),
+ $messages)
+----
+====
+
+////
+==== Computation of new geometries
+
+#not included yet#
+////
+
+==== Known limitations
+
+The implementation of the GmlGeoX module depends to a large extent on the deegree framework. The default geometry implementation of deegree does not support parsing all GML types, primarily the GML 3.3 types. Also, in a number of cases spatial operations are not supported for parsed geometries. This is primarily due to the fact that deegree relies on JTS to perform these operations, and that therefore the geometries must be simplified/linearized - which is not implemented for all geometry types that can be parsed by deegree. There is even a case where an incomplete JTS representations of a deegree geometry is accepted and used for spatial operations (for a surface with multiple polygon patches only the first is used).
+
+As a result, a test developer of this module must be very careful regarding which geometry types are supported for processing, and whether the computation is robust and exact or not. Please consult the Javadoc #JFH: add link# for additional details.
+
+For the spatial relationship operators, link:https://github.com/interactive-instruments/etf-webapp/wiki/gmlgeox-module-geometry-types-supported-by-spatial-operators[this page] in the test project developer manual documents which geometry types are supported and which are not. The page also has information, which geometry types are simplified/linearized automatically by the module.
 
 [[parameters]]
 Parameters

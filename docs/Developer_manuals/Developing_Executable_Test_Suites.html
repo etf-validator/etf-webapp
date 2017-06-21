@@ -63,7 +63,7 @@
 </li>
 <li><a href="#_team_engine_based_test_suites">5. TEAM-Engine-based test suites</a>
 <ul class="sectlevel2">
-<li><a href="#_overview_6">5.1. Overview</a></li>
+<li><a href="#_overview_7">5.1. Overview</a></li>
 <li><a href="#_team_engine_test_suites_supported_by_etf">5.2. TEAM Engine test suites supported by ETF</a></li>
 <li><a href="#_mapping_from_team_engine_testng_concepts_to_etf">5.3. Mapping from TEAM Engine / TestNG concepts to ETF</a></li>
 <li><a href="#te-attachments">5.4. Attachments</a></li>
@@ -1402,11 +1402,196 @@ currently defined in generic-query-prolog.xq:</p>
 </div>
 <div class="sect2">
 <h3 id="spatial-tests">3.7. Testing spatial aspects</h3>
+<div class="sect3">
+<h4 id="_overview_2">3.7.1. Overview</h4>
 <div class="paragraph">
-<p><mark>CP: Add more information how to use the GmlGeoX functions. Sources: <a href="https://github.com/interactive-instruments/etf-gmlgeox/blob/master/Readme.md" class="bare">https://github.com/interactive-instruments/etf-gmlgeox/blob/master/Readme.md</a> and <a href="https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox" class="bare">https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox</a></mark></p>
+<p>The GmlGeoX extension module extends XQuery with additional capabilities:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Spatial indexing of features</p>
+</li>
+<li>
+<p>Caching of feature geometries</p>
+</li>
+<li>
+<p>Validation of feature geometries</p>
+</li>
+<li>
+<p>Evaluation of topological predicates</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p><mark>JFH: Publish JavaDoc and link from here</mark></p>
+<p>The complete documentation of the module is available in the JavaDoc description. <mark>JFH: Publish JavaDoc and link from here</mark></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_spatial_indexing">3.7.2. Spatial indexing</h4>
+<div class="paragraph">
+<p>Feature geometries can be indexed using an r*-tree. To index a feature execute <code>ggeo:index( int pre, String dbName, String id, Node xmlGeometry )</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>'pre' is the index of the feature node in the database table that can be obtained using <code>db:node-pre($node)</code>. It is essential that the XML database is not updated as this will change the pre values.</p>
+</li>
+<li>
+<p>'dbName' is the name of the database that contains the feature node and can be obtained using <code>db:name($node)</code>.</p>
+</li>
+<li>
+<p>'id' is a String id used for the geometry cache. Typically the gml:id of the feature is used.</p>
+</li>
+<li>
+<p>'xmlGeometry' is the XML node with the GML geometry element to index.</p>
+</li>
+</ul>
+</div>
+<div class="exampleblock">
+<div class="title">Example 8. Indexing a list of features</div>
+<div class="content">
+<div class="paragraph">
+<p>To index a node list of features (<code>$features</code>) simply execute (where <code>ns:geometry</code> is the primary geometry property):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="XQuery"><span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">dummy</span> <span class="tok-o">:=</span> <span class="tok-k">for</span> <span class="tok-nv">$</span><span class="tok-n">feature</span> <span class="tok-ow">in</span> <span class="tok-nv">$</span><span class="tok-n">features</span>
+	<span class="tok-k">return</span> <span class="tok-nf">ggeo:index</span><span class="tok-p">(</span><span class="tok-nf">db:node-pre</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">),</span><span class="tok-nf">db:name</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">),</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">/</span><span class="tok-na">@gml:id</span><span class="tok-p">,</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">/</span><span class="tok-nt">ns:geometry</span><span class="tok-p">/</span><span class="tok-nt">*</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">])</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Once the index has been established, it can be searched to find all features whose bounding box overlaps with another bounding box. The <code>ggeo:search( number minx, number miny, number maxx, number maxy )</code> function returns a node list of indexed features overlapping with the search bounding box:</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 9. Search all indexed features in a bounding box</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="XQuery"><span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">env</span> <span class="tok-o">:=</span> <span class="tok-nf">ggeo:envelope</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">candidate_geometry</span><span class="tok-p">)</span>
+<span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">overlapping_features</span> <span class="tok-o">:=</span> <span class="tok-nf">ggeo:search</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">env</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">],</span><span class="tok-nv">$</span><span class="tok-n">env</span><span class="tok-p">[</span><span class="tok-mi">2</span><span class="tok-p">],</span><span class="tok-nv">$</span><span class="tok-n">env</span><span class="tok-p">[</span><span class="tok-mi">3</span><span class="tok-p">],</span><span class="tok-nv">$</span><span class="tok-n">env</span><span class="tok-p">[</span><span class="tok-mi">4</span><span class="tok-p">])</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="exampleblock">
+<div class="title">Example 10. Select the candidate geometries that may intersect the search bounding box</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="XQuery"><span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">geometries</span> <span class="tok-o">:=</span>
+	<span class="tok-k">for</span> <span class="tok-nv">$</span><span class="tok-n">feature</span> <span class="tok-ow">in</span> <span class="tok-nf">ggeo:search</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">env</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">],</span><span class="tok-nv">$</span><span class="tok-n">env</span><span class="tok-p">[</span><span class="tok-mi">2</span><span class="tok-p">],</span><span class="tok-nv">$</span><span class="tok-n">env</span><span class="tok-p">[</span><span class="tok-mi">3</span><span class="tok-p">],</span><span class="tok-nv">$</span><span class="tok-n">env</span><span class="tok-p">[</span><span class="tok-mi">4</span><span class="tok-p">])</span>
+		<span class="tok-k">return</span> <span class="tok-nf">ggeo:getGeometry</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">/</span><span class="tok-na">@gml:id</span><span class="tok-p">,</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">/</span><span class="tok-nt">ns:geometry</span><span class="tok-p">/</span><span class="tok-nt">*</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">])</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_geometry_caching">3.7.3. Geometry caching</h4>
+<div class="paragraph">
+<p>The parsed geometries are cached during indexing to avoid multiple computations of the geometries from the XML. The cache size can be set before the indexing is started using <code>ggeo:cacheSize( int size )</code>, the default size is 100000 geometries. The cache is transparent to the user of the GmlGeoX module.</p>
+</div>
+<div class="paragraph">
+<p>Geometries are accessed from the index using <code>geo:getGeometry( String id, Node xmlGeometry )</code>. The <code>id</code> is specified during the indexing, typically the gml:id attribute of the GML feature is used. If the geometry with the id is currently in the cache, it is returned. Otherwise the geometry is computed from the XML and put into the cache.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_geometry_validation">3.7.4. Geometry Validation</h4>
+<div class="paragraph">
+<p>Validation of GML geometry elements within a given XML node is basically a SAX-based scan for recognized GML geometry elements, and subsequent validation of these elements. The default set of recognized element names is a subset of GML. Functions offered by the module can be used to modify this set within an XQuery. See the <a href="https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox">test project developer documentation for this module</a> for further details.</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 11. Validation of feature geometries</div>
+<div class="content">
+<div class="paragraph">
+<p>In this XQuery expression, the feature geometries are all validated (test mask '110' means general validation and polygon patch connectivity are evaluated) and error messages returned from the GmlGeoX module are included in the test result.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="XQuery"><span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">messages</span> <span class="tok-o">:=</span> <span class="tok-k">for</span> <span class="tok-nv">$</span><span class="tok-n">feature</span> <span class="tok-ow">in</span> <span class="tok-nv">$</span><span class="tok-n">features</span>
+  <span class="tok-k">return</span>
+	<span class="tok-k">try</span> <span class="tok-p">{</span>
+		<span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">vr</span> <span class="tok-o">:=</span> <span class="tok-nf">ggeo:validateAndReport</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">,</span><span class="tok-s1">&#39;110&#39;</span><span class="tok-p">)</span>
+		<span class="tok-k">return</span>
+	   <span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-nf">xs:boolean</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">vr</span><span class="tok-p">/</span><span class="tok-nt">ggeo:isValid</span><span class="tok-p">))</span> <span class="tok-k">then</span> <span class="tok-p">()</span>
+	   <span class="tok-k">else</span>
+	   	<span class="tok-k">for</span> <span class="tok-nv">$</span><span class="tok-n">message</span> <span class="tok-ow">in</span> <span class="tok-nv">$</span><span class="tok-n">vr</span><span class="tok-p">/</span><span class="tok-nt">ggeo:message</span><span class="tok-p">[</span><span class="tok-na">@type</span><span class="tok-o">=</span><span class="tok-s1">&#39;ERROR&#39;</span><span class="tok-p">]</span>
+			<span class="tok-k">return</span>
+				<span class="tok-nf">local:addMessage</span><span class="tok-p">(</span><span class="tok-s1">&#39;TR.invalidGeometry&#39;</span><span class="tok-p">,</span> <span class="tok-k">map</span> <span class="tok-p">{</span> <span class="tok-s1">&#39;filename&#39;</span><span class="tok-p">:</span> <span class="tok-nf">local:filename</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">),</span> <span class="tok-s1">&#39;featureType&#39;</span><span class="tok-p">:</span> <span class="tok-nf">local-name</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">),</span> <span class="tok-s1">&#39;gmlid&#39;</span><span class="tok-p">:</span> <span class="tok-nf">string</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">/</span><span class="tok-na">@gml:id</span><span class="tok-p">),</span> <span class="tok-s1">&#39;text&#39;</span><span class="tok-p">:</span> <span class="tok-nv">$</span><span class="tok-n">message</span><span class="tok-p">/</span><span class="tok-nf">text</span><span class="tok-p">()</span> <span class="tok-p">})</span>
+	<span class="tok-p">}</span> <span class="tok-k">catch</span> <span class="tok-nt">*</span> <span class="tok-p">{</span>
+		<span class="tok-k">return</span> <span class="tok-p">()</span> <span class="tok-c">(: do not raise an error for parsing exceptions, if these are tested already elsewhere :)</span>
+	<span class="tok-p">}</span>
+<span class="tok-k">return</span>
+<span class="tok-p">(</span><span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">messages</span><span class="tok-p">)</span> <span class="tok-k">then</span> <span class="tok-s1">&#39;FAILED&#39;</span> <span class="tok-k">else</span> <span class="tok-s1">&#39;PASSED&#39;</span><span class="tok-p">,</span>
+ <span class="tok-nf">local:error-statistics</span><span class="tok-p">(</span><span class="tok-s1">&#39;TR.featuresWithErrors&#39;</span><span class="tok-p">,</span> <span class="tok-nf">count</span><span class="tok-p">(</span><span class="tok-nf">fn:distinct-values</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">messages</span><span class="tok-p">//</span><span class="tok-nt">etf:argument</span><span class="tok-p">[</span><span class="tok-na">@token</span><span class="tok-o">=</span><span class="tok-s1">&#39;gmlid&#39;</span><span class="tok-p">]/</span><span class="tok-nf">text</span><span class="tok-p">()))),</span>
+ <span class="tok-nv">$</span><span class="tok-n">messages</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_evaluation_of_topological_predicates">3.7.5. Evaluation of topological predicates</h4>
+<div class="paragraph">
+<p>Topological predicates between two geometries are evaluated using the JTS library. The standard predicates specified in the OGC Simple Feature standard are supported. See the <a href="https://github.com/interactive-instruments/etf-webapp/wiki/dev_manual_modules_gmlgeox">test project developer documentation for this module</a> for further details.</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 12. Testing</div>
+<div class="content">
+<div class="paragraph">
+<p>In this XQuery expression, the feature geometries are all evaluated to determine overlaps. This assumes that all features have surface geometries.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="XQuery"><span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">messages</span> <span class="tok-o">:=</span>
+<span class="tok-p">(</span><span class="tok-k">for</span> <span class="tok-nv">$</span><span class="tok-n">candidate</span> <span class="tok-ow">in</span> <span class="tok-nv">$</span><span class="tok-n">features</span>
+ <span class="tok-k">return</span>
+ <span class="tok-k">try</span> <span class="tok-p">{</span>
+  <span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">candidate_geometry</span> <span class="tok-o">:=</span> <span class="tok-nf">ggeo:getGeometry</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">candidate</span><span class="tok-p">/</span><span class="tok-na">@gml:id</span><span class="tok-p">,</span><span class="tok-nv">$</span><span class="tok-n">candidate</span><span class="tok-p">/</span><span class="tok-nt">*:geometry</span><span class="tok-p">/</span><span class="tok-nt">*</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">])</span>
+  <span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">env</span> <span class="tok-o">:=</span> <span class="tok-nf">ggeo:envelope</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">candidate_geometry</span><span class="tok-p">)</span>
+  <span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">other_features</span> <span class="tok-o">:=</span> <span class="tok-nf">ggeo:search</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">env</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">],</span><span class="tok-nv">$</span><span class="tok-n">env</span><span class="tok-p">[</span><span class="tok-mi">2</span><span class="tok-p">],</span><span class="tok-nv">$</span><span class="tok-n">env</span><span class="tok-p">[</span><span class="tok-mi">3</span><span class="tok-p">],</span><span class="tok-nv">$</span><span class="tok-n">env</span><span class="tok-p">[</span><span class="tok-mi">4</span><span class="tok-p">])</span>
+  <span class="tok-k">for</span> <span class="tok-nv">$</span><span class="tok-n">feature</span> <span class="tok-ow">in</span> <span class="tok-nv">$</span><span class="tok-n">other_features</span><span class="tok-p">[</span><span class="tok-nf">not</span> <span class="tok-p">(</span><span class="tok-na">@gml:id</span> <span class="tok-o">=</span> <span class="tok-nv">$</span><span class="tok-n">candidate</span><span class="tok-p">/</span><span class="tok-na">@gml:id</span><span class="tok-p">)]</span>
+   <span class="tok-k">order by</span> <span class="tok-nv">$</span><span class="tok-n">candidate</span><span class="tok-p">/</span><span class="tok-na">@gml:id</span><span class="tok-p">,</span> <span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">/</span><span class="tok-na">@gml:id</span>
+   <span class="tok-k">return</span>
+   <span class="tok-k">try</span> <span class="tok-p">{</span>
+   <span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">other_geometry</span> <span class="tok-o">:=</span> <span class="tok-nf">ggeo:getGeometry</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">/</span><span class="tok-na">@gml:id</span><span class="tok-p">,</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">/</span><span class="tok-nt">*:geometry</span><span class="tok-p">/</span><span class="tok-nt">*</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">])</span>
+   <span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">check</span> <span class="tok-o">:=</span> <span class="tok-nf">ggeo:relate</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">candidate_geometry</span><span class="tok-p">,</span> <span class="tok-nv">$</span><span class="tok-n">other_geometry</span><span class="tok-p">,</span> <span class="tok-s1">&#39;F********&#39;</span><span class="tok-p">)</span>
+	<span class="tok-k">return</span>
+	<span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">check</span><span class="tok-p">)</span> <span class="tok-k">then</span> <span class="tok-p">()</span>
+	<span class="tok-k">else</span>
+	<span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">intersection</span> <span class="tok-o">:=</span> <span class="tok-nf">string</span><span class="tok-p">(</span><span class="tok-nf">ggeo:intersection</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">candidate_geometry</span><span class="tok-p">,</span> <span class="tok-nv">$</span><span class="tok-n">other_geometry</span><span class="tok-p">))</span>
+	<span class="tok-k">let</span> <span class="tok-nv">$</span><span class="tok-n">polygons</span> <span class="tok-o">:=</span> <span class="tok-nf">functx:get-matches</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">intersection</span><span class="tok-p">,</span><span class="tok-s1">&#39;POLYGON\s?\(\s?\([\d,\.\s]+\)\s?\)&#39;</span><span class="tok-p">)[</span><span class="tok-nf">fn:string-length</span><span class="tok-p">(.)</span><span class="tok-o">&gt;</span><span class="tok-mi">0</span><span class="tok-p">]</span>
+	<span class="tok-k">return</span> <span class="tok-nf">local:addMessage</span><span class="tok-p">(</span><span class="tok-s1">&#39;TR.Overlap&#39;</span><span class="tok-p">,</span> <span class="tok-k">map</span> <span class="tok-p">{</span> <span class="tok-s1">&#39;filename&#39;</span><span class="tok-p">:</span> <span class="tok-nf">local:filename</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">candidate</span><span class="tok-p">),</span> <span class="tok-s1">&#39;featureType&#39;</span> <span class="tok-p">:</span> <span class="tok-nf">local-name</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">candidate</span><span class="tok-p">),</span> <span class="tok-s1">&#39;gmlid&#39;</span><span class="tok-p">:</span> <span class="tok-nf">string</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">candidate</span><span class="tok-p">/</span><span class="tok-na">@gml:id</span><span class="tok-p">),</span> <span class="tok-s1">&#39;gmlid2&#39;</span><span class="tok-p">:</span> <span class="tok-nf">string</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">feature</span><span class="tok-p">/</span><span class="tok-na">@gml:id</span><span class="tok-p">),</span> <span class="tok-s1">&#39;sharedArea&#39;</span><span class="tok-p">:</span> <span class="tok-nf">fn:string-join</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">polygons</span><span class="tok-p">,</span> <span class="tok-s1">&#39;, &#39;</span><span class="tok-p">)</span> <span class="tok-p">})</span>
+	<span class="tok-p">}</span> <span class="tok-k">catch</span> <span class="tok-nt">*</span> <span class="tok-p">{</span>
+    <span class="tok-k">return</span> <span class="tok-p">()</span> <span class="tok-c">(: do not raise an error for parsing exceptions, if these are tested already elsewhere :)</span>
+	<span class="tok-p">}</span>
+ <span class="tok-p">}</span> <span class="tok-k">catch</span> <span class="tok-nt">*</span> <span class="tok-p">{</span>
+   <span class="tok-k">return</span> <span class="tok-p">()</span> <span class="tok-c">(: do not raise an error for parsing exceptions, if these are tested already elsewhere :)</span>
+ <span class="tok-p">}</span>
+<span class="tok-p">)[</span><span class="tok-nf">position</span><span class="tok-p">()</span> <span class="tok-ow">le</span> <span class="tok-nv">$</span><span class="tok-n">limitErrors</span><span class="tok-p">]</span>
+<span class="tok-k">return</span>
+<span class="tok-p">(</span><span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">messages</span><span class="tok-p">)</span> <span class="tok-k">then</span> <span class="tok-s1">&#39;FAILED&#39;</span> <span class="tok-k">else</span> <span class="tok-s1">&#39;PASSED&#39;</span><span class="tok-p">,</span>
+ <span class="tok-nf">local:error-statistics</span><span class="tok-p">(</span><span class="tok-s1">&#39;TR.featuresWithErrors&#39;</span><span class="tok-p">,</span> <span class="tok-nf">count</span><span class="tok-p">(</span><span class="tok-nf">fn:distinct-values</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">messages</span><span class="tok-p">//</span><span class="tok-nt">etf:argument</span><span class="tok-p">[</span><span class="tok-na">@token</span><span class="tok-o">=</span><span class="tok-s1">&#39;gmlid&#39;</span><span class="tok-p">]/</span><span class="tok-nf">text</span><span class="tok-p">()))),</span>
+ <span class="tok-nv">$</span><span class="tok-n">messages</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_known_limitations">3.7.6. Known limitations</h4>
+<div class="paragraph">
+<p>The implementation of the GmlGeoX module depends to a large extent on the deegree framework. The default geometry implementation of deegree does not support parsing all GML types, primarily the GML 3.3 types. Also, in a number of cases spatial operations are not supported for parsed geometries. This is primarily due to the fact that deegree relies on JTS to perform these operations, and that therefore the geometries must be simplified/linearized - which is not implemented for all geometry types that can be parsed by deegree. There is even a case where an incomplete JTS representations of a deegree geometry is accepted and used for spatial operations (for a surface with multiple polygon patches only the first is used).</p>
+</div>
+<div class="paragraph">
+<p>As a result, a test developer of this module must be very careful regarding which geometry types are supported for processing, and whether the computation is robust and exact or not. Please consult the Javadoc <mark>JFH: add link</mark> for additional details.</p>
+</div>
+<div class="paragraph">
+<p>For the spatial relationship operators, <a href="https://github.com/interactive-instruments/etf-webapp/wiki/gmlgeox-module-geometry-types-supported-by-spatial-operators">this page</a> in the test project developer manual documents which geometry types are supported and which are not. The page also has information, which geometry types are simplified/linearized automatically by the module.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1460,7 +1645,7 @@ value '.*' matches all test assertions.</p>
 <div class="sect2">
 <h3 id="basex-test-object-types">3.9. Test Object Types</h3>
 <div class="sect3">
-<h4 id="_overview_2">3.9.1. Overview</h4>
+<h4 id="_overview_3">3.9.1. Overview</h4>
 <div class="paragraph">
 <p>This section lists all <a href="#test-object-types">Test Object Types</a> that are pre-defined in the BaseX test driver.</p>
 </div>
@@ -1722,7 +1907,7 @@ be specified by a test developer defined and declared in XML in the
 <div class="sect2">
 <h3 id="basex-test-item-types">3.10. Test Item Types</h3>
 <div class="sect3">
-<h4 id="_overview_3">3.10.1. Overview</h4>
+<h4 id="_overview_4">3.10.1. Overview</h4>
 <div class="paragraph">
 <p>This section lists all <a href="#test-item-types">Test Item Types</a> that are pre-defined in the BaseX test driver.</p>
 </div>
@@ -1862,7 +2047,7 @@ that is consistent with the dependencies.</p>
 <code>etf:ExecutableTestSuite</code> document.</p>
 </div>
 <div class="exampleblock">
-<div class="title">Example 8. A dependency to another test suite</div>
+<div class="title">Example 13. A dependency to another test suite</div>
 <div class="content">
 <div class="listingblock">
 <div class="content">
@@ -1878,7 +2063,7 @@ that is consistent with the dependencies.</p>
 </div>
 </div>
 <div class="exampleblock">
-<div class="title">Example 9. A dependency to another test case</div>
+<div class="title">Example 14. A dependency to another test case</div>
 <div class="content">
 <div class="listingblock">
 <div class="content">
@@ -1898,7 +2083,7 @@ that is consistent with the dependencies.</p>
 </div>
 </div>
 <div class="exampleblock">
-<div class="title">Example 10. An INSPIRE test suite with dependencies</div>
+<div class="title">Example 15. An INSPIRE test suite with dependencies</div>
 <div class="content">
 <div class="paragraph">
 <p>The <a href="https://github.com/inspire-eu-validation/ets-repository/blob/master/metadata/iso/ets-md-iso-bsxets.xml">Executable Test Suite for the Conformance Class "INSPIRE Profile based on EN ISO 19115 and EN ISO 19119" in INSPIRE</a> includes both kinds of dependencies.</p>
@@ -1912,7 +2097,7 @@ that is consistent with the dependencies.</p>
 <p>To associate an Executable Test Suite with a <a href="#tags">tag</a>, the tag is referenced from the XML document of the test suite.</p>
 </div>
 <div class="exampleblock">
-<div class="title">Example 11. Associate a test suite with a tag</div>
+<div class="title">Example 16. Associate a test suite with a tag</div>
 <div class="content">
 <div class="paragraph">
 <p>The tag element in the following snippet associates the tag with <code>id</code> <code>EID7f57420f-b228-41ae-9467-86e7ffef6e7e</code> with the test suite:</p>
@@ -1935,7 +2120,7 @@ that is consistent with the dependencies.</p>
 <code>include-metadata</code> directory.</p>
 </div>
 <div class="exampleblock">
-<div class="title">Example 12. An INSPIRE test suite with a tag</div>
+<div class="title">Example 17. An INSPIRE test suite with a tag</div>
 <div class="content">
 <div class="paragraph">
 <p>The <a href="https://github.com/inspire-eu-validation/ets-repository/blob/master/metadata/iso/ets-md-iso-bsxets.xml">Executable Test Suite for the Conformance Class "INSPIRE Profile based on EN ISO 19115 and EN ISO 19119" in INSPIRE</a> is associated with a  <a href="https://github.com/inspire-eu-validation/ets-repository/blob/master/include-metadata/Tag-EID3b9846c7-3940-4795-ae1d-0b5d82375c76.xml">tag for test suites for metadata according to version 1.3 of the INSPIRE technical guidance for metadata</a>.</p>
@@ -1949,7 +2134,7 @@ that is consistent with the dependencies.</p>
 <p>If a test result includes an <a href="#basex-attachments">attachment</a> with the type "StatisticalReport", a statistical table is included in the test report. The root element must be an <code>etf:StatisticalReportTable</code> and all <code>etf:entry</code> elements are shown - the value before the semicolon in a column "Type" (feature type or metadata record type) and the value after the semicolon in a column "Count" (number of features or metadata records of that type).</p>
 </div>
 <div class="exampleblock">
-<div class="title">Example 13. A sample StatisticalReportTable attachment</div>
+<div class="title">Example 18. A sample StatisticalReportTable attachment</div>
 <div class="content">
 <div class="listingblock">
 <div class="content">
@@ -1996,7 +2181,7 @@ of any errors.</p>
 and the links to them are included in the <code>etf:TestTaskResult</code>.</p>
 </div>
 <div class="exampleblock">
-<div class="title">Example 14. Example how attachments are referenced in a test result</div>
+<div class="title">Example 19. Example how attachments are referenced in a test result</div>
 <div class="content">
 <div class="listingblock">
 <div class="content">
@@ -2219,7 +2404,7 @@ this error:</p>
 ETF, reference the 'TR.noDataReturned' translation and output the corresponding error message from the loaded Translation Template Collection (see the parameter etf.translation.template.collection.id below).</p>
 </div>
 <div class="exampleblock">
-<div class="title">Example 15. Error message in the INSPIRE validator</div>
+<div class="title">Example 20. Error message in the INSPIRE validator</div>
 <div class="content">
 <div class="paragraph">
 <p>The error message in the INSPIRE validator would be (see the entry in the <a href="https://github.com/inspire-eu-validation/ets-repository/blob/master/include-metadata/TranslationTemplateBundle-EIDfadd4929-fa60-4781-b658-703bbfe3f4eb.xml#L13">Translation Template collection</a>):</p>
@@ -2329,7 +2514,7 @@ Suites this test suite depends on, separated by commas (whitespace is allowed)</
 <div class="sect2">
 <h3 id="soapui-test-object-types">4.5. Test Object Types</h3>
 <div class="sect3">
-<h4 id="_overview_4">4.5.1. Overview</h4>
+<h4 id="_overview_5">4.5.1. Overview</h4>
 <div class="paragraph">
 <p>This section lists all Test Object Types that are pre-defined in the SoapUI test driver.</p>
 </div>
@@ -2833,7 +3018,7 @@ be specified by a test developer defined and declared in XML in the
 <div class="sect2">
 <h3 id="soapui-test-item-types">4.6. Test Item Types</h3>
 <div class="sect3">
-<h4 id="_overview_5">4.6.1. Overview</h4>
+<h4 id="_overview_6">4.6.1. Overview</h4>
 <div class="paragraph">
 <p>This section lists all <a href="#test-item-types">Test Item Types</a> that are pre-defined in the SoapUI test driver.</p>
 </div>
@@ -2931,7 +3116,7 @@ Currently, the library provides one pre-defined map for INSPIRE Download Service
 <h2 id="_team_engine_based_test_suites">5. TEAM-Engine-based test suites</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_overview_6">5.1. Overview</h3>
+<h3 id="_overview_7">5.1. Overview</h3>
 <div class="paragraph">
 <p>Support for the TEAM Engine is different then for the other test engines.</p>
 </div>
