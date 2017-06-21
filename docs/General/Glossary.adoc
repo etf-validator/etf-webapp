@@ -1,8 +1,7 @@
-= Glossary
+== Glossary
 
-The table below lists key terms and definitions.
-
-[width="100%",options="header"]
+.Glossary of key terms and definitions in ETF
+[width="100%",options="header",cols="1,3"]
 |===
 |  *Term / Synonyms* | *Definition*
 |abstract test case
@@ -22,11 +21,11 @@ _Source: OGC Specification Model_
 
 |abstract test suite
 
-ATS | set of conformance classes that define tests for all requirements of a specification
+ATS |set of conformance classes that define tests for all requirements of a specification
 
 _Source: derived from OGC Specification Model and ISO 19105_
 
-|API | set of routines, protocols, and tools for building software and applications
+|API |set of routines, protocols, and tools for building software and applications
 
 _Source: Wikipedia_
 

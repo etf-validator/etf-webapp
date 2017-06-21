@@ -1,0 +1,15 @@
+= {doc-title}
+[frame="topbot",grid="none",cols="1,3"]
+|===
+| *Status* | {doc-status}
+| *Date* | {doc-date}
+| *Description* | {doc-description}
+| *Target audience* | {doc-audience}
+| *Licence* | https://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution (cc-by) 4.0]
+| *Identifier* | {doc-id}
+| *Language* | {doc-lang}
+|===
+
+ifeval::[{doc-warning-work-in-progress}==true]
+WARNING: WORK IN PROGRESS
+endif::[]

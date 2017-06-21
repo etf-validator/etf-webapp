@@ -616,7 +616,7 @@ Here is the XML snippet for these parameters:
 
 ==== Overview
 
-This section lists all Test Object Types that are pre-defined in the BaseX test driver.
+This section lists all link:#test-object-types[Test Object Types] that are pre-defined in the BaseX test driver.
 
 For each Test Object Type, the following information is provided:
 
@@ -701,6 +701,43 @@ A set of XML documents. Each document contains a CityGML 1.0 CityModel.
 ID:: EIDd9371e42-2bf4-420c-84a5-4ab9055a8706
 Parent:: link:#tot-gml[GML feature collections]
 XPath:: /*[local-name() = 'CityModel' and namespace-uri() = 'http://www.opengis.net/citygml/1.0']
+
+[[basex-test-item-types]]
+=== Test Item Types
+
+==== Overview
+
+This section lists all link:#test-item-types[Test Item Types] that are pre-defined in the BaseX test driver.
+
+For each Test Item Type, the following information is provided:
+
+* a description
+* the ID that must be used to reference the Test Item Type from a test step or test assertion
+* whether the type is applicable to test steps or test assertions
+
+==== Dummy Test Step
+In BaseX-based Executable Test Suites the concept of test steps is not used. A dummy test step, which is suppressed in test reports, is therefore created and associated with this test item type.
+
+ID:: EIDf483e8e8-06b9-4900-ab36-adad0d7f22f0
+Item:: Test Step
+
+==== XQuery
+The element `etf:expression` in a test assertion contains an XQuery fragment that is executed to determine the result.
+
+ID:: EIDf0edc596-49d2-48d6-a1a1-1ac581dcde0a
+Item:: Test Assertion
+
+==== Manual review
+The element `etf:expression` in a test assertion is ignored and the assertion result status is always 'PASSED_MANUAL' indicating that a manual review from an expert is required. The review must be specified in the description of the test assertion.
+
+ID:: EIDb48eeaa3-6a74-414a-879c-1dc708017e11
+Item:: Test Assertion
+
+==== Disabled
+The element `etf:expression` in a test assertion is ignored and the assertion result status is always 'NOT_APPLICABLE'. The test assertion is disabled. This type should be used only temporarily to disable a test assertion with known issues.
+
+ID:: EID92f22a19-2ec2-43f0-8971-c2da3eaafcd2
+Item:: Test Assertion
 
 === Dependencies
 
@@ -794,6 +831,26 @@ The tag is declared link:#tags[in XML in a separate document], in the
 The link:https://github.com/inspire-eu-validation/ets-repository/blob/master/metadata/iso/ets-md-iso-bsxets.xml[Executable Test Suite for the Conformance Class "INSPIRE Profile based on EN ISO 19115 and EN ISO 19119" in INSPIRE] is associated with a  link:https://github.com/inspire-eu-validation/ets-repository/blob/master/include-metadata/Tag-EID3b9846c7-3940-4795-ae1d-0b5d82375c76.xml[tag for test suites for metadata according to version 1.3 of the INSPIRE technical guidance for metadata].
 ===========================================
 
+=== Statistical information
+
+If a test result includes an link:#basex-attachments[attachment] with the type "StatisticalReport", a statistical table is included in the test report. The root element must be an `etf:StatisticalReportTable` and all `etf:entry` elements are shown - the value before the semicolon in a column "Type" (feature type or metadata record type) and the value after the semicolon in a column "Count" (number of features or metadata records of that type).
+
+.A sample StatisticalReportTable attachment
+===========================================
+[source,XML]
+----
+<StatisticalReportTable xmlns="http://www.interactive-instruments.de/etf/2.0">
+<type ref="EID242272e0-3f0a-4e9c-9643-657c4d6d304a"/>
+<entries>
+<entry>all; 10</entry>
+<entry>dataset; 5</entry>
+<entry>service; 5</entry>
+</entries>
+</StatisticalReportTable>
+----
+===========================================
+
+[[basex-attachments]]
 === Attachments
 
 An Executable Test Suite may record additional information to a test

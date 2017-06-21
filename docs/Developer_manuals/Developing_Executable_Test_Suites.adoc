@@ -16,33 +16,21 @@
 :pygments-style: autumn
 :pygments-linenums-mode: inline
 
-////
-[[ii_logo]]
-image::http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png["Interactive instruments logo",150,align="center",link=http://www.interactive-instruments.de/en]
-////
+include::../General/Logo.adoc[]
 
-[frame="none",grid="none",cols="^25,<.^75"]
-|===
-| image:../images/ETF_logo.png["ETF Logo",125,link=http://www.etf-validator.net] | [etf_headline]#ETF +
-Testing framework for spatial data and services#
-|===
+:doc-warning-work-in-progress: true
+:doc-title: Developing Executable Test Suites
+:doc-status: in review
+:doc-date: 2017-06-21
+:doc-description: This document is a guide on how to develop Executable Test Suites for ETF using the test engines SoapUI, BaseX and the TEAM Engine.
+:doc-audience: Everyone planning to develop or edit Executable Test Suites
+:doc-id: http://docs.etf-validator.net/Developer_manuals/Developing_Executable_Test_Suites.html
+:doc-lang: EN
 
-= Developing Executable Test Suites
-[frame="topbot",grid="none"]
-|===
-| *Status* | in review
-| *Date* | 2017-06-20
-| *Description* | This document is a guide on how to develop Executable Test Suites for ETF using the test engines SoapUI, BaseX and the TEAM Engine.
-| *Target audience* | Everyone planning to develop or edit Executable Test Suites
-| *Licence* | https://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution (cc-by) 4.0]
-| *Identifier* | http://docs.etf-validator.net/Developer_manuals/Developing_Executable_Test_Suites.html
-| *Language* | EN
-|===
-
-WARNING: WORK IN PROGRESS
+include::../General/Document-metadata.adoc[]
 
 == Changelog
-[width="100%",options="header"]
+[width="100%",options="header",cols="1,2,3"]
 |===
 |  *Date* | *Editor* | *Comments*
 | 2016-09-08 | Clemens Portele | BaseX documentation created
@@ -57,8 +45,6 @@ WARNING: WORK IN PROGRESS
 toc::[]
 
 <<<
-
-//:leveloffset: +1
 
 include::../General/About-short.adoc[]
 
@@ -76,5 +62,3 @@ include::TEAM_Engine_ETS.adoc[]
 :numbered!:
 
 include::../General/Glossary.adoc[]
-
-//:leveloffset: -1

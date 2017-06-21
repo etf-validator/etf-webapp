@@ -22,7 +22,8 @@ project and selecting 'Rename'.
 SoapUI and ETF are using a slightly different terminology for test items, as the
 following table shows.
 
-[width="100%",options="header"]
+.Mapping between SoapUI and ETF concepts
+[width="50%",options="header"]
 |===
 |  *SoapUI* | *ETF*
 | Test Project | Executable Test Suite
@@ -85,10 +86,10 @@ with the 'TR.missingFeedRootElement' code.
 
 === Parameters and metadata properties
 
-Properties are used to parameterize an Executable Test Suite ('Test Project' in SoapUI terminology) as well as to associate it with other resources of ETF like Tags, Test Object Types etc. The standard properties are described in the following table.
+Properties are used to parameterize an Executable Test Suite ('test project' in SoapUI terminology) as well as to associate it with other resources of ETF like Tags, Test Object Types etc. The standard properties are described in the following table. All properties are properties of the test project.
 
-Description of standard properties
-[width="100%",options="header"]
+.Description of standard properties on a SoapUI test project for ETF
+[width="100%",options="header",cols="1,2"]
 |===
 |  *Property name* | *Description*
 | serviceEndpoint | URL of the service to test
@@ -127,8 +128,6 @@ For each Test Object Type, the following information is provided:
 NOTE: In future versions of ETF it is planned that new Test Object Types may
 be specified by a test developer defined and declared in XML in the
 `include-metadata` directory.
-
-#CP: Provide namespace lists like INSPIRE_DS_NS for other specs.#
 
 [[tot-service]]
 ==== Web service
@@ -285,12 +284,38 @@ ID:: EID49d881ae-b115-4b91-aabe-31d5791bce52
 Parent:: link:#tot-service[Web service]
 XPath:: /*[local-name() = 'feed' and namespace-uri() = 'http://www.w3.org/2005/Atom']
 
+[[soapui-test-item-types]]
+=== Test Item Types
+
+==== Overview
+
+This section lists all link:#test-item-types[Test Item Types] that are pre-defined in the SoapUI test driver.
+
+For each Test Item Type, the following information is provided:
+
+* a description
+* the ID that must be used to reference the Test Item Type from a test step or test assertion
+* whether the type is applicable to test steps or test assertions
+
+#JFH: I did not find information about the types. Please correct or complete this section.#
+
+==== #label#
+#description#
+
+ID:: #EID...#
+Item:: #Test Step or Test Assertion#
+
+[[soapui-attachments]]
+=== Attachments
+
+#JFH: describe attachments that are referenced from SoapUI test results and their types.#
+
 === Assertion library
 
 The SoapUI extension library provides various functions for evaluating an XPath
 expression against the received response. The functions are called on an
 link:http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html[Assert]
-object:
+object, which is constructed like this:
 
 [source,Groovy]
 ----
@@ -298,12 +323,14 @@ import de.interactive_instruments.etf.suim.*
 Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)
 ----
 
-The parameters `messageExchange`, `context` and `log` are pre-defined in the context of the assertion.
+The parameters `messageExchange`, `context` and `log` are pre-defined in the context of the assertion. The last parameter of the constructor is the only part that varies. It is a map of namespace prefixes to the namespace URI.
+
+NOTE: Currently, the library provides one pre-defined map for INSPIRE Download Services (INSPIRE-DS_NS). Additional namespace maps for specific topics will be added in the future for convenience.
 
 #JFH: add screenshot#
 
-For further information see the
-link:http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html[Assert API documentation]
+For further information on the Assert class and its functions see the
+link:http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html[Assert API documentation].
 
 === Tips for creating helpful test suites
 

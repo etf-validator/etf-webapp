@@ -14,9 +14,9 @@ Prerequisites for the following steps to set up the ETS development environment 
 Then follow these steps under Windows:
 
 1. Download link:https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/suim/SoapUI-ETF.zip[this ZIP file] (using "etf-public-dev" as username and password)
-1. Extract the ZIP file in any directory
-1. Run 'install-plugins.bat'
-1. Run 'SoapUI 5.3.0.bat'
+2. Extract the ZIP file in any directory
+3. Run 'install-plugins.bat'
+4. Run 'SoapUI 5.3.0.bat'
 
 To load the plugins, SoapUI must always be started with the 'SoapUI 5.3.0.bat' file from the extracted directory.
 

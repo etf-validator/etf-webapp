@@ -1,0 +1,5 @@
+[frame="none",grid="none",cols="<20,<.^80"]
+|===
+| image:images/ETF_logo.png["ETF Logo",125,link=http://www.etf-validator.net] | [etf_headline]#*ETF* +
+Testing framework for spatial data and services#
+|===

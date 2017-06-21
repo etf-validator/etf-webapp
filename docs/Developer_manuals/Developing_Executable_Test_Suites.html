@@ -18,20 +18,16 @@
 <li><a href="#_developing_executable_test_suites">Developing Executable Test Suites</a>
 <ul class="sectlevel1">
 <li><a href="#_changelog">Changelog</a></li>
-</ul>
-</li>
-<li><a href="#_about_etf">About ETF</a>
-<ul class="sectlevel1">
+<li><a href="#_about_etf">About ETF</a></li>
 <li><a href="#_introduction">1. Introduction</a></li>
 <li><a href="#_information_and_concepts_used_by_all_executable_test_suites">2. Information and concepts used by all Executable Test Suites</a>
 <ul class="sectlevel2">
 <li><a href="#_overview">2.1. Overview</a></li>
 <li><a href="#message-template-bundles">2.2. Message template bundles</a></li>
 <li><a href="#tags">2.3. Tags</a></li>
-<li><a href="#_test_object_types">2.4. Test object types</a></li>
-<li><a href="#_test_item_types">2.5. Test item types</a></li>
-<li><a href="#_statistical_information">2.6. Statistical information</a></li>
-<li><a href="#_attachment_types">2.7. Attachment types</a></li>
+<li><a href="#test-object-types">2.4. Test object types</a></li>
+<li><a href="#test-item-types">2.5. Test item types</a></li>
+<li><a href="#attachments">2.6. Attachments</a></li>
 </ul>
 </li>
 <li><a href="#_basex_based_test_suites">3. BaseX-based test suites</a>
@@ -45,9 +41,11 @@
 <li><a href="#spatial-tests">3.7. Testing spatial aspects</a></li>
 <li><a href="#parameters">3.8. Parameters</a></li>
 <li><a href="#basex-test-object-types">3.9. Test Object Types</a></li>
-<li><a href="#_dependencies">3.10. Dependencies</a></li>
-<li><a href="#_tags">3.11. Tags</a></li>
-<li><a href="#_attachments">3.12. Attachments</a></li>
+<li><a href="#basex-test-item-types">3.10. Test Item Types</a></li>
+<li><a href="#_dependencies">3.11. Dependencies</a></li>
+<li><a href="#_tags">3.12. Tags</a></li>
+<li><a href="#_statistical_information">3.13. Statistical information</a></li>
+<li><a href="#basex-attachments">3.14. Attachments</a></li>
 </ul>
 </li>
 <li><a href="#_soapui_based_test_suites">4. SoapUI based Test Suites</a>
@@ -57,20 +55,23 @@
 <li><a href="#_basics_2">4.3. Basics</a></li>
 <li><a href="#_parameters_and_metadata_properties">4.4. Parameters and metadata properties</a></li>
 <li><a href="#soapui-test-object-types">4.5. Test Object Types</a></li>
-<li><a href="#_assertion_library">4.6. Assertion library</a></li>
-<li><a href="#_tips_for_creating_helpful_test_suites">4.7. Tips for creating helpful test suites</a></li>
+<li><a href="#soapui-test-item-types">4.6. Test Item Types</a></li>
+<li><a href="#soapui-attachments">4.7. Attachments</a></li>
+<li><a href="#_assertion_library">4.8. Assertion library</a></li>
+<li><a href="#_tips_for_creating_helpful_test_suites">4.9. Tips for creating helpful test suites</a></li>
 </ul>
 </li>
 <li><a href="#_team_engine_based_test_suites">5. TEAM-Engine-based test suites</a>
 <ul class="sectlevel2">
-<li><a href="#_overview_4">5.1. Overview</a></li>
+<li><a href="#_overview_6">5.1. Overview</a></li>
 <li><a href="#_team_engine_test_suites_supported_by_etf">5.2. TEAM Engine test suites supported by ETF</a></li>
 <li><a href="#_mapping_from_team_engine_testng_concepts_to_etf">5.3. Mapping from TEAM Engine / TestNG concepts to ETF</a></li>
-</ul>
-</li>
+<li><a href="#te-attachments">5.4. Attachments</a></li>
 </ul>
 </li>
 <li><a href="#_glossary">Glossary</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -79,13 +80,13 @@
 <div class="sectionbody">
 <table class="tableblock frame-none grid-none spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
+<col style="width: 20%;">
+<col style="width: 80%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="image"><a class="image" href="http://www.etf-validator.net"><img src="../images/ETF_logo.png" alt="ETF Logo" width="125"></a></span></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><span class="etf_headline">ETF<br>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><a class="image" href="http://www.etf-validator.net"><img src="../images/ETF_logo.png" alt="ETF Logo" width="125"></a></span></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><span class="etf_headline"><strong>ETF</strong><br>
 Testing framework for spatial data and services</span></p></td>
 </tr>
 </tbody>
@@ -97,8 +98,8 @@ Testing framework for spatial data and services</span></p></td>
 <div class="content">
 <table class="tableblock frame-topbot grid-none spread">
 <colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
+<col style="width: 25%;">
+<col style="width: 75%;">
 </colgroup>
 <tbody>
 <tr>
@@ -107,7 +108,7 @@ Testing framework for spatial data and services</span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Date</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2017-06-20</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-06-21</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
@@ -150,9 +151,9 @@ WORK IN PROGRESS
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
+<col style="width: 16.6666%;">
 <col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 50.0001%;">
 </colgroup>
 <thead>
 <tr>
@@ -189,9 +190,9 @@ WORK IN PROGRESS
 <div style="page-break-after: always;"></div>
 </div>
 </div>
-<h1 id="_about_etf" class="sect0">About ETF</h1>
-<div class="openblock partintro">
-<div class="content">
+<div class="sect1">
+<h2 id="_about_etf">About ETF</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>ETF is an open source testing framework for validating spatial data, metadata and web services in Spatial Data Infrastructures (SDIs). It can be used via a responsive web application or via a REST API.</p>
 </div>
@@ -368,19 +369,19 @@ The <code>name</code> attribute values of an <code>etf:LangTranslationTemplateCo
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="XML">&lt;TranslationTemplateBundle xmlns="http://www.interactive-instruments.de/etf/2.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 http://resources.etf-validator.net/schema/v2/model/resultSet.xsd"
-   id="EID27117afb-11aa-4e45-aa3d-0e1e65bdccb8"&gt;
-    &lt;translationTemplateCollections&gt;
-      &lt;LangTranslationTemplateCollection name="TR.incorrectRoot"&gt;
-         &lt;translationTemplates&gt;
-            &lt;TranslationTemplate language="en" name="TR.incorrectRoot"&gt;XML document '{filename}': The root element is not one of the recognised feature collections: wfs:FeatureCollection (WFS 1.1 or WFS 2.0) or gml:FeatureCollection (GML 3.1 or GML 3.2). The name of the root element is '{elementName}' in namespace '{namespace}'.&lt;/TranslationTemplate&gt;
-            &lt;TranslationTemplate language="de" name="TR.incorrectRoot"&gt;XML-Dokument '{filename}': Das Wurzelelement ist keines der erwarteten Feature-Collection-Elemente: wfs:FeatureCollection (WFS 1.1 oder WFS 2.0) oder gml:FeatureCollection (GML 3.1 oder GML 3.2). Der Name des Wurzelelements is '{elementName}' im Namensraum '{namespace}'.&lt;/TranslationTemplate&gt;
-         &lt;/translationTemplates&gt;
-      &lt;/LangTranslationTemplateCollection&gt;
-    &lt;/translationTemplateCollections&gt;
-&lt;/TranslationTemplateBundle&gt;</code></pre>
+<pre class="pygments highlight"><code data-lang="XML"><span class="tok-nt">&lt;TranslationTemplateBundle</span> <span class="tok-na">xmlns=</span><span class="tok-s">&quot;http://www.interactive-instruments.de/etf/2.0&quot;</span>
+    <span class="tok-na">xmlns:xsi=</span><span class="tok-s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+    <span class="tok-na">xsi:schemaLocation=</span><span class="tok-s">&quot;http://www.interactive-instruments.de/etf/2.0 http://resources.etf-validator.net/schema/v2/model/resultSet.xsd&quot;</span>
+   <span class="tok-na">id=</span><span class="tok-s">&quot;EID27117afb-11aa-4e45-aa3d-0e1e65bdccb8&quot;</span><span class="tok-nt">&gt;</span>
+    <span class="tok-nt">&lt;translationTemplateCollections&gt;</span>
+      <span class="tok-nt">&lt;LangTranslationTemplateCollection</span> <span class="tok-na">name=</span><span class="tok-s">&quot;TR.incorrectRoot&quot;</span><span class="tok-nt">&gt;</span>
+         <span class="tok-nt">&lt;translationTemplates&gt;</span>
+            <span class="tok-nt">&lt;TranslationTemplate</span> <span class="tok-na">language=</span><span class="tok-s">&quot;en&quot;</span> <span class="tok-na">name=</span><span class="tok-s">&quot;TR.incorrectRoot&quot;</span><span class="tok-nt">&gt;</span>XML document &#39;{filename}&#39;: The root element is not one of the recognised feature collections: wfs:FeatureCollection (WFS 1.1 or WFS 2.0) or gml:FeatureCollection (GML 3.1 or GML 3.2). The name of the root element is &#39;{elementName}&#39; in namespace &#39;{namespace}&#39;.<span class="tok-nt">&lt;/TranslationTemplate&gt;</span>
+            <span class="tok-nt">&lt;TranslationTemplate</span> <span class="tok-na">language=</span><span class="tok-s">&quot;de&quot;</span> <span class="tok-na">name=</span><span class="tok-s">&quot;TR.incorrectRoot&quot;</span><span class="tok-nt">&gt;</span>XML-Dokument &#39;{filename}&#39;: Das Wurzelelement ist keines der erwarteten Feature-Collection-Elemente: wfs:FeatureCollection (WFS 1.1 oder WFS 2.0) oder gml:FeatureCollection (GML 3.1 oder GML 3.2). Der Name des Wurzelelements is &#39;{elementName}&#39; im Namensraum &#39;{namespace}&#39;.<span class="tok-nt">&lt;/TranslationTemplate&gt;</span>
+         <span class="tok-nt">&lt;/translationTemplates&gt;</span>
+      <span class="tok-nt">&lt;/LangTranslationTemplateCollection&gt;</span>
+    <span class="tok-nt">&lt;/translationTemplateCollections&gt;</span>
+<span class="tok-nt">&lt;/TranslationTemplateBundle&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -418,18 +419,18 @@ How Execuable Test Suites are associated with tags differs between test engines 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="XML">&lt;Tag xmlns="http://www.interactive-instruments.de/etf/2.0" id="EIDfe1f3796-0ebf-4960-a6f7-f935e087fa4b" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 http://resources.etf-validator.net/schema/v2/model/resultSet.xsd"&gt;
-	&lt;label&gt;Data Theme: Administrative Units (Data Specification version 3.1)&lt;/label&gt;
-	&lt;description&gt;Tests for conformance classes specific to features of the data theme 'Administrative Units'.&lt;/description&gt;
-	&lt;priority&gt;202&lt;/priority&gt;
-&lt;/Tag&gt;</code></pre>
+<pre class="pygments highlight"><code data-lang="XML"><span class="tok-nt">&lt;Tag</span> <span class="tok-na">xmlns=</span><span class="tok-s">&quot;http://www.interactive-instruments.de/etf/2.0&quot;</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EIDfe1f3796-0ebf-4960-a6f7-f935e087fa4b&quot;</span> <span class="tok-na">xmlns:xsi=</span><span class="tok-s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> <span class="tok-na">xsi:schemaLocation=</span><span class="tok-s">&quot;http://www.interactive-instruments.de/etf/2.0 http://resources.etf-validator.net/schema/v2/model/resultSet.xsd&quot;</span><span class="tok-nt">&gt;</span>
+	<span class="tok-nt">&lt;label&gt;</span>Data Theme: Administrative Units (Data Specification version 3.1)<span class="tok-nt">&lt;/label&gt;</span>
+	<span class="tok-nt">&lt;description&gt;</span>Tests for conformance classes specific to features of the data theme &#39;Administrative Units&#39;.<span class="tok-nt">&lt;/description&gt;</span>
+	<span class="tok-nt">&lt;priority&gt;</span>202<span class="tok-nt">&lt;/priority&gt;</span>
+<span class="tok-nt">&lt;/Tag&gt;</span></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_test_object_types">2.4. Test object types</h3>
+<h3 id="test-object-types">2.4. Test object types</h3>
 <div class="paragraph">
 <p>A Test Object Type is a classification of a test object. Every Executable Test Suite in ETF declares which types of test objects it supports. This allows to determine which Executable Test Suites may be included in a test run against a test object. Test object types are structured in a hierarchical vocabulary.</p>
 </div>
@@ -437,25 +438,22 @@ How Execuable Test Suites are associated with tags differs between test engines 
 <p>The Test Object Types are used to check whether two or more Executable Test Suites can be executed on the same test object together in one Test Run.</p>
 </div>
 <div class="paragraph">
-<p>Every test engine supports one or more Test Object Types. The types supported by each test engine are described in the section on the test engines (<a href="#basex-test-object-types">BaseX</a>, <a href="#soapui-test-object-types">SoapUI</a>).</p>
+<p>Every test engine supports one or more Test Object Types. The types supported by each test engine are described in the section on the test engines (<a href="#basex-test-object-types">BaseX</a>, <a href="#soapui-test-object-types">SoapUI</a>). For the TEAM Engine, the applicable types from the other test engines are specified for <a href="#te-test-suites">each TEAM Engine test suite</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_test_item_types">2.5. Test item types</h3>
+<h3 id="test-item-types">2.5. Test item types</h3>
 <div class="paragraph">
-<p><mark>CP: add text</mark></p>
+<p>Each test step and test assertion is classified depending on the characteristics of the item. As the classification depends on the test engine, the pre-defined test item types for each test engine are specified in the section of the test engine (<a href="#basex-test-item-types">BaseX</a>, <a href="#soapui-test-ietm-types">SoapUI</a>). For the TEAM Engine internal test item types are created, but these are not visible to test developers.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_statistical_information">2.6. Statistical information</h3>
+<h3 id="attachments">2.6. Attachments</h3>
 <div class="paragraph">
-<p><mark>CP: describe (move to BaseX for now?)</mark></p>
+<p>Additional files may be "attached" to a test result. These includes log files, statistical information, service requests and responses, etc. The attachments are linked from or embeded in the test reports in HTML to provide additional information about the test run.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_attachment_types">2.7. Attachment types</h3>
 <div class="paragraph">
-<p><mark>CP: add text</mark></p>
+<p>The details depend on the test engine and the attachments that may occur for each test engine and are documented in the section of the test engine (<a href="#basex-attachments">BaseX</a>, <a href="#soapui-attachments">SoapUI</a>, <a href="#te-attachments">TEAM Engine</a>).</p>
 </div>
 </div>
 </div>
@@ -648,11 +646,11 @@ An Executable Test Suite is essentially an <a href="http://www.w3.org/TR/xquery-
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="XML">&lt;EtfModelItem xmlns="http://www.interactive-instruments.de/etf/2.0"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 http://resources.etf-validator.net/schema/v2/service/service.xsd" ...&gt;
+<pre class="pygments highlight"><code data-lang="XML"><span class="tok-nt">&lt;EtfModelItem</span> <span class="tok-na">xmlns=</span><span class="tok-s">&quot;http://www.interactive-instruments.de/etf/2.0&quot;</span>
+ <span class="tok-na">xmlns:xsi=</span><span class="tok-s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+    <span class="tok-na">xsi:schemaLocation=</span><span class="tok-s">&quot;http://www.interactive-instruments.de/etf/2.0 http://resources.etf-validator.net/schema/v2/service/service.xsd&quot;</span> <span class="tok-err">...</span><span class="tok-nt">&gt;</span>
   ...
-&lt;/EtfModelItem&gt;</code></pre>
+<span class="tok-nt">&lt;/EtfModelItem&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -663,81 +661,81 @@ An Executable Test Suite is essentially an <a href="http://www.w3.org/TR/xquery-
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="XML">&lt;TestTaskResult xmlns="http://www.interactive-instruments.de/etf/2.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 http://resources.etf-validator.net/schema/v2/service/service.xsd"
-    id="EIDc5e50620-5107-4b75-b6c1-74d4465fba0f"&gt;
-    &lt;testObject ref="EID666f71c1-9af3-4040-a21d-190f953725f4"/&gt;
-    &lt;testModuleResults&gt;
-        &lt;TestModuleResult id="EIDfdfc25d5-1790-43bd-abb6-2de6263619cc"&gt;
-            &lt;testCaseResults&gt;
-                &lt;TestCaseResult id="EID3dab6279-f553-4f93-b1bc-b73329fc69c3"&gt;
-                    &lt;testStepResults&gt;
-                        &lt;TestStepResult id="EIDffaf6f6a-66f6-4796-8c42-e5f681517c62"&gt;
-                            &lt;testAssertionResults&gt;
-                                &lt;TestAssertionResult id="EIDa35d1dd3-7cc2-41c7-9b2b-f60df48ffabb"&gt;
-                                    &lt;parent ref="EIDffaf6f6a-66f6-4796-8c42-e5f681517c62"/&gt;
-                                    &lt;resultedFrom ref="EIDcab35f1a-6292-44b9-ae2c-9ec62fc0f4b6"/&gt;
-                                    &lt;startTimestamp&gt;2016-09-05T13:10:24Z&lt;/startTimestamp&gt;
-                                    &lt;duration&gt;0&lt;/duration&gt;
-                                    &lt;status&gt;PASSED&lt;/status&gt;
-                                &lt;/TestAssertionResult&gt;
-                                &lt;TestAssertionResult id="EIDc18b01ff-f544-4d0e-9a8f-ef3874abd43f"&gt;
-                                    &lt;messages&gt;
-                                        &lt;message ref="TR.filesWithErrors"&gt;
-                                            &lt;translationArguments&gt;
-                                                &lt;argument token="count"&gt;1&lt;/argument&gt;
-                                            &lt;/translationArguments&gt;
-                                        &lt;/message&gt;
-                                        &lt;message ref="TR.incorrectRoot"&gt;
-                                            &lt;translationArguments&gt;
-                                                &lt;argument token="filename"&gt;ps-root.xml&lt;/argument&gt;
-                                                &lt;argument token="elementName"&gt;FeatureCollection&lt;/argument&gt;
-                                                &lt;argument token="namespace"&gt;http://www.opengis.net/wfs&lt;/argument&gt;
-                                            &lt;/translationArguments&gt;
-                                        &lt;/message&gt;
-                                    &lt;/messages&gt;
-                                    &lt;parent ref="EIDffaf6f6a-66f6-4796-8c42-e5f681517c62"/&gt;
-                                    &lt;resultedFrom ref="EID928d8204-3015-4811-82fd-f4779b35385b"/&gt;
-                                    &lt;startTimestamp&gt;2016-09-05T13:10:24Z&lt;/startTimestamp&gt;
-                                    &lt;duration&gt;1&lt;/duration&gt;
-                                    &lt;status&gt;FAILED&lt;/status&gt;
-                                &lt;/TestAssertionResult&gt;
-                            &lt;/testAssertionResults&gt;
-                            &lt;parent ref="EID3dab6279-f553-4f93-b1bc-b73329fc69c3"/&gt;
-                            &lt;resultedFrom ref="EIDc177cf64-3a66-4ac4-92b9-61207aab8007"/&gt;
-                            &lt;startTimestamp&gt;2016-09-05T13:10:24Z&lt;/startTimestamp&gt;
-                            &lt;duration&gt;1&lt;/duration&gt;
-                            &lt;status&gt;FAILED&lt;/status&gt;
-                        &lt;/TestStepResult&gt;
-                    &lt;/testStepResults&gt;
-                    &lt;parent ref="EIDfdfc25d5-1790-43bd-abb6-2de6263619cc"/&gt;
-                    &lt;resultedFrom ref="EIDf66872d4-3a1f-4581-a501-94200219bf13"/&gt;
-                    &lt;startTimestamp&gt;2016-09-05T13:10:24Z&lt;/startTimestamp&gt;
-                    &lt;duration&gt;1&lt;/duration&gt;
-                    &lt;status&gt;FAILED&lt;/status&gt;
-                &lt;/TestCaseResult&gt;
-            &lt;/testCaseResults&gt;
-            &lt;parent ref="EIDc5e50620-5107-4b75-b6c1-74d4465fba0f"/&gt;
-            &lt;resultedFrom ref="EID8e96257c-ae42-4123-b298-b8c5eda3a027"/&gt;
-            &lt;startTimestamp&gt;2016-09-05T13:10:24Z&lt;/startTimestamp&gt;
-            &lt;duration&gt;1&lt;/duration&gt;
-            &lt;status&gt;FAILED&lt;/status&gt;
-        &lt;/TestModuleResult&gt;
-    &lt;/testModuleResults&gt;
-    &lt;attachments&gt;
-        &lt;Attachment id="EIDc5e50620-5111-4bc5-b6c1-74d4465fbb23"&gt;
-            &lt;label&gt;Log file&lt;/label&gt;
-            &lt;encoding&gt;UTF-8&lt;/encoding&gt;
-            &lt;mimeType&gt;text/plain&lt;/mimeType&gt;
-            &lt;referencedData href="file://local/log.txt"/&gt;
-        &lt;/Attachment&gt;
-    &lt;/attachments&gt;
-    &lt;resultedFrom ref="EID545f9e49-009b-4114-9333-7ca26413b5d4"/&gt;
-    &lt;startTimestamp&gt;2016-09-05T13:10:24Z&lt;/startTimestamp&gt;
-    &lt;duration&gt;1&lt;/duration&gt;
-    &lt;status&gt;FAILED&lt;/status&gt;
-&lt;/TestTaskResult&gt;</code></pre>
+<pre class="pygments highlight"><code data-lang="XML"><span class="tok-nt">&lt;TestTaskResult</span> <span class="tok-na">xmlns=</span><span class="tok-s">&quot;http://www.interactive-instruments.de/etf/2.0&quot;</span>
+    <span class="tok-na">xmlns:xsi=</span><span class="tok-s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+    <span class="tok-na">xsi:schemaLocation=</span><span class="tok-s">&quot;http://www.interactive-instruments.de/etf/2.0 http://resources.etf-validator.net/schema/v2/service/service.xsd&quot;</span>
+    <span class="tok-na">id=</span><span class="tok-s">&quot;EIDc5e50620-5107-4b75-b6c1-74d4465fba0f&quot;</span><span class="tok-nt">&gt;</span>
+    <span class="tok-nt">&lt;testObject</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID666f71c1-9af3-4040-a21d-190f953725f4&quot;</span><span class="tok-nt">/&gt;</span>
+    <span class="tok-nt">&lt;testModuleResults&gt;</span>
+        <span class="tok-nt">&lt;TestModuleResult</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EIDfdfc25d5-1790-43bd-abb6-2de6263619cc&quot;</span><span class="tok-nt">&gt;</span>
+            <span class="tok-nt">&lt;testCaseResults&gt;</span>
+                <span class="tok-nt">&lt;TestCaseResult</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EID3dab6279-f553-4f93-b1bc-b73329fc69c3&quot;</span><span class="tok-nt">&gt;</span>
+                    <span class="tok-nt">&lt;testStepResults&gt;</span>
+                        <span class="tok-nt">&lt;TestStepResult</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EIDffaf6f6a-66f6-4796-8c42-e5f681517c62&quot;</span><span class="tok-nt">&gt;</span>
+                            <span class="tok-nt">&lt;testAssertionResults&gt;</span>
+                                <span class="tok-nt">&lt;TestAssertionResult</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EIDa35d1dd3-7cc2-41c7-9b2b-f60df48ffabb&quot;</span><span class="tok-nt">&gt;</span>
+                                    <span class="tok-nt">&lt;parent</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDffaf6f6a-66f6-4796-8c42-e5f681517c62&quot;</span><span class="tok-nt">/&gt;</span>
+                                    <span class="tok-nt">&lt;resultedFrom</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDcab35f1a-6292-44b9-ae2c-9ec62fc0f4b6&quot;</span><span class="tok-nt">/&gt;</span>
+                                    <span class="tok-nt">&lt;startTimestamp&gt;</span>2016-09-05T13:10:24Z<span class="tok-nt">&lt;/startTimestamp&gt;</span>
+                                    <span class="tok-nt">&lt;duration&gt;</span>0<span class="tok-nt">&lt;/duration&gt;</span>
+                                    <span class="tok-nt">&lt;status&gt;</span>PASSED<span class="tok-nt">&lt;/status&gt;</span>
+                                <span class="tok-nt">&lt;/TestAssertionResult&gt;</span>
+                                <span class="tok-nt">&lt;TestAssertionResult</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EIDc18b01ff-f544-4d0e-9a8f-ef3874abd43f&quot;</span><span class="tok-nt">&gt;</span>
+                                    <span class="tok-nt">&lt;messages&gt;</span>
+                                        <span class="tok-nt">&lt;message</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;TR.filesWithErrors&quot;</span><span class="tok-nt">&gt;</span>
+                                            <span class="tok-nt">&lt;translationArguments&gt;</span>
+                                                <span class="tok-nt">&lt;argument</span> <span class="tok-na">token=</span><span class="tok-s">&quot;count&quot;</span><span class="tok-nt">&gt;</span>1<span class="tok-nt">&lt;/argument&gt;</span>
+                                            <span class="tok-nt">&lt;/translationArguments&gt;</span>
+                                        <span class="tok-nt">&lt;/message&gt;</span>
+                                        <span class="tok-nt">&lt;message</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;TR.incorrectRoot&quot;</span><span class="tok-nt">&gt;</span>
+                                            <span class="tok-nt">&lt;translationArguments&gt;</span>
+                                                <span class="tok-nt">&lt;argument</span> <span class="tok-na">token=</span><span class="tok-s">&quot;filename&quot;</span><span class="tok-nt">&gt;</span>ps-root.xml<span class="tok-nt">&lt;/argument&gt;</span>
+                                                <span class="tok-nt">&lt;argument</span> <span class="tok-na">token=</span><span class="tok-s">&quot;elementName&quot;</span><span class="tok-nt">&gt;</span>FeatureCollection<span class="tok-nt">&lt;/argument&gt;</span>
+                                                <span class="tok-nt">&lt;argument</span> <span class="tok-na">token=</span><span class="tok-s">&quot;namespace&quot;</span><span class="tok-nt">&gt;</span>http://www.opengis.net/wfs<span class="tok-nt">&lt;/argument&gt;</span>
+                                            <span class="tok-nt">&lt;/translationArguments&gt;</span>
+                                        <span class="tok-nt">&lt;/message&gt;</span>
+                                    <span class="tok-nt">&lt;/messages&gt;</span>
+                                    <span class="tok-nt">&lt;parent</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDffaf6f6a-66f6-4796-8c42-e5f681517c62&quot;</span><span class="tok-nt">/&gt;</span>
+                                    <span class="tok-nt">&lt;resultedFrom</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID928d8204-3015-4811-82fd-f4779b35385b&quot;</span><span class="tok-nt">/&gt;</span>
+                                    <span class="tok-nt">&lt;startTimestamp&gt;</span>2016-09-05T13:10:24Z<span class="tok-nt">&lt;/startTimestamp&gt;</span>
+                                    <span class="tok-nt">&lt;duration&gt;</span>1<span class="tok-nt">&lt;/duration&gt;</span>
+                                    <span class="tok-nt">&lt;status&gt;</span>FAILED<span class="tok-nt">&lt;/status&gt;</span>
+                                <span class="tok-nt">&lt;/TestAssertionResult&gt;</span>
+                            <span class="tok-nt">&lt;/testAssertionResults&gt;</span>
+                            <span class="tok-nt">&lt;parent</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID3dab6279-f553-4f93-b1bc-b73329fc69c3&quot;</span><span class="tok-nt">/&gt;</span>
+                            <span class="tok-nt">&lt;resultedFrom</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDc177cf64-3a66-4ac4-92b9-61207aab8007&quot;</span><span class="tok-nt">/&gt;</span>
+                            <span class="tok-nt">&lt;startTimestamp&gt;</span>2016-09-05T13:10:24Z<span class="tok-nt">&lt;/startTimestamp&gt;</span>
+                            <span class="tok-nt">&lt;duration&gt;</span>1<span class="tok-nt">&lt;/duration&gt;</span>
+                            <span class="tok-nt">&lt;status&gt;</span>FAILED<span class="tok-nt">&lt;/status&gt;</span>
+                        <span class="tok-nt">&lt;/TestStepResult&gt;</span>
+                    <span class="tok-nt">&lt;/testStepResults&gt;</span>
+                    <span class="tok-nt">&lt;parent</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDfdfc25d5-1790-43bd-abb6-2de6263619cc&quot;</span><span class="tok-nt">/&gt;</span>
+                    <span class="tok-nt">&lt;resultedFrom</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDf66872d4-3a1f-4581-a501-94200219bf13&quot;</span><span class="tok-nt">/&gt;</span>
+                    <span class="tok-nt">&lt;startTimestamp&gt;</span>2016-09-05T13:10:24Z<span class="tok-nt">&lt;/startTimestamp&gt;</span>
+                    <span class="tok-nt">&lt;duration&gt;</span>1<span class="tok-nt">&lt;/duration&gt;</span>
+                    <span class="tok-nt">&lt;status&gt;</span>FAILED<span class="tok-nt">&lt;/status&gt;</span>
+                <span class="tok-nt">&lt;/TestCaseResult&gt;</span>
+            <span class="tok-nt">&lt;/testCaseResults&gt;</span>
+            <span class="tok-nt">&lt;parent</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDc5e50620-5107-4b75-b6c1-74d4465fba0f&quot;</span><span class="tok-nt">/&gt;</span>
+            <span class="tok-nt">&lt;resultedFrom</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID8e96257c-ae42-4123-b298-b8c5eda3a027&quot;</span><span class="tok-nt">/&gt;</span>
+            <span class="tok-nt">&lt;startTimestamp&gt;</span>2016-09-05T13:10:24Z<span class="tok-nt">&lt;/startTimestamp&gt;</span>
+            <span class="tok-nt">&lt;duration&gt;</span>1<span class="tok-nt">&lt;/duration&gt;</span>
+            <span class="tok-nt">&lt;status&gt;</span>FAILED<span class="tok-nt">&lt;/status&gt;</span>
+        <span class="tok-nt">&lt;/TestModuleResult&gt;</span>
+    <span class="tok-nt">&lt;/testModuleResults&gt;</span>
+    <span class="tok-nt">&lt;attachments&gt;</span>
+        <span class="tok-nt">&lt;Attachment</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EIDc5e50620-5111-4bc5-b6c1-74d4465fbb23&quot;</span><span class="tok-nt">&gt;</span>
+            <span class="tok-nt">&lt;label&gt;</span>Log file<span class="tok-nt">&lt;/label&gt;</span>
+            <span class="tok-nt">&lt;encoding&gt;</span>UTF-8<span class="tok-nt">&lt;/encoding&gt;</span>
+            <span class="tok-nt">&lt;mimeType&gt;</span>text/plain<span class="tok-nt">&lt;/mimeType&gt;</span>
+            <span class="tok-nt">&lt;referencedData</span> <span class="tok-na">href=</span><span class="tok-s">&quot;file://local/log.txt&quot;</span><span class="tok-nt">/&gt;</span>
+        <span class="tok-nt">&lt;/Attachment&gt;</span>
+    <span class="tok-nt">&lt;/attachments&gt;</span>
+    <span class="tok-nt">&lt;resultedFrom</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID545f9e49-009b-4114-9333-7ca26413b5d4&quot;</span><span class="tok-nt">/&gt;</span>
+    <span class="tok-nt">&lt;startTimestamp&gt;</span>2016-09-05T13:10:24Z<span class="tok-nt">&lt;/startTimestamp&gt;</span>
+    <span class="tok-nt">&lt;duration&gt;</span>1<span class="tok-nt">&lt;/duration&gt;</span>
+    <span class="tok-nt">&lt;status&gt;</span>FAILED<span class="tok-nt">&lt;/status&gt;</span>
+<span class="tok-nt">&lt;/TestTaskResult&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -788,17 +786,17 @@ be used (<code>$statusValues</code> is the sequence of status values from the lo
 level result items):</p>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="XQUERY">declare function local:status($statusValues as xs:string*) as xs:string
-{
-    if ($statusValues ='FAILED') then 'FAILED'
-    else if ($statusValues ='SKIPPED') then 'SKIPPED'
-    else if ($statusValues ='WARNING') then 'WARNING'
-    else if ($statusValues ='INFO') then 'INFO'
-    else if ($statusValues ='PASSED_MANUAL') then 'PASSED_MANUAL'
-    else if ($statusValues ='PASSED') then 'PASSED'
-    else if ($statusValues ='NOT_APPLICABLE') then 'NOT_APPLICABLE'
-    else 'UNDEFINED'
-};</code></pre>
+<pre class="pygments highlight"><code data-lang="XQUERY"><span class="tok-kd">declare</span> <span class="tok-kd">function</span> <span class="tok-nf">local:status</span><span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">statusValues</span> <span class="tok-k">as</span> <span class="tok-kt">xs:string</span><span class="tok-o">*</span><span class="tok-p">)</span> <span class="tok-k">as</span> <span class="tok-kt">xs:string</span>
+<span class="tok-p">{</span>
+    <span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">statusValues</span> <span class="tok-o">=</span><span class="tok-s1">&#39;FAILED&#39;</span><span class="tok-p">)</span> <span class="tok-k">then</span> <span class="tok-s1">&#39;FAILED&#39;</span>
+    <span class="tok-k">else</span> <span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">statusValues</span> <span class="tok-o">=</span><span class="tok-s1">&#39;SKIPPED&#39;</span><span class="tok-p">)</span> <span class="tok-k">then</span> <span class="tok-s1">&#39;SKIPPED&#39;</span>
+    <span class="tok-k">else</span> <span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">statusValues</span> <span class="tok-o">=</span><span class="tok-s1">&#39;WARNING&#39;</span><span class="tok-p">)</span> <span class="tok-k">then</span> <span class="tok-s1">&#39;WARNING&#39;</span>
+    <span class="tok-k">else</span> <span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">statusValues</span> <span class="tok-o">=</span><span class="tok-s1">&#39;INFO&#39;</span><span class="tok-p">)</span> <span class="tok-k">then</span> <span class="tok-s1">&#39;INFO&#39;</span>
+    <span class="tok-k">else</span> <span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">statusValues</span> <span class="tok-o">=</span><span class="tok-s1">&#39;PASSED_MANUAL&#39;</span><span class="tok-p">)</span> <span class="tok-k">then</span> <span class="tok-s1">&#39;PASSED_MANUAL&#39;</span>
+    <span class="tok-k">else</span> <span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">statusValues</span> <span class="tok-o">=</span><span class="tok-s1">&#39;PASSED&#39;</span><span class="tok-p">)</span> <span class="tok-k">then</span> <span class="tok-s1">&#39;PASSED&#39;</span>
+    <span class="tok-k">else</span> <span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-nv">$</span><span class="tok-n">statusValues</span> <span class="tok-o">=</span><span class="tok-s1">&#39;NOT_APPLICABLE&#39;</span><span class="tok-p">)</span> <span class="tok-k">then</span> <span class="tok-s1">&#39;NOT_APPLICABLE&#39;</span>
+    <span class="tok-k">else</span> <span class="tok-s1">&#39;UNDEFINED&#39;</span>
+<span class="tok-p">};</span></code></pre>
 </div>
 </div>
 </li>
@@ -893,103 +891,103 @@ content, the file names have to use a suffix "-bsxets.xml".</p>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="XML">&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;ExecutableTestSuite xmlns="http://www.interactive-instruments.de/etf/2.0"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 http://services.interactive-instruments.de/etf/schema/model/resultSet.xsd" id="EID545f9e49-009b-4114-9333-7ca26413b5d4"&gt;
-    &lt;itemHash&gt;bQ==&lt;/itemHash&gt;
-    &lt;remoteResource&gt;http://github.com/inspire-eu-validation/ets-repository/data-encoding/inspire-gml&lt;/remoteResource&gt;
-    &lt;localPath&gt;/auto&lt;/localPath&gt;
-    &lt;label&gt;Conformance class: INSPIRE GML encoding&lt;/label&gt;
-    &lt;description&gt;&lt;![CDATA[This test suite examines GML documents against basic requirements for the GML encoding for spatial data sets in INSPIRE. This only covers application-schema-independent, generic requirements. Requirements related to specific application schemas are part of conformance classes with a dependency on this conformance class.&lt;br/&gt;&lt;br/&gt;
-&lt;b&gt;This is a draft version. It has limitations and is expected to contain errors.&lt;/b&gt; Please report any issues or problems &lt;a href="https://github.com/interactive-instruments/ets-repository/issues" target="_blank"&gt;in GitHub&lt;/a&gt;.&lt;br/&gt;&lt;br/&gt;
-Known limitations are documented in the description of the applicable test case or test assertion.&lt;br/&gt;&lt;br/&gt;
-Source: &lt;a href="http://inspire.ec.europa.eu/id/ats/data-encoding/3.3/inspire-gml" target="_blank"&gt;Conformance Class 'INSPIRE GML encoding'&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;
-Pre-requisite conformance classes:
-&lt;ul&gt;&lt;li&gt;Conformance Class 'GML 3.2 documents [OGC]'&lt;/li&gt;&lt;/ul&gt;]]&gt;&lt;/description&gt;
-    &lt;reference&gt;../../inspire-bsxets.xq&lt;/reference&gt;
-    &lt;version&gt;0.1.0&lt;/version&gt;
-    &lt;author&gt;interactive instruments GmbH&lt;/author&gt;
-    &lt;creationDate&gt;2016-08-15T00:00:00Z&lt;/creationDate&gt;
-    &lt;lastEditor&gt;interactive instruments GmbH&lt;/lastEditor&gt;
-    &lt;lastUpdateDate&gt;2016-08-15T00:00:00Z&lt;/lastUpdateDate&gt;
-    &lt;testDriver ref="EID4dddc9e2-1b21-40b7-af70-6a2d156ad130"/&gt;
-    &lt;translationTemplateBundle ref="EID70a263c0-0ad7-42f2-9d4d-0d8a4ca71b52"/&gt;
-    &lt;supportedTestObjectTypes&gt;
-        &lt;testObjectType ref="EIDe1d4a306-7a78-4a3b-ae2d-cf5f0810853e"/&gt;
-    &lt;/supportedTestObjectTypes&gt;
-    &lt;testModules&gt;
-        &lt;TestModule id="EID8e96257c-ae42-4123-b298-b8c5eda3a027"&gt;
-            &lt;label&gt;IGNORE&lt;/label&gt;
-            &lt;description&gt;IGNORE&lt;/description&gt;
-            &lt;parent ref="EID545f9e49-009b-4114-9333-7ca26413b5d4"/&gt;
-            &lt;testCases&gt;
-                &lt;TestCase id="EIDf66872d4-3a1f-4581-a501-94200219bf13"&gt;
-                    &lt;label&gt;Basic tests&lt;/label&gt;
-                    &lt;description&gt;Verify that all documents contain GML features and use the expected character encoding.&lt;/description&gt;
-                    &lt;parent ref="EID8e96257c-ae42-4123-b298-b8c5eda3a027"/&gt;
-                    &lt;testSteps&gt;
-                        &lt;TestStep id="EIDc177cf64-3a66-4ac4-92b9-61207aab8007"&gt;
-                            &lt;label&gt;IGNORE&lt;/label&gt;
-                            &lt;description&gt;IGNORE&lt;/description&gt;
-                            &lt;parent ref="EIDf66872d4-3a1f-4581-a501-94200219bf13"/&gt;
-                            &lt;statementForExecution&gt;not applicable&lt;/statementForExecution&gt;
-                            &lt;testItemType ref="EIDf483e8e8-06b9-4900-ab36-adad0d7f22f0"/&gt;
-                            &lt;testAssertions&gt;
-                                &lt;TestAssertion id="EIDcab35f1a-6292-44b9-ae2c-9ec62fc0f4b6"&gt;
-                                    &lt;label&gt;gml.a.1: Errors loading the XML documents&lt;/label&gt;
-                                    &lt;description&gt;&lt;![CDATA[Report errors that occurred during loading the documents in the test object. A typical example is an XML document that is not well-formed and therefore cannot be processed.]]&gt;&lt;/description&gt;
-                                    &lt;parent ref="EIDc177cf64-3a66-4ac4-92b9-61207aab8007"/&gt;
-                                    &lt;expectedResult&gt;NOT_APPLICABLE&lt;/expectedResult&gt;
-                                    &lt;expression&gt;if (not($validationErrors)) then 'PASSED' else ('FAILED', for $error in $validationErrors return (local:addMessage('TR.valdiationError', map { 'text': $error })))&lt;/expression&gt;
-                                    &lt;testItemType ref="EIDf0edc596-49d2-48d6-a1a1-1ac581dcde0a"/&gt;
-                                    &lt;translationTemplates&gt;
-                                        &lt;translationTemplate ref="TR.valdiationError"/&gt;
-                                    &lt;/translationTemplates&gt;
-                                &lt;/TestAssertion&gt;
-                                &lt;TestAssertion id="EID928d8204-3015-4811-82fd-f4779b35385b"&gt;
-                                    &lt;label&gt;gml.a.2: Document root element&lt;/label&gt;
-                                    &lt;description&gt;&lt;![CDATA[Check for each XML document that the root element is a GML feature or a GML feature collection.&lt;br/&gt;&lt;br/&gt;
-For feature collections the following root elements are recognised:
-&lt;ul&gt;
-&lt;li&gt;wfs:FeatureCollection (WFS 2.0),&lt;/li&gt;
-&lt;li&gt;gml:FeatureCollection (GML 3.2),&lt;/li&gt;
-&lt;li&gt;base:SpatialDataSet (INSPIRE Base 3.2 or 3.3).&lt;/li&gt;
-&lt;/ul&gt;
-This test is a pre-condition to identify the INSPIRE features in the test object.&lt;br/&gt;&lt;br/&gt;
-Relevant requirements and recommendations:
-&lt;ul&gt;&lt;li&gt;Recommendation 11 - For the exchange of spatial objects in GML, an XML document with a FeatureCollection root element from ISO 19142:2010 (WFS 2.0) should be used.&lt;/li&gt;&lt;/ul&gt;
-&lt;b&gt;Known limitations:&lt;/b&gt;
-&lt;ul&gt;
-&lt;li&gt;Currently only feature collections are recognized as the test engine BaseX is not schema-aware. A new extension function is required to identify all feature elements.&lt;/li&gt;
-&lt;/ul&gt;
-Source: &lt;a href="" target="_blank"&gt;Abstract Test Case 'Basic test'&lt;/a&gt;]]&gt;&lt;/description&gt;
-                                    &lt;parent ref="EIDc177cf64-3a66-4ac4-92b9-61207aab8007"/&gt;
-                                    &lt;expectedResult&gt;NOT_APPLICABLE&lt;/expectedResult&gt;
-                                    &lt;expression&gt;
+<pre class="pygments highlight"><code data-lang="XML"><span class="tok-cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="tok-nt">&lt;ExecutableTestSuite</span> <span class="tok-na">xmlns=</span><span class="tok-s">&quot;http://www.interactive-instruments.de/etf/2.0&quot;</span>     <span class="tok-na">xmlns:xsi=</span><span class="tok-s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+    <span class="tok-na">xsi:schemaLocation=</span><span class="tok-s">&quot;http://www.interactive-instruments.de/etf/2.0 http://services.interactive-instruments.de/etf/schema/model/resultSet.xsd&quot;</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EID545f9e49-009b-4114-9333-7ca26413b5d4&quot;</span><span class="tok-nt">&gt;</span>
+    <span class="tok-nt">&lt;itemHash&gt;</span>bQ==<span class="tok-nt">&lt;/itemHash&gt;</span>
+    <span class="tok-nt">&lt;remoteResource&gt;</span>http://github.com/inspire-eu-validation/ets-repository/data-encoding/inspire-gml<span class="tok-nt">&lt;/remoteResource&gt;</span>
+    <span class="tok-nt">&lt;localPath&gt;</span>/auto<span class="tok-nt">&lt;/localPath&gt;</span>
+    <span class="tok-nt">&lt;label&gt;</span>Conformance class: INSPIRE GML encoding<span class="tok-nt">&lt;/label&gt;</span>
+    <span class="tok-nt">&lt;description&gt;</span><span class="tok-cp">&lt;![CDATA[This test suite examines GML documents against basic requirements for the GML encoding for spatial data sets in INSPIRE. This only covers application-schema-independent, generic requirements. Requirements related to specific application schemas are part of conformance classes with a dependency on this conformance class.&lt;br/&gt;&lt;br/&gt;</span>
+<span class="tok-cp">&lt;b&gt;This is a draft version. It has limitations and is expected to contain errors.&lt;/b&gt; Please report any issues or problems &lt;a href=&quot;https://github.com/interactive-instruments/ets-repository/issues&quot; target=&quot;_blank&quot;&gt;in GitHub&lt;/a&gt;.&lt;br/&gt;&lt;br/&gt;</span>
+<span class="tok-cp">Known limitations are documented in the description of the applicable test case or test assertion.&lt;br/&gt;&lt;br/&gt;</span>
+<span class="tok-cp">Source: &lt;a href=&quot;http://inspire.ec.europa.eu/id/ats/data-encoding/3.3/inspire-gml&quot; target=&quot;_blank&quot;&gt;Conformance Class &#39;INSPIRE GML encoding&#39;&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;</span>
+<span class="tok-cp">Pre-requisite conformance classes:</span>
+<span class="tok-cp">&lt;ul&gt;&lt;li&gt;Conformance Class &#39;GML 3.2 documents [OGC]&#39;&lt;/li&gt;&lt;/ul&gt;]]&gt;</span><span class="tok-nt">&lt;/description&gt;</span>
+    <span class="tok-nt">&lt;reference&gt;</span>../../inspire-bsxets.xq<span class="tok-nt">&lt;/reference&gt;</span>
+    <span class="tok-nt">&lt;version&gt;</span>0.1.0<span class="tok-nt">&lt;/version&gt;</span>
+    <span class="tok-nt">&lt;author&gt;</span>interactive instruments GmbH<span class="tok-nt">&lt;/author&gt;</span>
+    <span class="tok-nt">&lt;creationDate&gt;</span>2016-08-15T00:00:00Z<span class="tok-nt">&lt;/creationDate&gt;</span>
+    <span class="tok-nt">&lt;lastEditor&gt;</span>interactive instruments GmbH<span class="tok-nt">&lt;/lastEditor&gt;</span>
+    <span class="tok-nt">&lt;lastUpdateDate&gt;</span>2016-08-15T00:00:00Z<span class="tok-nt">&lt;/lastUpdateDate&gt;</span>
+    <span class="tok-nt">&lt;testDriver</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID4dddc9e2-1b21-40b7-af70-6a2d156ad130&quot;</span><span class="tok-nt">/&gt;</span>
+    <span class="tok-nt">&lt;translationTemplateBundle</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID70a263c0-0ad7-42f2-9d4d-0d8a4ca71b52&quot;</span><span class="tok-nt">/&gt;</span>
+    <span class="tok-nt">&lt;supportedTestObjectTypes&gt;</span>
+        <span class="tok-nt">&lt;testObjectType</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDe1d4a306-7a78-4a3b-ae2d-cf5f0810853e&quot;</span><span class="tok-nt">/&gt;</span>
+    <span class="tok-nt">&lt;/supportedTestObjectTypes&gt;</span>
+    <span class="tok-nt">&lt;testModules&gt;</span>
+        <span class="tok-nt">&lt;TestModule</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EID8e96257c-ae42-4123-b298-b8c5eda3a027&quot;</span><span class="tok-nt">&gt;</span>
+            <span class="tok-nt">&lt;label&gt;</span>IGNORE<span class="tok-nt">&lt;/label&gt;</span>
+            <span class="tok-nt">&lt;description&gt;</span>IGNORE<span class="tok-nt">&lt;/description&gt;</span>
+            <span class="tok-nt">&lt;parent</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID545f9e49-009b-4114-9333-7ca26413b5d4&quot;</span><span class="tok-nt">/&gt;</span>
+            <span class="tok-nt">&lt;testCases&gt;</span>
+                <span class="tok-nt">&lt;TestCase</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EIDf66872d4-3a1f-4581-a501-94200219bf13&quot;</span><span class="tok-nt">&gt;</span>
+                    <span class="tok-nt">&lt;label&gt;</span>Basic tests<span class="tok-nt">&lt;/label&gt;</span>
+                    <span class="tok-nt">&lt;description&gt;</span>Verify that all documents contain GML features and use the expected character encoding.<span class="tok-nt">&lt;/description&gt;</span>
+                    <span class="tok-nt">&lt;parent</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID8e96257c-ae42-4123-b298-b8c5eda3a027&quot;</span><span class="tok-nt">/&gt;</span>
+                    <span class="tok-nt">&lt;testSteps&gt;</span>
+                        <span class="tok-nt">&lt;TestStep</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EIDc177cf64-3a66-4ac4-92b9-61207aab8007&quot;</span><span class="tok-nt">&gt;</span>
+                            <span class="tok-nt">&lt;label&gt;</span>IGNORE<span class="tok-nt">&lt;/label&gt;</span>
+                            <span class="tok-nt">&lt;description&gt;</span>IGNORE<span class="tok-nt">&lt;/description&gt;</span>
+                            <span class="tok-nt">&lt;parent</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDf66872d4-3a1f-4581-a501-94200219bf13&quot;</span><span class="tok-nt">/&gt;</span>
+                            <span class="tok-nt">&lt;statementForExecution&gt;</span>not applicable<span class="tok-nt">&lt;/statementForExecution&gt;</span>
+                            <span class="tok-nt">&lt;testItemType</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDf483e8e8-06b9-4900-ab36-adad0d7f22f0&quot;</span><span class="tok-nt">/&gt;</span>
+                            <span class="tok-nt">&lt;testAssertions&gt;</span>
+                                <span class="tok-nt">&lt;TestAssertion</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EIDcab35f1a-6292-44b9-ae2c-9ec62fc0f4b6&quot;</span><span class="tok-nt">&gt;</span>
+                                    <span class="tok-nt">&lt;label&gt;</span>gml.a.1: Errors loading the XML documents<span class="tok-nt">&lt;/label&gt;</span>
+                                    <span class="tok-nt">&lt;description&gt;</span><span class="tok-cp">&lt;![CDATA[Report errors that occurred during loading the documents in the test object. A typical example is an XML document that is not well-formed and therefore cannot be processed.]]&gt;</span><span class="tok-nt">&lt;/description&gt;</span>
+                                    <span class="tok-nt">&lt;parent</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDc177cf64-3a66-4ac4-92b9-61207aab8007&quot;</span><span class="tok-nt">/&gt;</span>
+                                    <span class="tok-nt">&lt;expectedResult&gt;</span>NOT_APPLICABLE<span class="tok-nt">&lt;/expectedResult&gt;</span>
+                                    <span class="tok-nt">&lt;expression&gt;</span>if (not($validationErrors)) then &#39;PASSED&#39; else (&#39;FAILED&#39;, for $error in $validationErrors return (local:addMessage(&#39;TR.valdiationError&#39;, map { &#39;text&#39;: $error })))<span class="tok-nt">&lt;/expression&gt;</span>
+                                    <span class="tok-nt">&lt;testItemType</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDf0edc596-49d2-48d6-a1a1-1ac581dcde0a&quot;</span><span class="tok-nt">/&gt;</span>
+                                    <span class="tok-nt">&lt;translationTemplates&gt;</span>
+                                        <span class="tok-nt">&lt;translationTemplate</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;TR.valdiationError&quot;</span><span class="tok-nt">/&gt;</span>
+                                    <span class="tok-nt">&lt;/translationTemplates&gt;</span>
+                                <span class="tok-nt">&lt;/TestAssertion&gt;</span>
+                                <span class="tok-nt">&lt;TestAssertion</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EID928d8204-3015-4811-82fd-f4779b35385b&quot;</span><span class="tok-nt">&gt;</span>
+                                    <span class="tok-nt">&lt;label&gt;</span>gml.a.2: Document root element<span class="tok-nt">&lt;/label&gt;</span>
+                                    <span class="tok-nt">&lt;description&gt;</span><span class="tok-cp">&lt;![CDATA[Check for each XML document that the root element is a GML feature or a GML feature collection.&lt;br/&gt;&lt;br/&gt;</span>
+<span class="tok-cp">For feature collections the following root elements are recognised:</span>
+<span class="tok-cp">&lt;ul&gt;</span>
+<span class="tok-cp">&lt;li&gt;wfs:FeatureCollection (WFS 2.0),&lt;/li&gt;</span>
+<span class="tok-cp">&lt;li&gt;gml:FeatureCollection (GML 3.2),&lt;/li&gt;</span>
+<span class="tok-cp">&lt;li&gt;base:SpatialDataSet (INSPIRE Base 3.2 or 3.3).&lt;/li&gt;</span>
+<span class="tok-cp">&lt;/ul&gt;</span>
+<span class="tok-cp">This test is a pre-condition to identify the INSPIRE features in the test object.&lt;br/&gt;&lt;br/&gt;</span>
+<span class="tok-cp">Relevant requirements and recommendations:</span>
+<span class="tok-cp">&lt;ul&gt;&lt;li&gt;Recommendation 11 - For the exchange of spatial objects in GML, an XML document with a FeatureCollection root element from ISO 19142:2010 (WFS 2.0) should be used.&lt;/li&gt;&lt;/ul&gt;</span>
+<span class="tok-cp">&lt;b&gt;Known limitations:&lt;/b&gt;</span>
+<span class="tok-cp">&lt;ul&gt;</span>
+<span class="tok-cp">&lt;li&gt;Currently only feature collections are recognized as the test engine BaseX is not schema-aware. A new extension function is required to identify all feature elements.&lt;/li&gt;</span>
+<span class="tok-cp">&lt;/ul&gt;</span>
+<span class="tok-cp">Source: &lt;a href=&quot;&quot; target=&quot;_blank&quot;&gt;Abstract Test Case &#39;Basic test&#39;&lt;/a&gt;]]&gt;</span><span class="tok-nt">&lt;/description&gt;</span>
+                                    <span class="tok-nt">&lt;parent</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDc177cf64-3a66-4ac4-92b9-61207aab8007&quot;</span><span class="tok-nt">/&gt;</span>
+                                    <span class="tok-nt">&lt;expectedResult&gt;</span>NOT_APPLICABLE<span class="tok-nt">&lt;/expectedResult&gt;</span>
+                                    <span class="tok-nt">&lt;expression&gt;</span>
 let $filesWithErrors := $db[not(wfs:FeatureCollection or gml:FeatureCollection or base32:SpatialDataSet or base:SpatialDataSet or gml:AbstractFeature)][position() le $limitErrors]
 return
-(if ($filesWithErrors) then 'FAILED' else 'PASSED',
- local:error-statistics('TR.filesWithErrors', count($filesWithErrors)),
+(if ($filesWithErrors) then &#39;FAILED&#39; else &#39;PASSED&#39;,
+ local:error-statistics(&#39;TR.filesWithErrors&#39;, count($filesWithErrors)),
  for $file in $filesWithErrors
     order by local:filename($file)
     let $root := $file/element()
     return
-    local:addMessage('TR.incorrectRoot', map { 'filename': local:filename($root), 'elementName': local-name($root), 'namespace': namespace-uri($root) }))
-                                    &lt;/expression&gt;
-                                    &lt;testItemType ref="EIDf0edc596-49d2-48d6-a1a1-1ac581dcde0a"/&gt;
-                                    &lt;translationTemplates&gt;
-                                        &lt;translationTemplate ref="TR.incorrectRoot"/&gt;
-                                        &lt;translationTemplate ref="TR.filesWithErrors"/&gt;
-                                    &lt;/translationTemplates&gt;
-                                &lt;/TestAssertion&gt;
-                            &lt;/testAssertions&gt;
-                        &lt;/TestStep&gt;
-                    &lt;/testSteps&gt;
-                &lt;/TestCase&gt;
-            &lt;/testCases&gt;
-        &lt;/TestModule&gt;
-    &lt;/testModules&gt;
-&lt;/ExecutableTestSuite&gt;</code></pre>
+    local:addMessage(&#39;TR.incorrectRoot&#39;, map { &#39;filename&#39;: local:filename($root), &#39;elementName&#39;: local-name($root), &#39;namespace&#39;: namespace-uri($root) }))
+                                    <span class="tok-nt">&lt;/expression&gt;</span>
+                                    <span class="tok-nt">&lt;testItemType</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EIDf0edc596-49d2-48d6-a1a1-1ac581dcde0a&quot;</span><span class="tok-nt">/&gt;</span>
+                                    <span class="tok-nt">&lt;translationTemplates&gt;</span>
+                                        <span class="tok-nt">&lt;translationTemplate</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;TR.incorrectRoot&quot;</span><span class="tok-nt">/&gt;</span>
+                                        <span class="tok-nt">&lt;translationTemplate</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;TR.filesWithErrors&quot;</span><span class="tok-nt">/&gt;</span>
+                                    <span class="tok-nt">&lt;/translationTemplates&gt;</span>
+                                <span class="tok-nt">&lt;/TestAssertion&gt;</span>
+                            <span class="tok-nt">&lt;/testAssertions&gt;</span>
+                        <span class="tok-nt">&lt;/TestStep&gt;</span>
+                    <span class="tok-nt">&lt;/testSteps&gt;</span>
+                <span class="tok-nt">&lt;/TestCase&gt;</span>
+            <span class="tok-nt">&lt;/testCases&gt;</span>
+        <span class="tok-nt">&lt;/TestModule&gt;</span>
+    <span class="tok-nt">&lt;/testModules&gt;</span>
+<span class="tok-nt">&lt;/ExecutableTestSuite&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -1442,20 +1440,20 @@ value '.*' matches all test assertions.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="XML">    &lt;ParameterList name="ETF Standard Parameters for XML test objects"&gt;
-        &lt;parameter name="files_to_test" required="true"&gt;
-            &lt;defaultValue&gt;.*&lt;/defaultValue&gt;
-            &lt;description ref="TR.filesToTest"/&gt;
-            &lt;allowedValues&gt;.*&lt;/allowedValues&gt;
-            &lt;type&gt;string&lt;/type&gt;
-        &lt;/parameter&gt;
-        &lt;parameter name="tests_to_execute" required="false"&gt;
-            &lt;defaultValue&gt;.*&lt;/defaultValue&gt;
-            &lt;description ref="TR.testsToExecute"/&gt;
-            &lt;allowedValues&gt;.*&lt;/allowedValues&gt;
-            &lt;type&gt;string&lt;/type&gt;
-        &lt;/parameter&gt;
-    &lt;/ParameterList&gt;</code></pre>
+<pre class="pygments highlight"><code data-lang="XML">    <span class="tok-nt">&lt;ParameterList</span> <span class="tok-na">name=</span><span class="tok-s">&quot;ETF Standard Parameters for XML test objects&quot;</span><span class="tok-nt">&gt;</span>
+        <span class="tok-nt">&lt;parameter</span> <span class="tok-na">name=</span><span class="tok-s">&quot;files_to_test&quot;</span> <span class="tok-na">required=</span><span class="tok-s">&quot;true&quot;</span><span class="tok-nt">&gt;</span>
+            <span class="tok-nt">&lt;defaultValue&gt;</span>.*<span class="tok-nt">&lt;/defaultValue&gt;</span>
+            <span class="tok-nt">&lt;description</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;TR.filesToTest&quot;</span><span class="tok-nt">/&gt;</span>
+            <span class="tok-nt">&lt;allowedValues&gt;</span>.*<span class="tok-nt">&lt;/allowedValues&gt;</span>
+            <span class="tok-nt">&lt;type&gt;</span>string<span class="tok-nt">&lt;/type&gt;</span>
+        <span class="tok-nt">&lt;/parameter&gt;</span>
+        <span class="tok-nt">&lt;parameter</span> <span class="tok-na">name=</span><span class="tok-s">&quot;tests_to_execute&quot;</span> <span class="tok-na">required=</span><span class="tok-s">&quot;false&quot;</span><span class="tok-nt">&gt;</span>
+            <span class="tok-nt">&lt;defaultValue&gt;</span>.*<span class="tok-nt">&lt;/defaultValue&gt;</span>
+            <span class="tok-nt">&lt;description</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;TR.testsToExecute&quot;</span><span class="tok-nt">/&gt;</span>
+            <span class="tok-nt">&lt;allowedValues&gt;</span>.*<span class="tok-nt">&lt;/allowedValues&gt;</span>
+            <span class="tok-nt">&lt;type&gt;</span>string<span class="tok-nt">&lt;/type&gt;</span>
+        <span class="tok-nt">&lt;/parameter&gt;</span>
+    <span class="tok-nt">&lt;/ParameterList&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -1464,7 +1462,7 @@ value '.*' matches all test assertions.</p>
 <div class="sect3">
 <h4 id="_overview_2">3.9.1. Overview</h4>
 <div class="paragraph">
-<p>This section lists all Test Object Types that are pre-defined in the BaseX test driver.</p>
+<p>This section lists all <a href="#test-object-types">Test Object Types</a> that are pre-defined in the BaseX test driver.</p>
 </div>
 <div class="paragraph">
 <p>For each Test Object Type, the following information is provided:</p>
@@ -1722,7 +1720,104 @@ be specified by a test developer defined and declared in XML in the
 </div>
 </div>
 <div class="sect2">
-<h3 id="_dependencies">3.10. Dependencies</h3>
+<h3 id="basex-test-item-types">3.10. Test Item Types</h3>
+<div class="sect3">
+<h4 id="_overview_3">3.10.1. Overview</h4>
+<div class="paragraph">
+<p>This section lists all <a href="#test-item-types">Test Item Types</a> that are pre-defined in the BaseX test driver.</p>
+</div>
+<div class="paragraph">
+<p>For each Test Item Type, the following information is provided:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a description</p>
+</li>
+<li>
+<p>the ID that must be used to reference the Test Item Type from a test step or test assertion</p>
+</li>
+<li>
+<p>whether the type is applicable to test steps or test assertions</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dummy_test_step">3.10.2. Dummy Test Step</h4>
+<div class="paragraph">
+<p>In BaseX-based Executable Test Suites the concept of test steps is not used. A dummy test step, which is suppressed in test reports, is therefore created and associated with this test item type.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDf483e8e8-06b9-4900-ab36-adad0d7f22f0</p>
+</dd>
+<dt class="hdlist1">Item</dt>
+<dd>
+<p>Test Step</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_xquery">3.10.3. XQuery</h4>
+<div class="paragraph">
+<p>The element <code>etf:expression</code> in a test assertion contains an XQuery fragment that is executed to determine the result.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDf0edc596-49d2-48d6-a1a1-1ac581dcde0a</p>
+</dd>
+<dt class="hdlist1">Item</dt>
+<dd>
+<p>Test Assertion</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_manual_review">3.10.4. Manual review</h4>
+<div class="paragraph">
+<p>The element <code>etf:expression</code> in a test assertion is ignored and the assertion result status is always 'PASSED_MANUAL' indicating that a manual review from an expert is required. The review must be specified in the description of the test assertion.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EIDb48eeaa3-6a74-414a-879c-1dc708017e11</p>
+</dd>
+<dt class="hdlist1">Item</dt>
+<dd>
+<p>Test Assertion</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_disabled">3.10.5. Disabled</h4>
+<div class="paragraph">
+<p>The element <code>etf:expression</code> in a test assertion is ignored and the assertion result status is always 'NOT_APPLICABLE'. The test assertion is disabled. This type should be used only temporarily to disable a test assertion with known issues.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p>EID92f22a19-2ec2-43f0-8971-c2da3eaafcd2</p>
+</dd>
+<dt class="hdlist1">Item</dt>
+<dd>
+<p>Test Assertion</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dependencies">3.11. Dependencies</h3>
 <div class="paragraph">
 <p>Executable Test Suites may depend on other Executable Test Suites. This
 dependency has two effects. Assume we have three test suites where test
@@ -1771,13 +1866,13 @@ that is consistent with the dependencies.</p>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="XML">&lt;ExecutableTestSuite ...&gt;
+<pre class="pygments highlight"><code data-lang="XML"><span class="tok-nt">&lt;ExecutableTestSuite</span> <span class="tok-err">...</span><span class="tok-nt">&gt;</span>
   ...
-  &lt;dependencies&gt;
-    &lt;executableTestSuite ref="EID545f9e49-009b-4114-9333-7ca26413b5d4"/&gt;
-  &lt;/dependencies&gt;
+  <span class="tok-nt">&lt;dependencies&gt;</span>
+    <span class="tok-nt">&lt;executableTestSuite</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID545f9e49-009b-4114-9333-7ca26413b5d4&quot;</span><span class="tok-nt">/&gt;</span>
+  <span class="tok-nt">&lt;/dependencies&gt;</span>
   ...
-&lt;/ExecutableTestSuite&gt;</code></pre>
+<span class="tok-nt">&lt;/ExecutableTestSuite&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -1787,17 +1882,17 @@ that is consistent with the dependencies.</p>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="XML">&lt;ExecutableTestSuite ...&gt;
+<pre class="pygments highlight"><code data-lang="XML"><span class="tok-nt">&lt;ExecutableTestSuite</span> <span class="tok-err">...</span><span class="tok-nt">&gt;</span>
   ...
-  &lt;TestCase ...&gt;
+  <span class="tok-nt">&lt;TestCase</span> <span class="tok-err">...</span><span class="tok-nt">&gt;</span>
     ...
-    &lt;dependencies&gt;
-      &lt;testCase ref="EID2ee0045f-cf8d-4979-9d7d-76cb465a0314"/&gt;
-    &lt;/dependencies&gt;
+    <span class="tok-nt">&lt;dependencies&gt;</span>
+      <span class="tok-nt">&lt;testCase</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID2ee0045f-cf8d-4979-9d7d-76cb465a0314&quot;</span><span class="tok-nt">/&gt;</span>
+    <span class="tok-nt">&lt;/dependencies&gt;</span>
     ...
-  &lt;TestCase ...&gt;
+  <span class="tok-nt">&lt;TestCase</span> <span class="tok-err">...</span><span class="tok-nt">&gt;</span>
   ...
-&lt;/ExecutableTestSuite&gt;</code></pre>
+<span class="tok-nt">&lt;/ExecutableTestSuite&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -1812,7 +1907,7 @@ that is consistent with the dependencies.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_tags">3.11. Tags</h3>
+<h3 id="_tags">3.12. Tags</h3>
 <div class="paragraph">
 <p>To associate an Executable Test Suite with a <a href="#tags">tag</a>, the tag is referenced from the XML document of the test suite.</p>
 </div>
@@ -1824,13 +1919,13 @@ that is consistent with the dependencies.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="XML">&lt;ExecutableTestSuite ...&gt;
+<pre class="pygments highlight"><code data-lang="XML"><span class="tok-nt">&lt;ExecutableTestSuite</span> <span class="tok-err">...</span><span class="tok-nt">&gt;</span>
   ...
-  &lt;tags&gt;
-      &lt;tag ref="EID7f57420f-b228-41ae-9467-86e7ffef6e7e"/&gt;
-  &lt;/tags&gt;
+  <span class="tok-nt">&lt;tags&gt;</span>
+      <span class="tok-nt">&lt;tag</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID7f57420f-b228-41ae-9467-86e7ffef6e7e&quot;</span><span class="tok-nt">/&gt;</span>
+  <span class="tok-nt">&lt;/tags&gt;</span>
   ...
-&lt;/ExecutableTestSuite&gt;</code></pre>
+<span class="tok-nt">&lt;/ExecutableTestSuite&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -1849,7 +1944,30 @@ that is consistent with the dependencies.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_attachments">3.12. Attachments</h3>
+<h3 id="_statistical_information">3.13. Statistical information</h3>
+<div class="paragraph">
+<p>If a test result includes an <a href="#basex-attachments">attachment</a> with the type "StatisticalReport", a statistical table is included in the test report. The root element must be an <code>etf:StatisticalReportTable</code> and all <code>etf:entry</code> elements are shown - the value before the semicolon in a column "Type" (feature type or metadata record type) and the value after the semicolon in a column "Count" (number of features or metadata records of that type).</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 13. A sample StatisticalReportTable attachment</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="XML"><span class="tok-nt">&lt;StatisticalReportTable</span> <span class="tok-na">xmlns=</span><span class="tok-s">&quot;http://www.interactive-instruments.de/etf/2.0&quot;</span><span class="tok-nt">&gt;</span>
+<span class="tok-nt">&lt;type</span> <span class="tok-na">ref=</span><span class="tok-s">&quot;EID242272e0-3f0a-4e9c-9643-657c4d6d304a&quot;</span><span class="tok-nt">/&gt;</span>
+<span class="tok-nt">&lt;entries&gt;</span>
+<span class="tok-nt">&lt;entry&gt;</span>all; 10<span class="tok-nt">&lt;/entry&gt;</span>
+<span class="tok-nt">&lt;entry&gt;</span>dataset; 5<span class="tok-nt">&lt;/entry&gt;</span>
+<span class="tok-nt">&lt;entry&gt;</span>service; 5<span class="tok-nt">&lt;/entry&gt;</span>
+<span class="tok-nt">&lt;/entries&gt;</span>
+<span class="tok-nt">&lt;/StatisticalReportTable&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="basex-attachments">3.14. Attachments</h3>
 <div class="paragraph">
 <p>An Executable Test Suite may record additional information to a test
 result as attachments. In the case of tests on XML documents, these are
@@ -1878,30 +1996,30 @@ of any errors.</p>
 and the links to them are included in the <code>etf:TestTaskResult</code>.</p>
 </div>
 <div class="exampleblock">
-<div class="title">Example 13. Example how attachments are referenced in a test result</div>
+<div class="title">Example 14. Example how attachments are referenced in a test result</div>
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="XML">&lt;attachments&gt;
-  &lt;Attachment id="EID4c16160f-9004-467d-bf49-72b7da258eff" type="LogFile"&gt;
-    &lt;label&gt;Log file&lt;/label&gt;
-    &lt;encoding&gt;UTF-8&lt;/encoding&gt;
-    &lt;mimeType&gt;text/plain&lt;/mimeType&gt;
-    &lt;referencedData href="http://demo-inspire-next.etf-validator.net/etf-webapp/v2/TestTaskResults/EIDfa95b457-0d69-458f-98f3-6eae9b7f388d/Attachments/EID4c16160f-9004-467d-bf49-72b7da258eff"/&gt;
-  &lt;/Attachment&gt;
-  &lt;Attachment id="EIDd9f69337-4ae0-4df2-a058-46b71e15135c" type="StatisticalReport"&gt;
-    &lt;label&gt;Metadata record statistics&lt;/label&gt;
-    &lt;encoding&gt;UTF-8&lt;/encoding&gt;
-    &lt;mimeType&gt;application/xml&lt;/mimeType&gt;
-    &lt;referencedData href="http://demo-inspire-next.etf-validator.net/etf-webapp/v2/TestTaskResults/EIDfa95b457-0d69-458f-98f3-6eae9b7f388d/Attachments/EIDd9f69337-4ae0-4df2-a058-46b71e15135c"/&gt;
-  &lt;/Attachment&gt;
-  &lt;Attachment id="EID0fed0d42-39a3-4692-8e38-e78e2f87507a" type="Query"&gt;
-    &lt;label&gt;XQuery executed against the dataset&lt;/label&gt;
-    &lt;encoding&gt;UTF-8&lt;/encoding&gt;
-    &lt;mimeType&gt;text/plain&lt;/mimeType&gt;
-    &lt;referencedData href="http://demo-inspire-next.etf-validator.net/etf-webapp/v2/TestTaskResults/EIDfa95b457-0d69-458f-98f3-6eae9b7f388d/Attachments/EID0fed0d42-39a3-4692-8e38-e78e2f87507a"/&gt;
-  &lt;/Attachment&gt;
-&lt;/attachments&gt;</code></pre>
+<pre class="pygments highlight"><code data-lang="XML"><span class="tok-nt">&lt;attachments&gt;</span>
+  <span class="tok-nt">&lt;Attachment</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EID4c16160f-9004-467d-bf49-72b7da258eff&quot;</span> <span class="tok-na">type=</span><span class="tok-s">&quot;LogFile&quot;</span><span class="tok-nt">&gt;</span>
+    <span class="tok-nt">&lt;label&gt;</span>Log file<span class="tok-nt">&lt;/label&gt;</span>
+    <span class="tok-nt">&lt;encoding&gt;</span>UTF-8<span class="tok-nt">&lt;/encoding&gt;</span>
+    <span class="tok-nt">&lt;mimeType&gt;</span>text/plain<span class="tok-nt">&lt;/mimeType&gt;</span>
+    <span class="tok-nt">&lt;referencedData</span> <span class="tok-na">href=</span><span class="tok-s">&quot;http://demo-inspire-next.etf-validator.net/etf-webapp/v2/TestTaskResults/EIDfa95b457-0d69-458f-98f3-6eae9b7f388d/Attachments/EID4c16160f-9004-467d-bf49-72b7da258eff&quot;</span><span class="tok-nt">/&gt;</span>
+  <span class="tok-nt">&lt;/Attachment&gt;</span>
+  <span class="tok-nt">&lt;Attachment</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EIDd9f69337-4ae0-4df2-a058-46b71e15135c&quot;</span> <span class="tok-na">type=</span><span class="tok-s">&quot;StatisticalReport&quot;</span><span class="tok-nt">&gt;</span>
+    <span class="tok-nt">&lt;label&gt;</span>Metadata record statistics<span class="tok-nt">&lt;/label&gt;</span>
+    <span class="tok-nt">&lt;encoding&gt;</span>UTF-8<span class="tok-nt">&lt;/encoding&gt;</span>
+    <span class="tok-nt">&lt;mimeType&gt;</span>application/xml<span class="tok-nt">&lt;/mimeType&gt;</span>
+    <span class="tok-nt">&lt;referencedData</span> <span class="tok-na">href=</span><span class="tok-s">&quot;http://demo-inspire-next.etf-validator.net/etf-webapp/v2/TestTaskResults/EIDfa95b457-0d69-458f-98f3-6eae9b7f388d/Attachments/EIDd9f69337-4ae0-4df2-a058-46b71e15135c&quot;</span><span class="tok-nt">/&gt;</span>
+  <span class="tok-nt">&lt;/Attachment&gt;</span>
+  <span class="tok-nt">&lt;Attachment</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EID0fed0d42-39a3-4692-8e38-e78e2f87507a&quot;</span> <span class="tok-na">type=</span><span class="tok-s">&quot;Query&quot;</span><span class="tok-nt">&gt;</span>
+    <span class="tok-nt">&lt;label&gt;</span>XQuery executed against the dataset<span class="tok-nt">&lt;/label&gt;</span>
+    <span class="tok-nt">&lt;encoding&gt;</span>UTF-8<span class="tok-nt">&lt;/encoding&gt;</span>
+    <span class="tok-nt">&lt;mimeType&gt;</span>text/plain<span class="tok-nt">&lt;/mimeType&gt;</span>
+    <span class="tok-nt">&lt;referencedData</span> <span class="tok-na">href=</span><span class="tok-s">&quot;http://demo-inspire-next.etf-validator.net/etf-webapp/v2/TestTaskResults/EIDfa95b457-0d69-458f-98f3-6eae9b7f388d/Attachments/EID0fed0d42-39a3-4692-8e38-e78e2f87507a&quot;</span><span class="tok-nt">/&gt;</span>
+  <span class="tok-nt">&lt;/Attachment&gt;</span>
+<span class="tok-nt">&lt;/attachments&gt;</span></code></pre>
 </div>
 </div>
 </div>
@@ -2020,7 +2138,8 @@ project and selecting 'Rename'.</p>
 <p>SoapUI and ETF are using a slightly different terminology for test items, as the
 following table shows.</p>
 </div>
-<table class="tableblock frame-all grid-all spread">
+<table class="tableblock frame-all grid-all" style="width: 50%;">
+<caption class="title">Table 1. Mapping between SoapUI and ETF concepts</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2083,9 +2202,9 @@ the response:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="Groovy">import de.interactive_instruments.etf.suim.*
-Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)
-a.exists("/atom:feed", "TR.missingFeedRootElement")</code></pre>
+<pre class="pygments highlight"><code data-lang="Groovy"><span class="tok-kn">import</span> <span class="tok-nn">de.interactive_instruments.etf.suim.*</span>
+<span class="tok-n">Assert</span> <span class="tok-n">a</span> <span class="tok-o">=</span> <span class="tok-k">new</span> <span class="tok-n">Assert</span><span class="tok-o">(</span><span class="tok-n">messageExchange</span><span class="tok-o">,</span> <span class="tok-n">context</span><span class="tok-o">,</span> <span class="tok-n">log</span><span class="tok-o">,</span> <span class="tok-n">Assert</span><span class="tok-o">.</span><span class="tok-na">INSPIRE_DS_NS</span><span class="tok-o">)</span>
+<span class="tok-n">a</span><span class="tok-o">.</span><span class="tok-na">exists</span><span class="tok-o">(</span><span class="tok-s2">&quot;/atom:feed&quot;</span><span class="tok-o">,</span> <span class="tok-s2">&quot;TR.missingFeedRootElement&quot;</span><span class="tok-o">)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2100,7 +2219,7 @@ this error:</p>
 ETF, reference the 'TR.noDataReturned' translation and output the corresponding error message from the loaded Translation Template Collection (see the parameter etf.translation.template.collection.id below).</p>
 </div>
 <div class="exampleblock">
-<div class="title">Example 14. Error message in the INSPIRE validator</div>
+<div class="title">Example 15. Error message in the INSPIRE validator</div>
 <div class="content">
 <div class="paragraph">
 <p>The error message in the INSPIRE validator would be (see the entry in the <a href="https://github.com/inspire-eu-validation/ets-repository/blob/master/include-metadata/TranslationTemplateBundle-EIDfadd4929-fa60-4781-b658-703bbfe3f4eb.xml#L13">Translation Template collection</a>):</p>
@@ -2130,15 +2249,13 @@ with the 'TR.missingFeedRootElement' code.</p>
 <div class="sect2">
 <h3 id="_parameters_and_metadata_properties">4.4. Parameters and metadata properties</h3>
 <div class="paragraph">
-<p>Properties are used to parameterize an Executable Test Suite ('Test Project' in SoapUI terminology) as well as to associate it with other resources of ETF like Tags, Test Object Types etc. The standard properties are described in the following table.</p>
-</div>
-<div class="paragraph">
-<p>Description of standard properties</p>
+<p>Properties are used to parameterize an Executable Test Suite ('test project' in SoapUI terminology) as well as to associate it with other resources of ETF like Tags, Test Object Types etc. The standard properties are described in the following table. All properties are properties of the test project.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 2. Description of standard properties on a SoapUI test project for ETF</caption>
 <colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
 </colgroup>
 <thead>
 <tr>
@@ -2212,7 +2329,7 @@ Suites this test suite depends on, separated by commas (whitespace is allowed)</
 <div class="sect2">
 <h3 id="soapui-test-object-types">4.5. Test Object Types</h3>
 <div class="sect3">
-<h4 id="_overview_3">4.5.1. Overview</h4>
+<h4 id="_overview_4">4.5.1. Overview</h4>
 <div class="paragraph">
 <p>This section lists all Test Object Types that are pre-defined in the SoapUI test driver.</p>
 </div>
@@ -2248,9 +2365,6 @@ be specified by a test developer defined and declared in XML in the
 </td>
 </tr>
 </table>
-</div>
-<div class="paragraph">
-<p><mark>CP: Provide namespace lists like INSPIRE_DS_NS for other specs.</mark></p>
 </div>
 </div>
 <div class="sect3">
@@ -2717,32 +2831,96 @@ be specified by a test developer defined and declared in XML in the
 </div>
 </div>
 <div class="sect2">
-<h3 id="_assertion_library">4.6. Assertion library</h3>
+<h3 id="soapui-test-item-types">4.6. Test Item Types</h3>
+<div class="sect3">
+<h4 id="_overview_5">4.6.1. Overview</h4>
+<div class="paragraph">
+<p>This section lists all <a href="#test-item-types">Test Item Types</a> that are pre-defined in the SoapUI test driver.</p>
+</div>
+<div class="paragraph">
+<p>For each Test Item Type, the following information is provided:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a description</p>
+</li>
+<li>
+<p>the ID that must be used to reference the Test Item Type from a test step or test assertion</p>
+</li>
+<li>
+<p>whether the type is applicable to test steps or test assertions</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><mark>JFH: I did not find information about the types. Please correct or complete this section.</mark></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="__mark_label_mark">4.6.2. <mark>label</mark></h4>
+<div class="paragraph">
+<p><mark>description</mark></p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">ID</dt>
+<dd>
+<p><mark>EID&#8230;&#8203;</mark></p>
+</dd>
+<dt class="hdlist1">Item</dt>
+<dd>
+<p><mark>Test Step or Test Assertion</mark></p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="soapui-attachments">4.7. Attachments</h3>
+<div class="paragraph">
+<p><mark>JFH: describe attachments that are referenced from SoapUI test results and their types.</mark></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_assertion_library">4.8. Assertion library</h3>
 <div class="paragraph">
 <p>The SoapUI extension library provides various functions for evaluating an XPath
 expression against the received response. The functions are called on an
 <a href="http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html">Assert</a>
-object:</p>
+object, which is constructed like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="Groovy">import de.interactive_instruments.etf.suim.*
-Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)</code></pre>
+<pre class="pygments highlight"><code data-lang="Groovy"><span class="tok-kn">import</span> <span class="tok-nn">de.interactive_instruments.etf.suim.*</span>
+<span class="tok-n">Assert</span> <span class="tok-n">a</span> <span class="tok-o">=</span> <span class="tok-k">new</span> <span class="tok-n">Assert</span><span class="tok-o">(</span><span class="tok-n">messageExchange</span><span class="tok-o">,</span> <span class="tok-n">context</span><span class="tok-o">,</span> <span class="tok-n">log</span><span class="tok-o">,</span> <span class="tok-n">Assert</span><span class="tok-o">.</span><span class="tok-na">INSPIRE_DS_NS</span><span class="tok-o">)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The parameters <code>messageExchange</code>, <code>context</code> and <code>log</code> are pre-defined in the context of the assertion.</p>
+<p>The parameters <code>messageExchange</code>, <code>context</code> and <code>log</code> are pre-defined in the context of the assertion. The last parameter of the constructor is the only part that varies. It is a map of namespace prefixes to the namespace URI.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Currently, the library provides one pre-defined map for INSPIRE Download Services (INSPIRE-DS_NS). Additional namespace maps for specific topics will be added in the future for convenience.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p><mark>JFH: add screenshot</mark></p>
 </div>
 <div class="paragraph">
-<p>For further information see the
-<a href="http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html">Assert API documentation</a></p>
+<p>For further information on the Assert class and its functions see the
+<a href="http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html">Assert API documentation</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_tips_for_creating_helpful_test_suites">4.7. Tips for creating helpful test suites</h3>
+<h3 id="_tips_for_creating_helpful_test_suites">4.9. Tips for creating helpful test suites</h3>
 <div class="paragraph">
 <p><mark>JFH: Be more explicit how to create useful tests, what challenges are typically encountered and how these can be addressed. Examples: Dependencies, technical test steps vs HTTP test steps, iterations based on an OGC web service response, etc</mark></p>
 </div>
@@ -2753,7 +2931,7 @@ Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)</code
 <h2 id="_team_engine_based_test_suites">5. TEAM-Engine-based test suites</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_overview_4">5.1. Overview</h3>
+<h3 id="_overview_6">5.1. Overview</h3>
 <div class="paragraph">
 <p>Support for the TEAM Engine is different then for the other test engines.</p>
 </div>
@@ -2803,16 +2981,17 @@ This <a href="http://opengeospatial.github.io/teamengine/testng-essentials.html"
 <div class="paragraph">
 <p>TEAM Engine test suites that are currently registered in ETF as Executable Test Suite are listed in the following table:</p>
 </div>
-<table class="tableblock frame-all grid-all spread">
+<table id="te-test-suites" class="tableblock frame-all grid-all spread">
+<caption class="title">Table 3. TEAM Engine test suites registered in ETF</caption>
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+<col style="width: 37.5%;">
+<col style="width: 12.5%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top"><strong>TEAM Engine test suite</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Test suite</strong></th>
 <th class="tableblock halign-left valign-top"><strong>ID in ETF</strong></th>
 <th class="tableblock halign-left valign-top"><strong>Supported ETF Test Object Types</strong></th>
 <th class="tableblock halign-left valign-top"><strong>URL</strong></th>
@@ -2828,18 +3007,18 @@ This <a href="http://opengeospatial.github.io/teamengine/testng-essentials.html"
 </tbody>
 </table>
 <div class="paragraph">
-<p>The ID must used in other Executable Test Suites to establish a dependency to a TEAM Engine test suite.</p>
+<p>The ID must be used in other Executable Test Suites to establish a dependency to a TEAM Engine test suite.</p>
 </div>
 <div class="paragraph">
-<p>The TEAM Engine test suite is associated with a pre-defined Tag:</p>
+<p>The TEAM Engine test suite is associated with a pre-defined <a href="#tags">Tag</a>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="XML">&lt;etf:Tag id="EID268af871-5cf0-443e-834a-ce40bed6c0e3"&gt;
-  &lt;label&gt;OGC Test Suites (remote execution)&lt;/label&gt;
-  &lt;description&gt;Executable Test Suites that are executed on a remote OGC TEAM Engine instance&lt;/description&gt;
-  &lt;priority&gt;1000&lt;/priority&gt;
-&lt;/etf:Tag&gt;</code></pre>
+<pre class="pygments highlight"><code data-lang="XML"><span class="tok-nt">&lt;etf:Tag</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EID268af871-5cf0-443e-834a-ce40bed6c0e3&quot;</span><span class="tok-nt">&gt;</span>
+  <span class="tok-nt">&lt;label&gt;</span>OGC Test Suites (remote execution)<span class="tok-nt">&lt;/label&gt;</span>
+  <span class="tok-nt">&lt;description&gt;</span>Executable Test Suites that are executed on a remote OGC TEAM Engine instance<span class="tok-nt">&lt;/description&gt;</span>
+  <span class="tok-nt">&lt;priority&gt;</span>1000<span class="tok-nt">&lt;/priority&gt;</span>
+<span class="tok-nt">&lt;/etf:Tag&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2888,18 +3067,22 @@ Some information that is typically included in ETF test results is not included 
 </table>
 </div>
 </div>
-</div>
-</div>
-<h1 id="_glossary" class="sect0">Glossary</h1>
-<div class="openblock partintro">
-<div class="content">
+<div class="sect2">
+<h3 id="te-attachments">5.4. Attachments</h3>
 <div class="paragraph">
-<p>The table below lists key terms and definitions.</p>
+<p><mark>JFH: describe attachments that are referenced from TEAM Engine test results and their types.</mark></p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_glossary">Glossary</h2>
+<div class="sectionbody">
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 4. Glossary of key terms and definitions in ETF</caption>
 <colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
+<col style="width: 25%;">
+<col style="width: 75%;">
 </colgroup>
 <thead>
 <tr>
@@ -2924,7 +3107,7 @@ Some information that is typically included in ETF test results is not included 
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">abstract test suite
 </p><p class="tableblock">ATS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"> set of conformance classes that define tests for all requirements of a specification
+<td class="tableblock halign-left valign-top"><p class="tableblock">set of conformance classes that define tests for all requirements of a specification
 </p><p class="tableblock"><em>Source: derived from OGC Specification Model and ISO 19105</em></p></td>
 </tr>
 <tr>
@@ -3030,7 +3213,7 @@ Some information that is typically included in ETF test results is not included 
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-06-20 17:45:56 CEST
+Last updated 2017-06-21 13:25:02 CEST
 </div>
 </div>
 </body>
