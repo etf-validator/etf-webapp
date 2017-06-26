@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.5">
-<title>User manual for central deployments</title>
+<title>Administration of an ETF validator</title>
 <link rel="stylesheet" href="../stylesheets/etf.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 <link rel="stylesheet" href="../stylesheets/pygments-autumn.css">
@@ -15,47 +15,34 @@
 <div id="toc" class="toc2">
 <div id="toctitle">Table of contents</div>
 <ul class="sectlevel0">
-<li><a href="#_user_manual_for_central_deployments">User manual for central deployments</a>
+<li><a href="#_administration_of_an_etf_validator">Administration of an ETF validator</a>
 <ul class="sectlevel1">
-<li><a href="#_changelog">Changelog</a>
+<li><a href="#_changelog">Changelog</a></li>
+<li><a href="#_installation_on_windows">1. Installation on Windows</a>
 <ul class="sectlevel2">
-<li><a href="#_installation_on_windows">1.1. Installation on Windows</a>
-<ul class="sectlevel3">
-<li><a href="#_prerequisites_on_windows">1.1.1. Prerequisites on Windows:</a></li>
-<li><a href="#_configure_tomcat_on_windows">1.1.2. Configure Tomcat on Windows</a>
-<ul class="sectlevel4">
-<li><a href="#_option_1_tomcat_is_started_as_service">Option 1: Tomcat is started as service</a></li>
-<li><a href="#_option_2_tomcat_is_started_in_batch_mode">Option 2: Tomcat is started in batch mode</a></li>
+<li><a href="#_prerequisites_on_windows">1.1. Prerequisites on Windows</a></li>
+<li><a href="#_configure_tomcat_on_windows">1.2. Configure Tomcat on Windows</a></li>
+<li><a href="#_install_etf_web_application_on_windows">1.3. Install ETF web application on Windows</a></li>
 </ul>
 </li>
-<li><a href="#_install_etf_web_application_on_windows">1.1.3. Install ETF web application on Windows</a></li>
+<li><a href="#_installation_on_linux">2. Installation on Linux</a>
+<ul class="sectlevel2">
+<li><a href="#_prerequisites_on_linux">2.1. Prerequisites on Linux</a></li>
+<li><a href="#_configure_tomcat_on_linux">2.2. Configure Tomcat on Linux</a></li>
+<li><a href="#_install_etf_web_application_on_linux">2.3. Install ETF web application on Linux</a></li>
 </ul>
 </li>
-<li><a href="#_installation_on_linux">1.2. Installation on Linux</a>
-<ul class="sectlevel3">
-<li><a href="#_prerequisites_on_linux">1.2.1. Prerequisites on Linux:</a></li>
-<li><a href="#_configure_tomcat_on_linux">1.2.2. Configure Tomcat on Linux</a></li>
-<li><a href="#_install_etf_web_application_on_linux">1.2.3. Install ETF web application on Linux</a></li>
+<li><a href="#_etf_configuration">3. ETF configuration</a>
+<ul class="sectlevel2">
+<li><a href="#_data_directory_configuration">3.1. Data directory configuration</a></li>
+<li><a href="#ETF-config-file">3.2. ETF configuration properties file</a></li>
+<li><a href="#_etf_data_directory_structure">3.3. ETF data directory structure</a></li>
 </ul>
 </li>
-<li><a href="#_etf_configuration">1.3. ETF configuration</a>
-<ul class="sectlevel3">
-<li><a href="#_data_directory_configuration">1.3.1. Data directory configuration</a>
-<ul class="sectlevel4">
-<li><a href="#_windows">Windows</a></li>
-<li><a href="#_linux">Linux</a></li>
-</ul>
-</li>
-<li><a href="#ETF-config-file">1.3.2. ETF configuration properties file</a></li>
-<li><a href="#_etf_data_directory_structure">1.3.3. ETF data directory structure</a></li>
-</ul>
-</li>
-<li><a href="#ets-installation">1.4. Executable Test Suites</a>
-<ul class="sectlevel3">
-<li><a href="#_installation">1.4.1. Installation</a></li>
-<li><a href="#_official_executable_test_suite_repositories">1.4.2. Official Executable Test Suite repositories</a></li>
-</ul>
-</li>
+<li><a href="#ets-installation">4. Executable Test Suites</a>
+<ul class="sectlevel2">
+<li><a href="#_installation">4.1. Installation</a></li>
+<li><a href="#_official_executable_test_suite_repositories">4.2. Official Executable Test Suite repositories</a></li>
 </ul>
 </li>
 </ul>
@@ -66,33 +53,28 @@
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<div id="ii_logo" class="imageblock" style="text-align: center">
-<div class="content">
-<a class="image" href="http://www.interactive-instruments.de/en"><img src="http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png" alt="Interactive instruments logo" width="150"></a>
-</div>
-</div>
 <table class="tableblock frame-none grid-none spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 75%;">
+<col style="width: 20%;">
+<col style="width: 80%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-center valign-top"><p class="tableblock"><span class="image"><a class="image" href="http://www.etf-validator.net"><img src="../images/ETF_logo.png" alt="ETF Logo" width="125"></a></span></p></td>
-<td class="tableblock halign-left valign-middle"><p class="tableblock"><span class="etf_headline">ETF<br>
-testing framework for geo network services and data</span></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><span class="image"><a class="image" href="http://www.etf-validator.net"><img src="../images/ETF_logo.png" alt="ETF Logo" width="125"></a></span></p></td>
+<td class="tableblock halign-left valign-middle"><p class="tableblock"><span class="etf_headline"><strong>ETF</strong><br>
+Testing framework for spatial data and services</span></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<h1 id="_user_manual_for_central_deployments" class="sect0">User manual for central deployments</h1>
+<h1 id="_administration_of_an_etf_validator" class="sect0">Administration of an ETF validator</h1>
 <div class="openblock partintro">
 <div class="content">
 <table class="tableblock frame-topbot grid-none spread">
 <colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
+<col style="width: 25%;">
+<col style="width: 75%;">
 </colgroup>
 <tbody>
 <tr>
@@ -101,11 +83,15 @@ testing framework for geo network services and data</span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Date</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2017-04-20</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-06-21</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This manual is intended for administrators who want to set up an organization internal deployment of the ETF validator. Basic knowledge about Apache Tomcat 8 are required.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This document describes how to install and configure an ETF validator.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Target audience</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Administrators who want to set up a deployment of the ETF validator. Knowledge about Apache Tomcat 8 are required.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Licence</strong></p></td>
@@ -113,7 +99,7 @@ testing framework for geo network services and data</span></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Identifier</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Admin_manuals/index.adoc" class="bare">https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Admin_manuals/index.adoc</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://docs.etf-validator.net/Admin_manuals/index.html" class="bare">http://docs.etf-validator.net/Admin_manuals/index.html</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Language</strong></p></td>
@@ -140,9 +126,9 @@ The ETF Web application version 2 beta is not intended for production environmen
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
+<col style="width: 16.6666%;">
 <col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 50.0001%;">
 </colgroup>
 <thead>
 <tr>
@@ -157,15 +143,23 @@ The ETF Web application version 2 beta is not intended for production environmen
 <td class="tableblock halign-left valign-top"><p class="tableblock">Jon Herrmann</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">document converted from GitHub wiki</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-06-21</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Clemens Portele</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">editorial updates</p></td>
+</tr>
 </tbody>
 </table>
 <div style="page-break-after: always;"></div>
 <!-- toc disabled -->
 <div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installation_on_windows">1. Installation on Windows</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="_installation_on_windows">1.1. Installation on Windows</h3>
-<div class="sect3">
-<h4 id="_prerequisites_on_windows">1.1.1. Prerequisites on Windows:</h4>
+<h3 id="_prerequisites_on_windows">1.1. Prerequisites on Windows</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -180,13 +174,13 @@ The ETF Web application version 2 beta is not intended for production environmen
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_configure_tomcat_on_windows">1.1.2. Configure Tomcat on Windows</h4>
+<div class="sect2">
+<h3 id="_configure_tomcat_on_windows">1.2. Configure Tomcat on Windows</h3>
 <div class="paragraph">
 <p>Tomcat 8 must be run with UTF-8 file encoding and two parameters must be set. The configuration depends on how Tomcat is started on Windows. Accordingly, one of the two following chapters applies.</p>
 </div>
-<div class="sect4">
-<h5 id="_option_1_tomcat_is_started_as_service">Option 1: Tomcat is started as service</h5>
+<div class="sect3">
+<h4 id="_option_1_tomcat_is_started_as_service">1.2.1. Option 1: Tomcat is started as service</h4>
 <div class="paragraph">
 <p>If the Tomcat is running as a service on Windows, the parameters must be set in the service configuration (each parameter must be on a new line):</p>
 </div>
@@ -220,8 +214,8 @@ parameter http.proxyHost must be added:</p>
 <p>See <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html">Java Networking and Proxies</a> for more information and configuration options.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_option_2_tomcat_is_started_in_batch_mode">Option 2: Tomcat is started in batch mode</h5>
+<div class="sect3">
+<h4 id="_option_2_tomcat_is_started_in_batch_mode">1.2.2. Option 2: Tomcat is started in batch mode</h4>
 <div class="paragraph">
 <p>If Tomcat is started on Windows on the console via the batch file catalina.bat, the file setenv.bat must be created in the subfolder bin, of the Tomcat installation directory, with the following content:</p>
 </div>
@@ -244,8 +238,8 @@ parameter http.proxyHost must be added:</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_install_etf_web_application_on_windows">1.1.3. Install ETF web application on Windows</h4>
+<div class="sect2">
+<h3 id="_install_etf_web_application_on_windows">1.3. Install ETF web application on Windows</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -287,10 +281,12 @@ If ETF is accessed not only from one local machine, the <strong>etf.webapp.base.
 </div>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_installation_on_linux">2. Installation on Linux</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="_installation_on_linux">1.2. Installation on Linux</h3>
-<div class="sect3">
-<h4 id="_prerequisites_on_linux">1.2.1. Prerequisites on Linux:</h4>
+<h3 id="_prerequisites_on_linux">2.1. Prerequisites on Linux</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -305,8 +301,8 @@ If ETF is accessed not only from one local machine, the <strong>etf.webapp.base.
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_configure_tomcat_on_linux">1.2.2. Configure Tomcat on Linux</h4>
+<div class="sect2">
+<h3 id="_configure_tomcat_on_linux">2.2. Configure Tomcat on Linux</h3>
 <div class="paragraph">
 <p>Tomcat 8 must be run with UTF-8 file encoding and two parameters must be set. The
 parameters can be set in the <strong>setenv.sh</strong> file which is located in the <strong>bin</strong>
@@ -349,8 +345,8 @@ parameter http.proxyHost must be added:</p>
 <p>Restart Tomcat afterwards.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_install_etf_web_application_on_linux">1.2.3. Install ETF web application on Linux</h4>
+<div class="sect2">
+<h3 id="_install_etf_web_application_on_linux">2.3. Install ETF web application on Linux</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -392,10 +388,12 @@ If ETF is accessed not only from one local machine, the <strong>etf.webapp.base.
 </div>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_etf_configuration">3. ETF configuration</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="_etf_configuration">1.3. ETF configuration</h3>
-<div class="sect3">
-<h4 id="_data_directory_configuration">1.3.1. Data directory configuration</h4>
+<h3 id="_data_directory_configuration">3.1. Data directory configuration</h3>
 <div class="paragraph">
 <p>The deployment directory, in which the ETF web app is deployed by the web
 application server, can not be used to store data because it is also deleted,
@@ -406,8 +404,8 @@ directory is used.</p>
 <p>The application determines the ETF data directory based on the operating system
 in a specific order.</p>
 </div>
-<div class="sect4">
-<h5 id="_windows">Windows</h5>
+<div class="sect3">
+<h4 id="_windows">3.1.1. Windows</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -438,8 +436,8 @@ folder ( %ALLUSERSPROFILE% ).</p>
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_linux">Linux</h5>
+<div class="sect3">
+<h4 id="_linux">3.1.2. Linux</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -469,8 +467,8 @@ subfolder '~/.etf'.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="ETF-config-file">1.3.2. ETF configuration properties file</h4>
+<div class="sect2">
+<h3 id="ETF-config-file">3.2. ETF configuration properties file</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="properties"><span class="tok-c">#########################################</span>
@@ -594,8 +592,8 @@ subfolder '~/.etf'.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_etf_data_directory_structure">1.3.3. ETF data directory structure</h4>
+<div class="sect2">
+<h3 id="_etf_data_directory_structure">3.3. ETF data directory structure</h3>
 <div class="paragraph">
 <p>This chapter describes the strucutre of the ETF data directory.</p>
 </div>
@@ -691,10 +689,12 @@ indexed in databases in <strong>db/data/etf-tdb-&lt;UUID&gt;</strong> directorie
 </div>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="ets-installation">4. Executable Test Suites</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="ets-installation">1.4. Executable Test Suites</h3>
-<div class="sect3">
-<h4 id="_installation">1.4.1. Installation</h4>
+<h3 id="_installation">4.1. Installation</h3>
 <div class="paragraph">
 <p>Create a new subfolder in the <strong>projects</strong> subfolder of the ETF data directory and copy
 the Executable Test Suites in there.</p>
@@ -716,8 +716,8 @@ ZIP files are not supported and need to be extracted!
 short time and list the Test Suites in the <strong>Start Tests</strong> view.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_official_executable_test_suite_repositories">1.4.2. Official Executable Test Suite repositories</h4>
+<div class="sect2">
+<h3 id="_official_executable_test_suite_repositories">4.2. Official Executable Test Suite repositories</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -744,10 +744,9 @@ The Executable Test Suites in the listed repositories only work with ETF version
 </div>
 </div>
 </div>
-</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-05-03 01:35:03 CEST
+Last updated 2017-06-21 13:29:52 CEST
 </div>
 </div>
 </body>

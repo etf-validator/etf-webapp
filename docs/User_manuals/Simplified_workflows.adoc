@@ -6,7 +6,7 @@
 
 :toc: macro
 :toc-title: Table of contents
-:toclevels: 4
+:toclevels: 2
 :toc-position: left
 :appendix-caption: Annex
 
@@ -16,34 +16,26 @@
 :pygments-style: autumn
 :pygments-linenums-mode: inline
 
-[[ii_logo]]
-image::http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png["Interactive instruments logo",150,align="center",link=http://www.interactive-instruments.de/en]
+include::../General/Logo.adoc[]
 
-[frame="none",grid="none",cols="^25,<.^75"]
-|===
-| image:../images/ETF_logo.png["ETF Logo",125,link=http://www.etf-validator.net] | [etf_headline]#ETF +
-testing framework for geo network services and data#
-|===
+:doc-warning-work-in-progress: false
+:doc-title: User manual for central deployments
+:doc-status: in review
+:doc-date: 2017-06-21
+:doc-description: This manual describes how to use the ETF web application of a centrally deployed validator for testing spatial data and services. Central deployments store test objects only for a single test run.
+:doc-audience: Users of the ETF web application of a centrally deployed validator
+:doc-id: http://docs.etf-validator.net/Developer_manuals/Developing_Executable_Test_Suites.html
+:doc-lang: EN
 
-= User manual for central deployments
-[frame="topbot",grid="none"]
-|===
-| *Status* | in review
-| *Date* | 2017-04-20
-| *Description* | This manual is intended for users who are using a centrally deployed validator for testing geo network services and data.
-| *Licence* | https://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution (cc-by) 4.0]
-| *Identifier* | https://github.com/interactive-instruments/etf-webapp/tree/master/docs/User_manuals/Simplified_workflows.adoc
-| *Language* | EN
-|===
-
+include::../General/Document-metadata.adoc[]
 
 == Changelog
-[width="100%",options="header"]
+[width="100%",options="header",cols="1,2,3"]
 |===
 |  *Date* | *Editor* | *Comments*
-| 2017-04-20 | Jon Herrmann | document created |
+| 2017-04-20 | Jon Herrmann | document created
+| 2017-06-21 | Clemens Portele | editorial updates
 |===
-
 
 <<<
 

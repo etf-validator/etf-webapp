@@ -6,7 +6,7 @@
 
 :toc: macro
 :toc-title: Table of contents
-:toclevels: 4
+:toclevels: 2
 :toc-position: left
 :appendix-caption: Annex
 
@@ -16,35 +16,26 @@
 :pygments-style: autumn
 :pygments-linenums-mode: inline
 
-[[ii_logo]]
-image::http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png["Interactive instruments logo",150,align="center",link=http://www.interactive-instruments.de/en]
+include::../General/Logo.adoc[]
 
-[frame="none",grid="none",cols="^25,<.^75"]
-|===
-| image:../images/ETF_logo.png["ETF Logo",125,link=http://www.etf-validator.net] | [etf_headline]#ETF +
-testing framework for geo network services and data#
-|===
+:doc-warning-work-in-progress: false
+:doc-title: Web API v2
+:doc-status: in review
+:doc-date: 2017-06-21
+:doc-description: Quickstart manual for the 2nd version of the ETF Web API. For the complete documentation of the API, consult the Swagger documentation.
+:doc-audience: Developers planning to use the ETF Web API v2 to automate test runs with an ETF instance, for example in an automated test pipeline.
+:doc-id: http://docs.etf-validator.net/Developer_manuals/WEB-API.html
+:doc-lang: EN
 
-
-= Web API v2
-[frame="topbot",grid="none"]
-|===
-| *Status* | in review
-| *Date* | 2017-04-20
-| *Description* | This quickstart manual is intended for developers who want to automate test runs with an ETF instance, for example in an automated test pipeline.
-| *Licence* | https://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution (cc-by) 4.0]
-| *Identifier* | https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Developer_manuals/WEB-API.adoc
-| *Language* | EN
-|===
-
+include::../General/Document-metadata.adoc[]
 
 == Changelog
-[width="100%",options="header"]
+[width="100%",options="header",cols="1,2,3"]
 |===
 |  *Date* | *Editor* | *Comments*
-| 2017-04-24 | Jon Herrmann | document converted from GitHub wiki |
+| 2017-04-24 | Jon Herrmann | document converted from GitHub wiki
+| 2017-06-21 | Clemens Portele | editorial updates
 |===
-
 
 <<<
 
@@ -52,23 +43,27 @@ toc::[]
 
 <<<
 
+== Overview
+
 The ETF Web API v2 is used to retrieve Framework metadata, start/observe/manage tests and retrieve test results.
 
-The API is published as swagger definition on link:https://app.swaggerhub.com/api/etf/etf/[Swaggerhub]. The ETF web application instance also provides the Swagger web interface which is available at
+The API is published and documented in detail as a Swagger definition on link:https://app.swaggerhub.com/api/etf/etf/[Swaggerhub]. The ETF web application instance also provides the Swagger web interface which is available at
 
 ----
-http://your-etf-server/swagger-ui.html
+http://your-etf-server/path/swagger-ui.html
 ----
 
-Example for retrieving all installed Executable Test Suites:
+.Retrieving all installed Executable Test Suites in JSON
+=====================================================================
 ----
-http://your-etf-server/v2/ExecutableTestSuites.json
+http://your-etf-server/path/v2/ExecutableTestSuites.json
 ----
+=====================================================================
 
 == Response schema model
 The response model is based on a XML schema. The interactive XML schema documentation is available link:http://resources.etf-validator.net/schema/v2/doc/service.html[here]. Since the JSON responses are transformed from the XML, they are also based on this schema.
 
-== Example: starting a Test Run with the API
+== Starting a Test Run with the API
 First the ID of the Executable Test Suite that shall be used needs to be known. All available Executable Test Suites can be queried by invoking the GET request (replace localhost:8080 with your server address):
 ----
 http://localhost:8080/v2/ExecutableTestSuites.json
@@ -116,7 +111,7 @@ The response may look like this (excerpt):
 ----
 
 In this example the Executable Test Suite **Conformance class: INSPIRE Profile based on EN ISO 19115 and EN ISO 19119** with the **EIDec7323d5-d8f0-4cfe-b23a-b826df86d58c** is used.
-To start a new Test Run with test data that are located at http://example.com/test-data a JSON request must be send via POST to the interface:
+To start a new Test Run with test data that are located at http://example.com/test-data.zip a JSON request must be send via POST to the interface:
 ----
 http://localhost:8080/v2/TestRuns
 ----
@@ -124,28 +119,31 @@ The example testRunRequest JSON object may look like this:
 [source,JSON]
 ----
 {
-    "label": "Test run on 15:00 - 01.01.2017 with Conformance class INSPIRE Profile based on EN ISO 19115 and EN ISO 19119",
-    "executableTestSuiteIds": ["EIDec7323d5-d8f0-4cfe-b23a-b826df86d58c"],
-    "arguments": {
-        "files_to_test": ".*",
-        "tests_to_execute": ".*"
-    },
-    "testObject": {
-        "resources": {
-            "data": "http://example.com/test-data"
-        }
+  "label": "Test run on 15:00 - 01.01.2017 with Conformance class INSPIRE Profile based on EN ISO 19115 and EN ISO 19119",
+  "executableTestSuiteIds": ["EIDec7323d5-d8f0-4cfe-b23a-b826df86d58c"],
+  "arguments": {
+    "files_to_test": ".*",
+    "tests_to_execute": ".*"
+  },
+  "testObject": {
+    "resources": {
+			"data": "http://example.com/test-data.zip"
     }
+  }
 }
 ----
 
-Note: in this example the resource ID needs to be set to **data**, for file based resources. If a service is tested, the resource ID needs to be set to **serviceEndpoint**:
+In this example the resource ID needs to be set to **data**, for file based resources. If a service is tested, the resource ID needs to be set to **serviceEndpoint**:
 [source,JSON]
 ----
-    "testObject": {
-        "resources": {
-            "serviceEndpoint": "http://example.com/service?request=GetCapabilities"
-        }
+{
+  ...,
+  "testObject": {
+    "resources": {
+      "serviceEndpoint": "http://example.com/service?SERVICE=WFS&REQUEST=GetCapabilities"
     }
+  }
+}
 ----
 
 On success a Test Run object will be returned as JSON.
@@ -175,9 +173,11 @@ Example:
               "testObject": {
                 "ref": "EIDeb5c79c8-5be8-4029-83e4-5cf0cde5d33c"
               },
+              ...
+}
 ----
 
-The returned ID -in this example **EID1dfbed0e-131e-489d-a0a4-712f4259c30a** - can then be used to monitor the progress by invoking the interface :
+The returned ID - in this example **EID1dfbed0e-131e-489d-a0a4-712f4259c30a** - can then be used to monitor the progress by invoking the interface :
 ----
 http://localhost:8080/v2/TestRuns/EID1dfbed0e-131e-489d-a0a4-712f4259c30a/progress
 ----
@@ -192,7 +192,7 @@ which will return a Progress Object:
 }
 ----
 
-As the val property equals the max property the test run already finished and the HTML report can be fetched by invoking
+As the val property equals the max property, the test run already finished and the HTML report can be fetched by invoking
 ----
 http://localhost:8080/v2/TestRuns/EID1dfbed0e-131e-489d-a0a4-712f4259c30a.html
 ----

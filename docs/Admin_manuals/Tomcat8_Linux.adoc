@@ -1,6 +1,6 @@
 == Installation on Linux
 
-=== Prerequisites on Linux:
+=== Prerequisites on Linux
 * Machine with at least 4 GB Ram (8GB are recommended, 16 GB and more if a large set of XML files are tested)
 * link:https://www.java.com/en/download/help/linux_x64_install.xml[Oracle Java 8 is installed]
 * link:https://tomcat.apache.org/download-80.cgi[Apache Tomcat 8 installed and configured]

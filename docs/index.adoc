@@ -6,7 +6,7 @@
 
 :toc: macro
 :toc-title: Table of contents
-:toclevels: 4
+:toclevels: 2
 :toc-position: left
 :appendix-caption: Annex
 
@@ -16,26 +16,23 @@
 :pygments-style: autumn
 :pygments-linenums-mode: inline
 
-////
-[[ii_logo]]
-image::http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png["Interactive instruments logo",150,align="center",link=http://www.interactive-instruments.de/en]
-////
-
-[frame="none",grid="none",cols="^25,<.^75"]
-|===
-| image:images/ETF_logo.png["ETF Logo",125,link=http://www.etf-validator.net] | [etf_headline]#ETF +
-Testing framework for spatial data and services#
-|===
-
-include::General/about.adoc[]
+include::General/Logo-level0.adoc[]
 
 = ETF manuals
 
+<<<
+
+toc::[]
+
+<<<
+
+include::General/about.adoc[]
+
 == User manuals
 * link:User_manuals/Simplified_workflows.html[User manual for central deployments]
-* #User manual for organization internal deployments (in progress)#
+* User manual for organization internal deployments #(to be published)#
 
-== Administrator manual
+== Administrator manuals
 * link:https://github.com/interactive-instruments/etf-webapp-docker#setup-etf-with-docker-compose[Docker image]
 * link:Admin_manuals/index.html#_installation_on_windows[Tomcat 8 deployment on Windows 7]
 * link:Admin_manuals/index.html#_installation_on_linux[Tomcat 8 deployment on Linux]

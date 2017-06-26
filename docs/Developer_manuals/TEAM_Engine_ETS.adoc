@@ -24,15 +24,17 @@ A TEAM Engine test suite may be used in ETF, if it meets the following requireme
 
 TEAM Engine test suites that are currently registered in ETF as Executable Test Suite are listed in the following table:
 
-[width="100%",options="header"]
+[[te-test-suites]]
+.TEAM Engine test suites registered in ETF
+[width="100%",options="header",cols="1,3,3,1"]
 |===
-|  *TEAM Engine test suite* | *ID in ETF* | *Supported ETF Test Object Types* | *URL*
+|  *Test suite* | *ID in ETF* | *Supported ETF Test Object Types* | *URL*
 | WFS 2.0 | EID95a1b6fc-2b55-3d43-9502-3b8b605bda10 | link:#soapui-test-object-types[OGC Web Feature Service 2.0] | link:http://cite.opengeospatial.org/teamengine/rest/suites/wfs20/1.26/[Link]
 |===
 
-The ID must used in other Executable Test Suites to establish a dependency to a TEAM Engine test suite.
+The ID must be used in other Executable Test Suites to establish a dependency to a TEAM Engine test suite.
 
-The TEAM Engine test suite is associated with a pre-defined Tag:
+The TEAM Engine test suite is associated with a pre-defined link:#tags[Tag]:
 
 [source,XML]
 ----
@@ -54,3 +56,8 @@ NOTE: In the future, it is planned to harmonize the XML format of all TEAM Engin
 #JFH: Explain rules how the results are mapped.#
 
 WARNING: Some information that is typically included in ETF test results is not included in the TEAM Engine reports and, therefore, cannot be included in the ETF test reports.
+
+[[te-attachments]]
+=== Attachments
+
+#JFH: describe attachments that are referenced from TEAM Engine test results and their types.#

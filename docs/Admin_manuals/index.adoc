@@ -6,7 +6,7 @@
 
 :toc: macro
 :toc-title: Table of contents
-:toclevels: 4
+:toclevels: 2
 :toc-position: left
 :appendix-caption: Annex
 
@@ -16,33 +16,27 @@
 :pygments-style: autumn
 :pygments-linenums-mode: inline
 
-[[ii_logo]]
-image::http://www.interactive-instruments.de/wp-content/uploads/2012/07/copy-ii_logo_small.png["Interactive instruments logo",150,align="center",link=http://www.interactive-instruments.de/en]
+include::../General/Logo.adoc[]
 
-[frame="none",grid="none",cols="^25,<.^75"]
-|===
-| image:../images/ETF_logo.png["ETF Logo",125,link=http://www.etf-validator.net] | [etf_headline]#ETF +
-testing framework for geo network services and data#
-|===
+:doc-warning-work-in-progress: false
+:doc-title: Administration of an ETF validator
+:doc-status: in review
+:doc-date: 2017-06-21
+:doc-description: This document describes how to install and configure an ETF validator.
+:doc-audience: Administrators who want to set up a deployment of the ETF validator. Knowledge about Apache Tomcat 8 are required.
+:doc-id: http://docs.etf-validator.net/Admin_manuals/index.html
+:doc-lang: EN
 
-= User manual for central deployments
-[frame="topbot",grid="none"]
-|===
-| *Status* | in review
-| *Date* | 2017-04-20
-| *Description* | This manual is intended for administrators who want to set up an organization internal deployment of the ETF validator. Basic knowledge about Apache Tomcat 8 are required.
-| *Licence* | https://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution (cc-by) 4.0]
-| *Identifier* | https://github.com/interactive-instruments/etf-webapp/tree/master/docs/Admin_manuals/index.adoc
-| *Language* | EN
-|===
+include::../General/Document-metadata.adoc[]
 
 WARNING: The ETF Web application version 2 beta is not intended for production environments.
 
 == Changelog
-[width="100%",options="header"]
+[width="100%",options="header",cols="1,2,3"]
 |===
 |  *Date* | *Editor* | *Comments*
-| 2017-04-24 | Jon Herrmann | document converted from GitHub wiki |
+| 2017-04-24 | Jon Herrmann | document converted from GitHub wiki
+| 2017-06-21 | Clemens Portele | editorial updates
 |===
 
 <<<
@@ -50,8 +44,6 @@ WARNING: The ETF Web application version 2 beta is not intended for production e
 toc::[]
 
 <<<
-
-:leveloffset: +1
 
 :numbered:
 include::docker.adoc[]
@@ -65,5 +57,3 @@ include::configuration.adoc[]
 include::ets-installation.adoc[]
 
 :numbered!:
-
-:leveloffset: -1
