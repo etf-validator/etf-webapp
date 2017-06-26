@@ -25,6 +25,7 @@ import javax.validation.ConstraintViolation;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import de.interactive_instruments.etf.detector.TestObjectTypeNotDetected;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -103,6 +104,12 @@ public class LocalizableApiError extends LocalizableError {
 		super("l.max.upload.size.exceeded");
 		sensitiveInformation = false;
 		sc = 413;
+	}
+
+	public LocalizableApiError(final TestObjectTypeNotDetected e) {
+		super("l.testObject.type.not.detected", e);
+		sensitiveInformation = false;
+		sc = 400;
 	}
 
 	public boolean isSensitiveInformation() {

@@ -35,6 +35,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
+import de.interactive_instruments.etf.detector.DetectedTestObjectType;
+import de.interactive_instruments.etf.detector.TestObjectTypeNotDetected;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,38 +88,6 @@ public class TestObjectTypeController {
 			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/capabilities_xsd.html#TestObjectType) "
 			+ ETF_ITEM_COLLECTION_DESCRIPTION;
 
-	private static class TypeCheck {
-		private List<String> filenameExtensions;
-		private List<String> mimeTypes;
-		private String detectionExpression;
-
-		TypeCheck(TestObjectTypeDto dto) {
-			detectionExpression = dto.getDetectionExpression();
-			mimeTypes = dto.getMimeTypes();
-			filenameExtensions = dto.getFilenameExtensions();
-		}
-
-		boolean accept(final ResourceDto resource) throws IOException {
-			final URI uri = resource.getUri();
-			if (UriUtils.isFile(uri)) {
-				final IFile file = new IFile(uri);
-				if (file.isDirectory()) {
-					// check each file
-				} else {
-					// check single file
-				}
-			} else {
-				if (UriUtils.getContentLength(uri) > 300000000) {
-					// File is too large
-					return false;
-				}
-				final UriUtils.ContentAndType contentAndType = UriUtils.load(uri, null, false);
-
-			}
-			return false;
-		}
-	}
-
 	@PostConstruct
 	private void init() throws IOException, TransformerConfigurationException, ObjectWithIdNotFoundException {
 		testObjectTypeDao = dataStorageService.getDao(TestObjectTypeDto.class);
@@ -129,151 +99,29 @@ public class TestObjectTypeController {
 		logger.info("Test Object Type controller initialized");
 	}
 
-	public void checkAndResolveTypes(final TestObjectDto dto) throws StorageException, ObjectWithIdNotFoundException {
-		final List<TestObjectTypeDto> checkedTypes = new ArrayList<>();
-
-		for (final ResourceDto resourceDto : dto.getResourceCollection()) {
-			final URI resource = resourceDto.getUri();
-			if (UriUtils.isFile(resource)) {
-				// File
-				dto.setTestObjectType(testObjectTypeDao.getById(
-						EidConverter.toEid("EID5a60dded-0cb0-4977-9b06-16c6c2321d2e")).getDto());
-			} else {
-
-				dto.setRemoteResource(resource);
-
-				// TODO put into detectors v2.0.1
-				// WFS
-				try {
-					final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-					factory.setNamespaceAware(true);
-					final Credentials credentials = Credentials.fromProperties(dto.properties());
-					final URI reqURI = new URI(
-							UriUtils.withoutQueryParameters(resource.toString()) + "?service=wfs&request=GetCapabilities");
-					final DocumentBuilder builder = factory.newDocumentBuilder();
-					final Document doc = builder.parse(UriUtils.openStream(reqURI, credentials));
-
-					final XPathFactory xPathfactory = XPathFactory.newInstance();
-					final XPath xpath = xPathfactory.newXPath();
-
-					xpath.setNamespaceContext(new NamespaceContext() {
-						public String getNamespaceURI(String prefix) {
-							if (prefix == null) {
-								throw new NullPointerException("Null prefix");
-							} else if ("wfs".equals(prefix)) {
-								return "http://www.opengis.net/wfs/2.0";
-							} else if ("ows".equals(prefix)) {
-								return "http://www.opengis.net/ows/1.1";
-							}
-							return XMLConstants.NULL_NS_URI;
-						}
-
-						// This method isn't necessary for XPath processing.
-						public String getPrefix(String uri) {
-							throw new UnsupportedOperationException();
-						}
-
-						// This method isn't necessary for XPath processing either.
-						public Iterator getPrefixes(String uri) {
-							throw new UnsupportedOperationException();
-						}
-					});
-					final XPathExpression wfsTitle = xpath.compile("/wfs:WFS_Capabilities/ows:ServiceIdentification/ows:Title");
-					final XPathExpression description = xpath
-							.compile("/wfs:WFS_Capabilities/ows:ServiceIdentification/ows:Abstract");
-
-					final String titleStr = (String) wfsTitle.evaluate(doc, XPathConstants.STRING);
-					final String descriptionStr = (String) description.evaluate(doc, XPathConstants.STRING);
-
-					boolean webService = false;
-					if (!SUtils.isNullOrEmpty(titleStr)) {
-						dto.setLabel(titleStr);
-						webService = true;
-					}
-					if (!SUtils.isNullOrEmpty(descriptionStr)) {
-						dto.setDescription(descriptionStr);
-						webService = true;
-					}
-
-					if (webService) {
-						// Web service
-						dto.setTestObjectType(testObjectTypeDao.getById(
-								EidConverter.toEid("EID9b6ef734-981e-4d60-aa81-d6730a1c6389")).getDto());
-						// EidConverter.toEid("EID88311f83-818c-46ed-8a9a-cec4f3707365")).getDto());
-						return;
-					}
-				} catch (Exception e) {
-					// fallback: file
-					dto.setTestObjectType(testObjectTypeDao.getById(
-							EidConverter.toEid("EID5a60dded-0cb0-4977-9b06-16c6c2321d2e")).getDto());
-				}
-
-				// Service Feed
-				try {
-					final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-					factory.setNamespaceAware(true);
-					final Credentials credentials = Credentials.fromProperties(dto.properties());
-					final URI reqURI = resource;
-					final DocumentBuilder builder = factory.newDocumentBuilder();
-					final Document doc = builder.parse(UriUtils.openStream(reqURI, credentials));
-
-					final XPathFactory xPathfactory = XPathFactory.newInstance();
-					final XPath xpath = xPathfactory.newXPath();
-
-					xpath.setNamespaceContext(new NamespaceContext() {
-						public String getNamespaceURI(String prefix) {
-							if (prefix == null) {
-								throw new NullPointerException("Null prefix");
-							} else if ("atom".equals(prefix)) {
-								return "http://www.w3.org/2005/Atom";
-							}
-							return XMLConstants.NULL_NS_URI;
-						}
-
-						// This method isn't necessary for XPath processing.
-						public String getPrefix(String uri) {
-							throw new UnsupportedOperationException();
-						}
-
-						// This method isn't necessary for XPath processing either.
-						public Iterator getPrefixes(String uri) {
-							throw new UnsupportedOperationException();
-						}
-					});
-					final XPathExpression feedTitle = xpath.compile("/atom:feed/atom:title");
-					final XPathExpression feedDescription = xpath
-							.compile("/atom:feed/atom:subtitle");
-
-					final String titleStr = (String) feedTitle.evaluate(doc, XPathConstants.STRING);
-					final String descriptionStr = (String) feedDescription.evaluate(doc, XPathConstants.STRING);
-
-					boolean serviceFeed = false;
-					if (!SUtils.isNullOrEmpty(titleStr)) {
-						dto.setLabel(titleStr);
-						serviceFeed = true;
-					}
-					if (!SUtils.isNullOrEmpty(descriptionStr)) {
-						dto.setDescription(descriptionStr);
-						serviceFeed = true;
-					}
-
-					if (serviceFeed) {
-						// Service Feed
-						dto.setTestObjectType(testObjectTypeDao.getById(
-								EidConverter.toEid("EID49d881ae-b115-4b91-aabe-31d5791bce52")).getDto());
-					} else {
-						// file
-						dto.setTestObjectType(testObjectTypeDao.getById(
-								EidConverter.toEid("EID5a60dded-0cb0-4977-9b06-16c6c2321d2e")).getDto());
-					}
-				} catch (Exception e) {
-					// fallback: file
-					dto.setTestObjectType(testObjectTypeDao.getById(
-							EidConverter.toEid("EID5a60dded-0cb0-4977-9b06-16c6c2321d2e")).getDto());
-				}
-
-				// TODO END
-			}
+	public void checkAndResolveTypes(final TestObjectDto dto) throws IOException, LocalizableApiError {
+		// First resource is the main resource
+		final ResourceDto resourceDto = dto.getResourceCollection().iterator().next();
+		final URI resource = resourceDto.getUri();
+		final Credentials credentials;
+		if (UriUtils.isFile(resource)) {
+			credentials = null;
+		} else {
+			dto.setRemoteResource(resource);
+			credentials = Credentials.fromProperties(dto.properties());
+		}
+		final DetectedTestObjectType detectedTestObjectType;
+		try {
+			detectedTestObjectType = TestObjectTypeDetectorManager.detect(resource, credentials);
+		} catch (final TestObjectTypeNotDetected e) {
+			throw new LocalizableApiError(e);
+		}
+		dto.setTestObjectType(detectedTestObjectType.toTestObjectTypeDto());
+		if(!SUtils.isNullOrEmpty(detectedTestObjectType.getExtractedLabel())) {
+			dto.setLabel(detectedTestObjectType.getExtractedLabel());
+		}
+		if(!SUtils.isNullOrEmpty(detectedTestObjectType.getExtractedDescription())) {
+			dto.setLabel(detectedTestObjectType.getExtractedDescription());
 		}
 	}
 

@@ -243,7 +243,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		} catch (IllegalArgumentException | IOException e) {
 			throw new LocalizableApiError("l.invalid.url", e);
 		}
-		testObject.setItemHash(hash.getBytes());
+		testObject.setItemHash(hash);
 
 		return testObject;
 	}
@@ -350,7 +350,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			// If the TestObject possess resources, it is either a service based TestObject
 			// or it is a file based Test Object with either a relative path to TestData or
 			// an URL to testdata that need to be downloaded.
-			testObject.setItemHash(new byte[0]);
+			testObject.setItemHash("0");
 			if (testObject.getResourceByName("serviceEndpoint") != null) {
 				// Reference service
 				createWithUrlResources(testObject);
@@ -568,8 +568,6 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			testObjectTypeController.checkAndResolveTypes(testObject);
 		} catch (StorageException e) {
 			throw new LocalizableApiError(e);
-		} catch (ObjectWithIdNotFoundException e) {
-			throw new LocalizableApiError(e);
 		} catch (IOException e) {
 			throw new LocalizableApiError(e);
 		}
@@ -583,34 +581,6 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		return testObjectUpload;
 	}
 
-	/*
-	@ApiOperation(
-			value = "Define a Test Object",
-			notes = "Define a Test Object by referencing test data in the web or a web service",
-			tags = {TEST_OBJECTS_TAG_NAME}, produces = "application/json")
-	@ApiResponses(value = {
-			@ApiResponse(code = 201, message = "Test Object created", response = TestObjectUpload.class),
-			@ApiResponse(code = 400, message = "Invalid Test Object data", response = ApiError.class)
-	})
-	@RequestMapping(
-			value = {TESTOBJECTS_URL},
-			method = RequestMethod.POST)
-	public void createTestObject(
-			@RequestBody SimpleTestObject simpleTestObject, HttpServletRequest request, HttpServletResponse response) throws LocalizableApiError {
-		try {
-			final TestObjectDto testObjectDto = simpleTestObject.toTestObject(this.testObjectDao);
-			streaming.asJson2(testObjectDao, request, response, testObjectDto.getId().getId());
-		} catch (URISyntaxException e) {
-			throw new LocalizableApiError(e);
-		} catch (IOException e) {
-			throw new LocalizableApiError(e);
-		} catch (ObjectWithIdNotFoundException e) {
-			throw new LocalizableApiError(e);
-		} catch (StorageException e) {
-			throw new LocalizableApiError(e);
-		}
-	}
-	*/
 
 	@ApiOperation(value = "Get all Test Object resources", notes = "Download the Test Object - as long as the creator did not set the 'data.downloadable' property to 'false'.", tags = {
 			TEST_OBJECTS_TAG_NAME})
