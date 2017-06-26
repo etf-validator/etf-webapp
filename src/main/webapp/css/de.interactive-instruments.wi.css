@@ -143,3 +143,7 @@ div.tooltip p {
 .test-run-status-PASSED_MANUAL h2 a {
     color: #856946 !important;
 }
+
+.test-run-status-NOT_APPLICABLE h2 a {
+    color: #856946 !important;
+}
