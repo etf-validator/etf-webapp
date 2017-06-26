@@ -349,7 +349,6 @@ define([
         },
         _showDialog:function (page, options) {
             page.render(options);
-            console.log(page.el);
             $.mobile.changePage(page.$el, {
                 transition: 'pop', role: 'dialog', reverse: false, changeHash:false});
         }

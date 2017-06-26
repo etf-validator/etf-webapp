@@ -66,7 +66,17 @@
         <span th:text="#{l.Started}" >Started</span>: <span class="test-report-time"><%= moment(testRun.startTimestamp).format('HH:mm') %></span> - <span class="test-report-date"><%= moment(testRun.startTimestamp).format('DD.MM.YYYY') %></span>
         <% if(!_.isUndefined(testRun.status)) { %>
             <br/>
-            <span th:text="#{l.Status}" >Status</span>: <span><%= testRun.status=='PASSED_MANUAL' ? 'Passed, manual checks required' : testRun.status %></span>
+            <%
+            var resStatus = testRun.status;
+            if(testRun.status=='PASSED_MANUAL') {
+                status = 'Passed, manual checks required';
+            }else if(testRun.status=='NOT_APPLICABLE') {
+                status = 'Passed, non-applicable test have been omitted';
+            }else if(testRun.skipped=='SKIPPED') {
+                status = 'Tests have been skipped';
+            }
+            %>
+            <span th:text="#{l.Status}" >Status</span>: <span><%= resStatus %></span>
         <% } %>
         <br/>
         <%
