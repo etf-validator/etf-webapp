@@ -1424,7 +1424,7 @@ currently defined in generic-query-prolog.xq:</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>The complete documentation of the module is available in the JavaDoc description. <mark>JFH: Publish JavaDoc and link from here</mark></p>
+<p>The complete documentation of the module is available in the <a href="http://interactive-instruments.github.io/etf-gmlgeox/javadoc/index.html?de/interactive_instruments/etf/bsxm/GmlGeoX.html">JavaDoc description</a>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1587,7 +1587,7 @@ currently defined in generic-query-prolog.xq:</p>
 <p>The implementation of the GmlGeoX module depends to a large extent on the deegree framework. The default geometry implementation of deegree does not support parsing all GML types, primarily the GML 3.3 types. Also, in a number of cases spatial operations are not supported for parsed geometries. This is primarily due to the fact that deegree relies on JTS to perform these operations, and that therefore the geometries must be simplified/linearized - which is not implemented for all geometry types that can be parsed by deegree. There is even a case where an incomplete JTS representations of a deegree geometry is accepted and used for spatial operations (for a surface with multiple polygon patches only the first is used).</p>
 </div>
 <div class="paragraph">
-<p>As a result, a test developer of this module must be very careful regarding which geometry types are supported for processing, and whether the computation is robust and exact or not. Please consult the Javadoc <mark>JFH: add link</mark> for additional details.</p>
+<p>As a result, a test developer of this module must be very careful regarding which geometry types are supported for processing, and whether the computation is robust and exact or not. Please consult the <a href="http://interactive-instruments.github.io/etf-gmlgeox/javadoc/index.html?de/interactive_instruments/etf/bsxm/GmlGeoX.html">JavaDoc</a> for additional details.</p>
 </div>
 <div class="paragraph">
 <p>For the spatial relationship operators, <a href="https://github.com/interactive-instruments/etf-webapp/wiki/gmlgeox-module-geometry-types-supported-by-spatial-operators">this page</a> in the test project developer manual documents which geometry types are supported and which are not. The page also has information, which geometry types are simplified/linearized automatically by the module.</p>
@@ -3236,9 +3236,6 @@ In the future, it is planned to harmonize the XML format of all TEAM Engine test
 </div>
 <div class="sect2">
 <h3 id="_mapping_from_team_engine_testng_concepts_to_etf">5.3. Mapping from TEAM Engine / TestNG concepts to ETF</h3>
-<div class="paragraph">
-<p><mark>JFH: Explain rules how the results are mapped.</mark></p>
-</div>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -3251,11 +3248,113 @@ Some information that is typically included in ETF test results is not included 
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>The OGC Team Engine results are in the JUnit XML format and are mapped
+to the ETF results. The mapping is described in the following table.</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 50%;">
+<caption class="title">Table 4. Mapping between OGC Team Engine and ETF test items</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>OGC Team Engine</strong></th>
+<th class="tableblock halign-left valign-top"><strong>ETF</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">suite</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Test Task Result</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Test Module</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">class</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Test Case</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test-method</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Test Step</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>not mapped</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Test Assertion</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The result status mapping is based on the following rules.</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 50%;">
+<caption class="title">Table 5. Mapping between OGC Team Engine and ETF test results</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>OGC Team Engine</strong></th>
+<th class="tableblock halign-left valign-top"><strong>ETF</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test-method status is <code>PASS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PASSED</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test-method status is <code>FAIL</code> and is-config is <code>true</code> and exception class is <code>java.lang.AssertionError</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NOT_APPLICABLE</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test-method status is <code>FAIL</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FAILED</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test-method status is <code>SKIP</code> and exception class is <code>org.testng.SkipException</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SKIPPED</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">test-method status is <code>SKIP</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NOT_APPLICABLE</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">otherwise</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UNDEFINED</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The rule which occurs first descending is applied.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="te-attachments">5.4. Attachments</h3>
 <div class="paragraph">
-<p><mark>JFH: describe attachments that are referenced from TEAM Engine test results and their types.</mark></p>
+<p>The original OGC Team Engine test results are attached to the report with the type <code>JunitXml</code>:</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 21. Example of an OGC Team Engine result attachment</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="XML"><span class="tok-nt">&lt;Attachment</span> <span class="tok-na">type=</span><span class="tok-s">&quot;JunitXml&quot;</span> <span class="tok-na">id=</span><span class="tok-s">&quot;EID02e4736f-d1a5-482a-966e-a94717f7f1d9&quot;</span><span class="tok-nt">&gt;</span>
+  <span class="tok-nt">&lt;label&gt;</span>TEAM Engine result<span class="tok-nt">&lt;/label&gt;</span>
+  <span class="tok-nt">&lt;encoding&gt;</span>UTF-8<span class="tok-nt">&lt;/encoding&gt;</span>
+  <span class="tok-nt">&lt;mimeType&gt;</span>text/xml<span class="tok-nt">&lt;/mimeType&gt;</span>
+  <span class="tok-nt">&lt;referencedData</span> <span class="tok-na">href=</span><span class="tok-s">&quot;http://demo-inspire-next.etf-validator.net/etf-webapp/v2/TestTaskResults/EID674c8b95-d447-4b91-aaae-21169657828f/Attachments/EID02e4736f-d1a5-482a-966e-a94717f7f1d9&quot;</span><span class="tok-nt">/&gt;</span>
+<span class="tok-nt">&lt;/Attachment&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The Junit XML result can be retrieved from the <code>referencedData</code> link.</p>
 </div>
 </div>
 </div>
@@ -3264,7 +3363,7 @@ Some information that is typically included in ETF test results is not included 
 <h2 id="_glossary">Glossary</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 4. Glossary of key terms and definitions in ETF</caption>
+<caption class="title">Table 6. Glossary of key terms and definitions in ETF</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 75%;">
@@ -3398,7 +3497,7 @@ Some information that is typically included in ETF test results is not included 
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-06-21 13:25:02 CEST
+Last updated 2017-06-26 20:25:44 CEST
 </div>
 </div>
 </body>
