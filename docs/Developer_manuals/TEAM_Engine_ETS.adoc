@@ -53,11 +53,54 @@ NOTE: In the future, it is planned to harmonize the XML format of all TEAM Engin
 
 === Mapping from TEAM Engine / TestNG concepts to ETF
 
-#JFH: Explain rules how the results are mapped.#
-
 WARNING: Some information that is typically included in ETF test results is not included in the TEAM Engine reports and, therefore, cannot be included in the ETF test reports.
+
+The OGC Team Engine results are in the JUnit XML format and are mapped
+to the ETF results. The mapping is described in the following table.
+
+
+.Mapping between OGC Team Engine and ETF test items
+[width="50%",options="header"]
+|===
+| *OGC Team Engine* | *ETF*
+| suite | Test Task Result
+| test | Test Module
+| class | Test Case
+| test-method | Test Step
+| __not mapped__ | Test Assertion
+|===
+
+The result status mapping is based on the following rules.
+
+.Mapping between OGC Team Engine and ETF test results
+[width="50%",options="header"]
+|===
+| *OGC Team Engine* | *ETF*
+| test-method status is `PASS` | PASSED
+| test-method status is `FAIL` and is-config is `true` and exception class is `java.lang.AssertionError` | NOT_APPLICABLE
+| test-method status is `FAIL` | FAILED
+| test-method status is `SKIP` and exception class is `org.testng.SkipException` | SKIPPED
+| test-method status is `SKIP` | NOT_APPLICABLE
+| otherwise | UNDEFINED
+|===
+
+The rule which occurs first descending is applied.
 
 [[te-attachments]]
 === Attachments
 
-#JFH: describe attachments that are referenced from TEAM Engine test results and their types.#
+The original OGC Team Engine test results are attached to the report with the type `JunitXml`:
+
+.Example of an OGC Team Engine result attachment
+===========================================
+[source,XML]
+----
+<Attachment type="JunitXml" id="EID02e4736f-d1a5-482a-966e-a94717f7f1d9">
+  <label>TEAM Engine result</label>
+  <encoding>UTF-8</encoding>
+  <mimeType>text/xml</mimeType>
+  <referencedData href="http://demo-inspire-next.etf-validator.net/etf-webapp/v2/TestTaskResults/EID674c8b95-d447-4b91-aaae-21169657828f/Attachments/EID02e4736f-d1a5-482a-966e-a94717f7f1d9"/>
+</Attachment>
+===========================================
+
+The Junit XML result can be retrieved from the `referencedData` link.

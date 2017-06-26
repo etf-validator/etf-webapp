@@ -578,7 +578,7 @@ The GmlGeoX extension module extends XQuery with additional capabilities:
 * Evaluation of topological predicates
 //* Computation of new geometries - not included in the wiki yet
 
-The complete documentation of the module is available in the JavaDoc description. #JFH: Publish JavaDoc and link from here#
+The complete documentation of the module is available in the http://interactive-instruments.github.io/etf-gmlgeox/javadoc/index.html?de/interactive_instruments/etf/bsxm/GmlGeoX.html[JavaDoc description].
 
 ==== Spatial indexing
 
@@ -710,7 +710,7 @@ return
 
 The implementation of the GmlGeoX module depends to a large extent on the deegree framework. The default geometry implementation of deegree does not support parsing all GML types, primarily the GML 3.3 types. Also, in a number of cases spatial operations are not supported for parsed geometries. This is primarily due to the fact that deegree relies on JTS to perform these operations, and that therefore the geometries must be simplified/linearized - which is not implemented for all geometry types that can be parsed by deegree. There is even a case where an incomplete JTS representations of a deegree geometry is accepted and used for spatial operations (for a surface with multiple polygon patches only the first is used).
 
-As a result, a test developer of this module must be very careful regarding which geometry types are supported for processing, and whether the computation is robust and exact or not. Please consult the Javadoc #JFH: add link# for additional details.
+As a result, a test developer of this module must be very careful regarding which geometry types are supported for processing, and whether the computation is robust and exact or not. Please consult the http://interactive-instruments.github.io/etf-gmlgeox/javadoc/index.html?de/interactive_instruments/etf/bsxm/GmlGeoX.html[JavaDoc] for additional details.
 
 For the spatial relationship operators, link:https://github.com/interactive-instruments/etf-webapp/wiki/gmlgeox-module-geometry-types-supported-by-spatial-operators[this page] in the test project developer manual documents which geometry types are supported and which are not. The page also has information, which geometry types are simplified/linearized automatically by the module.
 
