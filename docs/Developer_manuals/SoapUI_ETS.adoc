@@ -6,7 +6,64 @@ You should be familiar with:
 * link:https://www.soapui.org/getting-started/your-first-soapui-project.html[SoapUI]
 * link:http://groovy-lang.org/[Groovy]
 
-include::SoapUI_ETS_GUI.adoc[]
+
+=== Development environment
+
+A SoapUI Executable Test Suite is developed and tested using the
+SoapUI GUI application.
+
+==== Installation
+
+Prerequisites for the following steps to set up the ETS development environment are:
+
+* Windows OS (it may work on Linux, too, but it is known to not work under macOS)
+* Java 1.8
+* SoapUI 5.3.0 installed
+
+Then follow these steps under Windows:
+
+1. Download link:https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/suim/SoapUI-ETF.zip[this ZIP file] (using "etf-public-dev" as username and password)
+2. Extract the ZIP file in any directory
+3. Run 'install-plugins.bat'
+4. Run 'SoapUI 5.3.0.bat'
+
+To load the plugins, SoapUI must always be started with the 'SoapUI 5.3.0.bat' file from the extracted directory.
+
+NOTE: This procedure is required as link:https://github.com/SmartBear/soapui/pull/201[Smartbear decided to lock out unsigned plugins]. Because the signing process is not transparent to us, we decided to use this workaround.
+
+==== First steps
+
+Start SoapUI with the 'SoapUI 5.3.0.bat' batch file. After the user interface
+appears, open the 'Tutorial workspace' by clicking on 'File' -> 'Switch workspace',
+then select the file 'tutorial-soapui-workspace.xml' from the 'SoapUI ETF\tutorial'
+directory.
+
+image:https://user-images.githubusercontent.com/13570741/27561133-41ba072e-5ac7-11e7-89bc-5685f8655363.png[]
+
+The workspace should open and load the 'Tutorial - Pre-defined WFS' test project.
+
+To test whether the extension is working properly, a web service can be tested
+with the test project 'Tutorial - Pre-defined WFS'. Therefore click on the
+test project and then on 'Custom Properties' in the lower left corner. Change
+the 'serviceEndpoint' property by double clicking on the 'Value' cell.
+
+Enter the URL to a INSPIRE Pre-defined download service. The test project will
+check if the GetCapabilities response is schema valid and that an
+INSPIRE ExtendedCapabilities element exists. To see the test fail, a URL to a
+WFS 2.0 service without an ExtendedCapabilities element can also be entered.
+
+==== Executing tests
+
+To execute a test suite against a web service set the serviceEndpoint property
+and the username and password (authUser and authPwd properties) if the service
+requires authentication. These properties can be changed after clicking on
+the test project and then on 'Custom Properties' in the lower left corner.
+
+Double click on the test project, click on the 'Test Suites' tab
+and start the test run with a click on the green arrow.
+
+image:https://user-images.githubusercontent.com/13570741/27562673-e27f6400-5acd-11e7-9c69-af1a5740efc9.png[]
+
 
 === Basics
 
@@ -14,10 +71,6 @@ link:http://www.soapui.org[SoapUI] is an open-source web service testing
 application originally developed for testing service-oriented architectures
 (SOA) and REST services. In ETF, it is extended via plugins and used to test
 spatial web services.
-
-Start the GUI with the batch file and click on 'File' and then on
-'Create Empty project'. The name can be changed by right-clicking on the test
-project and selecting 'Rename'.
 
 SoapUI and ETF are using a slightly different terminology for test items, as the
 following table shows.
@@ -38,32 +91,27 @@ and for passing user data into SoapUI, for example the service URL to test.
 
 image:https://user-images.githubusercontent.com/13570741/27132670-fb733832-510f-11e7-941d-f328250e7fd0.png[]
 
-Create a serviceEndpoint property in the "Custom Properties" tab and set a web service, for example an Atom service feed.
+Open the Test Suite 'Capabilities' from the 'Tutorial - Pre-defined WFS', then
+the 'Extended Capabilities' Test Case and the 'Get Capabilities' test step (see screenshot arrow 1).
+
+image:https://user-images.githubusercontent.com/13570741/27565109-6e73306e-5adc-11e7-8a63-49b4197464a2.png[]
 
 Properties on the Test project level can be referenced within SoapUI with the
-expression `${#Project#PROPERTY}`.
+expression `${#Project#PROPERTY}` (2).
 
 To test whether a atom service feed is available, create new
 SoapUI Test Suite, a Test Case and a HTTP Test Step. The Request URL ("Endpoint") of each
 HTTP Test Step must be set to `${#Project#serviceEndpoint}`.
 
-image:https://user-images.githubusercontent.com/13570741/27137321-eaecce0c-511d-11e7-8f0b-93361d0ba26b.png[]
+Open the Assertion view in the HTTP test step (3) and open the Assertion
+'ExtendedCapabilities element exists'.
 
-Add a new Assertion with the plus sign, select 'Script' and 'Script Assertion'
-and add the following content to check if the 'atom:feed' element exists in
-the response:
+image:https://user-images.githubusercontent.com/13570741/27565251-6e7055c8-5add-11e7-96bb-3eada8502138.png[]
 
-[source,Groovy]
-----
-import de.interactive_instruments.etf.suim.*
-Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)
-a.exists("/atom:feed", "TR.missingFeedRootElement")
-----
+When you click on the green arrow to run the Assertion, the assertion may pass
+or you may get this error:
 
-When you click on the green arrow to run the Assertion you will most likely get
-this error:
-
-image:https://user-images.githubusercontent.com/13570741/27138183-306dad32-5120-11e7-81de-71c8408922d7.png[]
+image:https://user-images.githubusercontent.com/13570741/27565229-508c154c-5add-11e7-8a30-30709a14411e.png[]
 
 The error is preprocessed for ETF and will, when SoapUI is run from within the
 ETF, reference the 'TR.noDataReturned' translation and output the corresponding error message from the loaded Translation Template Collection (see the parameter etf.translation.template.collection.id below).
@@ -75,14 +123,14 @@ The error message in the INSPIRE validator would be (see the entry in the link:h
 > 'Expected a response but the service did not return any data. Verify that the used endpoint URL is correct and accessible from outside your organization. If the service requires authentication, then check that the correct credentials are used by the validator or verify that upstream firewalls/proxy servers do not prevent access.'
 =========================================
 
-#JFH: Every Translation Template Collection for SoapUI tests must at least have texts for all TR.xxx-messages that are defined in the predefined functions. The codes and their meaning needs to be listed in this manual along with the parameters of each message.#
+This error occurs when no data has been received. If a response has been received
+but the ExtendedCapabilities element does not exists, you will see the following
+message in the assertion log window:
 
-This error occurs when no data has been received. Close the assertion (click on 'OK') and
-click on the green arrow in the HTTP test step to execute the HTTP request and
-execute the assertion against the response.
+image:https://user-images.githubusercontent.com/13570741/27565300-c1580bc8-5add-11e7-9611-05b312b4d94f.png[]
 
-Depending on the received data, you may now get a passed assertion or get a error
-with the 'TR.missingFeedRootElement' code.
+A more complex example can be found in the 'Stored Query' test suite of the
+tutorial project.
 
 === Parameters and metadata properties
 
@@ -297,18 +345,121 @@ For each Test Item Type, the following information is provided:
 * the ID that must be used to reference the Test Item Type from a test step or test assertion
 * whether the type is applicable to test steps or test assertions
 
-#JFH: I did not find information about the types. Please correct or complete this section.#
+==== HTTP Request Step
+https://www.soapui.org/functional-testing/teststep-reference/http-request/.html[See the SoapUI documentation].
 
-==== #label#
-#description#
+ID:: 6b16aa44-bdc7-4120-a790-4b74fc9ace62
+Item:: Test Step
 
-ID:: #EID...#
-Item:: #Test Step or Test Assertion#
+==== Script Test Step
+https://www.soapui.org/functional-testing/working-with-scripts.html[See the SoapUI documentation].
+The http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html[Assertion library]
+can be used in a Script Test Step.
+
+ID:: 90bdc939-bd42-41a0-9ef8-19e0ec04f89d
+Item:: Test Step
+
+==== Schema Validation Assertion
+Validates a XML response against the schema provided in the xsi:schemaLocation .
+
+ID:: 5ee1ae1a-e79f-41bb-bfb0-62cef89ca460
+Item:: Test Assertion
+
+==== Script Assertion
+https://www.soapui.org/functional-testing/validating-messages/using-script-assertions.html[See the SoapUI documentation].
+The http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html[Assertion library]
+can be used in a Script Assertion.
+
+ID:: fad9282c-1f1f-492b-b6ab-248430154310
+Item:: Test Assertion
+
+==== XPath Match Assertion
+https://www.soapui.org/functional-testing/validating-messages/validating-xml-messages.html[See the SoapUI documentation].
+
+ID:: 73c00044-a592-450f-8aff-7fb1da91c1df
+Item:: Test Assertion
+
+==== XQuery Match Assertion
+https://www.soapui.org/functional-testing/validating-messages/validating-xml-messages.html[See the SoapUI documentation].
+
+ID:: 5c28b666-4dda-43af-aa6e-1eed6212d8d8
+Item:: Test Assertion
+
+==== Basic Assertion
+All other assertions, like the
+https://www.soapui.org/functional-testing/validating-messages/getting-started-with-assertions.html#2-1-1-2-SLA[SLA assertion],
+are mapped to this type.
+
+ID:: e7e29c93-4c50-41c2-82d1-0f2db6a1abf6
+Item:: Test Assertion
 
 [[soapui-attachments]]
 === Attachments
 
-#JFH: describe attachments that are referenced from SoapUI test results and their types.#
+The SoapUI test driver can attach different data to the test report.
+
+A `Message` is attached to provide additional information that
+may be useful.
+
+.Message
+=====================================================================
+[source,XML]
+----
+<Attachment type="Message" id="EID6afae437-88f2-4a9d-970a-8255d3872588">
+          <label>Message.2</label>
+          <encoding>UTF-8</encoding>
+          <mimeType>text/plain</mimeType>
+          <referencedData href="http://demo-inspire-next.etf-validator.net/etf-webapp/v2/TestTaskResults/EIDb8f61761-4b25-47b5-8851-038615231f54/Attachments/EID6afae437-88f2-4a9d-970a-8255d3872588"/>
+</Attachment>
+----
+=====================================================================
+
+The parameters of a HTTP GET request are base64 encoded and embedded as
+attachment of type 'GetParameter'.
+
+.GetParameter
+=====================================================================
+[source,XML]
+----
+<Attachment type="GetParameter" id="EID9294c44b-5650-48b3-a25c-27dfe6b35c0c">
+          <label>Request Parameter</label>
+          <encoding>UTF-8</encoding>
+          <mimeType>text/plain</mimeType>
+          <embeddedData>aHR0cDovL2dlb3NlcnZlci55bXBhcmlzdG8uZmkvZ2Vvc2VydmVyL3dmcz9SRVFVRVNUPUdldENhcGFiaWxpdGllcyZWRVJTSU9OPTIuMC4wJlNFUlZJQ0U9d2ZzJkFDQ0VQVFZFUlNJT05TPTIuMC4w</embeddedData>
+</Attachment>
+----
+=====================================================================
+
+A HTTP POST request is referenced from an attachment of type 'PostData'.
+
+.PostData
+=====================================================================
+[source,XML]
+----
+<Attachment type="PostData" id="EID64f3f170-3833-4308-9c8c-d881641ccc75">
+  <label>Request Parameter</label>
+  <encoding>UTF-8</encoding>
+  <mimeType>text/xml</mimeType>
+  <referencedData href="http://demo-inspire-next.etf-validator.net/etf-webapp/v2/TestTaskResults/EID929e32b2-286f-46af-a5cf-de557c36d146/Attachments/EID64f3f170-3833-4308-9c8c-d881641ccc75"/>
+</Attachment>
+----
+=====================================================================
+
+Service responses referenced from 'ServiceResponse' attachments.
+
+.ServiceResponse
+=====================================================================
+[source,XML]
+----
+<Attachment type="ServiceResponse" id="EID3d6d11e3-8d86-4880-b095-a851af095dec">
+        <label>Service Response</label>
+        <encoding>UTF-8</encoding>
+        <mimeType>application/gzip</mimeType>
+<referencedData href="http://demo-inspire-next.etf-validator.net/etf-webapp/v2/TestTaskResults/EIDb8f61761-4b25-47b5-8851-038615231f54/Attachments/EID3d6d11e3-8d86-4880-b095-a851af095dec"/>
+----
+=====================================================================
+
+
 
 === Assertion library
 
@@ -325,13 +476,174 @@ Assert a = new Assert(messageExchange, context, log, Assert.INSPIRE_DS_NS)
 
 The parameters `messageExchange`, `context` and `log` are pre-defined in the context of the assertion. The last parameter of the constructor is the only part that varies. It is a map of namespace prefixes to the namespace URI.
 
-NOTE: Currently, the library provides one pre-defined map for INSPIRE Download Services (INSPIRE-DS_NS). Additional namespace maps for specific topics will be added in the future for convenience.
+.Example Assertion
+image:https://user-images.githubusercontent.com/13570741/27563693-66e76936-5ad3-11e7-8f53-4605927b7ad3.png[]
 
-#JFH: add screenshot#
+
+NOTE: Currently, the library provides one pre-defined map for INSPIRE Download Services
+http://interactive-instruments.github.io/etf-sui-ae/groovydoc/de/interactive_instruments/etf/suim/Assert.html#INSPIRE_DS_NS[INSPIRE_DS_NS].
+Additional namespace maps for specific topics will be added in the future for convenience.
 
 For further information on the Assert class and its functions see the
 link:http://interactive-instruments.github.io/etf-sui-ae/groovydoc/index.html?de/interactive_instruments/etf/suim/Assert.html[Assert API documentation].
 
+
+=== Translation Templates
+
+The Translation Template Collection referenced with the
+`etf.translation.template.collection.id` property must provide all messages that
+can be returned by the
+http://interactive-instruments.github.io/etf-sui-ae/groovydoc/de/interactive_instruments/etf/suim/Assert.html[Assertion library].
+The http://interactive-instruments.github.io/etf-sui-ae/groovydoc/de/interactive_instruments/etf/suim/Assert.html[Assertion library documentation]
+describes which function returns a specific error message with which parameters.
+
+The following Translation Template Bundle can be used as a starting point.
+The error texts should be self-describing for the errors and their occurrences.
+
+.Translation Template Bundle template for the SoapUI Assertion library
+=====================================================================
+[source,XML]
+----
+<TranslationTemplateBundle xmlns="http://www.interactive-instruments.de/etf/2.0" id="EIDxxxxxx"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 https://services.interactive-instruments.de/etf/schema/service/service.xsd">
+    <translationTemplateCollections>
+        <LangTranslationTemplateCollection name="TR.noDataReturned">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.noDataReturned">Expected a response but the service did not return any data. Verify that the used endpoint URL is correct and accessible from outside your organization. If the service requires authentication, then check that the correct credentials are used by the validator or verify that upstream firewalls/proxy servers do not prevent access.</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.xmlExpected">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.xmlExpected">Expected a XML response but the service returned unparseable data. Verify that the used endpoint URL is correct and accessible from outside your organization. If the service requires authentication, then check that the correct credentials are used by the validator or verify that upstream firewalls/proxy servers do not prevent access.</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.unexpectedHtml">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.unexpectedHtml">Expected a XML response but the service returned a HTML page. Verify that the used endpoint URL is correct and accessible from outside your organization. If the service requires authentication and returned an authentication page, then check that the correct credentials are used by the validator or verify that upstream firewalls/proxy servers do not prevent access.</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.missingElement">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.missingElement">The expected element '{element}' was not found in the response. XPath: {xpath}</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.elementNotExpected">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.elementNotExpected">'{element}' was NOT expected in the response. XPath: {xpath}</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.elementsNotExpected">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.elementsNotExpected">'{elements}' were not expected in the response. XPath: {xpath}</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.invalidValue">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.invalidValue">Expected the value '{value}' instead of '{acutal}' in {name}. XPath: {xpath}</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.emptyValue">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.emptyValue">Expected a non-empty text value for '{element}'. XPath: {xpath}</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.elementWithValueNotExpected">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.elementWithValueNotExpected">An element '{name}' with the value '{value}' was NOT expected in the response. XPath: {xpath}</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.unexpectedException">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.unexpectedException">The service returned an unexpected exception: '{text}'. Check the request parameters, which are partially determined from the Capabilities, previous requests or other metadata. Ensure that the service supports the data and functionalities published in the Capabilties and ensure that referenced data exist.</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.preCondition.testStep.xmlExpected">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.preCondition.testStep.xmlExpected">The required response of the test step '{testStepName}' can not be used for this test, due to not well-formed XML has been returned.</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.preCondition.testStep.unexpectedException">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.preCondition.testStep.unexpectedException">The required response of the test step '{testStepName}' can not be used for this test, due to an exception report has been returned.</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.preCondition.testStep.noDataReturned">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.preCondition.testStep.noDataReturned">The required response of the test step '{testStepName}' can not be used for this test, due to no data has been returned.</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.preCondition.testStep.missingElement">
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.preCondition.testStep.missingElement">The test compares data from this response with data from another test step, however the element '{element}' could not be found or has an empty value in test step '{testStepName}'.</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.missingSchemaLocation">
+            <!-- Used by the schema validation assertion -->
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.missingSchemaLocation">The schema attribute 'xsi:schemaLocation' was not found in the XML root element of the response. The response cannot be validated.</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.initializationAndBasicChecksFailed">
+            <!-- Thrown when a WFS is auto configured and the library initialization fails -->
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.initializationAndBasicChecksFailed">The testing of basic functionalities of the service failed and therefore all other test cases are skipped. Check all failed Test Cases in the 'Initialization and basic checks' module and ensure that the endpoints for GetCapabilities, GetFeature and DescribeFeatureType operations are accesible from outside your organization.</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.fallbackInfo">
+            <!-- TR.fallbackInfo is used when messages are thrown and no translation name is provided -->
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.fallbackInfo">{INFO}</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+        <LangTranslationTemplateCollection name="TR.internalError">
+            <!-- Thrown when an internal error occurs in the Assertion library -->
+            <translationTemplates>
+                <TranslationTemplate language="en" name="TR.internalError">Internal error in the Executable Test Suite. Please contact a system administrator. Error information: {text}</TranslationTemplate>
+            </translationTemplates>
+        </LangTranslationTemplateCollection>
+    </translationTemplateCollections>
+</TranslationTemplateBundle>
+----
+=====================================================================
+
+=== Mapping limitations from SoapUI concepts to ETF
+
+In order not to make the report too technical, the following test steps are not recorded:
+
+* Properties test steps
+* Property Transfer test steps
+* Conditional Goto test steps
+* Run TestCase (but dependencies are set)
+* Delay
+
+The following test steps are not supported as they are not required (yet):
+
+* SOAP (use HTTP test request step instead)
+* REST (use HTTP test request step instead)
+* AMF
+* JDBC
+* SOAP Mock Response
+* Manuel TestStep (instead use translation template names, starting with `TR.manual.`)
+
 === Tips for creating helpful test suites
 
-#JFH: Be more explicit how to create useful tests, what challenges are typically encountered and how these can be addressed. Examples: Dependencies, technical test steps vs HTTP test steps, iterations based on an OGC web service response, etc#
+* Always provide a description for test projects, test suites, test cases and test steps.
+* Avoid to use XPath assertions as you can not reference a helpful error message in
+a translation template.
+* Prefer Script Assertions to XQuery match assertions. If you need to use XQuery
+assertions you can reference translation templates by returning a xml element
+ `<etfTranslate what='TR.myMessage'/>`. Parameters can be passed as well
+ +
+----
+  <etfTranslate what='TR.missingElement'>
+    <element>ExtendedCapabilities</element>
+    <xpath>/wfs:WFS_Capabilities/ows:OperationsMetadata/ows:ExtendedCapabilities/inspire_dls:ExtendedCapabilities[1]</xpath>
+  </etfTranslate>
+----
+
+* Use the link:http://interactive-instruments.github.io/etf-sui-ae/groovydoc/de/interactive_instruments/xtf/ProjectHelper.html[ProjectHelper]
+to loop over test steps.
+* Set a timeout for each HTTP test step (SLA assertion).
+* Use the 'Run TestCase' test step in order to show dependencies between test
+cases in the report.
