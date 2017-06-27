@@ -49,7 +49,7 @@ ETF currently does not support any CTL-based tests, which return test results in
 
 WARNING: One pre-condition for using an OGC CITE test suite is that it does not require pre-loading any data into the service under test. For older tests (for example, the WMS 1.x and WFS 1.x test suites) loading a pre-defined test dataset was a typical requirement. Those OGC CITE test suites may only be used to test a resource that uses the test data.
 
-NOTE: In the future, it is planned to harmonize the XML format of all TEAM Engine test results using W3C EARL. Once that has been implemented - and ETF supports the EARL-based result format - also CTL-based test suites should be usable as long as they do not require any pre-loaded data and are accessible via the simple API.
+NOTE: In the future, it is https://github.com/opengeospatial/teamengine/issues/81[planned] to harmonize the XML format of all TEAM Engine test results using W3C EARL. Once that has been implemented - and ETF supports the EARL-based result format - also CTL-based test suites should be usable as long as they do not require any pre-loaded data and are accessible via the simple API.
 
 === Mapping from TEAM Engine / TestNG concepts to ETF
 

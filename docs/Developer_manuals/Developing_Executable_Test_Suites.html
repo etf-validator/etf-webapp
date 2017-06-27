@@ -2402,11 +2402,6 @@ the 'Extended Capabilities' Test Case and the 'Get Capabilities' test step (see 
 expression <code>${#Project#PROPERTY}</code> (2).</p>
 </div>
 <div class="paragraph">
-<p>To test whether a atom service feed is available, create new
-SoapUI Test Suite, a Test Case and a HTTP Test Step. The Request URL ("Endpoint") of each
-HTTP Test Step must be set to <code>${#Project#serviceEndpoint}</code>.</p>
-</div>
-<div class="paragraph">
 <p>Open the Assertion view in the HTTP test step (3) and open the Assertion
 'ExtendedCapabilities element exists'.</p>
 </div>
@@ -2441,7 +2436,7 @@ ETF, reference the 'TR.noDataReturned' translation and output the corresponding 
 </div>
 <div class="paragraph">
 <p>This error occurs when no data has been received. If a response has been received
-but the ExtendedCapabilities element does not exists, you will see the following
+but the ExtendedCapabilities element does not exist, you will see the following
 message in the assertion log window:</p>
 </div>
 <div class="paragraph">
@@ -3647,7 +3642,7 @@ One pre-condition for using an OGC CITE test suite is that it does not require p
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-In the future, it is planned to harmonize the XML format of all TEAM Engine test results using W3C EARL. Once that has been implemented - and ETF supports the EARL-based result format - also CTL-based test suites should be usable as long as they do not require any pre-loaded data and are accessible via the simple API.
+In the future, it is <a href="https://github.com/opengeospatial/teamengine/issues/81">planned</a> to harmonize the XML format of all TEAM Engine test results using W3C EARL. Once that has been implemented - and ETF supports the EARL-based result format - also CTL-based test suites should be usable as long as they do not require any pre-loaded data and are accessible via the simple API.
 </td>
 </tr>
 </table>
