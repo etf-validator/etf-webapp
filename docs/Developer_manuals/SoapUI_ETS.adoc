@@ -99,10 +99,6 @@ image:https://user-images.githubusercontent.com/13570741/27565109-6e73306e-5adc-
 Properties on the Test project level can be referenced within SoapUI with the
 expression `${#Project#PROPERTY}` (2).
 
-To test whether a atom service feed is available, create new
-SoapUI Test Suite, a Test Case and a HTTP Test Step. The Request URL ("Endpoint") of each
-HTTP Test Step must be set to `${#Project#serviceEndpoint}`.
-
 Open the Assertion view in the HTTP test step (3) and open the Assertion
 'ExtendedCapabilities element exists'.
 
@@ -124,7 +120,7 @@ The error message in the INSPIRE validator would be (see the entry in the link:h
 =========================================
 
 This error occurs when no data has been received. If a response has been received
-but the ExtendedCapabilities element does not exists, you will see the following
+but the ExtendedCapabilities element does not exist, you will see the following
 message in the assertion log window:
 
 image:https://user-images.githubusercontent.com/13570741/27565300-c1580bc8-5add-11e7-9611-05b312b4d94f.png[]
