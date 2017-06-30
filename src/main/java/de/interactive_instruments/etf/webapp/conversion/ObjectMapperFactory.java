@@ -105,8 +105,7 @@ public class ObjectMapperFactory implements FactoryBean<ObjectMapper> {
 
 		@Override
 		public SerializableString getEscapeSequence(int ch) {
-			return new SerializedString(
-					StringEscapeUtils.escapeHtml4(Character.toString((char) ch)));
+			return new SerializedString("\\u"+String.format("%04x", ch));
 		}
 	}
 
