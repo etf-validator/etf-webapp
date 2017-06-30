@@ -50,7 +50,6 @@ ext.springfoxSwaggerVersion = "2.6.1"
 
 configurations {
     compile.exclude group:'xalan'
-
     testdriver
 }
 
@@ -93,6 +92,7 @@ dependencies {
     // TODO download in future versions
     testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-suitd', version: '2.0.0' + project.snapshotSuffix
     testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-bsxtd', version: '2.0.0' + project.snapshotSuffix
+    testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-tetd', version: '1.0.0' + project.snapshotSuffix
 
     // Bean validation
     // compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.0.1.Final'
@@ -110,7 +110,7 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: etf_commonsIoVersion
     compile group: 'commons-lang', name: 'commons-lang', version:'2.6'
 
-    // switched from 2.4.7
+    // aligned with gradle
     compile 'org.codehaus.groovy:groovy-all:2.4.10'
 
     compile group: 'org.jsoup', name: 'jsoup', version: '1.9.1'
@@ -180,12 +180,6 @@ dependencies {
 
 def findRuntimeJar(prefix) {
     configurations.runtime.filter { it.name.startsWith(prefix) }
-}
-
-def normalizeJQPath(def path) {
-    // META-INF\resources\webjars\jquery-mobile\1.4.5\*.* -> *.*
-    def modified=path.replaceAll('META-INF/resources/webjars/[^/]*/[^/]*/(.*)', {"${it[1]}"})
-    return modified
 }
 
 // war.dependsOn(generateRebel)
