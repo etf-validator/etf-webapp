@@ -55,19 +55,22 @@ define(['toastr'], function (toastr) {
 
     function apiCallError(message, title, xhr) {
         var jsonErr;
-        try
-        {
-            jsonErr = $.parseJSON(xhr.responseText);
-        }catch(ignore) { }
-        if(!_.isUndefined(xhr.xhr)) {
-            try
-            {
+        if(!_.isUndefined(xhr.responseText)) {
+            try {
+                jsonErr = $.parseJSON(xhr.responseText);
+            } catch (ignore) { }
+        }else if(!_.isUndefined(xhr.xhr)) {
+            try {
                 if(_(xhr.xhr).isFunction()) {
                     jsonErr = $.parseJSON(xhr.xhr().responseText);
                 }else{
                     jsonErr = $.parseJSON(xhr.xhr.responseText);
                 }
             }catch(ignore) { }
+        }else if(!_.isUndefined(xhr.jqXHR)) {
+            try {
+                jsonErr = $.parseJSON(xhr.jqXHR.responseText);
+            } catch (ignore) { }
         }
 
         var errorMesg="unknown error";
