@@ -42,7 +42,7 @@
     </div>
     <div role="main" class="ui-content">
         <!-- Main -->
-            <h2>Test Reports</h2>
+            <h2 th:text="#{l.Testreports}">Testreports</h2>
             <ul id="test-report-item-listview-container" data-role="listview" data-inset="true" data-autodividers="true"
                 class="ui-listview-outer" data-filter="true" data-filter-placeholder="Filter Test Reports...">
                 <!-- Container for template -->
@@ -53,7 +53,7 @@
     </div>
 </div>
 
-<script tiles:fragment="test-reports-page" id="test-report-items-template" type="text/template">
+<script tiles:fragment="test-reports-page" id="test-report-items-template" type="text/template" th:inline="text">
     <![CDATA[
     <!-- guard comment -->
 
@@ -63,7 +63,7 @@
             <%= testRun.label %>
         </h2>
         <br>
-        <span th:text="#{l.Started}" >Started</span>: <span class="test-report-time"><%= moment(testRun.startTimestamp).format('HH:mm') %></span> - <span class="test-report-date"><%= moment(testRun.startTimestamp).format('DD.MM.YYYY') %></span>
+        <span th:text="#{l.Started}" >[[#{l.Started}]]</span>: <span class="test-report-time"><%= moment(testRun.startTimestamp).format('HH:mm') %></span> - <span class="test-report-date"><%= moment(testRun.startTimestamp).format('DD.MM.YYYY') %></span>
         <% if(!_.isUndefined(testRun.status)) { %>
             <br/>
             <%
@@ -76,7 +76,7 @@
                 status = 'Tests have been skipped';
             }
             %>
-            <span th:text="#{l.Status}" >Status</span>: <span><%= resStatus %></span>
+            <span th:text="#{l.Status}" >[[#{l.Status}]]</span>: <span><%= resStatus %></span>
         <% } %>
         <br/>
         <%
@@ -95,7 +95,7 @@
             if(!_.isUndefined(testObject) && !_.isUndefined(testObject.label)) {
         %>
         <div data-enhance="false">
-            <span th:text="#{l.Used.testobject}" >Used test object</span>:
+            <span th:text="#{l.Used.testobject}" >[[#{l.Used.testobject}]]</span>:
             <% if(!_.isUndefined(testObject.remoteResource) && testObject.remoteResource!='http://nowhere' && testObject.remoteResource!='http://private') { %>
             <a href="<%= testObject.remoteResource %>" target="_blank"><%= testObject.label %></a>
             <% }else{ %>
@@ -105,7 +105,7 @@
             if(!_.isUndefined(executableTestSuites)) {
         %>
             <div>
-                <span th:text="#{l.Used.executableTestSuites}" >Used test suites</span>:
+                <span th:text="#{l.Used.executableTestSuites}" >[[#{l.Used.executableTestSuites}]]</span>:
                 <ul>
                 <% _.each( executableTestSuites, function( ets ) { %>
                     <% if(!_.isUndefined(ets) && !_.isUndefined(ets.label)) { %>
@@ -119,11 +119,11 @@
 
         <div>
             <% if (testRun.status!='UNDEFINED') {  %>
-                <a href="<%= reportBaseUrl + testRun.id + '.html' %>" data-icon="eye" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.open.report}">Open report</a>
-                <a href="<%= reportBaseUrl + testRun.id + '.html?download=true' %>" data-icon="arrow-d-r" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.download.report}">Download report</a>
+                <a href="<%= reportBaseUrl + testRun.id + '.html' %>" data-icon="eye" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.open.report}">[[#{l.open.report}]]</a>
+                <a href="<%= reportBaseUrl + testRun.id + '.html?download=true' %>" data-icon="arrow-d-r" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.download.report}">[[#{l.download.report}]]</a>
             <% }; %>
-            <a href="<%= reportBaseUrl + testRun.id + '/log' %>" data-role="button" data-icon="info" data-inline="true" data-mini="true"  data-ajax="false"  th:text="#{l.open.log}">Open log</a>
-            <a href="#remove-test-report?id=<%= testRun.id %>" class="delete-button-tr" data-icon="delete" data-role="button" data-inline="true" data-mini="true" th:text="#{l.delete.report}">Delete report</a>
+            <a href="<%= reportBaseUrl + testRun.id + '/log' %>" data-role="button" data-icon="info" data-inline="true" data-mini="true"  data-ajax="false"  th:text="#{l.open.log}">[[#{l.open.log}]]</a>
+            <a href="#remove-test-report?id=<%= testRun.id %>" class="delete-button-tr" data-icon="delete" data-role="button" data-inline="true" data-mini="true" th:text="#{l.delete.report}">[[#{l.delete.report}]]</a>
         </div>
     </li>
     <% }); %>
@@ -137,7 +137,7 @@
     </div>
     <div role="main" class="ui-content">
         <!-- Main -->
-        <p>This will delete the test results including the log files!</p>
+        <p th:text="#{l.confirm.delete.testreport}">This will delete the test results including the log files!</p>
     </div>
     <div data-role="footer" style="text-align: center">
         <a id="test-report-delete-confirm" data-inline="true"

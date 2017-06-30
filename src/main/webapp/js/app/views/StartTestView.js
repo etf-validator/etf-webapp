@@ -64,10 +64,11 @@ define([
                 //add properties
                 var parameters = e.getParameters();
                 if(!_.isUndefined(parameters) && parameters != null) {
-                    _.each(parameters, function(p) {
+                    v2.jeach(parameters, function(p) {
                         if(p.required) {
                             _this.requiredParameters[p.name]=p;
                         }else if(_.isUndefined(_this.requiredParameters[p.name])){
+                            // add to optional parameters if not a required parameter for another ETS
                             _this.optionalParameters[p.name]=p;
                         }
                     });
@@ -241,7 +242,9 @@ define([
                 $('#show-ets-parameters-button').addClass('ui-disabled');
             }else{
                 var optionalParameters = $(".optional-parameter")
-                $('#show-ets-parameters-button').on('click', function (e) {
+                var showEtsParametersButton = $('#show-ets-parameters-button');
+                showEtsParametersButton.removeClass('ui-disabled');
+                showEtsParametersButton.on('click', function (e) {
                     e.preventDefault();
                     optionalParameters.slideToggle();
                 });

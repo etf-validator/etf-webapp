@@ -48,7 +48,7 @@
         </a>
 
         <div id="executable-test-suites-content">
-            <h2>Executable Test Suites</h2>
+            <h2 th:text="#{l.ExecutableTestSuites}">ExecutableTestSuites</h2>
             <p>To start a Test Run, select one or multiple Test Suites with a click on the flip switch on the right-hand
                 side ('use') and press the 'Start' button that appears once at least one Test Suite is selected. Please note
                 that the Test Suites are only applicable to certain Test Object types and therefore not all Test Suites are
@@ -181,8 +181,8 @@
 
     <div class="ui-field-contain">
         <label for="testRunLabel">
-            Label:
-            <span class="question" help="The entered label will show up as test result in the test results view"> ?</span>
+            [[#{l.Label}]]:
+            <span class="question" help="[[#{l.help.Label}]]"> ?</span>
         </label>
         <input data-inline="true" id="testRunLabel" type="text" title="
                 The entered label will show up as test result in the test results view" value="<%= defaultLabel %>"/>
@@ -205,12 +205,12 @@
                     </select>
                 </div>
                 <div id="fileUploadSelection" class="ui-field-contain">
-                    <label><span th:text="#{l.ZipOrXmlFile}" for="fileupload">ZIP or XML file </span> <span class="question"
+                    <label><span th:text="#{l.ZipOrXmlFile}" for="fileupload">[[#{l.ZipOrXmlFile}]] </span> <span class="question"
                         help="[[#{l.help.upload.test.data( ${maxUploadSizeHr} )}]]"> ?</span></label>
                     <input class="testObjectResourceInput" id="fileupload" type="file" accept="application/zip,text/xml,application/xml+gml,.gml" name="files[]" multiple>
                 </div>
                 <div id="remoteUrlSelection" style="display: none" class="ui-field-contain">
-                    <label><span th:text="#{l.Remote.file.Url}" for="testObjFile">Remote URL </span> <span class="question"
+                    <label><span th:text="#{l.Remote.file.Url}" for="testObjFile">[[#{l.Remote.file.Url}]] </span> <span class="question"
                         help="URL to remote XML/GML file or a ZIP file containing XML/GML files. The download will be initiated after clicking on the 'Start' button."> ?</span></label>
                     <input class="testObjectResourceInput" type="url" id="test-object-download-url" name="testObjUrl" />
                 </div>
@@ -234,7 +234,7 @@
 
     <div>
         <% if( !_.isEmpty(requiredParameters) ) { %>
-            <h4>Test Suite Parameters</h4>
+            <h4>[[#{l.Test.Suite.Parameters}]]</h4>
             <div class="required-parameter">
                 <% _.each( requiredParameters, function( p ) { %>
                 <div class="ui-field-contain">
@@ -250,7 +250,7 @@
                 </div>
             </div>
         <% } else { %>
-            <h4 class="optional-parameter" style="display: none">Test Suite Parameters</h4>
+            <h4 class="optional-parameter" style="display: none">[[#{l.Test.Suite.Parameters}]]</h4>
         <% } %>
         <div class="optional-parameter" style="display: none">
                 <% _.each( optionalParameters, function( p ) { %>
@@ -270,14 +270,14 @@
 
 
     <div id="selected-executable-test-suites" style="display: none">
-        <h4>Selected Test Suites</h4>
+        <h4>[[#{l.Selected.Test.Suites}]]</h4>
         <ul>
             <% v2.jeach( selectedExecutableTestSuites, function( executableTestSuite ) { %>
             <li> <%= executableTestSuite.label %> (Version <%= executableTestSuite.version %>) </li>
             <% }); %>
         </ul>
         <% if( !_.isEmpty(etsDependencies) ) { %>
-        <h4>Direct dependencies</h4>
+        <h4>[[#{l.Direct.dependencies}]]</h4>
         <ul>
             <% _.each( etsDependencies, function( dependency ) { %>
             <li> <%= dependency.label %> (Version <%= dependency.version %>) </li>
