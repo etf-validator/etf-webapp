@@ -71,11 +71,25 @@ etf.webapp.base.url = http://localhost:8080/etf-webapp
 # Restrict cross-origin HTTP requests for browsers, see
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
 # for more information.
-# Default: equals etf.webapp.base.url
+# Default: taken from etf.webapp.base.url
 # etf.api.allow.origin = *
 
 # An optional branding text which is shown in the header
 # etf.branding.text =
+
+# Max file upload size for test data in bytes.
+# By default the max upload size is estimated based on presumable free memory
+# during the start of the application.
+# Hint: 524288000 bytes are 500 MB
+# Default: auto
+# etf.max.upload.size = auto
+
+# Maximum size of the Test Object data in bytes.
+# As compressed files can be uploaded and the maximum file upload size
+# is different from the size of the extracted test files, this property
+# ensures that the specified limit is not exceeded.
+# Default: 5368709120 (5 GB)
+# etf.testobject.max.size = 5368709120
 
 # Allow access to private networks. Checked when
 # a new webservice test object is created. "false" is recommended in public
@@ -83,25 +97,19 @@ etf.webapp.base.url = http://localhost:8080/etf-webapp
 # Default: false
 # etf.testobject.allow.privatenet.access = false
 
-# Max file upload size for test data in bytes.
-# By default the max upload size is estimated based on presumable free memory
-# during the start of the application.
-# Default: auto
-# etf.max.upload.size = auto
-
-# Recreate internal BaseX configuration path (.basex) on startup. "true" is
+# Recreate the internal BaseX configuration file (.basex) on startup. "true" is
 # recommended.
 # Default: true
 # etf.bsx.recreate.config = true
 
 # Possible values default/simplified . A simplified workflow enables the user
-# to the start a test run without creating a test object.
+# to start a test run without creating a test object.
 # Default: simplified
 # etf.workflows = simplified
 
 # Help to improve our application by automatically reporting internal errors
-# (last user action, error message and stacktrace) to interactive instruments through the third
-# party service platform opbeat (see https://opbeat.com/about for more information).
+# (last user action, error message and stacktrace) to interactive instruments through
+# the third party service platform opbeat (see https://opbeat.com/about for more information).
 # Default: false
 # etf.errors.autoreport=false
 
@@ -137,7 +145,7 @@ etf.webapp.base.url = http://localhost:8080/etf-webapp
 ## Directory properties
 #########################################
 
-# For all directories paths can be set that are either absolute or
+# For all directories, paths can be set that are either absolute or
 # relative to the etf.dir. If the etf.dir is not specified it is
 # set to ../ relative to this configuration file.
 
@@ -148,6 +156,10 @@ etf.webapp.base.url = http://localhost:8080/etf-webapp
 # Directory for the test projects
 # Default: projects
 # etf.projects.dir = projects
+
+# Directory which contains the reports styles
+# Default: reportstyles
+# etf.reportstyles.dir = reportstyles
 
 # Directory which contains the test drivers
 # Default: td
@@ -168,6 +180,7 @@ etf.webapp.base.url = http://localhost:8080/etf-webapp
 # Directory that the application uses to backup files
 # Default: bak
 # etf.backup.dir = bak
+
 ----
 
 

@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import de.interactive_instruments.exceptions.IOsizeLimitExceededException;
+import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import de.interactive_instruments.Credentials;
@@ -42,11 +44,30 @@ class FileStorage {
 	private final IFile storageDir;
 	private final IFile tmpDir;
 	private final FileContentFilterHolder baseFilter;
+	private long maxStorageSize;
 
+	/**
+	 * Create a new FileStorage
+	 *
+	 * The max storage size is defaulted to 10 GB.
+	 *
+	 * @param destination destination directory
+	 * @param tmpDir temporary directory for up- and downloads
+	 * @param baseFilter filter that is applied on up- and downloaded files
+	 */
 	FileStorage(final IFile destination, final IFile tmpDir, final FileContentFilterHolder baseFilter) {
 		this.storageDir = destination;
 		this.tmpDir = tmpDir;
 		this.baseFilter = baseFilter;
+		maxStorageSize = 10737418240L;
+	}
+
+	/**
+	 * Change the max storage size
+	 * @param maxStorageSize max storage size
+	 */
+	public void setMaxStorageSize(final long maxStorageSize) {
+		this.maxStorageSize = maxStorageSize;
 	}
 
 	abstract class StorageCmd {
@@ -85,16 +106,27 @@ class FileStorage {
 			final IFile destinationSubDir = storageDir.secureExpandPathDown(label);
 			destinationSubDir.ensureDir();
 
-			for (final URI uri : uris) {
-				if (!UriUtils.isFile(uri)) {
-					final IFile download;
-					try {
-						download = UriUtils.downloadTo(uri, tmpSubDir, this.credentials);
-					} catch (IOException e) {
-						throw new LocalizableApiError("l.download.failed", e);
+			try {
+				long remainingDownloadSize = maxStorageSize;
+				for (final URI uri : uris) {
+					if (!UriUtils.isFile(uri)) {
+						final IFile download;
+						try {
+							download = UriUtils.downloadTo(uri, tmpSubDir, this.credentials, remainingDownloadSize);
+							remainingDownloadSize -= download.length();
+						} catch (IOException e) {
+							try {
+								tmpSubDir.deleteDirectory();
+								destinationSubDir.deleteDirectory();
+							} catch (IOException ignore) {}
+							throw new LocalizableApiError("l.download.failed", e);
+						}
+						prepare(download, destinationSubDir, download.getName(), fileFilter, remainingDownloadSize);
 					}
-					prepare(download, destinationSubDir, download.getName(), fileFilter);
 				}
+				checkSize(destinationSubDir);
+			}catch(IOsizeLimitExceededException e) {
+				throw new LocalizableApiError("l.max.download.size.exceeded", false, 400, e, maxStorageSize);
 			}
 			return destinationSubDir;
 		}
@@ -126,12 +158,19 @@ class FileStorage {
 				destinationSubDir.ensureDir();
 
 				uploadAndUnzip(files, fileFilter, tmpSubDir, destinationSubDir);
+				checkSize(destinationSubDir);
 			} catch (LocalizableApiError e) {
 				try {
 					tmpSubDir.deleteDirectory();
 					destinationSubDir.deleteDirectory();
 				} catch (IOException ignore) {}
 				throw e;
+			} catch (IOsizeLimitExceededException e) {
+				try {
+					tmpSubDir.deleteDirectory();
+					destinationSubDir.deleteDirectory();
+				} catch (IOException ignore) {}
+				throw new LocalizableApiError("l.max.upload.size.exceeded", false, 400, e, maxStorageSize);
 			} catch (IOException e) {
 				try {
 					tmpSubDir.deleteDirectory();
@@ -140,6 +179,12 @@ class FileStorage {
 				throw new LocalizableApiError(e);
 			}
 			return destinationSubDir;
+		}
+	}
+
+	private void checkSize(final IFile storageSubDir) throws IOsizeLimitExceededException {
+		if(FileUtils.sizeOfDirectory(storageSubDir)>maxStorageSize) {
+			throw new IOsizeLimitExceededException(maxStorageSize);
 		}
 	}
 
@@ -159,6 +204,7 @@ class FileStorage {
 
 	private void uploadAndUnzip(final Collection<MultipartFile> files, final MultiFileFilter fileFilter, final IFile tmpSubDir,
 			final IFile destinationSubDir) throws LocalizableApiError, IOException {
+		long remainingDownloadSize = maxStorageSize;
 		for (final MultipartFile multipartFile : files) {
 			if (multipartFile != null && !multipartFile.isEmpty()) {
 				final IFile tmpFile = tmpSubDir.secureExpandPathDown(
@@ -166,13 +212,14 @@ class FileStorage {
 				tmpFile.expectFileIsWritable();
 				tmpFile.delete();
 				multipartFile.transferTo(tmpFile);
-				prepare(tmpFile, destinationSubDir, multipartFile.getOriginalFilename(), fileFilter);
+				prepare(tmpFile, destinationSubDir, multipartFile.getOriginalFilename(), fileFilter, remainingDownloadSize);
+				remainingDownloadSize -= FileUtils.sizeOfDirectory(destinationSubDir);
 			}
 		}
 	}
 
 	private void prepare(final IFile tmpFile, final IFile storageSubDir, final String originalFilename,
-			final MultiFileFilter fileFilter) throws LocalizableApiError {
+			final MultiFileFilter fileFilter, final long maxSize) throws LocalizableApiError {
 		final String type;
 		try {
 			type = MimeTypeUtils.detectMimeType(tmpFile);
@@ -183,7 +230,9 @@ class FileStorage {
 		if (type.equals("application/zip")) {
 			// Unzip files to directory
 			try {
-				tmpFile.unzipTo(storageSubDir, fileFilter);
+				tmpFile.unzipTo(storageSubDir, fileFilter, maxSize);
+			} catch (IOsizeLimitExceededException e) {
+				throw new LocalizableApiError("l.max.extract.size.exceeded", e);
 			} catch (IOException e) {
 				throw new LocalizableApiError("l.decompress.failed", e);
 			} finally {

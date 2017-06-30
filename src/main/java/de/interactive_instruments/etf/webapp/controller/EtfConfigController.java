@@ -94,6 +94,7 @@ public class EtfConfigController implements PropertyHolder {
 
 	public static final String ETF_SUBMIT_ERRORS = "etf.errors.autoreport";
 	public static final String ETF_MAX_UPLOAD_SIZE = "etf.max.upload.size";
+	public static final String ETF_TEST_OBJECT_MAX_SIZE = "etf.testobject.max.size";
 
 	private static final String ETF_CONFIG_PROPERTY_FILENAME = "etf-config.properties";
 	private static final String ETF_CONFIG_DIR_NAME = "config";
@@ -122,6 +123,7 @@ public class EtfConfigController implements PropertyHolder {
 			put(ETF_WEBAPP_BASE_URL, "http://localhost:8080/etf-webapp");
 			put(ETF_BRANDING_TEXT, "");
 			put(ETF_TESTOBJECT_ALLOW_PRIVATENET_ACCESS, "false");
+			put(ETF_TEST_OBJECT_MAX_SIZE, "5368709120");
 			put(ETF_REPORT_COMPARISON, "false");
 			put(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION, "360");
 			put(ETF_TESTREPORTS_LIFETIME_EXPIRATION, "43800");

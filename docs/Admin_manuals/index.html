@@ -492,11 +492,25 @@ subfolder '~/.etf'.</p>
 <span class="tok-c"># Restrict cross-origin HTTP requests for browsers, see</span>
 <span class="tok-c"># https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS</span>
 <span class="tok-c"># for more information.</span>
-<span class="tok-c"># Default: equals etf.webapp.base.url</span>
+<span class="tok-c"># Default: taken from etf.webapp.base.url</span>
 <span class="tok-c"># etf.api.allow.origin = *</span>
 
 <span class="tok-c"># An optional branding text which is shown in the header</span>
 <span class="tok-c"># etf.branding.text =</span>
+
+<span class="tok-c"># Max file upload size for test data in bytes.</span>
+<span class="tok-c"># By default the max upload size is estimated based on presumable free memory</span>
+<span class="tok-c"># during the start of the application.</span>
+<span class="tok-c"># Hint: 524288000 bytes are 500 MB</span>
+<span class="tok-c"># Default: auto</span>
+<span class="tok-c"># etf.max.upload.size = auto</span>
+
+<span class="tok-c"># Maximum size of the Test Object data in bytes.</span>
+<span class="tok-c"># As compressed files can be uploaded and the maximum file upload size</span>
+<span class="tok-c"># is different from the size of the extracted test files, this property</span>
+<span class="tok-c"># ensures that the specified limit is not exceeded.</span>
+<span class="tok-c"># Default: 5368709120 (5 GB)</span>
+<span class="tok-c"># etf.testobject.max.size = 5368709120</span>
 
 <span class="tok-c"># Allow access to private networks. Checked when</span>
 <span class="tok-c"># a new webservice test object is created. &quot;false&quot; is recommended in public</span>
@@ -504,25 +518,19 @@ subfolder '~/.etf'.</p>
 <span class="tok-c"># Default: false</span>
 <span class="tok-c"># etf.testobject.allow.privatenet.access = false</span>
 
-<span class="tok-c"># Max file upload size for test data in bytes.</span>
-<span class="tok-c"># By default the max upload size is estimated based on presumable free memory</span>
-<span class="tok-c"># during the start of the application.</span>
-<span class="tok-c"># Default: auto</span>
-<span class="tok-c"># etf.max.upload.size = auto</span>
-
-<span class="tok-c"># Recreate internal BaseX configuration path (.basex) on startup. &quot;true&quot; is</span>
+<span class="tok-c"># Recreate the internal BaseX configuration file (.basex) on startup. &quot;true&quot; is</span>
 <span class="tok-c"># recommended.</span>
 <span class="tok-c"># Default: true</span>
 <span class="tok-c"># etf.bsx.recreate.config = true</span>
 
 <span class="tok-c"># Possible values default/simplified . A simplified workflow enables the user</span>
-<span class="tok-c"># to the start a test run without creating a test object.</span>
+<span class="tok-c"># to start a test run without creating a test object.</span>
 <span class="tok-c"># Default: simplified</span>
 <span class="tok-c"># etf.workflows = simplified</span>
 
 <span class="tok-c"># Help to improve our application by automatically reporting internal errors</span>
-<span class="tok-c"># (last user action, error message and stacktrace) to interactive instruments through the third</span>
-<span class="tok-c"># party service platform opbeat (see https://opbeat.com/about for more information).</span>
+<span class="tok-c"># (last user action, error message and stacktrace) to interactive instruments through</span>
+<span class="tok-c"># the third party service platform opbeat (see https://opbeat.com/about for more information).</span>
 <span class="tok-c"># Default: false</span>
 <span class="tok-c"># etf.errors.autoreport=false</span>
 
@@ -558,7 +566,7 @@ subfolder '~/.etf'.</p>
 <span class="tok-c">## Directory properties</span>
 <span class="tok-c">#########################################</span>
 
-<span class="tok-c"># For all directories paths can be set that are either absolute or</span>
+<span class="tok-c"># For all directories, paths can be set that are either absolute or</span>
 <span class="tok-c"># relative to the etf.dir. If the etf.dir is not specified it is</span>
 <span class="tok-c"># set to ../ relative to this configuration file.</span>
 
@@ -569,6 +577,10 @@ subfolder '~/.etf'.</p>
 <span class="tok-c"># Directory for the test projects</span>
 <span class="tok-c"># Default: projects</span>
 <span class="tok-c"># etf.projects.dir = projects</span>
+
+<span class="tok-c"># Directory which contains the reports styles</span>
+<span class="tok-c"># Default: reportstyles</span>
+<span class="tok-c"># etf.reportstyles.dir = reportstyles</span>
 
 <span class="tok-c"># Directory which contains the test drivers</span>
 <span class="tok-c"># Default: td</span>
@@ -746,7 +758,7 @@ The Executable Test Suites in the listed repositories only work with ETF version
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-06-21 13:29:52 CEST
+Last updated 2017-06-26 20:25:44 CEST
 </div>
 </div>
 </body>

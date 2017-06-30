@@ -143,7 +143,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	}
 
 	@PostConstruct
-	public void init() throws IOException, JAXBException, MissingPropertyException {
+	public void init() throws IOException, JAXBException, MissingPropertyException, InvalidPropertyException {
 
 		testDataDir = etfConfig.getPropertyAsFile(EtfConfigController.ETF_TESTDATA_DIR);
 		testDataDir.ensureDir();
@@ -160,6 +160,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 
 		// TODO provide file storages for each Test Object Type
 		fileStorage = new FileStorage(testDataDir, tmpUploadDir, baseFilter);
+		fileStorage.setMaxStorageSize(etfConfig.getPropertyAsLong(EtfConfigController.ETF_TEST_OBJECT_MAX_SIZE));
 
 		logger.info("TMP_HTTP_UPLOADS: " + tmpUploadDir.getAbsolutePath());
 
