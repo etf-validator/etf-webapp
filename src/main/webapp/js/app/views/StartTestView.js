@@ -164,6 +164,7 @@ define([
                         }
                     },
                     done: function (e, data) {
+                        $.mobile.loading( "hide" );
                         console.log("Upload data received %o", data);
                         if(!_.isUndefined(data.jqXHR) && !_.isUndefined(data.jqXHR.responseJSON.testObject)) {
                             // activate start button / deactivate file upload
@@ -192,6 +193,7 @@ define([
                         $("#fileupload-progress").show("slow");
                     },
                     fail: function(e, data) {
+                        $.mobile.loading( "hide" );
                         _this.testObjectCallbackId=null;
                         $('#start-tests-confirm').addClass('ui-disabled');
                         $('#fileupload').removeClass('ui-disabled');
@@ -203,6 +205,9 @@ define([
                             'width',
                             progress + '%'
                         );
+                        if(progress>=100) {
+                            $.mobile.loading( "show" );
+                        }
                     }
                 });
 
