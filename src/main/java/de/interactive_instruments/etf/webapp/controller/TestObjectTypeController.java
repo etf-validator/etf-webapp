@@ -121,7 +121,7 @@ public class TestObjectTypeController {
 			dto.setLabel(detectedTestObjectType.getExtractedLabel());
 		}
 		if(!SUtils.isNullOrEmpty(detectedTestObjectType.getExtractedDescription())) {
-			dto.setLabel(detectedTestObjectType.getExtractedDescription());
+			dto.setDescription(detectedTestObjectType.getExtractedDescription());
 		}
 	}
 
