@@ -182,8 +182,9 @@ public class TestResultController {
 			final TimedExpiredItemsRemover timedExpiredItemsRemover = new TimedExpiredItemsRemover();
 			timedExpiredItemsRemover.addExpirationItemHolder(new TestResultCleaner(testRunDao,
 					dataStorageService.getDao(TestObjectDto.class)), exp, TimeUnit.MINUTES);
+			// first start at least after 10 minutes
 			timer.scheduleAtFixedRate(timedExpiredItemsRemover,
-					TimeUnit.MINUTES.toMillis(exp)+60000, TimeUnit.MINUTES.toMillis(exp));
+					Math.min(TimeUnit.MINUTES.toMillis(exp), 600000), TimeUnit.MINUTES.toMillis(exp));
 			logger.info("Test reports are removed after {} minutes", exp);
 		}
 
