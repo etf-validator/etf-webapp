@@ -39,6 +39,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
+import de.interactive_instruments.*;
+import de.interactive_instruments.exceptions.ExcUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.slf4j.Logger;
@@ -54,10 +56,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import springfox.documentation.annotations.ApiIgnore;
 
-import de.interactive_instruments.Credentials;
-import de.interactive_instruments.IFile;
-import de.interactive_instruments.SUtils;
-import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.etf.dal.dao.*;
 import de.interactive_instruments.etf.dal.dto.capabilities.ResourceDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
@@ -99,6 +97,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	@Autowired
 	private TestObjectTypeController testObjectTypeController;
 
+	private Timer timer;
+
 	public static final String PATH = "testobjects";
 	private final static String TESTOBJECTS_URL = WebAppConstants.API_BASE_URL + "/TestObjects";
 	// 7 minutes for adding resources
@@ -116,6 +116,49 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/capabilities_xsd.html#TestObject). "
 			+ ETF_ITEM_COLLECTION_DESCRIPTION;
 
+	private static class TestObjectCleaner implements ExpirationItemHolder {
+		private final WriteDao<TestObjectDto> testObjectDao;
+		private final IFile testDataDir;
+		private final static Logger logger = LoggerFactory.getLogger(TestObjectCleaner.class);
+
+		private TestObjectCleaner(final Dao<TestObjectDto> testObjectDao,
+				final IFile testDataDir) {
+			this.testObjectDao = (WriteDao<TestObjectDto>) testObjectDao;
+			this.testDataDir = testDataDir;
+		}
+		@Override
+		public void removeExpiredItems(final long maxLifeTime, final TimeUnit unit) {
+			try {
+				// TODO filter dtos by timestamp and temporary property
+				final PreparedDtoCollection<TestObjectDto> all = testObjectDao.getAll(new SimpleFilter());
+				for (final TestObjectDto testObjectDto : all) {
+					if("true".equals(testObjectDto.properties().
+							getPropertyOrDefault("temporary", "false"))) {
+						final long expirationTime = testObjectDto.getCreationDate().getTime()+unit.toMillis(maxLifeTime);
+						if (System.currentTimeMillis()>expirationTime) {
+							final Map<String, ResourceDto> res = testObjectDto.getResources();
+							if(res!=null) {
+								for (final ResourceDto resourceDto : res.values()) {
+									final URI uri = resourceDto.getUri();
+									if(UriUtils.isFile(uri)) {
+										final IFile dir = testDataDir.secureExpandPathDown(uri.getPath());
+										try {
+											dir.deleteDirectory();
+										} catch (IOException e) {
+											logger.warn("Error deleting test data directory ", e);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			} catch (final StorageException e) {
+				logger.warn("Error deleting expired item ", e);
+			}
+		}
+	}
+
 	@InitBinder
 	private void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.zzz");
@@ -126,6 +169,10 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	@PreDestroy
 	private void shutdown() {
 		testObjectDao.release();
+
+		if (this.timer != null) {
+			timer.cancel();
+		}
 	}
 
 	private static class GmlAtomFilter implements FileContentFilterHolder {
@@ -165,6 +212,16 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		logger.info("TMP_HTTP_UPLOADS: " + tmpUploadDir.getAbsolutePath());
 
 		testObjectDao = ((WriteDao<TestObjectDto>) dataStorageService.getDao(TestObjectDto.class));
+
+		final long exp = etfConfig.getPropertyAsLong(EtfConfigController.ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION);
+		if(exp>0) {
+			timer = new Timer(true);
+			final TimedExpiredItemsRemover timedExpiredItemsRemover = new TimedExpiredItemsRemover();
+			timedExpiredItemsRemover.addExpirationItemHolder(new TestObjectCleaner(testObjectDao, testDataDir), exp, TimeUnit.MINUTES);
+			timer.scheduleAtFixedRate(timedExpiredItemsRemover,
+					TimeUnit.MINUTES.toMillis(exp)+70000, TimeUnit.MINUTES.toMillis(exp));
+			logger.info("Temporary Test Objects are removed after {} minutes", exp);
+		}
 
 		logger.info("Test Object controller initialized!");
 	}

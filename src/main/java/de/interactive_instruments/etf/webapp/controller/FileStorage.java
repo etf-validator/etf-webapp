@@ -45,6 +45,7 @@ class FileStorage {
 	private final IFile tmpDir;
 	private final FileContentFilterHolder baseFilter;
 	private long maxStorageSize;
+	private String maxStorageSizeHr;
 
 	/**
 	 * Create a new FileStorage
@@ -68,6 +69,7 @@ class FileStorage {
 	 */
 	public void setMaxStorageSize(final long maxStorageSize) {
 		this.maxStorageSize = maxStorageSize;
+		this.maxStorageSizeHr = FileUtils.byteCountToDisplaySize(maxStorageSize);
 	}
 
 	abstract class StorageCmd {
@@ -119,14 +121,14 @@ class FileStorage {
 								tmpSubDir.deleteDirectory();
 								destinationSubDir.deleteDirectory();
 							} catch (IOException ignore) {}
-							throw new LocalizableApiError("l.download.failed", e);
+							throw new LocalizableApiError("l.download.failed", false, 400, e, maxStorageSizeHr);
 						}
 						prepare(download, destinationSubDir, download.getName(), fileFilter, remainingDownloadSize);
 					}
 				}
 				checkSize(destinationSubDir);
 			}catch(IOsizeLimitExceededException e) {
-				throw new LocalizableApiError("l.max.download.size.exceeded", false, 400, e, maxStorageSize);
+				throw new LocalizableApiError("l.max.download.size.exceeded", false, 400, e, maxStorageSizeHr);
 			}
 			return destinationSubDir;
 		}
@@ -170,7 +172,7 @@ class FileStorage {
 					tmpSubDir.deleteDirectory();
 					destinationSubDir.deleteDirectory();
 				} catch (IOException ignore) {}
-				throw new LocalizableApiError("l.max.upload.size.exceeded", false, 400, e, maxStorageSize);
+				throw new LocalizableApiError("l.max.upload.size.exceeded", false, 400, e, maxStorageSizeHr);
 			} catch (IOException e) {
 				try {
 					tmpSubDir.deleteDirectory();
@@ -232,7 +234,7 @@ class FileStorage {
 			try {
 				tmpFile.unzipTo(storageSubDir, fileFilter, maxSize);
 			} catch (IOsizeLimitExceededException e) {
-				throw new LocalizableApiError("l.max.extract.size.exceeded", e);
+				throw new LocalizableApiError("l.max.extract.size.exceeded", false, 400, e, maxStorageSizeHr);
 			} catch (IOException e) {
 				throw new LocalizableApiError("l.decompress.failed", e);
 			} finally {

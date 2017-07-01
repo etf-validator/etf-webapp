@@ -21,8 +21,7 @@ import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
@@ -33,19 +32,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
 
+import de.interactive_instruments.*;
+import de.interactive_instruments.etf.dal.dao.PreparedDtoCollection;
+import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
+import de.interactive_instruments.exceptions.*;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import de.interactive_instruments.IFile;
-import de.interactive_instruments.SUtils;
-import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.etf.EtfConstants;
 import de.interactive_instruments.etf.dal.dao.Dao;
 import de.interactive_instruments.etf.dal.dao.PreparedDto;
@@ -63,10 +62,6 @@ import de.interactive_instruments.etf.webapp.conversion.EidConverter;
 import de.interactive_instruments.etf.webapp.dto.AttachmentCollection;
 import de.interactive_instruments.etf.webapp.helpers.CacheControl;
 import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
-import de.interactive_instruments.exceptions.InitializationException;
-import de.interactive_instruments.exceptions.InvalidStateTransitionException;
-import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
-import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
 
 import io.swagger.annotations.ApiOperation;
@@ -95,6 +90,8 @@ public class TestResultController {
 	@Autowired
 	private StreamingService streaming;
 
+	private Timer timer;
+
 	private IFile reportDir;
 	private IFile stylesheetFile;
 	private Dao<TestRunDto> testRunDao;
@@ -120,6 +117,44 @@ public class TestResultController {
 			+ TEST_TASK_RESULT_NOTE
 			+ ETF_ITEM_COLLECTION_DESCRIPTION;
 
+	private static class TestResultCleaner implements ExpirationItemHolder {
+		private final WriteDao<TestRunDto> testRunDao;
+		private final WriteDao<TestObjectDto> testObjectDao;
+		private final static Logger logger = LoggerFactory.getLogger(TestResultCleaner.class);
+		private TestResultCleaner(final Dao<TestRunDto> testRunDao,
+				final Dao<TestObjectDto> testObjectDao) {
+			this.testRunDao = (WriteDao<TestRunDto>) testRunDao;
+			this.testObjectDao = (WriteDao<TestObjectDto>) testObjectDao;
+		}
+		@Override
+		public void removeExpiredItems(final long maxLifeTime, final TimeUnit unit) {
+			try {
+				// TODO filter dtos by timestamp
+				final PreparedDtoCollection<TestRunDto> all = testRunDao.getAll(new SimpleFilter());
+				for (final TestRunDto testRunDto : all) {
+					final long expirationTime = testRunDto.getStartTimestamp().getTime()+unit.toMillis(maxLifeTime);
+					if (System.currentTimeMillis()>expirationTime) {
+						final List<TestObjectDto> testObjects = testRunDto.getTestObjects();
+						try {
+							testRunDao.delete(testRunDto.getId());
+						}catch (final Exception e) {
+							logger.warn("Error deleting expired item ", e);
+						}
+						for (final TestObjectDto testObjectDto : testObjects) {
+							try {
+								testObjectDao.delete(testObjectDto.getId());
+							}catch (final Exception e) {
+								logger.warn("Error deleting expired item ", e);
+							}
+						}
+					}
+				}
+			} catch (final StorageException e) {
+				ExcUtils.suppress(e);
+			}
+		}
+	}
+
 	public TestResultController() {
 
 	}
@@ -139,8 +174,18 @@ public class TestResultController {
 				this.testRunHtmlReportFormat = outputFormat;
 			}
 		}
-
 		streaming.prepareCache(testRunDao, new SimpleFilter());
+
+		final long exp = etfConfig.getPropertyAsLong(EtfConfigController.ETF_TESTREPORTS_LIFETIME_EXPIRATION);
+		if(exp>0) {
+			timer = new Timer(true);
+			final TimedExpiredItemsRemover timedExpiredItemsRemover = new TimedExpiredItemsRemover();
+			timedExpiredItemsRemover.addExpirationItemHolder(new TestResultCleaner(testRunDao,
+					dataStorageService.getDao(TestObjectDto.class)), exp, TimeUnit.MINUTES);
+			timer.scheduleAtFixedRate(timedExpiredItemsRemover,
+					TimeUnit.MINUTES.toMillis(exp)+60000, TimeUnit.MINUTES.toMillis(exp));
+			logger.info("Test reports are removed after {} minutes", exp);
+		}
 
 		logger.info("Result controller initialized!");
 	}
@@ -148,8 +193,12 @@ public class TestResultController {
 	@PreDestroy
 	private void shutdown() {
 		testRunDao.release();
-		// testTaskResultDao.release();
+
+		if (this.timer != null) {
+			timer.cancel();
+		}
 	}
+
 
 	public void storeTestRun(final TestRunDto testRunDto) throws StorageException {
 		// create copy and remove test task result ids

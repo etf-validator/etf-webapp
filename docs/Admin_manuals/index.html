@@ -512,6 +512,20 @@ subfolder '~/.etf'.</p>
 <span class="tok-c"># Default: 5368709120 (5 GB)</span>
 <span class="tok-c"># etf.testobject.max.size = 5368709120</span>
 
+<span class="tok-c"># Expiration time for temporary Test Objects. After the time has elapsed,</span>
+<span class="tok-c"># the test objects and test data are deleted.</span>
+<span class="tok-c"># To deactivate this feature and keep all Test Objects, the property</span>
+<span class="tok-c"># must be changed to the value 0.</span>
+<span class="tok-c"># Default: 480 (8 hours)</span>
+<span class="tok-c"># etf.testobject.temporary.lifetime.expiration = 480</span>
+
+<span class="tok-c"># Expiration time for Test Reports. After the time has elapsed,</span>
+<span class="tok-c"># the reports are deleted.</span>
+<span class="tok-c"># To deactivate this feature and keep all Test Reports, the property</span>
+<span class="tok-c"># must be changed to the value 0.</span>
+<span class="tok-c"># Default: 11520 (8 days)</span>
+<span class="tok-c"># etf.testreports.lifetime.expiration = 11520</span>
+
 <span class="tok-c"># Allow access to private networks. Checked when</span>
 <span class="tok-c"># a new webservice test object is created. &quot;false&quot; is recommended in public</span>
 <span class="tok-c"># deployments.</span>

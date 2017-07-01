@@ -81,7 +81,7 @@ public class SwaggerConfig {
 								+ "[Back to user interface]("
 								+ EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_WEBAPP_BASE_URL)
 								+ "/#home)")
-				.contact(new Contact("ETF Team", "www.etf-validator.net",
+				.contact(new Contact("ETF Team", "http://www.etf-validator.net",
 						"etf@interactive-instruments.de"))
 				.license("Apache 2.0")
 				.licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")

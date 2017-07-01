@@ -31,6 +31,7 @@ import javax.servlet.ServletContext;
 
 import ch.qos.logback.classic.Level;
 
+import de.interactive_instruments.exceptions.config.InvalidPropertyException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.apache.commons.lang.SystemUtils;
@@ -75,7 +76,7 @@ public class EtfConfigController implements PropertyHolder {
 	public static final String ETF_BRANDING_TEXT = "etf.branding.text";
 	public static final String ETF_TESTOBJECT_ALLOW_PRIVATENET_ACCESS = "etf.testobject.allow.privatenet.access";
 	// in minutes
-	public static final String ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION = "etf.testobject.uploaded.lifetime.expiration";
+	public static final String ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION = "etf.testobject.temporary.lifetime.expiration";
 	public static final String ETF_REPORT_COMPARISON = "etf.report.comparison";
 	// in minutes
 	public static final String ETF_TESTREPORTS_LIFETIME_EXPIRATION = "etf.testreports.lifetime.expiration";
@@ -125,8 +126,10 @@ public class EtfConfigController implements PropertyHolder {
 			put(ETF_TESTOBJECT_ALLOW_PRIVATENET_ACCESS, "false");
 			put(ETF_TEST_OBJECT_MAX_SIZE, "5368709120");
 			put(ETF_REPORT_COMPARISON, "false");
-			put(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION, "360");
-			put(ETF_TESTREPORTS_LIFETIME_EXPIRATION, "43800");
+			// 8 h
+			put(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION, "480");
+			// 8 days
+			put(ETF_TESTREPORTS_LIFETIME_EXPIRATION, "11520");
 			put(ETF_HELP_PAGE_URL,
 					"http://docs.etf-validator.net/User_manuals/Simplified_workflows.html");
 			put(ETF_BSX_RECREATE_CONFIG, "true");
@@ -376,8 +379,40 @@ public class EtfConfigController implements PropertyHolder {
 			configProperties.setProperty(ETF_MAX_UPLOAD_SIZE, String.valueOf("104857600"));
 		}
 
+		plausabilityCheckMinutes(ETF_TESTREPORTS_LIFETIME_EXPIRATION);
+		plausabilityCheckMinutes(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION);
+
+
 		configProperties.forEach((k, v) -> logger.info(k + " = " + v));
 		instance = this;
+	}
+
+	private void plausabilityCheckMinutes(final String property) {
+		final long minutes;
+		final String defaultVal = this.defaultProperties.get(property);
+		try {
+			minutes = this.getPropertyAsLong(property);
+		} catch (InvalidPropertyException e) {
+			logger.error("{} : not a number : {}. Setting default value: {}",
+					property, this.getProperty(property), defaultVal);
+			configProperties.setProperty(property, defaultVal);
+			return;
+		}
+		if(minutes<0) {
+			logger.error("{} : a negative value is not allowed: {}. Setting default value: {}",
+					property, minutes, defaultVal);
+			configProperties.setProperty(property, defaultVal);
+		}else if(minutes<20 && logger.isDebugEnabled()) {
+			// Values less than 20 minutes are allowed in debug mode
+			logger.error("{} : a value less than 20 minutes ( {} ) can interfere with the Test "
+							+ "Runs. Setting default value: {}",
+					property, minutes, defaultVal);
+			configProperties.setProperty(property, defaultVal);
+		}else if(minutes>131400) {
+			logger.warn("{} : a value higher than 3 month might be be very optimistic: {}",
+					property, minutes);
+			configProperties.setProperty(property, defaultVal);
+		}
 	}
 
 	private IFile createInitialDirectoryStructure(final IFile dir) throws IOException {

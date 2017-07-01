@@ -71,20 +71,26 @@ public class TestRunController implements TestRunEventListener {
 
 	@Autowired
 	DataStorageService dataStorageService;
+
 	@Autowired
 	private TestDriverController testDriverController;
+
 	@Autowired
 	private TestObjectController testObjectController;
+
 	@Autowired
 	private TestResultController testResultController;
-	private Timer timer;
+
 	@Autowired
 	private EtfConfigController etfConfig;
 
 	@Autowired
 	private StreamingService streamingService;
 
+	private Timer timer;
+
 	boolean simplifiedWorkflows;
+
 	private Dao<TestRunDto> testRunDao;
 
 	private final static String TEST_RUNS_URL = API_BASE_URL + "/TestRuns";
@@ -200,7 +206,7 @@ public class TestRunController implements TestRunEventListener {
 
 		timer = new Timer(true);
 		// Trigger every 30 Minutes
-		TimedExpiredItemsRemover timedExpiredItemsRemover = new TimedExpiredItemsRemover();
+		final TimedExpiredItemsRemover timedExpiredItemsRemover = new TimedExpiredItemsRemover();
 		timedExpiredItemsRemover.addExpirationItemHolder(
 				(l, timeUnit) -> taskPoolRegistry.removeDone(),
 				0, TimeUnit.HOURS);
