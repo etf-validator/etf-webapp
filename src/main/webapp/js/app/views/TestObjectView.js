@@ -42,6 +42,7 @@ define([
         },
 
         render: function() {
+            var _this = this;
             this.collection.deferred.done(function() {
                 console.log("Rendering Test Object view: %o", _this.collection.toJSON());
 

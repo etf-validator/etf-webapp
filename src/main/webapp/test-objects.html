@@ -53,9 +53,9 @@
             <p><span th:text="l.Description">Description</span>:
                 <span><%= testObject.description %></span></p>
 
-            <% v2.jeach( testObject.ResourceCollection, function( resources ) { %>
+            <% v2.jeach( testObject.ResourceCollection, function( resource ) { %>
                 <p><span th:text="l.Resource">Resource</span>:
-                <span><%= resources.href %></span></p>
+                <span><%= resource.href %></span></p>
             <% }); %>
 
             <p><span>Version</span>:

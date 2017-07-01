@@ -49,7 +49,7 @@
 
         <div id="executable-test-suites-content">
             <h2 th:text="#{l.ExecutableTestSuites}">ExecutableTestSuites</h2>
-            <p>To start a Test Run, select one or multiple Test Suites with a click on the flip switch on the right-hand
+            <p th:text="#{l.ExecutableTestSuites.help}">To start a Test Run, select one or multiple Test Suites with a click on the flip switch on the right-hand
                 side ('use') and press the 'Start' button that appears once at least one Test Suite is selected. Please note
                 that the Test Suites are only applicable to certain Test Object types and therefore not all Test Suites are
                 combinable for a Test Run. Additional information about a Test Suite will be shown with a click on the plus button.</p>
@@ -146,9 +146,9 @@
 </script>
 
 
-<div tiles:fragment="start-tests-page" id="start-tests-dialog" data-role="dialog" data-title="Start Tests">
+<div tiles:fragment="start-tests-page" id="start-tests-dialog" data-role="dialog" data-title="Start Tests" th:data-title="#{l.Configure.Test.Run}">
     <div data-role="header" role="banner">
-        <h2>Configure Test Run</h2>
+        <h2 th:text="#{l.Configure.Test.Run}">Configure Test Run</h2>
 
     </div>
     <div role="main" class="ui-content">
@@ -184,8 +184,7 @@
             [[#{l.Label}]]:
             <span class="question" help="[[#{l.help.Label}]]"> ?</span>
         </label>
-        <input data-inline="true" id="testRunLabel" type="text" title="
-                The entered label will show up as test result in the test results view" value="<%= defaultLabel %>"/>
+        <input data-inline="true" id="testRunLabel" type="text" title="[[#{l.help.Label}]]" value="<%= defaultLabel %>"/>
     </div>
 
 
@@ -211,7 +210,7 @@
                 </div>
                 <div id="remoteUrlSelection" style="display: none" class="ui-field-contain">
                     <label><span th:text="#{l.Remote.file.Url}" for="testObjFile">[[#{l.Remote.file.Url}]] </span> <span class="question"
-                        help="URL to remote XML/GML file or a ZIP file containing XML/GML files. The download will be initiated after clicking on the 'Start' button."> ?</span></label>
+                        help="[[#{l.Remote.file.Url.help}]]"> ?</span></label>
                     <input class="testObjectResourceInput" type="url" id="test-object-download-url" name="testObjUrl" />
                 </div>
 
@@ -289,9 +288,9 @@
     <!-- ]]> -->
 </script>
 
-<div tiles:fragment="start-tests-page" id="monitor-test-run-dialog" data-role="dialog" data-title="Monitor Test Run">
+<div tiles:fragment="start-tests-page" id="monitor-test-run-dialog" data-role="dialog" data-title="Monitor Test Run" th:data-title="#{l.Monitor.Test.Run}">
     <div data-role="header" role="banner">
-        <h2>Monitor Test Run</h2>
+        <h2 th:text="#{l.Monitor.Test.Run}">Monitor Test Run</h2>
     </div>
     <div role="main" class="ui-content">
         <!-- Main -->

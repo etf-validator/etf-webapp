@@ -43,6 +43,7 @@
     <div role="main" class="ui-content">
         <!-- Main -->
             <h2 th:text="#{l.Testreports}">Testreports</h2>
+            <p th:if="${maxTestRunLifetime}" th:text="#{l.Testreports.note.expire( ${maxTestRunLifetime} )}"></p>
             <ul id="test-report-item-listview-container" data-role="listview" data-inset="true" data-autodividers="true"
                 class="ui-listview-outer" data-filter="true" data-filter-placeholder="Filter Test Reports...">
                 <!-- Container for template -->
