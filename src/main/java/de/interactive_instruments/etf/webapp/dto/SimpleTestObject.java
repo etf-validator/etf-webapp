@@ -41,6 +41,7 @@ import de.interactive_instruments.exceptions.StorageException;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
@@ -100,7 +101,7 @@ public class SimpleTestObject {
 		if (resources != null && !resources.isEmpty()) {
 			testObject = new TestObjectDto();
 			for (final Map.Entry<String, String> nameUriEntry : resources.entrySet()) {
-				testObject.addResource(new ResourceDto(nameUriEntry.getKey(), nameUriEntry.getValue()));
+				testObject.addResource(new ResourceDto(nameUriEntry.getKey(), HtmlUtils.htmlUnescape(nameUriEntry.getValue())));
 			}
 			testObject.properties().setProperty("temporary", "true");
 			testObject.setVersionFromStr("1.0.0");
