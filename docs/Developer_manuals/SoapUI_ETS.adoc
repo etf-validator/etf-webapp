@@ -128,6 +128,16 @@ image:https://user-images.githubusercontent.com/13570741/27565300-c1580bc8-5add-
 A more complex example can be found in the 'Stored Query' test suite of the
 tutorial project.
 
+The installation package also contains two test module templates -one
+for testing Web Feature Services and one for web services in general- as starting
+point. One of the two templates can be imported in a new test project by right
+clicking on the test project and then after a click on 'Import Test Suite' choosing
+`Initialization-and-basic-checks-soapui-test-suite-template.xml` for a web service
+or  `Initialization-and-basic-checks-wfs-soapui-test-suite-template.xml` for
+a web feature service.
+
+image:https://user-images.githubusercontent.com/13570741/27772890-835867b8-5f6b-11e7-884e-901c278583fc.png[]
+
 === Parameters and metadata properties
 
 Properties are used to parameterize an Executable Test Suite ('test project' in SoapUI terminology) as well as to associate it with other resources of ETF like Tags, Test Object Types etc. The standard properties are described in the following table. All properties are properties of the test project.
@@ -639,7 +649,7 @@ assertions you can reference translation templates by returning a xml element
 ----
 
 * Use the link:http://interactive-instruments.github.io/etf-sui-ae/groovydoc/de/interactive_instruments/xtf/ProjectHelper.html[ProjectHelper]
-to loop over test steps.
+to execute other test steps from within loops
 * Set a timeout for each HTTP test step (SLA assertion).
 * Use the 'Run TestCase' test step in order to show dependencies between test
 cases in the report.

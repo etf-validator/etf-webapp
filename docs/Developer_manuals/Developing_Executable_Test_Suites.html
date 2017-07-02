@@ -2446,6 +2446,18 @@ message in the assertion log window:</p>
 <p>A more complex example can be found in the 'Stored Query' test suite of the
 tutorial project.</p>
 </div>
+<div class="paragraph">
+<p>The installation package also contains two test module templates -one
+for testing Web Feature Services and one for web services in general- as starting
+point. One of the two templates can be imported in a new test project by right
+clicking on the test project and then after a click on 'Import Test Suite' choosing
+<code>Initialization-and-basic-checks-soapui-test-suite-template.xml</code> for a web service
+or  <code>Initialization-and-basic-checks-wfs-soapui-test-suite-template.xml</code> for
+a web feature service.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="https://user-images.githubusercontent.com/13570741/27772890-835867b8-5f6b-11e7-884e-901c278583fc.png" alt="27772890 835867b8 5f6b 11e7 884e 901c278583fc"></span></p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_parameters_and_metadata_properties">4.4. Parameters and metadata properties</h3>
@@ -3512,7 +3524,7 @@ assertions you can reference translation templates by returning a xml element
 <ul>
 <li>
 <p>Use the <a href="http://interactive-instruments.github.io/etf-sui-ae/groovydoc/de/interactive_instruments/xtf/ProjectHelper.html">ProjectHelper</a>
-to loop over test steps.</p>
+to execute other test steps from within loops</p>
 </li>
 <li>
 <p>Set a timeout for each HTTP test step (SLA assertion).</p>
