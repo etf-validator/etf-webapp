@@ -48,14 +48,14 @@
         </a>
 
         <div id="executable-test-suites-content">
-            <h2 th:text="#{l.ExecutableTestSuites}">ExecutableTestSuites</h2>
+            <h2 th:text="#{l.ExecutableTestSuites}">Executable Test Suites</h2>
             <p th:text="#{l.ExecutableTestSuites.help}">To start a Test Run, select one or multiple Test Suites with a click on the flip switch on the right-hand
                 side ('use') and press the 'Start' button that appears once at least one Test Suite is selected. Please note
                 that the Test Suites are only applicable to certain Test Object types and therefore not all Test Suites are
                 combinable for a Test Run. Additional information about a Test Suite will be shown with a click on the plus button.</p>
 
             <ul id="executable-test-suite-listview-container" data-role="listview"
-                data-inset="true" class="ui-listview-outer" data-filter="true" data-autodividers="true" data-filter-placeholder="Filter Executable Test Suites...">
+                data-inset="true" class="ui-listview-outer" data-filter="true" data-autodividers="true" th:data-filter-placeholder="Filter Executable Test Suites...">
                 <!-- Container for template -->
             </ul>
         </div>

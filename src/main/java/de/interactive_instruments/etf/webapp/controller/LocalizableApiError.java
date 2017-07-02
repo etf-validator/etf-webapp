@@ -26,6 +26,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.interactive_instruments.etf.detector.TestObjectTypeNotDetected;
+import de.interactive_instruments.exceptions.IOsizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;

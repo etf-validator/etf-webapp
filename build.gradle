@@ -45,7 +45,7 @@ apply plugin: 'idea'
 ext.springSecurityVersion = "4.2.3.RELEASE"
 ext.springSecurityOAuth2Version = "2.1.1.RELEASE"
 ext.springVersion = "4.3.9.RELEASE"
-ext.jacksonVersion = "2.7.9"
+ext.jacksonVersion = "2.8.9"
 ext.springfoxSwaggerVersion = "2.6.1"
 
 configurations {

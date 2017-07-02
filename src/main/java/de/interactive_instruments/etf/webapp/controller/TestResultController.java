@@ -90,7 +90,12 @@ public class TestResultController {
 	@Autowired
 	private StreamingService streaming;
 
-	private Timer timer;
+	private Timer cleanTimer;
+	// 5 minutes after start
+	private final long initialDelay = 300000;
+	private TimedExpiredItemsRemover timedExpiredItemsRemover;
+	// default 1 hour
+	private String cacheMaxAgeSeconds = "3600";
 
 	private IFile reportDir;
 	private IFile stylesheetFile;
@@ -128,6 +133,7 @@ public class TestResultController {
 		}
 		@Override
 		public void removeExpiredItems(final long maxLifeTime, final TimeUnit unit) {
+			int removed=0;
 			try {
 				// TODO filter dtos by timestamp
 				final PreparedDtoCollection<TestRunDto> all = testRunDao.getAll(new SimpleFilter());
@@ -136,6 +142,7 @@ public class TestResultController {
 					if (System.currentTimeMillis()>expirationTime) {
 						final List<TestObjectDto> testObjects = testRunDto.getTestObjects();
 						try {
+							removed++;
 							testRunDao.delete(testRunDto.getId());
 						}catch (final Exception e) {
 							logger.warn("Error deleting expired item ", e);
@@ -152,6 +159,7 @@ public class TestResultController {
 			} catch (final StorageException e) {
 				ExcUtils.suppress(e);
 			}
+			logger.info("{} items were cleaned.", removed);
 		}
 	}
 
@@ -178,14 +186,19 @@ public class TestResultController {
 
 		final long exp = etfConfig.getPropertyAsLong(EtfConfigController.ETF_TESTREPORTS_LIFETIME_EXPIRATION);
 		if(exp>0) {
-			timer = new Timer(true);
-			final TimedExpiredItemsRemover timedExpiredItemsRemover = new TimedExpiredItemsRemover();
+			cleanTimer = new Timer(true);
+			// final TimedExpiredItemsRemover timedExpiredItemsRemover = new TimedExpiredItemsRemover();
+			timedExpiredItemsRemover = new TimedExpiredItemsRemover();
 			timedExpiredItemsRemover.addExpirationItemHolder(new TestResultCleaner(testRunDao,
 					dataStorageService.getDao(TestObjectDto.class)), exp, TimeUnit.MINUTES);
-			// first start at least after 10 minutes
-			timer.scheduleAtFixedRate(timedExpiredItemsRemover,
-					Math.min(TimeUnit.MINUTES.toMillis(exp), 600000), TimeUnit.MINUTES.toMillis(exp));
-			logger.info("Test reports are removed after {} minutes", exp);
+			logger.info("Test reports older than {} minutes are removed.", exp);
+			final long expCacheSeconds = TimeUnit.MINUTES.toSeconds(exp);
+			if(expCacheSeconds<Long.valueOf(cacheMaxAgeSeconds)) {
+				cacheMaxAgeSeconds=String.valueOf(expCacheSeconds);
+			}
+			cleanTimer.scheduleAtFixedRate(timedExpiredItemsRemover,
+					TimeUnit.SECONDS.toMillis(TimeUtils.calcDelay(0,9,0)),
+					86400000);
 		}
 
 		logger.info("Result controller initialized!");
@@ -195,8 +208,8 @@ public class TestResultController {
 	private void shutdown() {
 		testRunDao.release();
 
-		if (this.timer != null) {
-			timer.cancel();
+		if (this.cleanTimer != null) {
+			cleanTimer.cancel();
 		}
 	}
 
@@ -265,9 +278,21 @@ public class TestResultController {
 			}
 	}
 
+	private void setMaxAgeHeader(final HttpServletResponse response) {
+		response.setHeader("Cache-Control", "public, max-age="+cacheMaxAgeSeconds);
+	}
+
 	//
 	// Rest interfaces
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@RequestMapping(value = {TEST_RUNS_URL + "/clean"}, method = RequestMethod.GET)
+	public void clean(HttpServletResponse response) throws IOException {
+		timedExpiredItemsRemover.run();
+		response.setStatus(200);
+		response.getWriter().write("OK");
+	}
+
 
 	@ApiOperation(value = "Get multiple Test Results as XML", notes = TEST_RUN_DESCRIPTION, tags = {TEST_RESULTS_TAG_NAME})
 	@RequestMapping(value = {TEST_RUNS_URL + ".xml"}, method = RequestMethod.GET)
@@ -276,6 +301,7 @@ public class TestResultController {
 			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
 			HttpServletRequest request,
 			HttpServletResponse response) throws StorageException, IOException, ObjectWithIdNotFoundException {
+		setMaxAgeHeader(response);
 		streaming.asXml2(testRunDao, request, response, new SimpleFilter(offset, limit));
 	}
 
@@ -286,6 +312,7 @@ public class TestResultController {
 					+ EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request, HttpServletResponse response)
 			throws StorageException, IOException, ObjectWithIdNotFoundException {
+		setMaxAgeHeader(response);
 		streaming.asXml2(testRunDao, request, response, id);
 	}
 
@@ -297,6 +324,7 @@ public class TestResultController {
 			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		setMaxAgeHeader(response);
 		streaming.asJson2(testRunDao, request, response, new SimpleFilter(offset, limit));
 	}
 
@@ -308,6 +336,7 @@ public class TestResultController {
 					+ EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+		setMaxAgeHeader(response);
 		streaming.asJson2(testRunDao, request, response, id);
 	}
 
@@ -325,6 +354,7 @@ public class TestResultController {
 			@ApiParam(value = "Download report", example = "true", allowableValues = "true,false", defaultValue = "false") @RequestParam(value = "download", required = false) String download,
 			HttpServletRequest request,
 			HttpServletResponse response) throws LocalizableApiError {
+		setMaxAgeHeader(response);
 		getByIdHtml(testRunDao, id, download, request, response);
 	}
 
@@ -335,6 +365,7 @@ public class TestResultController {
 			@ApiParam(value = "Test Run ID. "
 					+ EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletResponse response) throws StorageException, IOException, LocalizableApiError {
+		setMaxAgeHeader(response);
 		try {
 			final TestRunDto dto = testRunDao.getById(EidConverter.toEid(id)).getDto();
 			if (dto.getLogPath() != null) {
@@ -375,7 +406,7 @@ public class TestResultController {
 			@PathVariable String id,
 			@PathVariable String attachmentId,
 			HttpServletResponse response) throws ObjectWithIdNotFoundException, StorageException, IOException {
-
+		setMaxAgeHeader(response);
 		final TestTaskResultDto testTaskResultDto = testTaskResultDao.getById(EidConverter.toEid(id)).getDto();
 		final AttachmentDto attachmentDto = testTaskResultDto.getAttachmentById(EidConverter.toEid(attachmentId));
 		if (attachmentDto == null) {
@@ -402,6 +433,7 @@ public class TestResultController {
 					+ EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request, HttpServletResponse response)
 			throws StorageException, IOException, ObjectWithIdNotFoundException {
+		setMaxAgeHeader(response);
 		streaming.asXml2(testTaskResultDao, request, response, id);
 	}
 
@@ -417,6 +449,7 @@ public class TestResultController {
 					+ EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request, HttpServletResponse response)
 			throws StorageException, IOException, ObjectWithIdNotFoundException {
+		setMaxAgeHeader(response);
 		streaming.asJson2(testTaskResultDao, request, response, id);
 	}
 
@@ -434,6 +467,7 @@ public class TestResultController {
 			@ApiParam(value = "Download report", example = "true", allowableValues = "true,false", defaultValue = "false") @RequestParam(value = "download", required = false) String download,
 			HttpServletRequest request,
 			HttpServletResponse response) throws LocalizableApiError {
+		setMaxAgeHeader(response);
 		getByIdHtml(testTaskResultDao, id, download, request, response);
 	}
 
