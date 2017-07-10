@@ -145,6 +145,12 @@ public class LocalizableApiError extends LocalizableError {
 		sc = 400;
 	}
 
+	public LocalizableApiError(final UriUtils.UriNotAnHttpAddressException e) {
+		super("l.uri.noSchema", e, e.getUri().toString());
+		sensitiveInformation = false;
+		sc = 400;
+	}
+
 	public LocalizableApiError(final ObjectWithIdNotFoundException e) {
 		super("l.object.with.eid.not.found", e);
 		sensitiveInformation = false;

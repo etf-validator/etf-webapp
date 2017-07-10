@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.UriUtils;
+import de.interactive_instruments.etf.webapp.controller.EtfConfigController;
 import de.interactive_instruments.exceptions.ExcUtils;
 
 /**
@@ -38,6 +39,10 @@ public class User {
 	};
 
 	public static String getUser(final HttpServletRequest request) {
+		if("false".equals(EtfConfigController.getInstance().
+				getPropertyOrDefault("etf.users.log", "false"))) {
+			return "unknown";
+		}
 		final String remoteAddr = request.getRemoteAddr();
 		try {
 			if (UriUtils.isPrivateNet(remoteAddr)) {
