@@ -434,9 +434,6 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			final String author = testObject.getAuthor();
 			testObject.setLastEditor(SUtils.isNullOrEmpty(author) ? "unknown" : author);
 		}
-		if (testObject.getRemoteResource() == null) {
-			testObject.setRemoteResource(URI.create("http://nowhere"));
-		}
 		testObject.setLocalPath(".");
 		testObject.properties().setProperty("data.downloadable", "false");
 

@@ -34,6 +34,7 @@ import javax.xml.transform.TransformerConfigurationException;
 
 import de.interactive_instruments.*;
 import de.interactive_instruments.etf.dal.dao.PreparedDtoCollection;
+import de.interactive_instruments.etf.dal.dao.basex.BsxPreparedDtoException;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.exceptions.*;
 import org.apache.commons.io.IOUtils;
@@ -131,33 +132,57 @@ public class TestResultController {
 			this.testRunDao = (WriteDao<TestRunDto>) testRunDao;
 			this.testObjectDao = (WriteDao<TestObjectDto>) testObjectDao;
 		}
+
+		private boolean removeTestRun(final TestRunDto testRunDto, final long maxLifeTimeMillis) {
+			boolean removed=false;
+			final long expirationTime = testRunDto.getStartTimestamp().getTime()+maxLifeTimeMillis;
+			if (System.currentTimeMillis()>expirationTime) {
+				final List<TestObjectDto> testObjects = testRunDto.getTestObjects();
+				try {
+					testRunDao.delete(testRunDto.getId());
+					removed=true;
+				}catch (final Exception e) {
+					logger.warn("Error deleting expired item ", e);
+				}
+				for (final TestObjectDto testObjectDto : testObjects) {
+					try {
+						testObjectDao.delete(testObjectDto.getId());
+					}catch (final Exception e) {
+						logger.warn("Error deleting expired item ", e);
+					}
+				}
+			}
+			return removed;
+		}
+
 		@Override
 		public void removeExpiredItems(final long maxLifeTime, final TimeUnit unit) {
 			int removed=0;
 			try {
 				// TODO filter dtos by timestamp
-				final PreparedDtoCollection<TestRunDto> all = testRunDao.getAll(new SimpleFilter());
-				for (final TestRunDto testRunDto : all) {
-					final long expirationTime = testRunDto.getStartTimestamp().getTime()+unit.toMillis(maxLifeTime);
-					if (System.currentTimeMillis()>expirationTime) {
-						final List<TestObjectDto> testObjects = testRunDto.getTestObjects();
-						try {
-							removed++;
-							testRunDao.delete(testRunDto.getId());
-						}catch (final Exception e) {
-							logger.warn("Error deleting expired item ", e);
-						}
-						for (final TestObjectDto testObjectDto : testObjects) {
-							try {
-								testObjectDao.delete(testObjectDto.getId());
-							}catch (final Exception e) {
-								logger.warn("Error deleting expired item ", e);
-							}
-						}
+				final PreparedDtoCollection<TestRunDto> allTestRuns = testRunDao.getAll(new SimpleFilter());
+				for (final TestRunDto testRunDto : allTestRuns) {
+					if(removeTestRun(testRunDto, unit.toMillis(maxLifeTime))) {
+						removed++;
 					}
 				}
-			} catch (final StorageException e) {
-				ExcUtils.suppress(e);
+			} catch (BsxPreparedDtoException | StorageException e) {
+				logger.warn("Using fallback mechanism for safe deletion");
+				try {
+					final Set<EID> allTestRuns = testRunDao.getAll(new SimpleFilter()).keySet();
+					for (final EID id : allTestRuns) {
+						try {
+							final TestRunDto testRunDto = testRunDao.getById(id).getDto();
+							if(removeTestRun(testRunDto, unit.toMillis(maxLifeTime))) {
+								removed++;
+							}
+						}catch (ObjectWithIdNotFoundException | BsxPreparedDtoException | StorageException ign) {
+							ExcUtils.suppress(ign);
+						}
+					}
+				}catch (BsxPreparedDtoException | StorageException ign) {
+					ExcUtils.suppress(ign);
+				}
 			}
 			logger.info("{} items were cleaned.", removed);
 		}
