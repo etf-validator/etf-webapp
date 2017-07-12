@@ -35,6 +35,7 @@ include::../General/Document-metadata.adoc[]
 |  *Date* | *Editor* | *Comments*
 | 2017-05-02 | Jon Herrmann | document created
 | 2017-06-21 | Clemens Portele | editorial updates
+| 2017-07-12 | Jon Herrmann | Test driver development section
 |===
 
 
@@ -131,6 +132,26 @@ NOTE: because the ETF version 2 is not finally released, the next branches must 
 
 Changed components can be installed into the local maven repository with the
 gradle *install* command and be used by the etf-webapp component afterwards.
+
+== Test driver development
+Test drivers are released with the ETF web application. There are integrated
+into the WAR file and extracted into the test driver directory at start up,
+depending on the version numbers of existing test drivers. If the integrated
+test drivers have a higher version number then the test drivers in the test
+driver directory, the old test drivers are deleted and the new test drivers
+are deployed and used.
+
+This mechanism allows to update test drivers without redeploying the whole web
+application.
+
+If you are either developing and testing a test driver without changing the
+version number or you are using a newer snapshot test driver, make sure the
+latest test driver is deployed into the test driver directory.
+
+This means that you need to manually overwrite the test driver or use the
+`gradle install` task in the test driver project. To correctly run the
+install task, you need to set the 'etf.td.deployment.dir' gradle property,
+for example in the settings.gradle or in the system gradle.properties.
 
 == FAQ
 Q: I get a `repository not found` error.

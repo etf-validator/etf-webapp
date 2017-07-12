@@ -23,6 +23,7 @@
 <li><a href="#_compiling_the_source_code">Compiling the source code</a></li>
 <li><a href="#_running_the_web_application">Running the web application</a></li>
 <li><a href="#_building_other_etf_components">Building other ETF components</a></li>
+<li><a href="#_test_driver_development">Test driver development</a></li>
 <li><a href="#_faq">FAQ</a></li>
 </ul>
 </li>
@@ -114,6 +115,11 @@ Testing framework for spatial data and services</span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">2017-06-21</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Clemens Portele</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">editorial updates</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-07-12</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jon Herrmann</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Test driver development section</p></td>
 </tr>
 </tbody>
 </table>
@@ -288,6 +294,34 @@ gradle <strong>install</strong> command and be used by the etf-webapp component 
 </div>
 </div>
 <div class="sect1">
+<h2 id="_test_driver_development">Test driver development</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Test drivers are released with the ETF web application. There are integrated
+into the WAR file and extracted into the test driver directory at start up,
+depending on the version numbers of existing test drivers. If the integrated
+test drivers have a higher version number then the test drivers in the test
+driver directory, the old test drivers are deleted and the new test drivers
+are deployed and used.</p>
+</div>
+<div class="paragraph">
+<p>This mechanism allows to update test drivers without redeploying the whole web
+application.</p>
+</div>
+<div class="paragraph">
+<p>If you are either developing and testing a test driver without changing the
+version number or you are using a newer snapshot test driver, make sure the
+latest test driver is deployed into the test driver directory.</p>
+</div>
+<div class="paragraph">
+<p>This means that you need to manually overwrite the test driver or use the
+<code>gradle install</code> task in the test driver project. To correctly run the
+install task, you need to set the 'etf.td.deployment.dir' gradle property,
+for example in the settings.gradle or in the system gradle.properties.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_faq">FAQ</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -323,7 +357,7 @@ Build-JDK: 1.8.0_102</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-06-26 20:25:44 CEST
+Last updated 2017-07-12 16:57:12 CEST
 </div>
 </div>
 </body>

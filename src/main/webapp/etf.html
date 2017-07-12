@@ -10,12 +10,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="description" content="ETF web application for testing geo network services and data" />
+    <meta name="description" content="ETF web application for testing spatial data and services" />
     <meta name="keywords" lang="en" content="geo, validation, wfs, wms, metadata, dataset, testsuite, etf" />
     <meta name="keywords" lang="de" content="Prüftool, inspire, wfs, wms, etf" />
     <meta name="distribution" content="IU"/>
     <meta name="web_author" content="interactive instruments GmbH"/>
 
+    <meta property="og:title" th:content="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}" />
+    <meta property="og:image" content="http://etf-validator.net/assets/img/ETF_logo.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="ETF is an open source testing framework for validating spatial data,
+        metadata and web services in Spatial Data Infrastructures" />
 
     <title th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}">BRANDING TEXT</title>
 

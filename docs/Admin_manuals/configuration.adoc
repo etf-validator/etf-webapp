@@ -200,7 +200,9 @@ etf.webapp.base.url = http://localhost:8080/etf-webapp
 
 === ETF data directory structure
 
-This chapter describes the strucutre of the ETF data directory.
+This chapter describes the structure of the ETF data directory. The following
+figure shows an example structure, identifiers or version numbers may be
+different in your setup.
 
 NOTE: When ETF is started from a docker image not all directories are mounted
 on the host.
@@ -209,6 +211,7 @@ on the host.
 image::../images/etf-data-dir.png[ETF data directory]
 
 ////
+only works on Windows with Asciidocfx
 [tree,file="../images/etf-data-dir.png"]
 --
 etf
@@ -268,7 +271,7 @@ the case when ETF is run from within a Tomcat application server. Otherwise the
 log file can be found in the ETF data directory below the *logs* subfolder.
 . Executable Test Suites must be installed in the *projects* folder.
 They are automatically (re-)loaded after a short time.
-. estdrivers are loaded from the *td* directory on ETF startup.
+. Testdrivers are loaded from the *td* directory on ETF startup.
 . The *testdata* directory contains uploaded files. XML files are
 indexed in databases in *db/data/etf-tdb-<UUID>* directories during a test run.
 
