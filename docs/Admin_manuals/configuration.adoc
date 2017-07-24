@@ -125,7 +125,7 @@ etf.webapp.base.url = http://localhost:8080/etf-webapp
 # (last user action, error message and stacktrace) to interactive instruments through
 # the third party service platform opbeat (see https://opbeat.com/about for more information).
 # Default: false
-# etf.errors.autoreport=false
+# etf.errors.autoreport = false
 
 
 ##################################################################################
@@ -154,6 +154,9 @@ etf.webapp.base.url = http://localhost:8080/etf-webapp
 # Privacy statement
 # etf.meta.privacystatement.text = Privacy statement ...
 
+# The link to the help page can be overridden with this property.
+# Default: http://docs.etf-validator.net
+# etf.help.page = http://docs.etf-validator.net
 
 #########################################
 ## Directory properties
@@ -165,7 +168,7 @@ etf.webapp.base.url = http://localhost:8080/etf-webapp
 
 # Optional base path
 # Default: ../
-# etf.dir=/data/etf
+# etf.dir = /data/etf
 
 # Directory for the test projects
 # Default: projects

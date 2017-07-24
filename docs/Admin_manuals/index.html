@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" prefix="og: http://ogp.me/ns#">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
@@ -8,9 +8,9 @@
 
 <meta property="og:type" content="article">
 <meta property="og:email" content="etf@interactive-instruments.de">
-<meta property="og:title" content="Administration of an ETF validator">
+<meta property="og:title" content="ETF manuals">
 <meta property="og:site_name" content="Administration of an ETF validator">
-<meta property="og:url" content="docs.etf-validator.net">
+<meta property="og:url" content="http://docs.etf-validator.net/Admin_manuals/index.html">
 <meta property="og:image" content="http://etf-validator.net/assets/img/ETF_logo.png">
 <meta property="article:published_time" content="2017-07-24 CEST">
 <meta property="article:author" content="https://github.com/jonherrmann">
@@ -563,7 +563,7 @@ subfolder '~/.etf'.</p>
 <span class="tok-c"># (last user action, error message and stacktrace) to interactive instruments through</span>
 <span class="tok-c"># the third party service platform opbeat (see https://opbeat.com/about for more information).</span>
 <span class="tok-c"># Default: false</span>
-<span class="tok-c"># etf.errors.autoreport=false</span>
+<span class="tok-c"># etf.errors.autoreport = false</span>
 
 
 <span class="tok-c">##################################################################################</span>
@@ -592,6 +592,9 @@ subfolder '~/.etf'.</p>
 <span class="tok-c"># Privacy statement</span>
 <span class="tok-c"># etf.meta.privacystatement.text = Privacy statement ...</span>
 
+<span class="tok-c"># The link to the help page can be overridden with this property.</span>
+<span class="tok-c"># Default: http://docs.etf-validator.net</span>
+<span class="tok-c"># etf.help.page = http://docs.etf-validator.net</span>
 
 <span class="tok-c">#########################################</span>
 <span class="tok-c">## Directory properties</span>
@@ -603,7 +606,7 @@ subfolder '~/.etf'.</p>
 
 <span class="tok-c"># Optional base path</span>
 <span class="tok-c"># Default: ../</span>
-<span class="tok-c"># etf.dir=/data/etf</span>
+<span class="tok-c"># etf.dir = /data/etf</span>
 
 <span class="tok-c"># Directory for the test projects</span>
 <span class="tok-c"># Default: projects</span>
