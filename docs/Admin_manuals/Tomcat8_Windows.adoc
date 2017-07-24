@@ -66,7 +66,7 @@ See link:https://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html
     </multipart-config>
 ----
 . The application will start and initially create the ETF directory structure in the directory %ALLUSERSPROFILE% (default: C:\ProgramData). If the environment variables TOMCAT_HOME or CATALINA_HOME are set the etf.log file is stored in *%TOMCAT_HOME%\logs\etf.log* or *%CATALINA_HOME%\logs\etf.log* otherwise in *%ALLUSERSPROFILE%\etf\logs\etf.log*
-. Download the link:https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/bsxm/etf-gmlgeox/1.1.0/etf-gmlgeox-1.1.0.jar[latest GmlGeoX library]. Rename the downloaded file to GmlGeoX.jar (note that the file name is case-sensitive!). Afterwards copy the file to *%ALLUSERSPROFILE%\etf\ds\db\repo\de\interactive_instruments\etf\bsxm*.
+. Download the link:https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/bsxm/etf-gmlgeox/1.1.0/etf-gmlgeox-1.1.0.jar[latest GmlGeoX library], using etf-public-dev as user and password. Rename the downloaded file to GmlGeoX.jar (note that the file name is case-sensitive!). Afterwards copy the file to *%ALLUSERSPROFILE%\etf\ds\db\repo\de\interactive_instruments\etf\bsxm*.
 . Download <<ets-installation>> and extract archives into the *%ALLUSERSPROFILE%\etf\projects* directory. The web application will automatically load the Executable Test Suites after a few seconds.
 . The web application can be accessed via link:http://localhost:8080/etf-webapp[http://localhost:8080/etf-webapp].
 If ETF is accessed not only from one local machine, the *etf.webapp.base.url* property must be changed in the <<etf-configuration-dir>> to your server address (e.g. http://etf-server:8080/etf-webapp).

@@ -37,6 +37,7 @@ WARNING: The ETF Web application version 2 beta is not intended for production e
 |  *Date* | *Editor* | *Comments*
 | 2017-04-24 | Jon Herrmann | document converted from GitHub wiki
 | 2017-06-21 | Clemens Portele | editorial updates
+| 2017-06-24 | Jon Herrmann | FAQ added
 |===
 
 <<<
@@ -55,5 +56,7 @@ include::Tomcat8_Linux.adoc[]
 include::configuration.adoc[]
 
 include::ets-installation.adoc[]
+
+include::faq.adoc[]
 
 :numbered!:

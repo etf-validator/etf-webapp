@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
 <head>
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.5">
+
+<meta property="og:type" content="article">
+<meta property="og:email" content="etf@interactive-instruments.de">
+<meta property="og:title" content="Administration of an ETF validator">
+<meta property="og:site_name" content="Administration of an ETF validator">
+<meta property="og:url" content="docs.etf-validator.net">
+<meta property="og:image" content="http://etf-validator.net/assets/img/ETF_logo.png">
+<meta property="article:published_time" content="2017-07-24 CEST">
+<meta property="article:author" content="https://github.com/jonherrmann">
+<meta property="article:author" content="https://github.com/cportele">
+
 <title>Administration of an ETF validator</title>
 <link rel="stylesheet" href="../stylesheets/etf.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
@@ -45,6 +56,7 @@
 <li><a href="#_official_executable_test_suite_repositories">4.2. Official Executable Test Suite repositories</a></li>
 </ul>
 </li>
+<li><a href="#_faq">5. FAQ</a></li>
 </ul>
 </li>
 </ul>
@@ -147,6 +159,11 @@ The ETF Web application version 2 beta is not intended for production environmen
 <td class="tableblock halign-left valign-top"><p class="tableblock">2017-06-21</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Clemens Portele</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">editorial updates</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-06-24</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jon Herrmann</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FAQ added</p></td>
 </tr>
 </tbody>
 </table>
@@ -265,7 +282,7 @@ parameter http.proxyHost must be added:</p>
 <p>The application will start and initially create the ETF directory structure in the directory %ALLUSERSPROFILE% (default: C:\ProgramData). If the environment variables TOMCAT_HOME or CATALINA_HOME are set the etf.log file is stored in <strong>%TOMCAT_HOME%\logs\etf.log</strong> or <strong>%CATALINA_HOME%\logs\etf.log</strong> otherwise in <strong>%ALLUSERSPROFILE%\etf\logs\etf.log</strong></p>
 </li>
 <li>
-<p>Download the <a href="https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/bsxm/etf-gmlgeox/1.1.0/etf-gmlgeox-1.1.0.jar">latest GmlGeoX library</a>. Rename the downloaded file to GmlGeoX.jar (note that the file name is case-sensitive!). Afterwards copy the file to <strong>%ALLUSERSPROFILE%\etf\ds\db\repo\de\interactive_instruments\etf\bsxm</strong>.</p>
+<p>Download the <a href="https://services.interactive-instruments.de/etfdev-af/etf-public-dev/de/interactive_instruments/etf/bsxm/etf-gmlgeox/1.1.0/etf-gmlgeox-1.1.0.jar">latest GmlGeoX library</a>, using etf-public-dev as user and password. Rename the downloaded file to GmlGeoX.jar (note that the file name is case-sensitive!). Afterwards copy the file to <strong>%ALLUSERSPROFILE%\etf\ds\db\repo\de\interactive_instruments\etf\bsxm</strong>.</p>
 </li>
 <li>
 <p>Download <a href="#ets-installation">Executable Test Suites</a> and extract archives into the <strong>%ALLUSERSPROFILE%\etf\projects</strong> directory. The web application will automatically load the Executable Test Suites after a few seconds.</p>
@@ -771,10 +788,23 @@ The Executable Test Suites in the listed repositories only work with ETF version
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_faq">5. FAQ</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Q: I get a <code>Module not found: de.interactive_instruments.etf.bsxm.GmlGeoX</code> error.</p>
+</div>
+<div class="paragraph">
+<p>A: You did not install the required GmlGeoX module or you removed the file
+GmlGeox.jar from <code>etf\ds\db\repo\de\interactive_instruments\etf\bsxm</code>. You can
+fix the problem by (re-)installing the GmlGeoX module.</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-06-26 20:25:44 CEST
+Last updated 2017-07-24 13:23:48 CEST
 </div>
 </div>
 </body>
