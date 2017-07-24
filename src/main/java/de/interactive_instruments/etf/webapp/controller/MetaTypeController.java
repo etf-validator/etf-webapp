@@ -115,7 +115,7 @@ public class MetaTypeController {
 	})
 	@RequestMapping(value = {TEST_ITEM_TYPES_URL + "/{id}", TEST_ITEM_TYPES_URL + "/{id}.json"}, method = RequestMethod.GET)
 	public void testItemTypeByIdJson(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asJson2(testItemTypeDao, request, response, id);
@@ -154,7 +154,7 @@ public class MetaTypeController {
 	})
 	@RequestMapping(value = {TEST_ITEM_TYPES_URL + "/{id}.xml"}, method = RequestMethod.GET)
 	public void testItemTypeByIdXml(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asXml2(testItemTypeDao, request, response, id);
@@ -167,7 +167,7 @@ public class MetaTypeController {
 	})
 	@RequestMapping(value = {TEST_ITEM_TYPES_URL + "/{id}"}, method = RequestMethod.HEAD)
 	public ResponseEntity<String> existsTestItemType(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE) @PathVariable String id)
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id)
 			throws IOException, StorageException, ObjectWithIdNotFoundException {
 		return testItemTypeDao.exists(EidConverter.toEid(id)) ? new ResponseEntity(HttpStatus.NO_CONTENT)
 				: new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -186,7 +186,7 @@ public class MetaTypeController {
 	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL + "/{id}",
 			TRANSLATION_TEMP_BUNDLE_URL + "/{id}.json"}, method = RequestMethod.GET)
 	public void translationTemplateBundleByIdJson(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asJson2(translationTemplateBundleDao, request, response, id);
@@ -229,7 +229,7 @@ public class MetaTypeController {
 	})
 	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL + "/{id}.xml"}, method = RequestMethod.GET)
 	public void translationTemplateBundleByIdXml(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asXml2(translationTemplateBundleDao, request, response, id);
@@ -242,7 +242,7 @@ public class MetaTypeController {
 	})
 	@RequestMapping(value = {TRANSLATION_TEMP_BUNDLE_URL + "/{id}"}, method = RequestMethod.HEAD)
 	public ResponseEntity<String> existsTranslationTemplateBundle(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE) @PathVariable String id)
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id)
 			throws IOException, StorageException, ObjectWithIdNotFoundException {
 		return translationTemplateBundleDao.exists(EidConverter.toEid(id)) ? new ResponseEntity(HttpStatus.NO_CONTENT)
 				: new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -259,7 +259,7 @@ public class MetaTypeController {
 	})
 	@RequestMapping(value = {COMPONENTS_URL + "/{id}", COMPONENTS_URL + "/{id}.json"}, method = RequestMethod.GET)
 	public void componentsByIdJson(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asJson2(componentDao, request, response, id);
@@ -302,7 +302,7 @@ public class MetaTypeController {
 	})
 	@RequestMapping(value = {COMPONENTS_URL + "/{id}.xml"}, method = RequestMethod.GET)
 	public void componentsByIdXml(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asXml2(componentDao, request, response, id);
@@ -315,7 +315,7 @@ public class MetaTypeController {
 	})
 	@RequestMapping(value = {COMPONENTS_URL + "/{id}"}, method = RequestMethod.HEAD)
 	public ResponseEntity<String> existsComponent(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE) @PathVariable String id)
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id)
 			throws IOException, StorageException, ObjectWithIdNotFoundException {
 		return componentDao.exists(EidConverter.toEid(id)) ? new ResponseEntity(HttpStatus.NO_CONTENT)
 				: new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -332,7 +332,7 @@ public class MetaTypeController {
 	})
 	@RequestMapping(value = {TAGS_URL + "/{id}", TAGS_URL + "/{id}.json"}, method = RequestMethod.GET)
 	public void tagsByIdJson(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asJson2(tagDao, request, response, id);
@@ -373,7 +373,7 @@ public class MetaTypeController {
 	})
 	@RequestMapping(value = {TAGS_URL + "/{id}.xml"}, method = RequestMethod.GET)
 	public void tagsByIdXml(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_DESCRIPTION) @PathVariable String id,
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asXml2(tagDao, request, response, id);
@@ -386,7 +386,7 @@ public class MetaTypeController {
 	})
 	@RequestMapping(value = {TAGS_URL + "/{id}"}, method = RequestMethod.HEAD)
 	public ResponseEntity<String> existsTag(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE) @PathVariable String id)
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id)
 			throws IOException, StorageException, ObjectWithIdNotFoundException {
 		return tagDao.exists(EidConverter.toEid(id)) ? new ResponseEntity(HttpStatus.NO_CONTENT)
 				: new ResponseEntity(HttpStatus.NOT_FOUND);

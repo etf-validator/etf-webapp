@@ -652,7 +652,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	})
 	@RequestMapping(value = {TESTOBJECTS_URL + "/{id}/data"}, method = RequestMethod.GET)
 	public void getResources(
-			@ApiParam(value = EID_DESCRIPTION, required = true) @PathVariable String id,
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			final HttpServletResponse response)
 			throws StorageException, IOException, ObjectWithIdNotFoundException, LocalizableApiError {
 		final TestObjectDto testObject = testObjectDao.getById(EidConverter.toEid(id)).getDto();

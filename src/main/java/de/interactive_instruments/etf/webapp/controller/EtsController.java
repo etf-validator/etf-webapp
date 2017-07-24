@@ -132,7 +132,8 @@ public class EtsController {
 			@ApiResponse(code = 404, message = "Executable Test Suite not found")
 	})
 	@RequestMapping(value = {ETS_URL + "/{id}.xml"}, method = RequestMethod.GET)
-	public void executableTestSuiteXmlById(@PathVariable String id, HttpServletRequest request, HttpServletResponse response)
+	public void executableTestSuiteXmlById(
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asXml2(etsDao, request, response, id);
 	}
@@ -145,7 +146,7 @@ public class EtsController {
 	@RequestMapping(value = {ETS_URL + "/{id}",
 			ETS_URL + "/{id}.json"}, method = RequestMethod.GET, produces = "application/json")
 	public void executableTestSuiteJsonById(
-			@PathVariable String id,
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asJson2(etsDao, request, response, id);
@@ -162,7 +163,7 @@ public class EtsController {
 	})
 	@RequestMapping(value = {ETS_URL + "/{id}"}, method = RequestMethod.HEAD)
 	public ResponseEntity<String> exists(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE) @PathVariable String id)
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id)
 			throws IOException, ObjectWithIdNotFoundException {
 		final EID eid = EidConverter.toEid(id);
 		if (etsDao.exists(eid)) {

@@ -85,7 +85,7 @@ public class SwaggerConfig {
 						"etf@interactive-instruments.de"))
 				.license("Apache 2.0")
 				.licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
-				.version("2.0.0-BETA")
+				.version("2.0.0")
 				.build();
 	}
 

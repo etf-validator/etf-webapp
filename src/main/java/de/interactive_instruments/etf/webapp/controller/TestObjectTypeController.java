@@ -137,7 +137,7 @@ public class TestObjectTypeController {
 	})
 	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + "/{id}", TEST_OBJECT_TYPES_URL + "/{id}.json"}, method = RequestMethod.GET)
 	public void testObjectTypesByIdJson(
-			@PathVariable String id,
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asJson2(testObjectTypeDao, request, response, id);
@@ -164,8 +164,10 @@ public class TestObjectTypeController {
 			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Object Types")
 	})
 	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + ".xml"}, method = RequestMethod.GET)
-	public void listTestObjectTypesXml(@RequestParam(required = false, defaultValue = "0") int offset,
-			@RequestParam(required = false, defaultValue = "0") int limit, HttpServletRequest request,
+	public void listTestObjectTypesXml(
+			@RequestParam(required = false, defaultValue = "0") int offset,
+			@RequestParam(required = false, defaultValue = "0") int limit,
+			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asXml2(testObjectTypeDao, request, response, new SimpleFilter(offset, limit));
 	}
@@ -178,7 +180,7 @@ public class TestObjectTypeController {
 	})
 	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + "/{id}.xml"}, method = RequestMethod.GET)
 	public void testObjectTypesByIdXml(
-			@PathVariable String id,
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asXml2(testObjectTypeDao, request, response, id);
