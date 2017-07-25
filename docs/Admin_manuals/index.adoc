@@ -21,15 +21,13 @@ include::../General/Logo.adoc[]
 :doc-warning-work-in-progress: false
 :doc-title: Administration of an ETF validator
 :doc-status: in review
-:doc-date: 2017-06-21
+:doc-date: 2017-06-24
 :doc-description: This document describes how to install and configure an ETF validator.
 :doc-audience: Administrators who want to set up a deployment of the ETF validator. Knowledge about Apache Tomcat 8 are required.
 :doc-id: http://docs.etf-validator.net/Admin_manuals/index.html
 :doc-lang: EN
 
 include::../General/Document-metadata.adoc[]
-
-WARNING: The ETF Web application version 2 beta is not intended for production environments.
 
 == Changelog
 [width="100%",options="header",cols="1,2,3"]
@@ -45,6 +43,8 @@ WARNING: The ETF Web application version 2 beta is not intended for production e
 toc::[]
 
 <<<
+
+include::../General/About-short.adoc[]
 
 :numbered:
 include::docker.adoc[]

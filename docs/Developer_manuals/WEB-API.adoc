@@ -43,6 +43,8 @@ toc::[]
 
 <<<
 
+include::../General/About-short.adoc[]
+
 == Overview
 
 The ETF Web API v2 is used to retrieve Framework metadata, start/observe/manage tests and retrieve test results.
