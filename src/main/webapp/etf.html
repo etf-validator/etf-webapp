@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:og="http://opengraphprotocol.org/schema/"
       lang="en"
       class="ui-mobile ui-mobile-rendering">
 
@@ -10,17 +11,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="description" content="ETF web application for testing spatial data and services" />
+    <meta name="description" content="ETF web application for validating spatial data, metadata and web services" />
     <meta name="keywords" lang="en" content="geo, validation, wfs, wms, metadata, dataset, testsuite, etf" />
     <meta name="keywords" lang="de" content="Prüftool, inspire, wfs, wms, etf" />
     <meta name="distribution" content="IU"/>
     <meta name="web_author" content="interactive instruments GmbH"/>
 
     <meta property="og:title" th:content="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}" />
+    <meta property="og:url" th:content="${T(de.interactive_instruments.etf.webapp.helpers.View).getBaseUrl()}" />
     <meta property="og:image" content="http://etf-validator.net/assets/img/ETF_logo.png" />
-    <meta property="og:type" content="website" />
-    <meta property="og:description" content="ETF is an open source testing framework for validating spatial data,
-        metadata and web services in Spatial Data Infrastructures" />
+    <meta property="og:description" content="ETF is an open source testing framework for validating spatial data, metadata and web services in Spatial Data Infrastructures" />
+    <meta property="og:type" content="WebApplication" />
 
     <title th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}">BRANDING TEXT</title>
 
@@ -56,9 +57,12 @@
 
     <meta name="application-name" th:content="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}"/>
     <meta name="application-major-version" content="2"/>
-    <meta name="msapplication-TileImage" th:content="@{/mstile-144x144.png}" />
+    <meta name="msapplication-TileColor" content=" #2b5797" />
+    <meta name="msapplication-TileImage" th:content="@{/mstile-150x150.png}" />
     <meta name="msapplication-square150x150logo" th:content="@{/mstile-150x150.png}" />
-    <meta name="msapplication-square310x310logo" th:content="@{/310x310.png}" />
+
+    <meta name="robots" content="index,nofollow" />
+    <link rel="canonical" th:href="${T(de.interactive_instruments.etf.webapp.helpers.View).getBaseUrl()}"/>
 
     <link rel="stylesheet" type="text/css"
           href="css/de.interactive-instruments.min.css"

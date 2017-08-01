@@ -43,6 +43,7 @@ define([
 
         initialize: function(options) {
             this.registerViewEvents();
+            this.backPage = options.backPage;
         },
 
         render: function(options) {

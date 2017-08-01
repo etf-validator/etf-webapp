@@ -133,7 +133,9 @@ define([
             this.homeView = new HomeView();
             this.monitorView = new MonitorView();
 
-            this.startTestView = new StartTestView( {} )
+            this.startTestView = new StartTestView({
+                backPage: $("#start-tests")
+            });
 
             this.deleteTestReportView = new DeleteObjectView( {
                 typeName: "Test Report",
