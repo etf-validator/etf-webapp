@@ -45,6 +45,7 @@ apply plugin: 'idea'
 ext.springSecurityVersion = "4.2.3.RELEASE"
 ext.springSecurityOAuth2Version = "2.1.1.RELEASE"
 ext.springVersion = "4.3.9.RELEASE"
+ext.springBootTestVersion = "1.5.5.RELEASE"
 ext.jacksonVersion = "2.8.9"
 ext.springfoxSwaggerVersion = "2.6.1"
 
@@ -163,8 +164,7 @@ dependencies {
     // Testing
     testCompile group: 'junit', name: 'junit', version: etf_junitTestVersion
     testCompile group: 'de.interactive_instruments.etf.test', name: 'etf-unittest', version:'1.0.0'+project.snapshotSuffix
-    testCompile group: 'org.springframework', name: 'spring-test', version: springVersion
-    testCompile group: 'org.easymock', name: 'easymock', version:'3.4'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootTestVersion
     testCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version:'3.4.0'
     testCompile group: 'org.seleniumhq.selenium', name: 'selenium-firefox-driver', version:'3.4.0'
     testCompile group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version:'3.4.0'
