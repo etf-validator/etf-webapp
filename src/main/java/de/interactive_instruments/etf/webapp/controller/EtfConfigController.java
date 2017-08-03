@@ -462,12 +462,12 @@ public class EtfConfigController implements PropertyHolder {
 		tdDir.mkdirs();
 		final IFile.VersionedFileList latestDriverVersions = tdDir.getVersionedFilesInDir();
 
-		// Copy test drivers (will be automatically downloaded in future releases)
+		// Copy test drivers
 		final String tdDirName = "/testdrivers";
 		final Set<String> tds = servletContext.getResourcePaths(tdDirName);
 		for (final String td : tds) {
 			final String testDriverName = td.substring(tdDirName.length());
-			if(latestDriverVersions.isNewer(testDriverName)) {
+			if(!SUtils.isNullOrEmpty(testDriverName) && latestDriverVersions.isNewer(testDriverName)) {
 				logger.info("Installing Test Driver "+testDriverName);
 				final IFile tdJar = new IFile(tdDir, testDriverName);
 				final InputStream jarStream = servletContext.getResourceAsStream(td);
