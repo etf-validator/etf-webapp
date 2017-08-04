@@ -380,6 +380,18 @@ public class EtfConfigController implements PropertyHolder {
 			// Fallback limit 100 MB, only checked in the web interface
 			configProperties.setProperty(ETF_MAX_UPLOAD_SIZE, String.valueOf("104857600"));
 		}
+		try {
+			final long maxUploadSize = getPropertyAsLong(ETF_MAX_UPLOAD_SIZE);
+			final long maxObjectSize = getPropertyAsLong(ETF_TEST_OBJECT_MAX_SIZE);
+			if(maxUploadSize>maxObjectSize) {
+				logger.warn("The property {} should be set to value greater than {} . Defaulting to the value {}",
+						ETF_TEST_OBJECT_MAX_SIZE, ETF_MAX_UPLOAD_SIZE, ETF_MAX_UPLOAD_SIZE);
+				configProperties.setProperty(ETF_TEST_OBJECT_MAX_SIZE, ETF_MAX_UPLOAD_SIZE);
+			}
+		} catch (InvalidPropertyException e) {
+			// Should never happen
+			ExcUtils.suppress(e);
+		}
 
 		plausabilityCheckMinutes(ETF_TESTREPORTS_LIFETIME_EXPIRATION);
 		plausabilityCheckMinutes(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION);
