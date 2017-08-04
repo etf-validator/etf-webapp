@@ -16,6 +16,7 @@
 package de.interactive_instruments.etf.webapp.controller;
 
 import static de.interactive_instruments.etf.webapp.SwaggerConfig.STATUS_TAG_NAME;
+import static de.interactive_instruments.etf.webapp.controller.EtfConfigController.ETF_TEST_OBJECT_MAX_SIZE;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -29,6 +30,9 @@ import javax.xml.bind.JAXBException;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.sun.management.OperatingSystemMXBean;
 
+import de.interactive_instruments.exceptions.ExcUtils;
+import de.interactive_instruments.exceptions.config.InvalidPropertyException;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,6 +165,8 @@ public class StatusController {
 	private OperatingSystemMXBean mbean;
 
 	private final static int updateInterval = 20000;
+	// 5 GB
+	private final static long defaultDiskSpaceAlarm = 5368709120L;
 
 	@Scheduled(fixedDelay = updateInterval)
 	public void watch() {
@@ -170,10 +176,26 @@ public class StatusController {
 
 		final List<String> statusWarningMessages = new ArrayList<>();
 		ServiceStatus status = ServiceStatus.GOOD;
-		final double usableDiskSpace = ((double) tdDir.getFreeSpace()) / ((double) tdDir.getTotalSpace());
+		final long freeSpace = tdDir.getFreeSpace();
+		final double usableDiskSpace = ((double) freeSpace) / ((double) tdDir.getTotalSpace());
 		final double usableMemory = ((double) allocatedMemory) / ((double) Runtime.getRuntime().maxMemory());
-		if (tdDir.getFreeSpace() < 5368709120L) {
-			statusWarningMessages.add("Less then 5 GB disk space available");
+
+		long testObjectMaxSize;
+		try {
+			testObjectMaxSize = config.getPropertyAsLong(ETF_TEST_OBJECT_MAX_SIZE);
+		} catch (InvalidPropertyException e) {
+			// Should never happen
+			ExcUtils.suppress(e);
+			testObjectMaxSize = 5368709120L;
+		}
+
+		if (freeSpace <  testObjectMaxSize) {
+			statusWarningMessages.add("Less then "+ FileUtils.byteCountToDisplaySize(testObjectMaxSize)+
+					" disk space available");
+			status = ServiceStatus.MAJOR;
+		}else if (freeSpace < defaultDiskSpaceAlarm) {
+			statusWarningMessages.add("Less then "+ FileUtils.byteCountToDisplaySize(defaultDiskSpaceAlarm)+
+					" disk space available");
 			status = ServiceStatus.MAJOR;
 		}
 		if (usableDiskSpace < 0.13) {
@@ -184,13 +206,13 @@ public class StatusController {
 		}
 		if (usableMemory > 0.90) {
 			statusWarningMessages.add("Less then 10% RAM available");
-			status = ServiceStatus.MAJOR;
-		}
-		if (presumableFreeMemory < 536870912L) {
-			statusWarningMessages.add("Less then 512 MB RAM available");
 			if (status != ServiceStatus.MAJOR) {
 				status = ServiceStatus.MINOR;
 			}
+		}
+		if (presumableFreeMemory < 536870912L) {
+			statusWarningMessages.add("Less then 512 MB RAM available");
+			status = ServiceStatus.MAJOR;
 		}
 
 		final long modified = System.currentTimeMillis();
