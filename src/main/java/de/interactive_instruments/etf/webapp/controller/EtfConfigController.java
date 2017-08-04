@@ -384,8 +384,9 @@ public class EtfConfigController implements PropertyHolder {
 			final long maxUploadSize = getPropertyAsLong(ETF_MAX_UPLOAD_SIZE);
 			final long maxObjectSize = getPropertyAsLong(ETF_TEST_OBJECT_MAX_SIZE);
 			if(maxUploadSize>maxObjectSize) {
-				logger.warn("The property {} should be set to value greater than {} . Defaulting to the value {}",
-						ETF_TEST_OBJECT_MAX_SIZE, ETF_MAX_UPLOAD_SIZE, ETF_MAX_UPLOAD_SIZE);
+				logger.warn("The value of the {} property should be set to value greater "
+								+ "than the value {} of the {} property.",
+						ETF_TEST_OBJECT_MAX_SIZE, maxUploadSize, ETF_MAX_UPLOAD_SIZE);
 				configProperties.setProperty(ETF_TEST_OBJECT_MAX_SIZE, ETF_MAX_UPLOAD_SIZE);
 			}
 		} catch (InvalidPropertyException e) {
