@@ -176,8 +176,7 @@ public class StatusController {
 
 		final List<String> statusWarningMessages = new ArrayList<>();
 		ServiceStatus status = ServiceStatus.GOOD;
-		final long freeSpace = tdDir.getFreeSpace();
-		final double usableDiskSpace = ((double) freeSpace) / ((double) tdDir.getTotalSpace());
+		final double usableDiskSpace = ((double) tdDir.getFreeSpace()) / ((double) tdDir.getTotalSpace());
 		final double usableMemory = ((double) allocatedMemory) / ((double) Runtime.getRuntime().maxMemory());
 
 		long testObjectMaxSize;
@@ -189,11 +188,12 @@ public class StatusController {
 			testObjectMaxSize = 5368709120L;
 		}
 
-		if (freeSpace <  testObjectMaxSize) {
+		final long freeSpace = tdDir.getFreeSpace();
+		if (tdDir.getFreeSpace() <  testObjectMaxSize) {
 			statusWarningMessages.add("Less then "+ FileUtils.byteCountToDisplaySize(testObjectMaxSize)+
 					" disk space available");
 			status = ServiceStatus.MAJOR;
-		}else if (freeSpace < defaultDiskSpaceAlarm) {
+		}else if (tdDir.getFreeSpace() < defaultDiskSpaceAlarm) {
 			statusWarningMessages.add("Less then "+ FileUtils.byteCountToDisplaySize(defaultDiskSpaceAlarm)+
 					" disk space available");
 			status = ServiceStatus.MAJOR;
@@ -277,6 +277,12 @@ public class StatusController {
 	@RequestMapping(value = "/v2/status", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody ExtendedServiceStatus getStatus() {
 		return serviceStatus.get();
+	}
+
+	public void ensureStatusNotMajor() throws LocalizableApiError {
+		if(ServiceStatus.valueOf(serviceStatus.get().status)==ServiceStatus.MAJOR) {
+			throw new LocalizableApiError("l.system.status.major", false, 503);
+		}
 	}
 
 	public void triggerMaintenance() {

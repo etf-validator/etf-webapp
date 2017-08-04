@@ -85,6 +85,9 @@ public class TestRunController implements TestRunEventListener {
 	private EtfConfigController etfConfig;
 
 	@Autowired
+	private StatusController statusController;
+
+	@Autowired
 	private StreamingService streamingService;
 
 	private Timer timer;
@@ -482,6 +485,8 @@ public class TestRunController implements TestRunEventListener {
 	public void start(@RequestBody @Valid StartTestRunRequest testRunRequest, BindingResult result, HttpServletRequest request,
 			HttpServletResponse response)
 			throws LocalizableApiError, InvalidPropertyException {
+
+		statusController.ensureStatusNotMajor();
 
 		if (result.hasErrors()) {
 			throw new LocalizableApiError(result.getFieldError());

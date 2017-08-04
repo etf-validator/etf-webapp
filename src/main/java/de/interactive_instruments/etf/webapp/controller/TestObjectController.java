@@ -88,6 +88,9 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	private EtfConfigController etfConfig;
 
 	@Autowired
+	private StatusController statusController;
+
+	@Autowired
 	private DataStorageService dataStorageService;
 
 	@Autowired
@@ -618,6 +621,9 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	@RequestMapping(value = {TESTOBJECTS_URL}, params = "action=upload", method = RequestMethod.POST)
 	public TestObjectUpload uploadData(
 			@ApiIgnore final MultipartHttpServletRequest request) throws LocalizableApiError, InvalidPropertyException {
+
+		statusController.ensureStatusNotMajor();
+
 		final TestObjectDto testObject = new TestObjectDto();
 		testObject.setId(EidFactory.getDefault().createRandomId());
 
