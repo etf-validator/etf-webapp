@@ -68,14 +68,26 @@
         <% if(!_.isUndefined(testRun.status)) { %>
             <br/>
             <%
-            var resStatus = testRun.status;
-            if(testRun.status=='PASSED_MANUAL') {
-                status = 'Passed, manual checks required';
-            }else if(testRun.status=='NOT_APPLICABLE') {
-                status = 'Passed, non-applicable test have been omitted';
-            }else if(testRun.skipped=='SKIPPED') {
-                status = 'Tests have been skipped';
-            }
+                var resStatus = testRun.status;
+                if(resStatus == 'PASSED') {
+                    resStatus = 'All test passed';
+                }else if(resStatus == 'UNDEFINED') {
+                    resStatus = 'Undefined, not (yet) executed';
+                }else if(resStatus == 'FAILED') {
+                    resStatus = 'At least one test failed';
+                }else if(resStatus == 'PASSED_MANUAL') {
+                    resStatus = 'Passed, but manual checks are required for non-automated tests';
+                }else if(resStatus == 'INFO') {
+                    resStatus = 'Passed';
+                }else if(resStatus == 'WARNING') {
+                    resStatus = 'Passed, with warning messages';
+                }else if(resStatus == 'INTERNAL_ERROR') {
+                    resStatus = 'A test engine encountered an internal error';
+                }else if(resStatus == 'NOT_APPLICABLE') {
+                    resStatus = 'Passed, but at least one non-applicable test has been omitted';
+                }else if(resStatus == 'SKIPPED') {
+                    resStatus = 'Tests have been skipped';
+                }
             %>
             <span th:text="#{l.Status}" >[[#{l.Status}]]</span>: <span><%= resStatus %></span>
         <% } %>
