@@ -16,10 +16,13 @@ ETF can be used via a responsive web application or via a link:http://docs.etf-v
 
 The easiest way to deploy ETF is a Docker container, available on link:https://hub.docker.com/r/iide/etf-webapp[Docker Hub].
 
-The source code is link:https://github.com/interactive-instruments/etf-webapp[published] under the Apache 2.0 License.
-
 link:http://www.interactive-instruments.de/[interactive instruments] has developed ETF and is the primary maintainer of the software.
 
-The development of ETF version 1 has been funded by several organisations and projects including link:https://www.interactive-instruments.de/[interactive instruments GmbH], the link:http://www.esdin.eu/[ESDIN project], link:https://www.geonovum.nl/[Geonovum] and the Surveying Authorities of the German Laender.
+[.small]
+ETF version 1 (version ≤ 1.0.13): +
+© 2010-2016 interactive instruments GmbH. Licensed under the Apache 2.0 License.
 
-The development of ETF version 2 has been funded by the link:https://joinup.ec.europa.eu/community/are3na/description[ARE3NA action] as part of the link:http://ec.europa.eu/isa/[Interoperability Solutions for European Public Administrations (ISA ) Programme].
+[.small]
+ETF version 2 (version ≥ 2.0.0-beta): +
+© 2017 European Union, interactive instruments GmbH. Licensed under the EUPL. +
+This work was supported by the link:http://ec.europa.eu/isa[EU Interoperability Solutions for European Public Administrations Programme] through link:https://joinup.ec.europa.eu/community/are3na/description[Action 1.17: A Reusable INSPIRE Reference Platform (ARE3NA)].
