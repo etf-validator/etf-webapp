@@ -11,6 +11,7 @@
 :appendix-caption: Annex
 
 :icons: font
+:docinfo: shared
 
 :source-highlighter: pygments
 :pygments-style: autumn
