@@ -14,7 +14,7 @@ ETF component version numbers comply with the [Semantic Versioning Specification
 
 ## Build information
 
-The project can be build and packaged as war path by running the gradlew.sh/.bat wrapper with:
+The project can be build and packaged as WAR file by running the gradlew.sh/.bat wrapper with:
 ```gradle
 $ gradlew build war
 ```
