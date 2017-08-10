@@ -37,6 +37,9 @@ import javax.xml.xpath.XPathFactory;
 
 import de.interactive_instruments.etf.detector.DetectedTestObjectType;
 import de.interactive_instruments.etf.detector.TestObjectTypeNotDetected;
+import de.interactive_instruments.etf.model.capabilities.Resource;
+import de.interactive_instruments.etf.model.capabilities.SecuredResource;
+import de.interactive_instruments.etf.model.capabilities.StdResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,27 +105,21 @@ public class TestObjectTypeController {
 	public void checkAndResolveTypes(final TestObjectDto dto) throws IOException, LocalizableApiError {
 		// First resource is the main resource
 		final ResourceDto resourceDto = dto.getResourceCollection().iterator().next();
-		final URI resource = resourceDto.getUri();
-		final Credentials credentials;
-		if (UriUtils.isFile(resource)) {
-			credentials = null;
+		final Resource resource;
+		if (UriUtils.isFile(resourceDto.getUri())) {
+			resource = new StdResource(resourceDto.getName(), resourceDto.getUri());
 		} else {
-			dto.setRemoteResource(resource);
-			credentials = Credentials.fromProperties(dto.properties());
+			dto.setRemoteResource(resourceDto.getUri());
+			resource = new SecuredResource(resourceDto.getName(),
+					Credentials.fromProperties(dto.properties()), resourceDto.getUri());
 		}
 		final DetectedTestObjectType detectedTestObjectType;
 		try {
-			detectedTestObjectType = TestObjectTypeDetectorManager.detect(resource, credentials);
+			detectedTestObjectType = TestObjectTypeDetectorManager.detect(resource);
 		} catch (final TestObjectTypeNotDetected e) {
 			throw new LocalizableApiError(e);
 		}
-		dto.setTestObjectType(detectedTestObjectType.toTestObjectTypeDto());
-		if(!SUtils.isNullOrEmpty(detectedTestObjectType.getExtractedLabel())) {
-			dto.setLabel(detectedTestObjectType.getExtractedLabel());
-		}
-		if(!SUtils.isNullOrEmpty(detectedTestObjectType.getExtractedDescription())) {
-			dto.setDescription(detectedTestObjectType.getExtractedDescription());
-		}
+		detectedTestObjectType.enrichAndNormalize(dto);
 	}
 
 	//
@@ -139,7 +136,7 @@ public class TestObjectTypeController {
 	public void testObjectTypesByIdJson(
 			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
-			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+			HttpServletResponse response) throws IOException, ObjectWithIdNotFoundException {
 		streaming.asJson2(testObjectTypeDao, request, response, id);
 	}
 
@@ -154,7 +151,7 @@ public class TestObjectTypeController {
 			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
 			HttpServletRequest request,
 			HttpServletResponse response)
-			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
+			throws ConfigurationException, IOException, ObjectWithIdNotFoundException {
 		streaming.asJson2(testObjectTypeDao, request, response, new SimpleFilter(offset, limit));
 	}
 
@@ -168,7 +165,7 @@ public class TestObjectTypeController {
 			@RequestParam(required = false, defaultValue = "0") int offset,
 			@RequestParam(required = false, defaultValue = "0") int limit,
 			HttpServletRequest request,
-			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+			HttpServletResponse response) throws IOException, ObjectWithIdNotFoundException {
 		streaming.asXml2(testObjectTypeDao, request, response, new SimpleFilter(offset, limit));
 	}
 
@@ -182,7 +179,7 @@ public class TestObjectTypeController {
 	public void testObjectTypesByIdXml(
 			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
 			HttpServletRequest request,
-			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+			HttpServletResponse response) throws IOException, ObjectWithIdNotFoundException {
 		streaming.asXml2(testObjectTypeDao, request, response, id);
 	}
 }
