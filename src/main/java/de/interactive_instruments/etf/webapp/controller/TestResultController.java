@@ -32,11 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
 
-import de.interactive_instruments.*;
-import de.interactive_instruments.etf.dal.dao.PreparedDtoCollection;
-import de.interactive_instruments.etf.dal.dao.basex.BsxPreparedDtoException;
-import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
-import de.interactive_instruments.exceptions.*;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,11 +41,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import de.interactive_instruments.*;
 import de.interactive_instruments.etf.EtfConstants;
 import de.interactive_instruments.etf.dal.dao.Dao;
 import de.interactive_instruments.etf.dal.dao.PreparedDto;
+import de.interactive_instruments.etf.dal.dao.PreparedDtoCollection;
 import de.interactive_instruments.etf.dal.dao.WriteDao;
+import de.interactive_instruments.etf.dal.dao.basex.BsxPreparedDtoException;
 import de.interactive_instruments.etf.dal.dto.Dto;
+import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.etf.dal.dto.result.AttachmentDto;
 import de.interactive_instruments.etf.dal.dto.result.TestResultStatus;
 import de.interactive_instruments.etf.dal.dto.result.TestTaskResultDto;
@@ -63,6 +62,7 @@ import de.interactive_instruments.etf.webapp.conversion.EidConverter;
 import de.interactive_instruments.etf.webapp.dto.AttachmentCollection;
 import de.interactive_instruments.etf.webapp.helpers.CacheControl;
 import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
+import de.interactive_instruments.exceptions.*;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
 
 import io.swagger.annotations.ApiOperation;
@@ -127,6 +127,7 @@ public class TestResultController {
 		private final WriteDao<TestRunDto> testRunDao;
 		private final WriteDao<TestObjectDto> testObjectDao;
 		private final static Logger logger = LoggerFactory.getLogger(TestResultCleaner.class);
+
 		private TestResultCleaner(final Dao<TestRunDto> testRunDao,
 				final Dao<TestObjectDto> testObjectDao) {
 			this.testRunDao = (WriteDao<TestRunDto>) testRunDao;
@@ -134,20 +135,20 @@ public class TestResultController {
 		}
 
 		private boolean removeTestRun(final TestRunDto testRunDto, final long maxLifeTimeMillis) {
-			boolean removed=false;
-			final long expirationTime = testRunDto.getStartTimestamp().getTime()+maxLifeTimeMillis;
-			if (System.currentTimeMillis()>expirationTime) {
+			boolean removed = false;
+			final long expirationTime = testRunDto.getStartTimestamp().getTime() + maxLifeTimeMillis;
+			if (System.currentTimeMillis() > expirationTime) {
 				final List<TestObjectDto> testObjects = testRunDto.getTestObjects();
 				try {
 					testRunDao.delete(testRunDto.getId());
-					removed=true;
-				}catch (final Exception e) {
+					removed = true;
+				} catch (final Exception e) {
 					logger.warn("Error deleting expired item ", e);
 				}
 				for (final TestObjectDto testObjectDto : testObjects) {
 					try {
 						testObjectDao.delete(testObjectDto.getId());
-					}catch (final Exception e) {
+					} catch (final Exception e) {
 						logger.warn("Error deleting expired item ", e);
 					}
 				}
@@ -157,12 +158,12 @@ public class TestResultController {
 
 		@Override
 		public void removeExpiredItems(final long maxLifeTime, final TimeUnit unit) {
-			int removed=0;
+			int removed = 0;
 			try {
 				// TODO filter dtos by timestamp
 				final PreparedDtoCollection<TestRunDto> allTestRuns = testRunDao.getAll(new SimpleFilter());
 				for (final TestRunDto testRunDto : allTestRuns) {
-					if(removeTestRun(testRunDto, unit.toMillis(maxLifeTime))) {
+					if (removeTestRun(testRunDto, unit.toMillis(maxLifeTime))) {
 						removed++;
 					}
 				}
@@ -173,14 +174,14 @@ public class TestResultController {
 					for (final EID id : allTestRuns) {
 						try {
 							final TestRunDto testRunDto = testRunDao.getById(id).getDto();
-							if(removeTestRun(testRunDto, unit.toMillis(maxLifeTime))) {
+							if (removeTestRun(testRunDto, unit.toMillis(maxLifeTime))) {
 								removed++;
 							}
-						}catch (ObjectWithIdNotFoundException | BsxPreparedDtoException | StorageException ign) {
+						} catch (ObjectWithIdNotFoundException | BsxPreparedDtoException | StorageException ign) {
 							ExcUtils.suppress(ign);
 						}
 					}
-				}catch (BsxPreparedDtoException | StorageException ign) {
+				} catch (BsxPreparedDtoException | StorageException ign) {
 					ExcUtils.suppress(ign);
 				}
 			}
@@ -210,7 +211,7 @@ public class TestResultController {
 		streaming.prepareCache(testRunDao, new SimpleFilter());
 
 		final long exp = etfConfig.getPropertyAsLong(EtfConfigController.ETF_TESTREPORTS_LIFETIME_EXPIRATION);
-		if(exp>0) {
+		if (exp > 0) {
 			cleanTimer = new Timer(true);
 			// final TimedExpiredItemsRemover timedExpiredItemsRemover = new TimedExpiredItemsRemover();
 			timedExpiredItemsRemover = new TimedExpiredItemsRemover();
@@ -218,11 +219,11 @@ public class TestResultController {
 					dataStorageService.getDao(TestObjectDto.class)), exp, TimeUnit.MINUTES);
 			logger.info("Test reports older than {} minutes are removed.", exp);
 			final long expCacheSeconds = TimeUnit.MINUTES.toSeconds(exp);
-			if(expCacheSeconds<Long.valueOf(cacheMaxAgeSeconds)) {
-				cacheMaxAgeSeconds=String.valueOf(expCacheSeconds);
+			if (expCacheSeconds < Long.valueOf(cacheMaxAgeSeconds)) {
+				cacheMaxAgeSeconds = String.valueOf(expCacheSeconds);
 			}
 			cleanTimer.scheduleAtFixedRate(timedExpiredItemsRemover,
-					TimeUnit.SECONDS.toMillis(TimeUtils.calcDelay(0,9,0)),
+					TimeUnit.SECONDS.toMillis(TimeUtils.calcDelay(0, 9, 0)),
 					86400000);
 		}
 
@@ -237,7 +238,6 @@ public class TestResultController {
 			cleanTimer.cancel();
 		}
 	}
-
 
 	public void storeTestRun(final TestRunDto testRunDto) throws StorageException {
 		// create copy and remove test task result ids
@@ -304,7 +304,7 @@ public class TestResultController {
 	}
 
 	private void setMaxAgeHeader(final HttpServletResponse response) {
-		response.setHeader("Cache-Control", "public, max-age="+cacheMaxAgeSeconds);
+		response.setHeader("Cache-Control", "public, max-age=" + cacheMaxAgeSeconds);
 	}
 
 	//
@@ -317,7 +317,6 @@ public class TestResultController {
 		response.setStatus(200);
 		response.getWriter().write("OK");
 	}
-
 
 	@ApiOperation(value = "Get multiple Test Results as XML", notes = TEST_RUN_DESCRIPTION, tags = {TEST_RESULTS_TAG_NAME})
 	@RequestMapping(value = {TEST_RUNS_URL + ".xml"}, method = RequestMethod.GET)

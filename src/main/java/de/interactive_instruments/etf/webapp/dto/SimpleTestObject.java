@@ -28,6 +28,8 @@ import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.springframework.web.util.HtmlUtils;
+
 import de.interactive_instruments.Credentials;
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.UriUtils;
@@ -41,7 +43,6 @@ import de.interactive_instruments.exceptions.StorageException;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.web.util.HtmlUtils;
 
 /**
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )

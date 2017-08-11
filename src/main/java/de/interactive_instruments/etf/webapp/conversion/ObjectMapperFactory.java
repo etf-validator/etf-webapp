@@ -29,17 +29,17 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
-import de.interactive_instruments.*;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.web.util.HtmlUtils;
 
+import de.interactive_instruments.*;
 import de.interactive_instruments.etf.dal.dto.Dto;
 import de.interactive_instruments.etf.dal.dto.ModelItemDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
 import de.interactive_instruments.etf.dal.dto.translation.TranslationTemplateDto;
 import de.interactive_instruments.etf.model.EID;
-import org.springframework.web.util.HtmlUtils;
 
 /**
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
@@ -108,13 +108,14 @@ public class ObjectMapperFactory implements FactoryBean<ObjectMapper> {
 
 		@Override
 		public SerializableString getEscapeSequence(int ch) {
-			return new SerializedString("\\u"+String.format("%04x", ch));
+			return new SerializedString("\\u" + String.format("%04x", ch));
 		}
 	}
 
 	public static class JsonHtmlXssDeserializer extends JsonDeserializer<String> {
 		@Override
-		public String deserialize(final JsonParser jp, final DeserializationContext ctxt) throws IOException, JsonProcessingException {
+		public String deserialize(final JsonParser jp, final DeserializationContext ctxt)
+				throws IOException, JsonProcessingException {
 			final JsonNode node = jp.getCodec().readTree(jp);
 			return HtmlUtils.htmlEscape(node.asText());
 		}

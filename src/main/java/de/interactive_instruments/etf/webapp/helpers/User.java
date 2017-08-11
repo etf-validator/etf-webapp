@@ -39,8 +39,7 @@ public class User {
 	};
 
 	public static String getUser(final HttpServletRequest request) {
-		if("false".equals(EtfConfigController.getInstance().
-				getPropertyOrDefault("etf.users.log", "false"))) {
+		if ("false".equals(EtfConfigController.getInstance().getPropertyOrDefault("etf.users.log", "false"))) {
 			return "unknown";
 		}
 		final String remoteAddr = request.getRemoteAddr();

@@ -133,7 +133,8 @@ public class EtsController {
 	})
 	@RequestMapping(value = {ETS_URL + "/{id}.xml"}, method = RequestMethod.GET)
 	public void executableTestSuiteXmlById(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id, HttpServletRequest request, HttpServletResponse response)
+			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
+			HttpServletRequest request, HttpServletResponse response)
 			throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asXml2(etsDao, request, response, id);
 	}

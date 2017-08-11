@@ -30,8 +30,6 @@ import javax.xml.bind.JAXBException;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.sun.management.OperatingSystemMXBean;
 
-import de.interactive_instruments.exceptions.ExcUtils;
-import de.interactive_instruments.exceptions.config.InvalidPropertyException;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +44,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.interactive_instruments.IFile;
+import de.interactive_instruments.exceptions.ExcUtils;
+import de.interactive_instruments.exceptions.config.InvalidPropertyException;
 import de.interactive_instruments.exceptions.config.MissingPropertyException;
 import io.swagger.annotations.*;
 
@@ -189,12 +189,12 @@ public class StatusController {
 		}
 
 		final long freeSpace = tdDir.getFreeSpace();
-		if (tdDir.getFreeSpace() <  testObjectMaxSize) {
-			statusWarningMessages.add("Less then "+ FileUtils.byteCountToDisplaySize(testObjectMaxSize)+
+		if (tdDir.getFreeSpace() < testObjectMaxSize) {
+			statusWarningMessages.add("Less then " + FileUtils.byteCountToDisplaySize(testObjectMaxSize) +
 					" disk space available");
 			status = ServiceStatus.MAJOR;
-		}else if (tdDir.getFreeSpace() < defaultDiskSpaceAlarm) {
-			statusWarningMessages.add("Less then "+ FileUtils.byteCountToDisplaySize(defaultDiskSpaceAlarm)+
+		} else if (tdDir.getFreeSpace() < defaultDiskSpaceAlarm) {
+			statusWarningMessages.add("Less then " + FileUtils.byteCountToDisplaySize(defaultDiskSpaceAlarm) +
 					" disk space available");
 			status = ServiceStatus.MAJOR;
 		}
@@ -280,7 +280,7 @@ public class StatusController {
 	}
 
 	public void ensureStatusNotMajor() throws LocalizableApiError {
-		if(ServiceStatus.valueOf(serviceStatus.get().status)==ServiceStatus.MAJOR) {
+		if (ServiceStatus.valueOf(serviceStatus.get().status) == ServiceStatus.MAJOR) {
 			throw new LocalizableApiError("l.system.status.major", false, 503);
 		}
 	}

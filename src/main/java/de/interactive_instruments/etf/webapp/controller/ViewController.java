@@ -18,6 +18,8 @@ package de.interactive_instruments.etf.webapp.controller;
 import static de.interactive_instruments.etf.webapp.controller.EtfConfigController.ETF_MAX_UPLOAD_SIZE;
 import static de.interactive_instruments.etf.webapp.controller.EtfConfigController.ETF_TESTREPORTS_LIFETIME_EXPIRATION;
 
+import java.util.concurrent.TimeUnit;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +30,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
@@ -52,9 +52,9 @@ public class ViewController {
 				configController.getPropertyAsLong(ETF_MAX_UPLOAD_SIZE));
 
 		final long reportExp = configController.getPropertyAsLong(ETF_TESTREPORTS_LIFETIME_EXPIRATION);
-		if(reportExp>0) {
+		if (reportExp > 0) {
 			model.addAttribute("maxTestRunLifetime",
-					DurationFormatUtils.formatDurationWords(TimeUnit.MINUTES.toMillis(reportExp),true, true));
+					DurationFormatUtils.formatDurationWords(TimeUnit.MINUTES.toMillis(reportExp), true, true));
 		}
 
 		return "etf";

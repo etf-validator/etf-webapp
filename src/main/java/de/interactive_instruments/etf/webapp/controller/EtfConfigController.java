@@ -31,7 +31,6 @@ import javax.servlet.ServletContext;
 
 import ch.qos.logback.classic.Level;
 
-import de.interactive_instruments.exceptions.config.InvalidPropertyException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.apache.commons.lang.SystemUtils;
@@ -52,6 +51,7 @@ import de.interactive_instruments.LogUtils;
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.etf.EtfConstants;
 import de.interactive_instruments.exceptions.ExcUtils;
+import de.interactive_instruments.exceptions.config.InvalidPropertyException;
 import de.interactive_instruments.exceptions.config.MissingPropertyException;
 import de.interactive_instruments.properties.PropertyHolder;
 import de.interactive_instruments.properties.PropertyUtils;
@@ -383,9 +383,9 @@ public class EtfConfigController implements PropertyHolder {
 		try {
 			final long maxUploadSize = getPropertyAsLong(ETF_MAX_UPLOAD_SIZE);
 			final long maxObjectSize = getPropertyAsLong(ETF_TEST_OBJECT_MAX_SIZE);
-			if(maxUploadSize>maxObjectSize) {
+			if (maxUploadSize > maxObjectSize) {
 				logger.warn("The value of the {} property should be set to value greater "
-								+ "than the value {} of the {} property.",
+						+ "than the value {} of the {} property.",
 						ETF_TEST_OBJECT_MAX_SIZE, maxUploadSize, ETF_MAX_UPLOAD_SIZE);
 				configProperties.setProperty(ETF_TEST_OBJECT_MAX_SIZE, ETF_MAX_UPLOAD_SIZE);
 			}
@@ -396,7 +396,6 @@ public class EtfConfigController implements PropertyHolder {
 
 		plausabilityCheckMinutes(ETF_TESTREPORTS_LIFETIME_EXPIRATION);
 		plausabilityCheckMinutes(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION);
-
 
 		configProperties.forEach((k, v) -> logger.info(k + " = " + v));
 		instance = this;
@@ -413,17 +412,17 @@ public class EtfConfigController implements PropertyHolder {
 			configProperties.setProperty(property, defaultVal);
 			return;
 		}
-		if(minutes<0) {
+		if (minutes < 0) {
 			logger.error("{} : a negative value is not allowed: {}. Setting default value: {}",
 					property, minutes, defaultVal);
 			configProperties.setProperty(property, defaultVal);
-		}else if(minutes<20 && logger.isDebugEnabled()) {
+		} else if (minutes < 20 && logger.isDebugEnabled()) {
 			// Values less than 20 minutes are allowed in debug mode
-			logger.error("{} : a value less than 20 minutes ( {} ) can interfere with the Test "
-							+ "Runs. Setting default value: {}",
+			logger.error("{} : a value less than 20 minutes ( {}) can interfere with the Test "
+					+ "Runs. Setting default value: {}",
 					property, minutes, defaultVal);
 			configProperties.setProperty(property, defaultVal);
-		}else if(minutes>131400) {
+		} else if (minutes > 131400) {
 			logger.warn("{} : a value higher than 3 month might be be very optimistic: {}",
 					property, minutes);
 			configProperties.setProperty(property, defaultVal);
@@ -480,8 +479,8 @@ public class EtfConfigController implements PropertyHolder {
 		final Set<String> tds = servletContext.getResourcePaths(tdDirName);
 		for (final String td : tds) {
 			final String testDriverName = td.substring(tdDirName.length());
-			if(!SUtils.isNullOrEmpty(testDriverName) && latestDriverVersions.isNewer(testDriverName)) {
-				logger.info("Installing Test Driver "+testDriverName);
+			if (!SUtils.isNullOrEmpty(testDriverName) && latestDriverVersions.isNewer(testDriverName)) {
+				logger.info("Installing Test Driver " + testDriverName);
 				final IFile tdJar = new IFile(tdDir, testDriverName);
 				final InputStream jarStream = servletContext.getResourceAsStream(td);
 				try (final FileOutputStream out = new FileOutputStream(tdJar)) {

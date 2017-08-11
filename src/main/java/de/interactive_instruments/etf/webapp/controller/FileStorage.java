@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import de.interactive_instruments.exceptions.IOsizeLimitExceededException;
 import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +32,7 @@ import de.interactive_instruments.IFile;
 import de.interactive_instruments.MimeTypeUtils;
 import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.etf.dal.dto.MetaDataItemDto;
+import de.interactive_instruments.exceptions.IOsizeLimitExceededException;
 import de.interactive_instruments.io.FileContentFilterHolder;
 import de.interactive_instruments.io.MultiFileFilter;
 
@@ -127,7 +127,7 @@ class FileStorage {
 					}
 				}
 				checkSize(destinationSubDir);
-			}catch(IOsizeLimitExceededException e) {
+			} catch (IOsizeLimitExceededException e) {
 				throw new LocalizableApiError("l.max.download.size.exceeded", false, 400, e, maxStorageSizeHr);
 			}
 			return destinationSubDir;
@@ -185,7 +185,7 @@ class FileStorage {
 	}
 
 	private void checkSize(final IFile storageSubDir) throws IOsizeLimitExceededException {
-		if(FileUtils.sizeOfDirectory(storageSubDir)>maxStorageSize) {
+		if (FileUtils.sizeOfDirectory(storageSubDir) > maxStorageSize) {
 			throw new IOsizeLimitExceededException(maxStorageSize);
 		}
 	}
