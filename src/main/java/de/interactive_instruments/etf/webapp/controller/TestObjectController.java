@@ -39,7 +39,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
-import de.interactive_instruments.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.slf4j.Logger;
@@ -55,6 +54,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import springfox.documentation.annotations.ApiIgnore;
 
+import de.interactive_instruments.*;
 import de.interactive_instruments.etf.dal.dao.*;
 import de.interactive_instruments.etf.dal.dto.capabilities.ResourceDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
@@ -130,22 +130,22 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			this.testObjectDao = (WriteDao<TestObjectDto>) testObjectDao;
 			this.testDataDir = testDataDir;
 		}
+
 		@Override
 		public void removeExpiredItems(final long maxLifeTime, final TimeUnit unit) {
-			int removed=0;
+			int removed = 0;
 			try {
 				// TODO filter dtos by timestamp and temporary property
 				final PreparedDtoCollection<TestObjectDto> all = testObjectDao.getAll(new SimpleFilter());
 				for (final TestObjectDto testObjectDto : all) {
-					if("true".equals(testObjectDto.properties().
-							getPropertyOrDefault("temporary", "false"))) {
-						final long expirationTime = testObjectDto.getCreationDate().getTime()+unit.toMillis(maxLifeTime);
-						if (System.currentTimeMillis()>expirationTime) {
+					if ("true".equals(testObjectDto.properties().getPropertyOrDefault("temporary", "false"))) {
+						final long expirationTime = testObjectDto.getCreationDate().getTime() + unit.toMillis(maxLifeTime);
+						if (System.currentTimeMillis() > expirationTime) {
 							final Map<String, ResourceDto> res = testObjectDto.getResources();
-							if(res!=null) {
+							if (res != null) {
 								for (final ResourceDto resourceDto : res.values()) {
 									final URI uri = resourceDto.getUri();
-									if(UriUtils.isFile(uri)) {
+									if (UriUtils.isFile(uri)) {
 										final IFile dir = testDataDir.secureExpandPathDown(uri.getPath());
 										try {
 											removed++;
@@ -221,12 +221,13 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		testObjectDao = ((WriteDao<TestObjectDto>) dataStorageService.getDao(TestObjectDto.class));
 
 		final long exp = etfConfig.getPropertyAsLong(EtfConfigController.ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION);
-		if(exp>0) {
+		if (exp > 0) {
 			cleanTimer = new Timer(true);
 			final TimedExpiredItemsRemover timedExpiredItemsRemover = new TimedExpiredItemsRemover();
-			timedExpiredItemsRemover.addExpirationItemHolder(new TestObjectCleaner(testObjectDao, testDataDir), exp, TimeUnit.MINUTES);
+			timedExpiredItemsRemover.addExpirationItemHolder(new TestObjectCleaner(testObjectDao, testDataDir), exp,
+					TimeUnit.MINUTES);
 			cleanTimer.scheduleAtFixedRate(timedExpiredItemsRemover,
-					TimeUnit.SECONDS.toMillis(TimeUtils.calcDelay(0,9,0)),
+					TimeUnit.SECONDS.toMillis(TimeUtils.calcDelay(0, 9, 0)),
 					86400000);
 			logger.info("Temporary Test Objects older than {} minutes are removed.", exp);
 		}
@@ -405,7 +406,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	}
 
 	// Main entry point for Test Run contoller
-	public void initResourcesAndAdd(final TestObjectDto testObject)
+	public void initResourcesAndAdd(final TestObjectDto testObject, final Set<EID> supportedTestObjectTypes)
 			throws StorageException, IOException, ObjectWithIdNotFoundException, LocalizableApiError, InvalidPropertyException {
 
 		// If the ID is null, the Test Object references external data
@@ -428,7 +429,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 				testObject.setAuthor("unknown");
 			}
 		}
-		testObjectTypeController.checkAndResolveTypes(testObject);
+		testObjectTypeController.checkAndResolveTypes(testObject, supportedTestObjectTypes);
 		// otherwise it contains all required types.
 
 		testObject.setVersionFromStr("1.0.0");
@@ -620,7 +621,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	})
 	@RequestMapping(value = {TESTOBJECTS_URL}, params = "action=upload", method = RequestMethod.POST)
 	public TestObjectUpload uploadData(
-			@ApiIgnore final MultipartHttpServletRequest request) throws LocalizableApiError, InvalidPropertyException {
+			@ApiIgnore final MultipartHttpServletRequest request)
+			throws LocalizableApiError, InvalidPropertyException, ObjectWithIdNotFoundException {
 
 		statusController.ensureStatusNotMajor();
 
@@ -631,7 +633,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			// Create from upload
 			createWithFileResources(testObject, request.getMultiFileMap().values());
 
-			testObjectTypeController.checkAndResolveTypes(testObject);
+			testObjectTypeController.checkAndResolveTypes(testObject, null);
 		} catch (StorageException e) {
 			throw new LocalizableApiError(e);
 		} catch (IOException e) {
@@ -646,7 +648,6 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		testObject.setLabel(testObjectUpload.getNameForUpload());
 		return testObjectUpload;
 	}
-
 
 	@ApiOperation(value = "Get all Test Object resources", notes = "Download the Test Object - as long as the creator did not set the 'data.downloadable' property to 'false'.", tags = {
 			TEST_OBJECTS_TAG_NAME})

@@ -25,8 +25,6 @@ import javax.validation.ConstraintViolation;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import de.interactive_instruments.etf.detector.TestObjectTypeNotDetected;
-import de.interactive_instruments.exceptions.IOsizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -34,7 +32,10 @@ import org.springframework.validation.FieldError;
 import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.etf.LocalizableError;
 import de.interactive_instruments.etf.component.ComponentLoadingException;
+import de.interactive_instruments.etf.detector.IncompatibleTestObjectTypeException;
+import de.interactive_instruments.etf.detector.TestObjectTypeNotDetected;
 import de.interactive_instruments.etf.webapp.dto.StartTestRunRequest;
+import de.interactive_instruments.exceptions.IOsizeLimitExceededException;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
@@ -109,6 +110,12 @@ public class LocalizableApiError extends LocalizableError {
 
 	public LocalizableApiError(final TestObjectTypeNotDetected e) {
 		super("l.testObject.type.not.detected", e);
+		sensitiveInformation = false;
+		sc = 400;
+	}
+
+	public LocalizableApiError(final IncompatibleTestObjectTypeException e) {
+		super("l.testObject.type.incomaptible", e, e.getDetectedTestObjectType().getLabel());
 		sensitiveInformation = false;
 		sc = 400;
 	}

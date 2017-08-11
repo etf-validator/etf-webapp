@@ -35,11 +35,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
-import de.interactive_instruments.etf.detector.DetectedTestObjectType;
-import de.interactive_instruments.etf.detector.TestObjectTypeNotDetected;
-import de.interactive_instruments.etf.model.capabilities.Resource;
-import de.interactive_instruments.etf.model.capabilities.SecuredResource;
-import de.interactive_instruments.etf.model.capabilities.StdResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +50,15 @@ import de.interactive_instruments.etf.dal.dao.WriteDao;
 import de.interactive_instruments.etf.dal.dto.capabilities.ResourceDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectTypeDto;
+import de.interactive_instruments.etf.detector.DetectedTestObjectType;
+import de.interactive_instruments.etf.detector.IncompatibleTestObjectTypeException;
 import de.interactive_instruments.etf.detector.TestObjectTypeDetectorManager;
+import de.interactive_instruments.etf.detector.TestObjectTypeNotDetected;
 import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.model.EidMap;
+import de.interactive_instruments.etf.model.capabilities.Resource;
+import de.interactive_instruments.etf.model.capabilities.SecuredResource;
+import de.interactive_instruments.etf.model.capabilities.StdResource;
 import de.interactive_instruments.etf.webapp.WebAppConstants;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
 import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
@@ -102,7 +103,9 @@ public class TestObjectTypeController {
 		logger.info("Test Object Type controller initialized");
 	}
 
-	public void checkAndResolveTypes(final TestObjectDto dto) throws IOException, LocalizableApiError {
+	public void checkAndResolveTypes(final TestObjectDto dto, final Set<EID> expectedTypes)
+			throws IOException, LocalizableApiError,
+			ObjectWithIdNotFoundException {
 		// First resource is the main resource
 		final ResourceDto resourceDto = dto.getResourceCollection().iterator().next();
 		final Resource resource;
@@ -115,8 +118,10 @@ public class TestObjectTypeController {
 		}
 		final DetectedTestObjectType detectedTestObjectType;
 		try {
-			detectedTestObjectType = TestObjectTypeDetectorManager.detect(resource);
+			detectedTestObjectType = TestObjectTypeDetectorManager.detect(resource, expectedTypes);
 		} catch (final TestObjectTypeNotDetected e) {
+			throw new LocalizableApiError(e);
+		} catch (IncompatibleTestObjectTypeException e) {
 			throw new LocalizableApiError(e);
 		}
 		detectedTestObjectType.enrichAndNormalize(dto);

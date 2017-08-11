@@ -50,7 +50,9 @@ import de.interactive_instruments.etf.dal.dao.Dao;
 import de.interactive_instruments.etf.dal.dao.WriteDao;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.etf.dal.dto.run.TestRunDto;
+import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
 import de.interactive_instruments.etf.model.EID;
+import de.interactive_instruments.etf.model.EidHolder;
 import de.interactive_instruments.etf.testdriver.*;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
 import de.interactive_instruments.etf.webapp.dto.ApiError;
@@ -502,7 +504,12 @@ public class TestRunController implements TestRunEventListener {
 			final TestObjectDto tO = testRunDto.getTestObjects().get(0);
 
 			tO.setAuthor(User.getUser(request));
-			testObjectController.initResourcesAndAdd(tO);
+
+			final Set<EID> requiredTestObjectTypeIds = new HashSet<>();
+			for (final ExecutableTestSuiteDto ets : testRunDto.getExecutableTestSuites()) {
+				requiredTestObjectTypeIds.addAll(EidHolder.getAllIds(ets.getSupportedTestObjectTypes()));
+			}
+			testObjectController.initResourcesAndAdd(tO, requiredTestObjectTypeIds);
 
 			// Check if test object is already in use
 			for (TestRun tR : taskPoolRegistry.getTasks()) {
