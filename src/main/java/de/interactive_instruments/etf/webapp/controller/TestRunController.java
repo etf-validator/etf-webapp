@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import de.interactive_instruments.etf.model.EidHolderWithParent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -505,9 +506,19 @@ public class TestRunController implements TestRunEventListener {
 
 			tO.setAuthor(User.getUser(request));
 
+			// Add all Test Object Types supported by the first ETS
 			final Set<EID> requiredTestObjectTypeIds = new HashSet<>();
-			for (final ExecutableTestSuiteDto ets : testRunDto.getExecutableTestSuites()) {
-				requiredTestObjectTypeIds.addAll(EidHolder.getAllIds(ets.getSupportedTestObjectTypes()));
+			final Iterator<ExecutableTestSuiteDto> etsIterator = testRunDto.getExecutableTestSuites().iterator();
+
+			requiredTestObjectTypeIds.addAll(EidHolderWithParent.getAllIdsAndParentIds(etsIterator.next().getSupportedTestObjectTypes()));
+			// now iterate over the other ETS and delete all Test Object Types that are not supported by the first ETS
+			while(etsIterator.hasNext()) {
+				final Set<EID> supportedIds = EidHolder.getAllIds(etsIterator.next().getSupportedTestObjectTypes());
+				requiredTestObjectTypeIds.removeIf( eid -> !supportedIds.contains(eid) );
+			}
+			// if the list is now empty, the Test Suites are incompatible
+			if(requiredTestObjectTypeIds.isEmpty()) {
+				throw new LocalizableApiError("l.ets.supported.testObject.type.incompatible", false, 400);
 			}
 			testObjectController.initResourcesAndAdd(tO, requiredTestObjectTypeIds);
 

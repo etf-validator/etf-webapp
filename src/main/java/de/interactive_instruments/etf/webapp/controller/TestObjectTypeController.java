@@ -57,13 +57,9 @@ import de.interactive_instruments.etf.detector.TestObjectTypeNotDetected;
 import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.model.EidMap;
 import de.interactive_instruments.etf.model.capabilities.Resource;
-import de.interactive_instruments.etf.model.capabilities.SecuredResource;
-import de.interactive_instruments.etf.model.capabilities.StdResource;
 import de.interactive_instruments.etf.webapp.WebAppConstants;
-import de.interactive_instruments.etf.webapp.conversion.EidConverter;
 import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
-import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
 
 import io.swagger.annotations.ApiOperation;
@@ -108,14 +104,8 @@ public class TestObjectTypeController {
 			ObjectWithIdNotFoundException {
 		// First resource is the main resource
 		final ResourceDto resourceDto = dto.getResourceCollection().iterator().next();
-		final Resource resource;
-		if (UriUtils.isFile(resourceDto.getUri())) {
-			resource = new StdResource(resourceDto.getName(), resourceDto.getUri());
-		} else {
-			dto.setRemoteResource(resourceDto.getUri());
-			resource = new SecuredResource(resourceDto.getName(),
-					Credentials.fromProperties(dto.properties()), resourceDto.getUri());
-		}
+		final Resource resource = Resource.create(resourceDto.getName(),
+				resourceDto.getUri(), Credentials.fromProperties(dto.properties()));
 		final DetectedTestObjectType detectedTestObjectType;
 		try {
 			detectedTestObjectType = TestObjectTypeDetectorManager.detect(resource, expectedTypes);
@@ -125,6 +115,9 @@ public class TestObjectTypeController {
 			throw new LocalizableApiError(e);
 		}
 		detectedTestObjectType.enrichAndNormalize(dto);
+		if(!UriUtils.isFile(resourceDto.getUri())) {
+			dto.setRemoteResource(resourceDto.getUri());
+		}
 	}
 
 	//

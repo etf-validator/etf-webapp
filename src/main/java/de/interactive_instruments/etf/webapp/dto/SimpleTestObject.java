@@ -107,7 +107,7 @@ public class SimpleTestObject {
 			testObject.properties().setProperty("temporary", "true");
 			testObject.setVersionFromStr("1.0.0");
 			testObject.setCreationDateNowIfNotSet();
-			testObject.setRemoteResource(URI.create("http://private"));
+			// testObject.setRemoteResource(URI.create("http://private"));
 			testObject.setLocalPath(".");
 			final Credentials credentials;
 			if (!SUtils.isNullOrEmpty(username)) {
