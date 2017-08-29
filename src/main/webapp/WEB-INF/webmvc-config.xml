@@ -102,5 +102,4 @@
     </bean>
 
     <bean id="apiFilter" class="de.interactive_instruments.etf.webapp.filter.ApiFilter"/>
-
 </beans>

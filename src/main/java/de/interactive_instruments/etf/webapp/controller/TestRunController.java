@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import de.interactive_instruments.etf.model.EidHolderWithParent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +53,7 @@ import de.interactive_instruments.etf.dal.dto.run.TestRunDto;
 import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
 import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.model.EidHolder;
+import de.interactive_instruments.etf.model.EidHolderWithParent;
 import de.interactive_instruments.etf.testdriver.*;
 import de.interactive_instruments.etf.webapp.conversion.EidConverter;
 import de.interactive_instruments.etf.webapp.dto.ApiError;
@@ -510,14 +510,15 @@ public class TestRunController implements TestRunEventListener {
 			final Set<EID> requiredTestObjectTypeIds = new HashSet<>();
 			final Iterator<ExecutableTestSuiteDto> etsIterator = testRunDto.getExecutableTestSuites().iterator();
 
-			requiredTestObjectTypeIds.addAll(EidHolderWithParent.getAllIdsAndParentIds(etsIterator.next().getSupportedTestObjectTypes()));
+			requiredTestObjectTypeIds
+					.addAll(EidHolderWithParent.getAllIdsAndParentIds(etsIterator.next().getSupportedTestObjectTypes()));
 			// now iterate over the other ETS and delete all Test Object Types that are not supported by the first ETS
-			while(etsIterator.hasNext()) {
+			while (etsIterator.hasNext()) {
 				final Set<EID> supportedIds = EidHolder.getAllIds(etsIterator.next().getSupportedTestObjectTypes());
-				requiredTestObjectTypeIds.removeIf( eid -> !supportedIds.contains(eid) );
+				requiredTestObjectTypeIds.removeIf(eid -> !supportedIds.contains(eid));
 			}
 			// if the list is now empty, the Test Suites are incompatible
-			if(requiredTestObjectTypeIds.isEmpty()) {
+			if (requiredTestObjectTypeIds.isEmpty()) {
 				throw new LocalizableApiError("l.ets.supported.testObject.type.incompatible", false, 400);
 			}
 			testObjectController.initResourcesAndAdd(tO, requiredTestObjectTypeIds);

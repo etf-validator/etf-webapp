@@ -194,7 +194,7 @@ public class TestResultController {
 	}
 
 	@PostConstruct
-	public void init() throws IOException, TransformerConfigurationException, StorageException,
+	public void init() throws IOException, TransformerConfigurationException,
 			ConfigurationException, InvalidStateTransitionException, InitializationException {
 
 		reportDir = etfConfig.getPropertyAsFile(EtfConstants.ETF_DATASOURCE_DIR).expandPath("obj");

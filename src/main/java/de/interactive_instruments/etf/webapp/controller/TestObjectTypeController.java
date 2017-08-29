@@ -115,7 +115,7 @@ public class TestObjectTypeController {
 			throw new LocalizableApiError(e);
 		}
 		detectedTestObjectType.enrichAndNormalize(dto);
-		if(!UriUtils.isFile(resourceDto.getUri())) {
+		if (!UriUtils.isFile(resourceDto.getUri())) {
 			dto.setRemoteResource(resourceDto.getUri());
 		}
 	}
