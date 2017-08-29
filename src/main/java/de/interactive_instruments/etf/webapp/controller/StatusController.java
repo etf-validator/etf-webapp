@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.PostConstruct;
@@ -66,6 +67,7 @@ public class StatusController {
 			+ "were thrown during the last 2 minutes.";
 
 	private IFile tdDir;
+	private static long startTimeMillis;
 
 	private final Logger logger = LoggerFactory.getLogger(StatusController.class);
 
@@ -75,6 +77,7 @@ public class StatusController {
 			"heartbeat",
 			"willExpireAt",
 			"version",
+			"uptime",
 			"allocatedMemory",
 			"presumableFreeMemory",
 			"totalSpace",
@@ -83,7 +86,7 @@ public class StatusController {
 			"messages",
 	})
 	@ApiModel(description = "Extended status information about the service")
-	private static class ExtendedServiceStatus {
+	private final static class ExtendedServiceStatus {
 
 		@ApiModelProperty(value = "Service instance name", example = "Validator X")
 		private final String name;
@@ -103,6 +106,9 @@ public class StatusController {
 
 		@ApiModelProperty(value = "Service instance version", example = "2.0.0")
 		private final String version;
+
+		@ApiModelProperty(value = "Service uptime in seconds", example = "60000")
+		private final String uptime;
 
 		@ApiModelProperty(value = "Amount of allocated memory in bytes", example = "2147483648")
 		private final String allocatedMemory;
@@ -130,6 +136,7 @@ public class StatusController {
 			this.status = status;
 			this.heartbeat = String.valueOf(heartbeat);
 			this.willExpireAt = String.valueOf(willExpireAt);
+			this.uptime = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTimeMillis));
 			this.version = version;
 			this.allocatedMemory = String.valueOf(allocatedMemory);
 			this.presumableFreeMemory = String.valueOf(presumableFreeMemory);
@@ -147,6 +154,7 @@ public class StatusController {
 	@PostConstruct
 	public void init() throws IOException, JAXBException, MissingPropertyException {
 		tdDir = config.getPropertyAsFile(EtfConfigController.ETF_TESTDATA_DIR);
+		startTimeMillis = System.currentTimeMillis();
 		mbean = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 		logger.info("Status controller initialized!");
 	}
@@ -189,11 +197,11 @@ public class StatusController {
 		}
 
 		final long freeSpace = tdDir.getFreeSpace();
-		if (tdDir.getFreeSpace() < testObjectMaxSize) {
+		if (freeSpace < testObjectMaxSize) {
 			statusWarningMessages.add("Less then " + FileUtils.byteCountToDisplaySize(testObjectMaxSize) +
 					" disk space available");
 			status = ServiceStatus.MAJOR;
-		} else if (tdDir.getFreeSpace() < defaultDiskSpaceAlarm) {
+		} else if (freeSpace < defaultDiskSpaceAlarm) {
 			statusWarningMessages.add("Less then " + FileUtils.byteCountToDisplaySize(defaultDiskSpaceAlarm) +
 					" disk space available");
 			status = ServiceStatus.MAJOR;
