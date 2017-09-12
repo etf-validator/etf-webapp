@@ -1,8 +1,8 @@
 == About ETF
 
-ETF is an open source testing framework for validating spatial data, metadata and web services in Spatial Data Infrastructures (SDIs).
+link:http://etf-validator.net[ETF] is an open source testing framework for validating spatial data, metadata and web services in Spatial Data Infrastructures (SDIs).
 
-The design of ETF is driven by three goals: be user-friendly, consistency with the standards and the capability to test all resources in an SDI.
+The design of ETF is driven by three goals: be user-friendly, consistent with the standards and capable of testing all resources in an SDI.
 
 User-friendly means that you do not have to be a developer to use it and that test reports include sufficient information for technical staff to understand the reasons for warnings and errors detected during the execution of tests. The user interface and the test reports support multiple languages, too.
 
@@ -12,10 +12,17 @@ The concepts in ETF are based on ISO 19105 and the OGC Specification Model which
 * link:http://basex.org/[BaseX], an XML database, for testing sets of XML documents - including very large ones
 * link:http://opengeospatial.github.io/teamengine[TEAM Engine], the tool used by the OGC CITE tests, to support the modern CITE tests developed using TestNG
 
-ETF can be used via a responsive web application or via a REST API.
+ETF can be used via a responsive web application or via a link:http://docs.etf-validator.net/Developer_manuals/WEB-API.html#_overview[REST API].
 
-The easiest way to deploy ETF is a Docker container, available on Docker Hub.
-
-The source code is published under the Apache 2.0 License.
+The easiest way to deploy ETF is a Docker container, available on link:https://hub.docker.com/r/iide/etf-webapp[Docker Hub].
 
 link:http://www.interactive-instruments.de/[interactive instruments] has developed ETF and is the primary maintainer of the software.
+
+[.small]
+ETF version 1 (version ≤ 1.0.13): +
+© 2010-2016 interactive instruments GmbH. Licensed under the Apache 2.0 License.
+
+[.small]
+ETF version 2 (version ≥ 2.0.0-beta): +
+© 2017 European Union, interactive instruments GmbH. Licensed under the EUPL. +
+This work was supported by the link:http://ec.europa.eu/isa[EU Interoperability Solutions for European Public Administrations Programme] through link:https://joinup.ec.europa.eu/community/are3na/description[Action 1.17: A Reusable INSPIRE Reference Platform (ARE3NA)].

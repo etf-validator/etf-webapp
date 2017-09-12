@@ -11,6 +11,7 @@
 :appendix-caption: Annex
 
 :icons: font
+:docinfo: shared
 
 :source-highlighter: pygments
 :pygments-style: autumn
@@ -18,7 +19,7 @@
 
 include::../General/Logo.adoc[]
 
-:doc-warning-work-in-progress: true
+:doc-warning-work-in-progress: false
 :doc-title: Developing Executable Test Suites
 :doc-status: in review
 :doc-date: 2017-06-21
@@ -36,7 +37,7 @@ include::../General/Document-metadata.adoc[]
 | 2016-09-08 | Clemens Portele | BaseX documentation created
 | 2017-06-09 | Jon Herrmann | BaseX documentation updated and merged
 | 2017-06-13 | Jon Herrmann | SoapUI documentation
-| 2017-06-xx | Jon Herrmann, Clemens Portele | Revision after review
+| 2017-06-21 | Jon Herrmann, Clemens Portele | Revision after review
 |===
 
 

@@ -11,6 +11,7 @@
 :appendix-caption: Annex
 
 :icons: font
+:docinfo: shared
 
 :source-highlighter: pygments
 :pygments-style: autumn
@@ -38,12 +39,13 @@ include::../General/Document-metadata.adoc[]
 | 2017-07-12 | Jon Herrmann | Test driver development section
 |===
 
-
 <<<
 
 toc::[]
 
 <<<
+
+include::../General/About-short.adoc[]
 
 == Prerequisites
 

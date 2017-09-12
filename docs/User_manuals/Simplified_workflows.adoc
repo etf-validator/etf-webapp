@@ -11,6 +11,7 @@
 :appendix-caption: Annex
 
 :icons: font
+:docinfo: shared
 
 :source-highlighter: pygments
 :pygments-style: autumn
@@ -24,7 +25,7 @@ include::../General/Logo.adoc[]
 :doc-date: 2017-06-21
 :doc-description: This manual describes how to use the ETF web application of a centrally deployed validator for testing spatial data and services. Central deployments store test objects only for a single test run.
 :doc-audience: Users of the ETF web application of a centrally deployed validator
-:doc-id: http://docs.etf-validator.net/Developer_manuals/Developing_Executable_Test_Suites.html
+:doc-id: http://docs.etf-validator.net/User_manuals/Simplified_workflows.html
 :doc-lang: EN
 
 include::../General/Document-metadata.adoc[]
