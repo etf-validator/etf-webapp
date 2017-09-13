@@ -175,6 +175,11 @@ Testing framework for spatial data and services</span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Jon Herrmann, Clemens Portele</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Revision after review</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017-09-13</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jon Herrmann</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schematron section added</p></td>
+</tr>
 </tbody>
 </table>
 <div style="page-break-after: always;"></div>
@@ -2205,13 +2210,15 @@ and the links to them are included in the <code>etf:TestTaskResult</code>.</p>
 <div class="sect2">
 <h3 id="_schematron">3.15. Schematron</h3>
 <div class="paragraph">
-<p>The etf-ets-repository provides a
+<p>The
+<a href="https://github.com/interactive-instruments/etf-ets-repository">etf-ets-repository</a>
+provides a
 <a href="https://github.com/interactive-instruments/etf-ets-repository/blob/master/utils/schematron_2_etf.xsl">XSLT Stylesheet</a>
 that can be used to transform
-a Schematron file into an ETF Executable Test Suite. The Stylesheet
-maps all information that are found in the Schematron file, but since
-descriptors and labels are optional in the Schematron format and may be
-missing, it is recommended to manually edit the generated ETS and
+a Schematron file into an ETF Executable Test Suite for the BaseX test driver.
+The Stylesheet maps all information that are found in the Schematron file, but
+since descriptors and labels are optional in the Schematron format and may be
+absent, it is recommended to manually edit the generated ETS and
 add these information.</p>
 </div>
 </div>
@@ -3954,7 +3961,7 @@ generating a report, the error message is recorded as attachment of type <code>i
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-08-10 23:51:44 CEST
+Last updated 2017-09-13 09:52:54 CEST
 </div>
 </div>
 </body>

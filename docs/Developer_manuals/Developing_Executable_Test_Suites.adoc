@@ -38,6 +38,7 @@ include::../General/Document-metadata.adoc[]
 | 2017-06-09 | Jon Herrmann | BaseX documentation updated and merged
 | 2017-06-13 | Jon Herrmann | SoapUI documentation
 | 2017-06-21 | Jon Herrmann, Clemens Portele | Revision after review
+| 2017-09-13 | Jon Herrmann | Schematron section added
 |===
 
 

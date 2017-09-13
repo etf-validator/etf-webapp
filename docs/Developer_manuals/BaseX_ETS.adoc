@@ -1040,11 +1040,13 @@ and the links to them are included in the `etf:TestTaskResult`.
 
 === Schematron
 
-The etf-ets-repository provides a
+The
+link:https://github.com/interactive-instruments/etf-ets-repository[etf-ets-repository]
+provides a
 link:https://github.com/interactive-instruments/etf-ets-repository/blob/master/utils/schematron_2_etf.xsl[XSLT Stylesheet]
 that can be used to transform
-a Schematron file into an ETF Executable Test Suite. The Stylesheet
-maps all information that are found in the Schematron file, but since
-descriptors and labels are optional in the Schematron format and may be
-missing, it is recommended to manually edit the generated ETS and
+a Schematron file into an ETF Executable Test Suite for the BaseX test driver.
+The Stylesheet maps all information that are found in the Schematron file, but
+since descriptors and labels are optional in the Schematron format and may be
+absent, it is recommended to manually edit the generated ETS and
 add these information.
