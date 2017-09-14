@@ -18,7 +18,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.24'
+        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.25'
         classpath "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
 
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE"
@@ -165,17 +165,16 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: etf_junitTestVersion
     testCompile group: 'de.interactive_instruments.etf.test', name: 'etf-unittest', version:'1.0.0'+project.snapshotSuffix
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootTestVersion
-    testCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version:'3.4.0'
-    testCompile group: 'org.seleniumhq.selenium', name: 'selenium-firefox-driver', version:'3.4.0'
-    testCompile group: 'org.seleniumhq.selenium', name: 'selenium-chrome-driver', version:'3.4.0'
+
+    // todo: Xalan (not xerces) is required by selenium tests "java.lang.NoClassDefFoundError: org/apache/xml/utils/PrefixResolver"
+    // but blocked to not interfere with Saxon. Not solved in selenium 3.4
     testCompile group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version:'2.52.0'
+    testCompile group: 'org.seleniumhq.selenium', name: 'selenium-support', version:'2.53.1'
 
     // API
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: springfoxSwaggerVersion
     compile group: 'io.springfox', name: 'springfox-swagger2', version: springfoxSwaggerVersion
     // compile group: 'io.springfox', name: 'springfox-staticdocs', version: '2.4.0'
-
-
 }
 
 def findRuntimeJar(prefix) {
