@@ -1041,12 +1041,17 @@ and the links to them are included in the `etf:TestTaskResult`.
 === Schematron
 
 The
-link:https://github.com/interactive-instruments/etf-ets-repository[etf-ets-repository]
-provides a
-link:https://github.com/interactive-instruments/etf-ets-repository/blob/master/utils/schematron_2_etf.xsl[XSLT Stylesheet]
-that can be used to transform
-a Schematron file into an ETF Executable Test Suite for the BaseX test driver.
-The Stylesheet maps all information that are found in the Schematron file, but
+link:https://github.com/interactive-instruments/etf-ets-repository/tree/master/utils[etf-ets-repository]
+provides two Stylesheets for generating
+link:https://github.com/interactive-instruments/etf-ets-repository/blob/master/utils/schematron_2_etf_ets.xsl[ETF Executable Test Suites]
+for the BaseX test driver and for generating
+link:https://github.com/interactive-instruments/etf-ets-repository/blob/master/utils/schematron_2_etf_translation_template_bundle.xsl[Translation Template Bundles]
+from Schematron files.
+
+The Stylesheets map all information that are found in the Schematron file, but
 since descriptors and labels are optional in the Schematron format and may be
 absent, it is recommended to manually edit the generated ETS and
 add these information.
+
+The procedure to generate the ETS and the Translation Template Bundle is
+described link:https://github.com/interactive-instruments/etf-ets-repository/blob/master/utils/Readme.md#transform-a-schematron-file-to-an-etf-version-2-executable-test-suite[here].
