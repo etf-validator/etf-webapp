@@ -202,7 +202,7 @@ public class EtfConfigController implements PropertyHolder {
 				II_Constants.II_COPYRIGHT);
 
 		// Set HTTP Client to ETF
-		System.setProperty("http.agent", "ETF validator (version: " + version + " )");
+		System.setProperty("http.ii.agent", "ETF validator (" + version + ")");
 
 		System.setProperty("java.awt.headless", "true");
 		final String encoding = System.getProperty("file.encoding");
