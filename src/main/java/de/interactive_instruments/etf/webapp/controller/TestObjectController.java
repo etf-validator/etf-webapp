@@ -286,7 +286,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 
 	private TestObjectDto createWithUrlResources(final TestObjectDto testObject) throws LocalizableApiError {
 
-		final String hash;
+		String hash;
 		try {
 			final URI serviceEndpoint = testObject.getResourceByName("serviceEndpoint");
 
@@ -299,10 +299,13 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			hash = UriUtils.hashFromContent(serviceEndpoint,
 					Credentials.fromProperties(testObject.properties()));
 		} catch (final UriUtils.ConnectionException e) {
-			if ((e.getResponseCode() == 403 || e.getResponseCode() == 401) && e.getUrl() != null) {
+			if (e.getResponseCode() == 400 && e.getUrl() != null) {
+				hash = "0000000000000400";
+			}
+			else if ((e.getResponseCode() == 403 || e.getResponseCode() == 401) && e.getUrl() != null) {
 				throw new LocalizableApiError("l.url.secured", false, 400, e, e.getUrl().getHost());
 			}
-			if (e.getResponseCode() >= 400 && e.getResponseCode() < 500) {
+			else if (e.getResponseCode() >= 401 && e.getResponseCode() < 500) {
 				throw new LocalizableApiError("l.url.client.error", e);
 			} else if (e.getResponseCode() != -1) {
 				throw new LocalizableApiError("l.url.server.error", e);
