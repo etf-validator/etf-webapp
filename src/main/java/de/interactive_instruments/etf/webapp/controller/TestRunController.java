@@ -117,7 +117,7 @@ public class TestRunController implements TestRunEventListener {
 
 		@ApiModelProperty(value = "Completed Test Steps", example = "39", dataType = "int")
 		private String val;
-		@ApiModelProperty(value = "Maximum number of Test Steps", example = "103", dataType = "int")
+		@ApiModelProperty(value = "Estimated total number of Test Steps. Additional Test Steps can be generated dynamically during a test run to analyze certain aspects in detail.", example = "103", dataType = "int")
 		private String max;
 		@ApiModelProperty(value = "Log messages", example = "[ \"Test Run started\", \"Assertion X failed\"]")
 		private List<String> log;
@@ -290,8 +290,9 @@ public class TestRunController implements TestRunEventListener {
 	// Rest interfaces
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@ApiOperation(value = "Get the Test Run progress as JSON", notes = "Retrieve one Test Run status including log messages, the number of executed and remaining Test Steps", produces = "application/json", tags = {
-			TEST_RUNS_TAG_NAME})
+	@ApiOperation(value = "Get the Test Run progress as JSON",
+			notes = "Retrieve one Test Run status including log messages, the estimated total number of Test Steps and the number of already executed Test Steps",
+			produces = "application/json", tags = {TEST_RUNS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Task progress returned", response = TaskProgressDto.class),
 			@ApiResponse(code = 404, message = "Test Run not found", response = Void.class),
@@ -306,7 +307,8 @@ public class TestRunController implements TestRunEventListener {
 					+ "so that the service can skip the known messages and return only new ones. "
 					+ "Example: the client received 3 log messages and should therefore invoke this interface with pos=3. "
 					+ "In the meantime the service logged a total of 13 messages. As the client knows the first three "
-					+ "messages the service will skip the first 3 messages and return the 10 new messages.", example = "13", required = false, defaultValue = "0") @RequestParam(value = "pos", required = false) String strPos,
+					+ "messages the service will skip the first 3 messages and return the 10 new messages."
+					+ "The test run completed when the value of the val property and the value of the pos property are equal. ", example = "13", required = false, defaultValue = "0") @RequestParam(value = "pos", required = false) String strPos,
 			final HttpServletResponse response) throws StorageException {
 
 		long position = 0;
