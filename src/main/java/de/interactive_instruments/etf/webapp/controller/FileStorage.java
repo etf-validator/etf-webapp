@@ -125,7 +125,7 @@ class FileStorage {
 								tmpSubDir.deleteDirectory();
 								destinationSubDir.deleteDirectory();
 							} catch (IOException ignore) {}
-							throw new LocalizableApiError("l.download.failed", false, 400, e, maxStorageSizeHr);
+							throw new LocalizableApiError("l.download.failed", false, 400, e);
 						}
 						prepare(download, destinationSubDir, download.getName(), fileFilter, remainingDownloadSize);
 					}
