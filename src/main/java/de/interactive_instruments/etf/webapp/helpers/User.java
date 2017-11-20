@@ -43,6 +43,16 @@ public class User {
 	};
 
 	public static String getUser(final HttpServletRequest request) {
+		final String userNamePrefix;
+		if(!SUtils.isNullOrEmpty(request.getRemoteUser())) {
+			userNamePrefix=request.getRemoteUser()+"@";
+		}else{
+			userNamePrefix="";
+		}
+		return userNamePrefix+getRemoteAddr(request);
+	}
+
+	private static String getRemoteAddr(final HttpServletRequest request) {
 		if ("false".equals(EtfConfigController.getInstance().getPropertyOrDefault("etf.users.log", "false"))) {
 			return "unknown";
 		}
