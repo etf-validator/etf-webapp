@@ -1,6 +1,12 @@
-**Please note: this repository is intended for issue reports specific to the ETF validator.
-If you have an issue with an Executable Test Suite, then please use the corresponding repository,
-for instance the [INSPIRE ETS repository](https://github.com/inspire-eu-validation/ets-repository) if you have an issue with an INSPIRE test.**
+**Please note:
+
+This repository is intended for issue reports specific to the ETF validator.
+If you have an issue with an Executable Test Suite, then please use the
+corresponding repository, for instance the [INSPIRE ETS repository](https://github.com/inspire-eu-validation/ets-repository)
+if you have an issue with an INSPIRE test.
+
+Our User, Administrator and Developer
+manuals are available here: http://docs.etf-validator.net/.**
 
 ### Prerequisites for a bug report
 
@@ -10,7 +16,12 @@ for instance the [INSPIRE ETS repository](https://github.com/inspire-eu-validati
 * [ ] Upload excerpts of the etf.log, catalina.out/log and localhost-<date>.log files. Important parts are:
 the initialization log entries beginning with the ETF ASCII logo and ending with "TestRunController initialized!" plus the last exception messages.
 * [ ] If the problem is related to the Web user interface: include screenshots
-* [ ] If the problem is related to specific (non-sensitive) test data: attach the test data
+* [ ] If the problem is related to specific test data, provide the URL of your
+service / the file you have uploaded or referenced.
+If your service is protected or you have confidential data that you cannot
+upload here, you can request an email address to which you can send URLs / files.
+Please note that issues cannot be fixed for services/datasets that we cannot
+access.
 * [ ] Don't forget to remove sensitive information from uploaded files!!!
 
 ### Description
