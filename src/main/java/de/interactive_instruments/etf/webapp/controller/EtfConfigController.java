@@ -46,7 +46,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import de.interactive_instruments.IFile;
@@ -75,6 +74,7 @@ public class EtfConfigController implements PropertyHolder {
 	}
 
 	public static final String ETF_WEBAPP_BASE_URL = "etf.webapp.base.url";
+	public static final String ETF_CSS_URL = "etf.webapp.css.url";
 	public static final String ETF_API_BASE_URL = "etf.api.base.url";
 	public static final String ETF_API_ALLOW_ORIGIN = "etf.api.allow.origin";
 	public static final String ETF_BRANDING_TEXT = "etf.branding.text";
@@ -135,7 +135,7 @@ public class EtfConfigController implements PropertyHolder {
 			// 8 days
 			put(ETF_TESTREPORTS_LIFETIME_EXPIRATION, "11520");
 			put(ETF_HELP_PAGE_URL,
-					"http://docs.etf-validator.net/User_manuals/Simplified_workflows.html");
+					"https://docs.etf-validator.net/User_manuals/Simplified_workflows.html");
 			put(ETF_BSX_RECREATE_CONFIG, "true");
 			put(ETF_SUBMIT_ERRORS, "false");
 			put(ETF_MAX_UPLOAD_SIZE, "auto");
@@ -347,6 +347,12 @@ public class EtfConfigController implements PropertyHolder {
 		final String apiBaseUrl = configProperties.getProperty(ETF_API_BASE_URL);
 		if (SUtils.isNullOrEmpty(apiBaseUrl)) {
 			configProperties.setProperty(ETF_API_BASE_URL, configProperties.getProperty(ETF_WEBAPP_BASE_URL) + "/v2");
+		}
+
+		// Set CSS url
+		final String cssUrl = configProperties.getProperty(ETF_CSS_URL);
+		if (SUtils.isNullOrEmpty(cssUrl)) {
+			configProperties.setProperty(ETF_CSS_URL, configProperties.getProperty(ETF_WEBAPP_BASE_URL) + "/css");
 		}
 
 		// Set CORS
