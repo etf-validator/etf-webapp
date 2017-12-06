@@ -23,31 +23,19 @@ import static de.interactive_instruments.etf.webapp.SwaggerConfig.SERVICE_CAP_TA
 import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
 
 import java.io.IOException;
-import java.net.URI;
-import java.util.*;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.XMLConstants;
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.Document;
 
 import de.interactive_instruments.Credentials;
-import de.interactive_instruments.IFile;
-import de.interactive_instruments.SUtils;
 import de.interactive_instruments.UriUtils;
 import de.interactive_instruments.etf.dal.dao.Dao;
 import de.interactive_instruments.etf.dal.dao.WriteDao;

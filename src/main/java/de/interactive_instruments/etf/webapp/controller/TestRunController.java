@@ -290,9 +290,8 @@ public class TestRunController implements TestRunEventListener {
 	// Rest interfaces
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@ApiOperation(value = "Get the Test Run progress as JSON",
-			notes = "Retrieve one Test Run status including log messages, the estimated total number of Test Steps and the number of already executed Test Steps",
-			produces = "application/json", tags = {TEST_RUNS_TAG_NAME})
+	@ApiOperation(value = "Get the Test Run progress as JSON", notes = "Retrieve one Test Run status including log messages, the estimated total number of Test Steps and the number of already executed Test Steps", produces = "application/json", tags = {
+			TEST_RUNS_TAG_NAME})
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Task progress returned", response = TaskProgressDto.class),
 			@ApiResponse(code = 404, message = "Test Run not found", response = Void.class),

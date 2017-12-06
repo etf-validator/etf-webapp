@@ -39,7 +39,6 @@ import de.interactive_instruments.etf.component.ComponentLoadingException;
 import de.interactive_instruments.etf.detector.IncompatibleTestObjectTypeException;
 import de.interactive_instruments.etf.detector.TestObjectTypeNotDetected;
 import de.interactive_instruments.etf.webapp.dto.StartTestRunRequest;
-import de.interactive_instruments.exceptions.IOsizeLimitExceededException;
 import de.interactive_instruments.exceptions.ObjectWithIdNotFoundException;
 import de.interactive_instruments.exceptions.StorageException;
 import de.interactive_instruments.exceptions.config.ConfigurationException;

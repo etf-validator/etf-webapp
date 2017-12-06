@@ -301,11 +301,9 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		} catch (final UriUtils.ConnectionException e) {
 			if (e.getResponseCode() == 400 && e.getUrl() != null) {
 				hash = "0000000000000400";
-			}
-			else if ((e.getResponseCode() == 403 || e.getResponseCode() == 401) && e.getUrl() != null) {
+			} else if ((e.getResponseCode() == 403 || e.getResponseCode() == 401) && e.getUrl() != null) {
 				throw new LocalizableApiError("l.url.secured", false, 400, e, e.getUrl().getHost());
-			}
-			else if (e.getResponseCode() >= 401 && e.getResponseCode() < 500) {
+			} else if (e.getResponseCode() >= 401 && e.getResponseCode() < 500) {
 				throw new LocalizableApiError("l.url.client.error", e);
 			} else if (e.getResponseCode() != -1) {
 				throw new LocalizableApiError("l.url.server.error", e);

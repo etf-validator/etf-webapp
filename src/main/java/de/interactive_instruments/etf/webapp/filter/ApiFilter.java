@@ -20,6 +20,7 @@
 package de.interactive_instruments.etf.webapp.filter;
 
 import static de.interactive_instruments.etf.webapp.controller.EtfConfigController.ETF_API_ALLOW_ORIGIN;
+import static de.interactive_instruments.etf.webapp.helpers.RequestHelper.isOnlyHtmlRequested;
 
 import java.io.IOException;
 
@@ -63,16 +64,25 @@ public class ApiFilter extends OncePerRequestFilter {
 	}
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
+			final FilterChain filterChain)
 			throws ServletException, IOException {
 
 		if (!"localhost".equals(this.allowOrigin)) {
 			response.addHeader("Access-Control-Allow-Origin", this.allowOrigin);
+			if (!"*".equals(this.allowOrigin)) {
+				/**
+				 * If the server specifies an origin host rather than "*", then it must also include Origin
+				 * in the Vary response header to indicate to clients that server responses will differ based
+				 * on the value of the Origin request header.
+				 */
+				response.addHeader("Vary", "Origin");
+			}
 			if (request.getHeader("Access-Control-Request-Method") != null && "OPTIONS".equals(request.getMethod())) {
 				response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-				//			response.addHeader("Access-Control-Allow-Headers", "Authorization");
-				response.addHeader("Access-Control-Allow-Headers", "Content-Type");
-				response.addHeader("Access-Control-Max-Age", "1");
+				response.addHeader("Access-Control-Allow-Credentials", "true");
+				response.addHeader("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Authorization");
+				response.addHeader("Access-Control-Max-Age", "60");
 				response.getWriter().print("OK");
 				response.getWriter().flush();
 				return;

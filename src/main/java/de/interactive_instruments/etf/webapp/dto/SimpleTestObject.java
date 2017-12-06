@@ -24,7 +24,6 @@ import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.E
 import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.EID_EXAMPLE;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 

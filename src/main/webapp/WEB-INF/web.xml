@@ -9,6 +9,11 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	<!-- The master configuration path for this Spring web application -->
 	<description>ETF web application for web service and data tests</description>
 	<display-name>ETF-WebApp</display-name>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/404.jsp</location>
+	</error-page>
 	
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
