@@ -23,6 +23,7 @@ import static de.interactive_instruments.etf.webapp.SwaggerConfig.SERVICE_CAP_TA
 import static de.interactive_instruments.etf.webapp.dto.DocumentationConstants.*;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -108,7 +109,14 @@ public class TestObjectTypeController {
 		}
 		detectedTestObjectType.enrichAndNormalize(dto);
 		if (!UriUtils.isFile(resourceDto.getUri())) {
+			// service URI
 			dto.setRemoteResource(resourceDto.getUri());
+		}else{
+			// fallback download URI
+			final URI downloadUri = dto.getResourceByName("data");
+			if(downloadUri!=null && !UriUtils.isFile(downloadUri)) {
+				dto.setRemoteResource(downloadUri);
+			}
 		}
 	}
 
