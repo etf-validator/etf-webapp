@@ -1,3 +1,13 @@
+requirejs.onError = function (err) {
+    console.log(err.requireType);
+    if (err.requireType === 'timeout') {
+        console.log('Timeout loading modules: ' + err.requireModules);
+    }else if (err.requireType === 'scripterror') {
+        alert('Error loading the ETF Web Interface, please contact the System Administrator. Error message: '+err.message);
+    }
+    throw err;
+};
+
 require.config( {
     paths: {
         baseUrl: 'js',
@@ -29,17 +39,36 @@ require.config( {
             "//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min", "lib/toastr.min"
         ],
         "jquery.iframe-transport": [
-            "//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.14.2/js/jquery.iframe-transport.min", "lib/jquery.iframe-transport"
+            "//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.14.2/js/jquery.iframe-transport.min", "lib/jquery.iframe-transport.min"
         ],
         "jquery-ui/ui/widget": [
             "lib/jquery.ui.widget"
         ],
         "jquery.fileupload": [
-            "//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.14.2/js/jquery.fileupload.min", "lib/jquery.fileupload"
+            "//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.14.2/js/jquery.fileupload.min", "lib/jquery.fileupload.min"
         ],
         "etf.webui": [
             "app"
         ],
+    },
+    onNodeCreated: function(node, config, module, path) {
+        var sri = {
+            'jquery': 'sha256-rsPUGdUPBXgalvIj4YKJrrUlmLXbOb6Cp7cdxn1qeUc=',
+            'jquery.mobile': 'sha256-MkfSkbXhZoQ1CyPwjC30mPfLF8iKF5n564n9WvCLX4E=',
+            'jquery.validate': 'sha256-Lj47JmDL+qxf6/elCzHQSUFZmJYmqEECssN5LP/ifRM=',
+            'underscore': 'sha256-IyWBFJYclFY8Pn32bwWdSHmV4B9M5mby5bhPHEmeY8w=',
+            'backbone': 'sha256-0atoj6xVOJUoBM8Vp5PFywwLLE+aNl2svi4Q9UWZ+dQ=',
+            'backbone.paginator': 'sha256-nqCLeI27BiuRxhJEcsKPwUpTusAzME+5qFOWntHhAvy6',
+            'moment': 'sha256-Gn7MUQono8LUxTfRA0WZzJgTua52Udm1Ifrk5421zkA=',
+            'toastr': 'sha256-yNbKY1y6h2rbVcQtf0b8lq4a+xpktyFc3pSYoGAY1qQ=',
+            'jquery.iframe-transport': 'sha256-OiZnRAga/nDE1Ud8eLfBWCwb9mMZmkrRIRblCeRYWj8=',
+            'jquery-ui/ui/widget': 'sha256-CvqMlHtDX8dDgshwl03tVwvzncqqMKN0FLzZrNap4+I=',
+            'jquery.fileupload': 'sha256-tcXzqklRDpmITiQ0Ff+S6H2uUQl089oXkEyGjOOGmN4='
+        };
+        if (sri[module]) {
+            node.setAttribute('integrity', sri[module]);
+            node.setAttribute('crossorigin', 'anonymous');
+        }
     },
     shim: {
         "backbone": {
