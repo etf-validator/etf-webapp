@@ -72,7 +72,7 @@ public class SwaggerConfig {
 				.description(
 						"This is an interactive documentation and a web user interface for interacting with the Web API version 2 BETA of the test framework "
 								+ "[ETF](https://interactive-instruments.github.io/etf-webapp). "
-								+ "This semi-automatic generated documentation covers basic functionality, but consulting the [Wiki](https://github.com/interactive-instruments/etf-webapp/wiki/Web%20API) "
+								+ "This semi-automatic generated documentation covers basic functionality, but consulting the [API Documentation](http://docs.etf-validator.net/v2.0/Developer_manuals/WEB-API.html) "
 								+ "may be required to get a deeper understanding of the ETF model and further procedures. "
 								+ "Issues can be reported in [GitHub]"
 								+ "(https://github.com/interactive-instruments/etf-webapp/issues/new?title=[webapi-v2-beta]%20&body=Please%20don%27t%20delete%20the%20"
@@ -87,8 +87,8 @@ public class SwaggerConfig {
 								+ "/#home)")
 				.contact(new Contact("ETF Team", "http://www.etf-validator.net",
 						"etf@interactive-instruments.de"))
-				.license("Apache 2.0")
-				.licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
+				.license("European Public License 1.2")
+				.licenseUrl("https://joinup.ec.europa.eu/page/eupl-text-11-12")
 				.version("2.0.0")
 				.build();
 	}
