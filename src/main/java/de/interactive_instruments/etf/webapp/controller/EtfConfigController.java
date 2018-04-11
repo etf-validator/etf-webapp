@@ -135,7 +135,7 @@ public class EtfConfigController implements PropertyHolder {
 			// 8 days
 			put(ETF_TESTREPORTS_LIFETIME_EXPIRATION, "11520");
 			put(ETF_HELP_PAGE_URL,
-					"https://docs.etf-validator.net/User_manuals/Simplified_workflows.html");
+					"https://docs.etf-validator.net/v2.0/User_manuals/Simplified_workflows.html");
 			put(ETF_BSX_RECREATE_CONFIG, "true");
 			put(ETF_SUBMIT_ERRORS, "false");
 			put(ETF_MAX_UPLOAD_SIZE, "auto");
