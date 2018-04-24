@@ -49,6 +49,7 @@ ext.springBootTestVersion = "1.5.5.RELEASE"
 ext.jacksonVersion = "2.8.11"
 ext.springfoxSwaggerVersion = "2.6.1"
 
+
 configurations {
     compile.exclude group:'xalan'
     testdriver
@@ -64,6 +65,9 @@ repositories {
             username gradle.rootProject.ext.r_user
             password gradle.rootProject.ext.r_pwd
         }
+    }
+    maven {
+    	url "http://maven.guadaltel.es/nexus/content/groups/public"
     }
 }
 
@@ -86,7 +90,9 @@ dependencies {
     compile group: 'de.interactive_instruments.etf', name: 'etf-stdtot', version: '1.0.0' + project.snapshotSuffix
 
     // TODO remove in future versions, use SPI
-    compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version: '2.0.0' + project.snapshotSuffix
+    
+    compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version: '2.1.0-20180423'
+    
     compile group: 'de.interactive_instruments.etf', name: 'etf-rc', version: '1.0.0' + project.snapshotSuffix
 
     // Prepackaged test drivers
