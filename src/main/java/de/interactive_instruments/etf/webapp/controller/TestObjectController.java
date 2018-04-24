@@ -445,8 +445,9 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		}
 		testObject.setLocalPath(".");
 		testObject.properties().setProperty("data.downloadable", "false");
-
-		testObjectDao.add(testObject);
+		if(!testObjectDao.exists(testObject.getId())){
+			testObjectDao.add(testObject);
+		}
 	}
 
 	//

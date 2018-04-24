@@ -111,10 +111,10 @@ public class TestObjectTypeController {
 		if (!UriUtils.isFile(resourceDto.getUri())) {
 			// service URI
 			dto.setRemoteResource(resourceDto.getUri());
-		}else{
+		} else {
 			// fallback download URI
 			final URI downloadUri = dto.getResourceByName("data");
-			if(downloadUri!=null && !UriUtils.isFile(downloadUri)) {
+			if (downloadUri != null && !UriUtils.isFile(downloadUri)) {
 				dto.setRemoteResource(downloadUri);
 			}
 		}
