@@ -132,7 +132,7 @@ define([
 
             this.homeView = new HomeView();
             this.monitorView = new MonitorView();
-
+            
             this.startTestView = new StartTestView({
                 backPage: $("#start-tests")
             });
@@ -184,6 +184,8 @@ define([
             "start-tests?:ids": "startTestsDialog",
 
             "start-tests": "startTests",
+            
+            "rerun-tests?:id": "rerunTests",
 
             "home": "home",
 
@@ -211,6 +213,71 @@ define([
 
         startTests: function() {
             this.changePage(this.executableTestSuitesView, null, this.executableTestSuitesView.collection);
+        },
+        
+        rerunTests: function(id) {
+        	var _id = id.substring(3);
+        	var tasks = {};
+        	var label = {};
+        	var models = this.testReportView.collection.models;
+        	_.each( models, function( model ) {
+                if(!_.isUndefined(model.attributes.id) && _id == model.attributes.id) { 
+                	tasks = model.attributes.testTasks.TestTask;
+                	label = model.attributes.label;
+        		}
+			});
+        	var credentials = function(username, password) {
+	            if(!_.isUndefined(username) && ! username.trim().length < 1) {
+	                this.username = username;
+	                this.password = password;
+	            }
+	        };
+			var etss = [];
+			var testObject = {};
+			var argumentList = {};
+        	//When there is just one task.
+        	if(!_.isUndefined(tasks.executableTestSuite)){ 
+        		testObject = {id: tasks.testObject.id,
+    					setCredentials: credentials};
+        		argumentList = tasks.ArgumentList;
+        		etss.push(tasks.executableTestSuite.id);
+    		}
+        	//When there are several tasks.
+        	else{
+        		testObject = {id: tasks[0].testObject.id,
+    					setCredentials: credentials};
+        		argumentList = tasks[0].ArgumentList;
+        		_.each( tasks, function( task ) {
+                    if(!_.isUndefined(task) && !_.isUndefined(task.executableTestSuite) && !_.isUndefined(task.executableTestSuite.id)) { 
+                    	etss.push(task.executableTestSuite.id);
+            		}
+    			});
+        	}
+        	//Generate a new label.
+        	var regex1 = RegExp(/\(\d+\)$/);
+        	var regex2 = RegExp(/\d+/);
+        	if(regex1.test(label)){
+        		var cadenaIntentos = regex1.exec(label);
+            	var numeroIntentos = parseInt(regex2.exec(cadenaIntentos));
+            	var nuevoNumero = numeroIntentos + 1;
+            	label = label.replace(regex1,"("+nuevoNumero+")");
+        	}
+        	else{
+        		label = label + " (1)";
+        	}
+        	
+        	var testRun = new v2.TestRun(label,etss, argumentList, testObject);
+            $("#start-tests-confirm").addClass('ui-disabled');
+            v2.startTestRun(testRun, function (data) {
+                if(!_.isUndefined(data.EtfItemCollection)) {
+                    location.href = '#monitor-test-run?id=' + data.EtfItemCollection.testRuns.TestRun.id;
+                }else{
+                    $("#start-tests-confirm").removeClass('ui-disabled');
+                    v2.apiCallError("Could not start test run: ", "Error", data);
+                }
+            }, function(data) {
+                $("#start-tests-confirm").removeClass('ui-disabled');
+            });
         },
 
         startTestsDialog: function(ids) {

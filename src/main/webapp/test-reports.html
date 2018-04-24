@@ -43,7 +43,8 @@
     <![CDATA[
     <!-- guard comment -->
 
-    <% v2.jeach( collection, function( testRun ) { %>
+    <%
+	v2.jeach( collection, function( testRun ) { %>
     <li class="ii-collapsible-li test-run-status-<%= testRun.status %>" id="test-report-item-<%= testRun.id %>" data-role="collapsible" data-iconpos="left" data-shadow="false" data-corners="false">
         <h2>
             <%= testRun.label %>
@@ -122,9 +123,12 @@
             <% }; %>
             <a href="<%= reportBaseUrl + testRun.id + '/log' %>" data-role="button" data-icon="info" data-inline="true" data-mini="true"  data-ajax="false"  th:text="#{l.open.log}">[[#{l.open.log}]]</a>
             <a href="#remove-test-report?id=<%= testRun.id %>" class="delete-button-tr" data-icon="delete" data-role="button" data-inline="true" data-mini="true" th:text="#{l.delete.report}">[[#{l.delete.report}]]</a>
-        </div>
+			<a href="#rerun-tests?id=<%= testRun.id %>" data-icon="refresh" data-role="button" data-inline="true" data-mini="true" th:text="#{l.rerun.test}">[[#{l.rerun.test}]]</a>
+		</div>
     </li>
-    <% }); %>
+	
+    <%
+	}); %>
 
     <!-- ]]> -->
 </script>
