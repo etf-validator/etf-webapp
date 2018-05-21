@@ -232,52 +232,71 @@ define([
 	                this.password = password;
 	            }
 	        };
-			var etss = [];
+	        
+	        
+	        
+			var etslocal = {};
+			var etsremote = [];
 			var testObject = {};
 			var argumentList = {};
-        	//When there is just one task.
+			
+			collection = this.executableTestSuitesView.collection;
+			//When there is just one task.
         	if(!_.isUndefined(tasks.executableTestSuite)){ 
-        		testObject = {id: tasks.testObject.id,
-    					setCredentials: credentials};
+        		testObject = tasks.testObject.id;
         		argumentList = tasks.ArgumentList;
-        		etss.push(tasks.executableTestSuite.id);
+        		etslocal[tasks.executableTestSuite.id] = collection._byId[tasks.executableTestSuite.id];
+        		etsremote.push(tasks.executableTestSuite.id);
     		}
         	//When there are several tasks.
         	else{
-        		testObject = {id: tasks[0].testObject.id,
-    					setCredentials: credentials};
+        		testObject = tasks[0].testObject;
         		argumentList = tasks[0].ArgumentList;
         		_.each( tasks, function( task ) {
-                    if(!_.isUndefined(task) && !_.isUndefined(task.executableTestSuite) && !_.isUndefined(task.executableTestSuite.id)) { 
-                    	etss.push(task.executableTestSuite.id);
+                    if(!_.isUndefined(task) && !_.isUndefined(task.executableTestSuite) && !_.isUndefined(task.executableTestSuite.id)) {
+                    	etslocal[task.executableTestSuite.id] = collection._byId[task.executableTestSuite.id];
+                    	etsremote.push(task.executableTestSuite.id);
             		}
     			});
         	}
-        	//Generate a new label.
-        	var regex1 = RegExp(/\(\d+\)$/);
-        	var regex2 = RegExp(/\d+/);
-        	if(regex1.test(label)){
-        		var cadenaIntentos = regex1.exec(label);
-            	var numeroIntentos = parseInt(regex2.exec(cadenaIntentos));
-            	var nuevoNumero = numeroIntentos + 1;
-            	label = label.replace(regex1,"("+nuevoNumero+")");
-        	}
-        	else{
-        		label = label + " (1)";
-        	}
-        	
-        	var testRun = new v2.TestRun(label,etss, argumentList, testObject);
-            $("#start-tests-confirm").addClass('ui-disabled');
-            v2.startTestRun(testRun, function (data) {
-                if(!_.isUndefined(data.EtfItemCollection)) {
-                    location.href = '#monitor-test-run?id=' + data.EtfItemCollection.testRuns.TestRun.id;
-                }else{
+			if(testObject.hasOwnProperty("remoteResource")){
+				//Rerun a remote file test automatically
+				
+				//Generate a new label.
+	        	var regex1 = RegExp(/\(\d+\)$/);
+	        	var regex2 = RegExp(/\d+/);
+	        	if(regex1.test(label)){
+	        		var cadenaIntentos = regex1.exec(label);
+	            	var numeroIntentos = parseInt(regex2.exec(cadenaIntentos));
+	            	var nuevoNumero = numeroIntentos + 1;
+	            	label = label.replace(regex1,"("+nuevoNumero+")");
+	        	}
+	        	else{
+	        		label = label + " (1)";
+	        	}
+				newTestObject = new v2.TestObject(new v2.Resource("data", testObject.remoteResource));
+				console.log(testObject);
+                console.log(newTestObject);
+                var testRun = new v2.TestRun(label,etsremote, argumentList, newTestObject);
+                $("#start-tests-confirm").addClass('ui-disabled');
+                v2.startTestRun(testRun, function (data) {
+                    if(!_.isUndefined(data.EtfItemCollection)) {
+                        location.href = '#monitor-test-run?id=' + data.EtfItemCollection.testRuns.TestRun.id;
+                    }else{
+                        $("#start-tests-confirm").removeClass('ui-disabled');
+                        v2.apiCallError("Could not start test run: ", "Error", data);
+                    }
+                }, function(data) {
                     $("#start-tests-confirm").removeClass('ui-disabled');
-                    v2.apiCallError("Could not start test run: ", "Error", data);
-                }
-            }, function(data) {
-                $("#start-tests-confirm").removeClass('ui-disabled');
-            });
+                });
+				
+			}
+			else{
+				//Rerun a local file test 
+				
+				this.showDialog(this.startTestView, { executableTestSuites: etslocal });
+				 $("#start-tests-dialog > div > div[data-role='header'] a[role='button']").attr('href', '/#start-tests');
+			}
         },
 
         startTestsDialog: function(ids) {
@@ -286,7 +305,7 @@ define([
             console.log("Opening dialog for starting Executable Test Suites "+ids);
             etsCol.deferred.done(function() {
                 // When collection is ready
-
+            	
                 // get ETS from collection
                 var selectedExecutableTestSuites = {};
                 _.each( v2.getParameters(ids).ids, function (i) {
