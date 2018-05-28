@@ -271,7 +271,7 @@ public class TestResultController {
 
 				if (Objects.equals(download, "true")) {
 					final String reportFileName;
-					if (preparedDto.getDto() instanceof TestRun) {
+					if (preparedDto.getDto() instanceof TestRunDto) {
 						final TestRunDto testRunDto = (TestRunDto) preparedDto.getDto();
 						if (TestResultStatus.valueOf(testRunDto.getTestResultStatus()) == TestResultStatus.UNDEFINED) {
 							response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
