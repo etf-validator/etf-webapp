@@ -144,7 +144,6 @@ dependencies {
             "org.springframework.security:spring-security-web:$springSecurityVersion",
             "org.springframework.security.oauth:spring-security-oauth2:$springSecurityOAuth2Version",
 
-            "javax.servlet:jstl:1.2",
             "javax.validation:validation-api:1.1.0.Final",
 
             "org.thymeleaf:thymeleaf-spring4:2.1.6.RELEASE",
@@ -221,6 +220,7 @@ war {
         include 'etf-*td*.jar'
         into('testdrivers')
     }
+
 }
 
 if(project.hasProperty("opbeat.organizationId")) {
