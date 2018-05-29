@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 European Union, interactive instruments GmbH
+ * Copyright 2017-2018 European Union, interactive instruments GmbH
  * Licensed under the EUPL, Version 1.2 or - as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
@@ -111,10 +111,10 @@ public class TestObjectTypeController {
 		if (!UriUtils.isFile(resourceDto.getUri())) {
 			// service URI
 			dto.setRemoteResource(resourceDto.getUri());
-		}else{
+		} else {
 			// fallback download URI
 			final URI downloadUri = dto.getResourceByName("data");
-			if(downloadUri!=null && !UriUtils.isFile(downloadUri)) {
+			if (downloadUri != null && !UriUtils.isFile(downloadUri)) {
 				dto.setRemoteResource(downloadUri);
 			}
 		}
