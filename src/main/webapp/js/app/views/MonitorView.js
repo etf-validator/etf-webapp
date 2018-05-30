@@ -55,33 +55,6 @@ define([
             this.monitorLogArea.text("Connecting to test runner and waiting for new messages...");
             this.currentLogPos = 0;
 
-            /*
-            this.container.html(
-                this.template({ moment: moment,
-                    // todo ETS
-                })
-            );
-
-            this.addListener($("body"), "pagecontainerchangefailed", function(event, data) {
-
-                console.log("Test report not available");
-                var lastLog = monitor.val();
-                var eO = new Error("Internal error occurred during test run: " + lastLog);
-                eO.name = 'InternalTestRunError';
-                // _opbeat('captureException', eO);
-
-                alert("An internal error occurred during the execution of " +
-                    "the test run and a test report could not be generated. " +
-                    "The error may be occurred due to a defect in an executable test suite " +
-                    "or due to a defect in the test engine. " +
-                    "Please check the log of the test run or " +
-                    " contact the system administrator to check " +
-                    "the 'etf.log' log path. Sorry for the inconvenience!");
-                throw eO;
-            });
-            */
-
-
             this.container.trigger('create');
             return this;
         },
@@ -161,7 +134,6 @@ define([
                             " a report or the internet connection to the web application has been lost!");
                         var e = new Error("Internal error occurred during test run: " + _this.monitorLogArea.val());
                         e.name = 'InternalTestRunError';
-                        // _opbeat('captureException', e);
                     }
                 }
             });

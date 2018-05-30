@@ -24,18 +24,6 @@
     <meta property="og:description" content="ETF is an open source testing framework for validating spatial data, metadata and web services in Spatial Data Infrastructures" />
     <meta property="og:type" content="WebApplication" />
     <title th:text="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}">BRANDING TEXT</title>
-    <!-- Opbeat for Javascript bug reports -->
-    <!-- https://opbeat.com/docs/articles/get-started-with-javascript/ -->
-    <script th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).submitAnalysisData == 'true'}"
-            src="https://d3tvtfb6518e3e.cloudfront.net/3/opbeat.min.js"
-            data-org-id="51578fc580a94ef3a79e0d4f94769114"
-            data-app-id="ea471c7d24" async="async">
-    </script>
-    <script type="text/javascript">
-        // This feature is activated with the etf.errors.autoreport configuration property
-        _opbeat = window._opbeat || function() { (window._opbeat.q = window._opbeat.q || []).push(arguments) };
-        _opbeat('config', { /* Configuration options */ });
-    </script>
     <link rel="fluid-icon" th:href="@{/310x310.png}" th:title="${T(de.interactive_instruments.etf.webapp.helpers.View).brandingText}" />
     <link rel="mask-icon" th:href="@{/icon-mono.svg}" color="#000000" />
     <link rel="shortcut icon" th:href="@{/favicon.ico}" href="/favicon.ico" type="image/vnd.microsoft.icon" />
