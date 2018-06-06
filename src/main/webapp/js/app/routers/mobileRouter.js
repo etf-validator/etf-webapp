@@ -226,21 +226,12 @@ define([
                 	label = model.attributes.label;
         		}
 			});
-        	var credentials = function(username, password) {
-	            if(!_.isUndefined(username) && ! username.trim().length < 1) {
-	                this.username = username;
-	                this.password = password;
-	            }
-	        };
-	        
-	        
-	        
 			var etslocal = {};
 			var etsremote = [];
 			var testObject = {};
 			var argumentList = {};
 			
-			collection = this.executableTestSuitesView.collection;
+			var collection = this.executableTestSuitesView.collection;
 			//When there is just one task.
         	if(!_.isUndefined(tasks.executableTestSuite)){ 
         		testObject = tasks.testObject.id;
@@ -274,9 +265,7 @@ define([
 	        	else{
 	        		label = label + " (1)";
 	        	}
-				newTestObject = new v2.TestObject(new v2.Resource("data", testObject.remoteResource));
-				console.log(testObject);
-                console.log(newTestObject);
+				var newTestObject = new v2.TestObject(new v2.Resource("data", testObject.remoteResource));
                 var testRun = new v2.TestRun(label,etsremote, argumentList, newTestObject);
                 $("#start-tests-confirm").addClass('ui-disabled');
                 v2.startTestRun(testRun, function (data) {
