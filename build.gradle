@@ -18,7 +18,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.26'
+        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'[1.0.26,1.0.99]'
         classpath "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
 
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE"
@@ -147,7 +147,6 @@ dependencies {
             "org.springframework.security:spring-security-web:$springSecurityVersion",
             "org.springframework.security.oauth:spring-security-oauth2:$springSecurityOAuth2Version",
 
-            "javax.servlet:jstl:1.2",
             "javax.validation:validation-api:1.1.0.Final",
 
             "org.thymeleaf:thymeleaf-spring4:2.1.6.RELEASE",
@@ -224,35 +223,6 @@ war {
         include 'etf-*td*.jar'
         into('testdrivers')
     }
+
 }
 
-if(project.hasProperty("opbeat.organizationId")) {
-    task opbeatRelease {
-        doLast {
-            final String reqPath = "/api/v1/organizations/" +
-                    project.getProperty("opbeat.organizationId") +
-                    "/apps/" +
-                    project.getProperty("opbeat.appId") + "/releases/"
-            def releaseData = [
-                    'rev'   : repo.head().abbreviatedId,
-                    'branch': 'master',
-                    'status': 'completed']
-            def reqHeaders = [
-                    'User-Agent'   : 'gradle-notify',
-                    'Authorization': "Bearer " + project.getProperty("opbeat.api_key")]
-
-            def http = new groovyx.net.http.HTTPBuilder("https://intake.opbeat.com");
-            http.request(groovyx.net.http.Method.POST, groovyx.net.http.ContentType.JSON) {
-                uri.path = reqPath
-                headers = reqHeaders
-                body = releaseData
-                response.failure = { resp, reader -> System.out << reader }
-                response.success = { println "Notified Opbeat" }
-            }
-        }
-        if (tasks.findByPath('uploadArchives') != null) {
-            opbeatRelease.shouldRunAfter uploadArchives
-            afterReleaseBuild.dependsOn opbeatRelease
-        }
-    }
-}
