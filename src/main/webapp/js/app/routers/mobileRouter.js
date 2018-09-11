@@ -234,7 +234,7 @@ define([
 			var collection = this.executableTestSuitesView.collection;
 			//When there is just one task.
         	if(!_.isUndefined(tasks.executableTestSuite)){ 
-        		testObject = tasks.testObject.id;
+        		testObject = tasks.testObject;
         		argumentList = tasks.ArgumentList;
         		etslocal[tasks.executableTestSuite.id] = collection._byId[tasks.executableTestSuite.id];
         		etsremote.push(tasks.executableTestSuite.id);
@@ -257,10 +257,10 @@ define([
 	        	var regex1 = RegExp(/\(\d+\)$/);
 	        	var regex2 = RegExp(/\d+/);
 	        	if(regex1.test(label)){
-	        		var cadenaIntentos = regex1.exec(label);
-	            	var numeroIntentos = parseInt(regex2.exec(cadenaIntentos));
-	            	var nuevoNumero = numeroIntentos + 1;
-	            	label = label.replace(regex1,"("+nuevoNumero+")");
+	        		var stringAttempt = regex1.exec(label);
+	            	var nAttempt = parseInt(regex2.exec(stringAttempt));
+	            	var newNumber = nAttempt + 1;
+	            	label = label.replace(regex1,"("+newNumber+")");
 	        	}
 	        	else{
 	        		label = label + " (1)";
