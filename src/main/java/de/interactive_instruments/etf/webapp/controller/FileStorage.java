@@ -64,7 +64,7 @@ class FileStorage {
 		this.storageDir = destination;
 		this.tmpDir = tmpDir;
 		this.baseFilter = baseFilter;
-		maxStorageSize = 10737418240L;
+		setMaxStorageSize(10737418240L);
 	}
 
 	/**
