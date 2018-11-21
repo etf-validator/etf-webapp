@@ -40,6 +40,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +69,8 @@ import de.interactive_instruments.etf.webapp.helpers.CacheControl;
 import de.interactive_instruments.etf.webapp.helpers.SimpleFilter;
 import de.interactive_instruments.exceptions.*;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
+import de.interactive_instruments.properties.Properties;
+import de.interactive_instruments.properties.PropertyHolder;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -269,6 +272,16 @@ public class TestResultController {
 				final ServletOutputStream out = response.getOutputStream();
 				final PreparedDto preparedDto = dao.getById(EidConverter.toEid(id));
 
+				// Set language
+				final Locale locale;
+				final String langParameter = request.getParameter("lang");
+				if (!SUtils.isNullOrEmpty(langParameter)) {
+					locale = new Locale(langParameter);
+				} else {
+					locale = LocaleContextHolder.getLocale();
+				}
+				final PropertyHolder properties = new Properties().setProperty("language", locale.getLanguage());
+
 				if (Objects.equals(download, "true")) {
 					final String reportFileName;
 					if (preparedDto.getDto() instanceof TestRunDto) {
@@ -292,10 +305,10 @@ public class TestResultController {
 					response.setContentType(MediaType.TEXT_HTML_VALUE);
 					response.setHeader("Content-Disposition",
 							"attachment; filename=" + IFile.sanitize(reportFileName) + ".html");
-					preparedDto.streamTo(testRunHtmlReportFormat, null, out);
+					preparedDto.streamTo(testRunHtmlReportFormat, properties, out);
 				} else {
 					response.setContentType(MediaType.TEXT_HTML_VALUE);
-					preparedDto.streamTo(testRunHtmlReportFormat, null, out);
+					preparedDto.streamTo(testRunHtmlReportFormat, properties, out);
 				}
 			} catch (final ObjectWithIdNotFoundException e) {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
