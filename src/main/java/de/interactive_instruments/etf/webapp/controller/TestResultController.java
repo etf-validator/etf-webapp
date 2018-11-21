@@ -71,11 +71,7 @@ import de.interactive_instruments.exceptions.*;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
 import de.interactive_instruments.properties.Properties;
 import de.interactive_instruments.properties.PropertyHolder;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 
 /**
  * Test result controller for viewing and comparing test results
@@ -129,6 +125,10 @@ public class TestResultController {
 			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/result_xsd.html#TestTaskResult). "
 			+ TEST_TASK_RESULT_NOTE
 			+ ETF_ITEM_COLLECTION_DESCRIPTION;
+
+	private final static String HTML_REPORT_NOTE = " If the Accept-Language header is set and translations are available in that "
+			+ "language, the report or parts of it will be returned in the requested language. English is used as fallback language. "
+			+ "Note: changing the Accept-Language header may not work in the Swagger User Interface.";
 
 	private static class TestResultCleaner implements ExpirationItemHolder {
 		private final WriteDao<TestRunDto> testRunDao;
@@ -381,8 +381,11 @@ public class TestResultController {
 		streaming.asJson2(testRunDao, request, response, id);
 	}
 
-	@ApiOperation(value = "Generate a HTML Test Report", notes = "Generates a HTML report from the test results of one Test Run.", produces = "text/html", tags = {
-			TEST_RESULTS_TAG_NAME})
+	@ApiOperation(value = "Generate a HTML Test Report", notes = "Generates a HTML report from the test results of one Test Run."
+			+ HTML_REPORT_NOTE, produces = "text/html", tags = {
+					TEST_RESULTS_TAG_NAME})
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "Accept-Language", value = "Report language", dataType = "string", paramType = "header")})
 	@ApiResponses(value = {
 			@ApiResponse(code = 202, message = "Test Run exists", response = Void.class),
 			@ApiResponse(code = 404, message = "Test Run does not exist", response = Void.class),
@@ -494,8 +497,10 @@ public class TestResultController {
 		streaming.asJson2(testTaskResultDao, request, response, id);
 	}
 
-	@ApiOperation(value = "Generate a HTML Test Report from a single Test Task within a Test Run", notes = "Generates a HTML report from one single result of Test Task the within a Test Run. "
-			+ TEST_TASK_RESULT_NOTE, produces = "text/html", tags = {TEST_RESULTS_TAG_NAME})
+	@ApiOperation(value = "Generate a HTML Test Report from a single Test Task within a Test Run. ", notes = "Generates a HTML report from one single result of Test Task the within a Test Run. "
+			+ TEST_TASK_RESULT_NOTE + HTML_REPORT_NOTE, produces = "text/html", tags = {TEST_RESULTS_TAG_NAME})
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "Accept-Language", value = "Report language", dataType = "string", paramType = "header")})
 	@ApiResponses(value = {
 			@ApiResponse(code = 202, message = "Test Task exists", response = Void.class),
 			@ApiResponse(code = 404, message = "Test Task does not exist", response = Void.class),
