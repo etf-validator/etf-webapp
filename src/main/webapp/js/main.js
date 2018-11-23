@@ -99,9 +99,9 @@ require.config( {
 
             'https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.14.2/js/jquery.fileupload.min.js': 'sha256-tcXzqklRDpmITiQ0Ff+S6H2uUQl089oXkEyGjOOGmN4='
         };
-        var external = !path.startsWith('js/');
+        var jsPos = path.indexOf('js/');
         var sri = sri[path];
-        if(external===true) {
+        if(jsPos != 0) {
             node.setAttribute('crossorigin', 'anonymous');
             if(sri) {
                 node.setAttribute('integrity', sri);
