@@ -8,19 +8,33 @@ about: Create an issue report to help us improve ETF
 !!! PLEASE READ THE TEXT BELOW !!!
 !!!
 
-This repository is intended for issue reports specific to the ETF validator.
+### Correct repository?
+
+This repository is intended for issue reports specific to the ETF validator software.
+
 If you have an issue with an Executable Test Suite, then please use the
 corresponding repository, for instance the [INSPIRE repository](https://github.com/inspire-eu-validation/community/blob/master/README.md)
 if you have an issue with an INSPIRE test.
 
+If you are using an instance of the validator from a service provider and your problem is solely that the web interface is not loading or the service is unavailable, then contact the provider directly. This include the following HTTP error codes:
+- 403 - Forbidden
+- 404 - Not Found
+- 413 - Request Entity Too Large
+- 502 - Bad Gateway
+- 503 - Service Unavailable
+- 504 - Gateway Timeout
+- 507 - Insufficient Storage
+- 509 - Bandwidth Limit Exceeded
+
+
 Our User, Administrator and Developer
-manuals are available here: http://docs.etf-validator.net/.**
+manuals are available here: http://docs.etf-validator.net
 
 ### Prerequisites for a bug report
 
 * [ ] Set a clear and descriptive title
 * [ ] Can you reproduce the problem
-* [ ] Did you [use the Github issue search](https://github.com/issues?utf8=✓&q=is%3Aissue+user%3Ainteractive-instruments) to check whether your bug has already been reported?
+* [ ] Did you [use the Github issue search](https://github.com/issues?utf8=✓&q=is%3Aissue+user%3Aetf-validator) to check whether your bug has already been reported?
 * [ ] Upload excerpts of the etf.log, catalina.out/log and localhost-<date>.log files. Important parts are:
 the initialization log entries beginning with the ETF ASCII logo and ending with "TestRunController initialized!" plus the last exception messages.
 * [ ] If the problem is related to the Web user interface: include screenshots
