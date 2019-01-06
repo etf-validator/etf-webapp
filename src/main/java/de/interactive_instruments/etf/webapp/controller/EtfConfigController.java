@@ -1,5 +1,5 @@
 /**
- * Copyright 2017-2018 European Union, interactive instruments GmbH
+ * Copyright 2017-2019 European Union, interactive instruments GmbH
  * Licensed under the EUPL, Version 1.2 or - as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
@@ -482,9 +482,9 @@ public class EtfConfigController implements PropertyHolder {
 	private void updateTestDrivers() throws IOException {
 		final IFile tdDir = etfDir.expandPath(defaultProperties.get(ETF_TESTDRIVERS_DIR));
 		tdDir.mkdirs();
-		if(tdDir.secureExpandPathDown(".etf_do_not_touch_drivers").exists()) {
+		if (tdDir.secureExpandPathDown(".etf_do_not_touch_drivers").exists()) {
 			logger.debug("Drivers are not touched.");
-		}else{
+		} else {
 			final IFile.VersionedFileList latestDriverVersions = tdDir.getVersionedFilesInDir();
 			// Copy test drivers
 			final String tdDirName = "/testdrivers";
