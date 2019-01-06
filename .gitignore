@@ -14,3 +14,4 @@ src/main/webapp/help
 etf-*.log
 etf-*.zip
 hs_err_pid*.log
+/build-dependencies.txt
