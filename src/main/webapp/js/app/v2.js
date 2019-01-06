@@ -48,9 +48,7 @@ define(['toastr'], function (toastr) {
     }
 
     function unexpectedError(error) {
-        if(!_.isUndefined(_opbeat)) {
-            _opbeat('captureException', error);
-        }
+        // https://github.com/etf-validator/etf-webapp/issues/155
     }
 
     function apiCallError(message, title, xhr) {

@@ -22,18 +22,18 @@
 <tiles-definitions>
 
 	<!-- Main sites -->
-	<definition name="error" template="error.html" templateType="thymeleaf"/>
 	<definition name="etf" template="etf.html" templateType="thymeleaf">
-		<put-attribute name="header" cascade="true" value="/layout.html :: header" type="thymeleaf"/>
-		<put-attribute name="footer" cascade="true" value="/layout.html :: footer" type="thymeleaf"/>
+		<put-attribute name="header" cascade="true" value="layout.html :: header" type="thymeleaf"/>
+		<put-attribute name="footer" cascade="true" value="layout.html :: footer" type="thymeleaf"/>
 
-		<put-attribute name="home-page" value="/home.html :: home-page" type="thymeleaf"/>
-		<put-attribute name="start-tests-page" value="/executable-test-suites.html :: start-tests-page" type="thymeleaf"/>
-		<put-attribute name="test-objects-page" value="/test-objects.html :: test-objects-page" type="thymeleaf"/>
-		<put-attribute name="test-reports-page" value="/test-reports.html :: test-reports-page" type="thymeleaf"/>
+		<put-attribute name="home-page" value="home.html :: home-page" type="thymeleaf"/>
+		<put-attribute name="start-tests-page" value="executable-test-suites.html :: start-tests-page" type="thymeleaf"/>
+		<put-attribute name="test-objects-page" value="test-objects.html :: test-objects-page" type="thymeleaf"/>
+		<put-attribute name="test-reports-page" value="test-reports.html :: test-reports-page" type="thymeleaf"/>
 		<!--put-attribute name="monitor-test-run-page" value="/monitor-test-run.html :: monitor-test-run-dialog" type="thymeleaf"/-->
 	</definition>
 	<definition name="offline" template="offline.html"/>
+	<definition name="error" template="error.html"/>
 
 
 	<!-- Pages -->

@@ -1,0 +1,16 @@
+language: java
+jdk:
+- oraclejdk8
+os:
+- linux
+branches:
+  except:
+  - master
+cache:
+  directories:
+  - "$HOME/.gradle"
+before_script:
+- export TZ=Europe/Berlin
+script:
+- "./gradlew init"
+- "./gradlew -Dorg.gradle.project.ii.etfdev.quality.reports=true test jacocoTestReport"

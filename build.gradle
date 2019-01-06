@@ -18,7 +18,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'1.0.25'
+        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'[1.0.30,1.0.99]'
         classpath "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
 
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE"
@@ -43,10 +43,10 @@ import groovy.json.JsonSlurper
 apply plugin: 'idea'
 
 ext.springSecurityVersion = "4.2.3.RELEASE"
-ext.springSecurityOAuth2Version = "2.1.1.RELEASE"
-ext.springVersion = "4.3.9.RELEASE"
+ext.springSecurityOAuth2Version = "2.2.1.RELEASE"
+ext.springVersion = "4.3.13.RELEASE"
 ext.springBootTestVersion = "1.5.5.RELEASE"
-ext.jacksonVersion = "2.8.9"
+ext.jacksonVersion = "2.8.11"
 ext.springfoxSwaggerVersion = "2.6.1"
 
 configurations {
@@ -77,23 +77,21 @@ idea {
 
 dependencies {
 
-    compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.7.0-4'
+    compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.7.0-21'
 
-    compile group: 'de.interactive_instruments', name: 'ii-commons-util', version: '2.0.0' + project.snapshotSuffix
-    compile group: 'de.interactive_instruments.etf', name: 'etf-core', version: '1.0.0' + project.snapshotSuffix
-    compile group: 'de.interactive_instruments.etf', name: 'etf-spi', version: '1.0.0' + project.snapshotSuffix
-
-    compile group: 'de.interactive_instruments.etf', name: 'etf-stdtot', version: '1.0.0' + project.snapshotSuffix
+    compile group: 'de.interactive_instruments', name: 'ii-commons-util', version: '3.0.0' + project.snapshotSuffix
+    compile group: 'de.interactive_instruments.etf', name: 'etf-core', version: '1.1.0' + project.snapshotSuffix
+    compile group: 'de.interactive_instruments.etf', name: 'etf-spi', version: '1.0.1' + project.snapshotSuffix
+    compile group: 'de.interactive_instruments.etf', name: 'etf-stdtot', version: '1.0.1' + project.snapshotSuffix
 
     // TODO remove in future versions, use SPI
-    compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version: '2.0.0' + project.snapshotSuffix
-    compile group: 'de.interactive_instruments.etf', name: 'etf-rc', version: '1.0.0' + project.snapshotSuffix
+    compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version: '2.0.1' + project.snapshotSuffix
 
     // Prepackaged test drivers
     // TODO download in future versions
-    testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-suitd', version: '2.0.0' + project.snapshotSuffix
-    testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-bsxtd', version: '2.0.0' + project.snapshotSuffix
-    testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-tetd', version: '1.0.0' + project.snapshotSuffix
+    testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-suitd', version: '2.0.1' + project.snapshotSuffix
+    testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-bsxtd', version: '2.0.1' + project.snapshotSuffix
+    testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-tetd', version: '1.0.1' + project.snapshotSuffix
 
     // Bean validation
     // compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.0.1.Final'
@@ -144,11 +142,10 @@ dependencies {
             "org.springframework.security:spring-security-web:$springSecurityVersion",
             "org.springframework.security.oauth:spring-security-oauth2:$springSecurityOAuth2Version",
 
-            "javax.servlet:jstl:1.2",
             "javax.validation:validation-api:1.1.0.Final",
 
-            "org.thymeleaf:thymeleaf-spring4:2.1.5.RELEASE",
-            "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE",
+            "org.thymeleaf:thymeleaf-spring4:2.1.6.RELEASE",
+            "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.3.RELEASE",
             "org.thymeleaf.extras:thymeleaf-extras-conditionalcomments:2.1.2.RELEASE"
 
     compile("org.thymeleaf.extras:thymeleaf-extras-tiles2-spring4:2.1.1.RELEASE") {
@@ -175,6 +172,19 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: springfoxSwaggerVersion
     compile group: 'io.springfox', name: 'springfox-swagger2', version: springfoxSwaggerVersion
     // compile group: 'io.springfox', name: 'springfox-staticdocs', version: '2.4.0'
+
+    compile group: 'ognl', name: 'ognl', version: '3.0.21'
+
+
+    compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
+
+    // Upgrade Thymeleaf dependency, see https://nvd.nist.gov/vuln/detail/CVE-2016-3093
+    compile group: 'ognl', name: 'ognl', version: '3.0.21'
+
+    // Upgrade Thymeleaf, Tiles dependency, see https://nvd.nist.gov/vuln/detail/CVE-2014-0114
+    compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
+
+
 }
 
 def findRuntimeJar(prefix) {
@@ -208,35 +218,5 @@ war {
         include 'etf-*td*.jar'
         into('testdrivers')
     }
-}
 
-if(project.hasProperty("opbeat.organizationId")) {
-    task opbeatRelease {
-        doLast {
-            final String reqPath = "/api/v1/organizations/" +
-                    project.getProperty("opbeat.organizationId") +
-                    "/apps/" +
-                    project.getProperty("opbeat.appId") + "/releases/"
-            def releaseData = [
-                    'rev'   : repo.head().abbreviatedId,
-                    'branch': 'master',
-                    'status': 'completed']
-            def reqHeaders = [
-                    'User-Agent'   : 'gradle-notify',
-                    'Authorization': "Bearer " + project.getProperty("opbeat.api_key")]
-
-            def http = new groovyx.net.http.HTTPBuilder("https://intake.opbeat.com");
-            http.request(groovyx.net.http.Method.POST, groovyx.net.http.ContentType.JSON) {
-                uri.path = reqPath
-                headers = reqHeaders
-                body = releaseData
-                response.failure = { resp, reader -> System.out << reader }
-                response.success = { println "Notified Opbeat" }
-            }
-        }
-        if (tasks.findByPath('uploadArchives') != null) {
-            opbeatRelease.shouldRunAfter uploadArchives
-            afterReleaseBuild.dependsOn opbeatRelease
-        }
-    }
 }
