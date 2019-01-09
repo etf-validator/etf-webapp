@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 European Union, interactive instruments GmbH
+ * Copyright 2017-2019 European Union, interactive instruments GmbH
  * Licensed under the EUPL, Version 1.2 or - as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
@@ -397,7 +397,7 @@ public class EtfConfigController implements PropertyHolder {
 				logger.warn("The value of the {} property should be set to value greater "
 						+ "than the value {} of the {} property.",
 						ETF_TEST_OBJECT_MAX_SIZE, maxUploadSize, ETF_MAX_UPLOAD_SIZE);
-				configProperties.setProperty(ETF_TEST_OBJECT_MAX_SIZE, ETF_MAX_UPLOAD_SIZE);
+				configProperties.setProperty(ETF_TEST_OBJECT_MAX_SIZE, configProperties.getProperty(ETF_MAX_UPLOAD_SIZE));
 			}
 		} catch (InvalidPropertyException e) {
 			// Should never happen
@@ -482,25 +482,28 @@ public class EtfConfigController implements PropertyHolder {
 	private void updateTestDrivers() throws IOException {
 		final IFile tdDir = etfDir.expandPath(defaultProperties.get(ETF_TESTDRIVERS_DIR));
 		tdDir.mkdirs();
-		final IFile.VersionedFileList latestDriverVersions = tdDir.getVersionedFilesInDir();
-
-		// Copy test drivers
-		final String tdDirName = "/testdrivers";
-		final Set<String> tds = servletContext.getResourcePaths(tdDirName);
-		if (tds != null) {
-			for (final String td : tds) {
-				final String testDriverName = td.substring(tdDirName.length());
-				if (!SUtils.isNullOrEmpty(testDriverName) && latestDriverVersions.isNewer(testDriverName)) {
-					logger.info("Installing Test Driver " + testDriverName);
-					final IFile tdJar = new IFile(tdDir, testDriverName);
-					final InputStream jarStream = servletContext.getResourceAsStream(td);
-					try (final FileOutputStream out = new FileOutputStream(tdJar)) {
-						IOUtils.copy(jarStream, out);
-					} catch (final IOException e) {
-						tdJar.delete();
-						logger.error("Could not copy test driver: ", e);
-					} finally {
-						jarStream.close();
+		if (tdDir.secureExpandPathDown(".etf_do_not_touch_drivers").exists()) {
+			logger.debug("Drivers are not touched.");
+		} else {
+			final IFile.VersionedFileList latestDriverVersions = tdDir.getVersionedFilesInDir();
+			// Copy test drivers
+			final String tdDirName = "/testdrivers";
+			final Set<String> tds = servletContext.getResourcePaths(tdDirName);
+			if (tds != null) {
+				for (final String td : tds) {
+					final String testDriverName = td.substring(tdDirName.length());
+					if (!SUtils.isNullOrEmpty(testDriverName) && latestDriverVersions.isNewer(testDriverName)) {
+						logger.info("Installing Test Driver " + testDriverName);
+						final IFile tdJar = new IFile(tdDir, testDriverName);
+						final InputStream jarStream = servletContext.getResourceAsStream(td);
+						try (final FileOutputStream out = new FileOutputStream(tdJar)) {
+							IOUtils.copy(jarStream, out);
+						} catch (final IOException e) {
+							tdJar.delete();
+							logger.error("Could not copy test driver: ", e);
+						} finally {
+							jarStream.close();
+						}
 					}
 				}
 			}

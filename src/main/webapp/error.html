@@ -16,18 +16,6 @@
 
 <p th:if="${hint != null}" th:text="${hint}"></p>
 
-<script th:if="${submitReport == true}" th:inline="javascript">
-    /*<![CDATA[*/
-    var exType = /*[[${ex.class.simpleName}]]*/ null;
-    var message = /*[[${ex.message}]]*/ null;
-    var exid = /*[[${exid}]]*/ null;
-    var e = new Error(exid+" -> "+message);
-    e.name=exType;
-    _opbeat('captureException', e);
-    /*]]>*/
-</script>
-
-
 <div th:if="${ex != null}">
 
     <p><b th:if="${ex.message}" th:text="${ex.message}">exception message...</b></p>
@@ -47,10 +35,6 @@
 <div th:if="${ex == null}">
     <p>Error logged</p>
 </div>
-<div th:if="${submitReport == true}">
-    <p>Error report submitted</p>
-</div>
-
 
 </body>
 </html>

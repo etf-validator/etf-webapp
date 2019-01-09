@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 European Union, interactive instruments GmbH
+ * Copyright 2017-2019 European Union, interactive instruments GmbH
  * Licensed under the EUPL, Version 1.2 or - as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
@@ -70,13 +70,13 @@ public class SwaggerConfig {
 		return new ApiInfoBuilder()
 				.title("ETF Web API")
 				.description(
-						"This is an interactive documentation and a web user interface for interacting with the Web API version 2 BETA of the test framework "
-								+ "[ETF](https://interactive-instruments.github.io/etf-webapp). "
+						"This is an interactive documentation and a web user interface for interacting with the Web API version 2 of the test framework "
+								+ "[ETF](http://etf-validator.net). "
 								+ "This semi-automatic generated documentation covers basic functionality, but consulting the [API Documentation](http://docs.etf-validator.net/v2.0/Developer_manuals/WEB-API.html) "
 								+ "may be required to get a deeper understanding of the ETF model and further procedures. "
 								+ "Issues can be reported in [GitHub]"
-								+ "(https://github.com/interactive-instruments/etf-webapp/issues/new?title=[webapi-v2-beta]%20&body=Please%20don%27t%20delete%20the%20"
-								+ "[webapi-v2-beta]%20text%20in%20the%20title.%20This%20text%20can%20be%20deleted.&labels=webapi). "
+								+ "(https://github.com/etf-validator/etf-webapp/issues/new?title=[webapi-v2]%20&body=Please%20don%27t%20delete%20the%20[webapi-v2]"
+								+ "%20text%20in%20the%20title.%20This%20text%20can%20be%20deleted.&labels=module:%20Web%20UI%20/%20controller%20layer). "
 								+ "\n\n"
 								+ "Content negotiation is not supported and therefore JSON is always returned for endpoints without file extension. "
 								+ "For most operations, a link to the XML response schema is provided in the implementation nodes."
