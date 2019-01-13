@@ -57,116 +57,116 @@ import de.interactive_instruments.properties.PropertyUtils;
 @Service
 public class StreamingService {
 
-	@Autowired
-	private ObjectMapperFactory objectMapperFactory;
+    @Autowired
+    private ObjectMapperFactory objectMapperFactory;
 
-	private ObjectMapper mapper;
+    private ObjectMapper mapper;
 
-	private long initCacheSize() {
-		final long defaultVal = 30;
-		final long size = PropertyUtils.getenvOrProperty("ETF_STREAMING_CACHE_SIZE", defaultVal);
-		if (size != defaultVal) {
-			LoggerFactory.getLogger(StreamingService.class).info("Streaming cache set to: {}", size);
-		}
-		return size;
-	}
+    private long initCacheSize() {
+        final long defaultVal = 30;
+        final long size = PropertyUtils.getenvOrProperty("ETF_STREAMING_CACHE_SIZE", defaultVal);
+        if (size != defaultVal) {
+            LoggerFactory.getLogger(StreamingService.class).info("Streaming cache set to: {}", size);
+        }
+        return size;
+    }
 
-	private final Cache<String, byte[]> bigResponseCache = Caffeine.newBuilder().maximumSize(initCacheSize()).build();
+    private final Cache<String, byte[]> bigResponseCache = Caffeine.newBuilder().maximumSize(initCacheSize()).build();
 
-	@PostConstruct
-	void init() throws Exception {
-		mapper = objectMapperFactory.getObject();
-	}
+    @PostConstruct
+    void init() throws Exception {
+        mapper = objectMapperFactory.getObject();
+    }
 
-	void asXml2(
-			final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response,
-			final Filter filter)
-			throws IOException, ObjectWithIdNotFoundException, StorageException {
-		if (CacheControl.clientNeedsUpdate(dao, request, response)) {
-			final ServletOutputStream out = response.getOutputStream();
-			response.setContentType(MediaType.TEXT_XML_VALUE);
-			final OutputFormat xml = dao.getOutputFormats()
-					.get(EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Xml"));
-			dao.getAll(filter).streamTo(xml, null, out);
-		}
-	}
+    void asXml2(
+            final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response,
+            final Filter filter)
+            throws IOException, ObjectWithIdNotFoundException, StorageException {
+        if (CacheControl.clientNeedsUpdate(dao, request, response)) {
+            final ServletOutputStream out = response.getOutputStream();
+            response.setContentType(MediaType.TEXT_XML_VALUE);
+            final OutputFormat xml = dao.getOutputFormats()
+                    .get(EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Xml"));
+            dao.getAll(filter).streamTo(xml, null, out);
+        }
+    }
 
-	void asXml2(
-			final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response, final String id)
-			throws IOException, ObjectWithIdNotFoundException, StorageException {
-		if (CacheControl.clientNeedsUpdate(dao, request, response)) {
-			final ServletOutputStream out = response.getOutputStream();
-			response.setContentType(MediaType.TEXT_XML_VALUE);
-			final OutputFormat xml = dao.getOutputFormats()
-					.get(EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Xml"));
-			dao.getById(EidConverter.toEid(id)).streamTo(xml, null, out);
-		}
-	}
+    void asXml2(
+            final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response, final String id)
+            throws IOException, ObjectWithIdNotFoundException, StorageException {
+        if (CacheControl.clientNeedsUpdate(dao, request, response)) {
+            final ServletOutputStream out = response.getOutputStream();
+            response.setContentType(MediaType.TEXT_XML_VALUE);
+            final OutputFormat xml = dao.getOutputFormats()
+                    .get(EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Xml"));
+            dao.getById(EidConverter.toEid(id)).streamTo(xml, null, out);
+        }
+    }
 
-	private static String keyFor(final Dao<? extends Dto> dao, final Filter filter) {
-		final StringBuilder k = new StringBuilder(dao.getId());
-		k.append(".").append(dao.getLastModificationDate());
-		k.append(".").append(filter.offset());
-		k.append(".").append(filter.limit());
-		k.append(".").append(filter.fields());
-		return k.toString();
-	}
+    private static String keyFor(final Dao<? extends Dto> dao, final Filter filter) {
+        final StringBuilder k = new StringBuilder(dao.getId());
+        k.append(".").append(dao.getLastModificationDate());
+        k.append(".").append(filter.offset());
+        k.append(".").append(filter.limit());
+        k.append(".").append(filter.fields());
+        return k.toString();
+    }
 
-	public void prepareCache(final Dao<? extends Dto> dao, final Filter filter) {
-		try (ByteArrayOutputStream byteCache = new ByteArrayOutputStream()) {
-			final OutputFormat json = dao.getOutputFormats().get(
-					EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Json"));
-			dao.getAll(filter).streamTo(json, null, byteCache);
-			bigResponseCache.put(keyFor(dao, filter), byteCache.toByteArray());
-		} catch (IOException e) {
-			ExcUtils.suppress(e);
-		}
-	}
+    public void prepareCache(final Dao<? extends Dto> dao, final Filter filter) {
+        try (ByteArrayOutputStream byteCache = new ByteArrayOutputStream()) {
+            final OutputFormat json = dao.getOutputFormats().get(
+                    EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Json"));
+            dao.getAll(filter).streamTo(json, null, byteCache);
+            bigResponseCache.put(keyFor(dao, filter), byteCache.toByteArray());
+        } catch (IOException e) {
+            ExcUtils.suppress(e);
+        }
+    }
 
-	void asJson2(
-			final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response,
-			final Filter filter)
-			throws IOException, ObjectWithIdNotFoundException, StorageException {
-		if (CacheControl.clientNeedsUpdate(dao, request, response)) {
-			final ServletOutputStream out = response.getOutputStream();
-			response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+    void asJson2(
+            final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response,
+            final Filter filter)
+            throws IOException, ObjectWithIdNotFoundException, StorageException {
+        if (CacheControl.clientNeedsUpdate(dao, request, response)) {
+            final ServletOutputStream out = response.getOutputStream();
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
 
-			// Check if response is in cache
-			final String k = keyFor(dao, filter);
-			byte[] preparedResponse = bigResponseCache.getIfPresent(k);
-			if (preparedResponse == null) {
-				// save in cache
-				try (ByteArrayOutputStream byteCache = new ByteArrayOutputStream()) {
-					final OutputFormat json = dao.getOutputFormats()
-							.get(EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Json"));
-					dao.getAll(filter).streamTo(json, null, byteCache);
-					preparedResponse = byteCache.toByteArray();
-					bigResponseCache.put(k, preparedResponse);
-				}
-			}
-			try (ByteArrayInputStream byteStream = new ByteArrayInputStream(preparedResponse)) {
-				IOUtils.copy(byteStream, out);
-			}
-		}
-	}
+            // Check if response is in cache
+            final String k = keyFor(dao, filter);
+            byte[] preparedResponse = bigResponseCache.getIfPresent(k);
+            if (preparedResponse == null) {
+                // save in cache
+                try (ByteArrayOutputStream byteCache = new ByteArrayOutputStream()) {
+                    final OutputFormat json = dao.getOutputFormats()
+                            .get(EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Json"));
+                    dao.getAll(filter).streamTo(json, null, byteCache);
+                    preparedResponse = byteCache.toByteArray();
+                    bigResponseCache.put(k, preparedResponse);
+                }
+            }
+            try (ByteArrayInputStream byteStream = new ByteArrayInputStream(preparedResponse)) {
+                IOUtils.copy(byteStream, out);
+            }
+        }
+    }
 
-	void asJson2(
-			final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response, final String id)
-			throws IOException, ObjectWithIdNotFoundException, StorageException {
-		if (CacheControl.clientNeedsUpdate(dao, request, response)) {
-			final ServletOutputStream out = response.getOutputStream();
-			response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-			final OutputFormat json = dao.getOutputFormats()
-					.get(EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Json"));
-			dao.getById(EidConverter.toEid(id)).streamTo(json, null, out);
-		}
-	}
+    void asJson2(
+            final Dao<? extends Dto> dao, final HttpServletRequest request, final HttpServletResponse response, final String id)
+            throws IOException, ObjectWithIdNotFoundException, StorageException {
+        if (CacheControl.clientNeedsUpdate(dao, request, response)) {
+            final ServletOutputStream out = response.getOutputStream();
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            final OutputFormat json = dao.getOutputFormats()
+                    .get(EidFactory.getDefault().createUUID(dao.getDtoType().getSimpleName() + "DsResult2Json"));
+            dao.getById(EidConverter.toEid(id)).streamTo(json, null, out);
+        }
+    }
 
-	void asJson2(
-			final Dto dto, final HttpServletResponse response)
-			throws IOException, ObjectWithIdNotFoundException, StorageException {
-		final ServletOutputStream out = response.getOutputStream();
-		response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-		mapper.writeValue(out, dto);
-	}
+    void asJson2(
+            final Dto dto, final HttpServletResponse response)
+            throws IOException, ObjectWithIdNotFoundException, StorageException {
+        final ServletOutputStream out = response.getOutputStream();
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        mapper.writeValue(out, dto);
+    }
 }

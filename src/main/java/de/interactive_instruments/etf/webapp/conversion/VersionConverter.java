@@ -38,78 +38,78 @@ import de.interactive_instruments.Version;
  */
 public class VersionConverter implements EtfConverter<Version> {
 
-	private static Deserializer deserializer = new Deserializer();
-	private static Serializer serializer = new Serializer();
+    private static Deserializer deserializer = new Deserializer();
+    private static Serializer serializer = new Serializer();
 
-	public static Version toVersion(final String version) {
-		return Version.parse(version);
-	}
+    public static Version toVersion(final String version) {
+        return Version.parse(version);
+    }
 
-	public static String toStr(final Version version) {
-		return Objects.requireNonNull(version, "Cannot convert empty Version").getAsString();
-	}
+    public static String toStr(final Version version) {
+        return Objects.requireNonNull(version, "Cannot convert empty Version").getAsString();
+    }
 
-	@Override
-	public Version parse(final String text, final Locale locale) throws ParseException {
-		return toVersion(text);
-	}
+    @Override
+    public Version parse(final String text, final Locale locale) throws ParseException {
+        return toVersion(text);
+    }
 
-	@Override
-	public String print(final Version version, final Locale locale) {
-		return toStr(version);
-	}
+    @Override
+    public String print(final Version version, final Locale locale) {
+        return toStr(version);
+    }
 
-	@Override
-	public Class<Version> getType() {
-		return Version.class;
-	}
+    @Override
+    public Class<Version> getType() {
+        return Version.class;
+    }
 
-	@Override
-	public JsonDeserializer<Version> jsonDeserializer() {
-		return deserializer;
-	}
+    @Override
+    public JsonDeserializer<Version> jsonDeserializer() {
+        return deserializer;
+    }
 
-	@Override
-	public JsonSerializer<Version> jsonSerializer() {
-		return serializer;
-	}
+    @Override
+    public JsonSerializer<Version> jsonSerializer() {
+        return serializer;
+    }
 
-	@Override
-	public Converter<String, Version> typeToStrConverter() {
-		return deserializer;
-	}
+    @Override
+    public Converter<String, Version> typeToStrConverter() {
+        return deserializer;
+    }
 
-	@Override
-	public Converter<Version, String> strToTypeConverter() {
-		return serializer;
-	}
+    @Override
+    public Converter<Version, String> strToTypeConverter() {
+        return serializer;
+    }
 
-	private final static class Deserializer extends JsonDeserializer<Version> implements Converter<String, Version> {
-		@Override
-		public Version deserialize(final JsonParser jp, final DeserializationContext ctxt)
-				throws IOException, JsonProcessingException {
-			final JsonNode node = jp.getCodec().readTree(jp);
-			return new Version(node.asText());
-		}
+    private final static class Deserializer extends JsonDeserializer<Version> implements Converter<String, Version> {
+        @Override
+        public Version deserialize(final JsonParser jp, final DeserializationContext ctxt)
+                throws IOException, JsonProcessingException {
+            final JsonNode node = jp.getCodec().readTree(jp);
+            return new Version(node.asText());
+        }
 
-		@Override
-		public Version convert(final String source) {
-			return toVersion(source);
-		}
-	}
+        @Override
+        public Version convert(final String source) {
+            return toVersion(source);
+        }
+    }
 
-	private final static class Serializer extends JsonSerializer<Version> implements Converter<Version, String> {
-		@Override
-		public void serialize(final Version value, final JsonGenerator gen, final SerializerProvider serializers)
-				throws IOException, JsonProcessingException {
-			if (value != null) {
-				gen.writeString(value.getAsString());
-			}
-		}
+    private final static class Serializer extends JsonSerializer<Version> implements Converter<Version, String> {
+        @Override
+        public void serialize(final Version value, final JsonGenerator gen, final SerializerProvider serializers)
+                throws IOException, JsonProcessingException {
+            if (value != null) {
+                gen.writeString(value.getAsString());
+            }
+        }
 
-		@Override
-		public String convert(final Version source) {
-			return toStr(source);
-		}
-	}
+        @Override
+        public String convert(final Version source) {
+            return toStr(source);
+        }
+    }
 }

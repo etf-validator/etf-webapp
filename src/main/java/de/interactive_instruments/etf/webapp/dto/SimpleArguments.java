@@ -35,18 +35,18 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "Arguments")
 public class SimpleArguments {
 
-	@JsonIgnore
-	private Map<String, String> additionalProperties = new HashMap<String, String>();
+    @JsonIgnore
+    private Map<String, String> additionalProperties = new HashMap<String, String>();
 
-	@ApiModelProperty(value = "Key value pairs. See Implementation Notes for an complete example.")
-	@JsonAnyGetter
-	public Map<String, String> get() {
-		return this.additionalProperties;
-	}
+    @ApiModelProperty(value = "Key value pairs. See Implementation Notes for an complete example.")
+    @JsonAnyGetter
+    public Map<String, String> get() {
+        return this.additionalProperties;
+    }
 
-	@JsonAnySetter
-	public void set(String name, String value) {
-		this.additionalProperties.put(name, value);
-	}
+    @JsonAnySetter
+    public void set(String name, String value) {
+        this.additionalProperties.put(name, value);
+    }
 
 }

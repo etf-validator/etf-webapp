@@ -67,178 +67,178 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 public class EtsController {
 
-	@Autowired
-	ServletContext servletContext;
+    @Autowired
+    ServletContext servletContext;
 
-	// Wait for TestDriverController to activate all ETS
-	@Autowired
-	private TestDriverController testDriverController;
+    // Wait for TestDriverController to activate all ETS
+    @Autowired
+    private TestDriverController testDriverController;
 
-	@Autowired
-	private DataStorageService dataStorageService;
+    @Autowired
+    private DataStorageService dataStorageService;
 
-	@Autowired
-	private StreamingService streaming;
+    @Autowired
+    private StreamingService streaming;
 
-	private final Logger logger = LoggerFactory.getLogger(EtsController.class);
-	private Dao<ExecutableTestSuiteDto> etsDao;
-	private OutputFormat xmlOutputFormat;
-	private final static String ETS_URL = WebAppConstants.API_BASE_URL + "/ExecutableTestSuites";
-	private final static String ETS_MODEL_DESCRIPTION = "The Executable Test Suite model is described in the "
-			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/test_xsd.html#ExecutableTestSuite). "
-			+ ETF_ITEM_COLLECTION_DESCRIPTION;
+    private final Logger logger = LoggerFactory.getLogger(EtsController.class);
+    private Dao<ExecutableTestSuiteDto> etsDao;
+    private OutputFormat xmlOutputFormat;
+    private final static String ETS_URL = WebAppConstants.API_BASE_URL + "/ExecutableTestSuites";
+    private final static String ETS_MODEL_DESCRIPTION = "The Executable Test Suite model is described in the "
+            + "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/test_xsd.html#ExecutableTestSuite). "
+            + ETF_ITEM_COLLECTION_DESCRIPTION;
 
-	@PostConstruct
-	private void init() throws IOException, TransformerConfigurationException {
-		etsDao = dataStorageService.getDao(ExecutableTestSuiteDto.class);
-		xmlOutputFormat = etsDao.getOutputFormats().values().iterator().next();
-		logger.info("Executable Test Suite controller initialized!");
+    @PostConstruct
+    private void init() throws IOException, TransformerConfigurationException {
+        etsDao = dataStorageService.getDao(ExecutableTestSuiteDto.class);
+        xmlOutputFormat = etsDao.getOutputFormats().values().iterator().next();
+        logger.info("Executable Test Suite controller initialized!");
 
-		// Prepare cache
-		streaming.prepareCache(etsDao, new SimpleFilter("label,remoteResource,description,version,author,creationDate,"
-				+ "lastEditor,lastUpdateDate,tags,translationTemplateBundle,ParameterList,supportedTestObjectTypes,dependencies"));
-	}
+        // Prepare cache
+        streaming.prepareCache(etsDao, new SimpleFilter("label,remoteResource,description,version,author,creationDate,"
+                + "lastEditor,lastUpdateDate,tags,translationTemplateBundle,ParameterList,supportedTestObjectTypes,dependencies"));
+    }
 
-	@ApiOperation(value = "Get multiple Executable Test Suites as JSON", notes = ETS_MODEL_DESCRIPTION, tags = {
-			SERVICE_CAP_TAG_NAME})
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Executable Test Suite"),
-	})
-	@RequestMapping(value = {ETS_URL, ETS_URL + ".json"}, method = RequestMethod.GET)
-	public void listExecutableTestSuitesJson(
-			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
-			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
-			@ApiParam(value = FIELDS_DESCRIPTION) @RequestParam(required = false, defaultValue = "*") String fields,
-			HttpServletRequest request,
-			HttpServletResponse response)
-			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
-		streaming.asJson2(etsDao, request, response, new SimpleFilter(offset, limit, fields));
-	}
+    @ApiOperation(value = "Get multiple Executable Test Suites as JSON", notes = ETS_MODEL_DESCRIPTION, tags = {
+            SERVICE_CAP_TAG_NAME})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "EtfItemCollection with multiple Executable Test Suite"),
+    })
+    @RequestMapping(value = {ETS_URL, ETS_URL + ".json"}, method = RequestMethod.GET)
+    public void listExecutableTestSuitesJson(
+            @ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
+            @ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+            @ApiParam(value = FIELDS_DESCRIPTION) @RequestParam(required = false, defaultValue = "*") String fields,
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
+        streaming.asJson2(etsDao, request, response, new SimpleFilter(offset, limit, fields));
+    }
 
-	@ApiOperation(value = "Get multiple Executable Test Suites as XML", notes = ETS_MODEL_DESCRIPTION, tags = {
-			SERVICE_CAP_TAG_NAME})
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Executable Test Suite"),
-	})
-	@RequestMapping(value = {ETS_URL + ".xml"}, method = RequestMethod.GET)
-	public void listExecutableTestSuitesXml(
-			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
-			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
-			@ApiParam(value = FIELDS_DESCRIPTION) @RequestParam(required = false, defaultValue = "*") String fields,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streaming.asXml2(etsDao, request, response, new SimpleFilter(offset, limit, fields));
-	}
+    @ApiOperation(value = "Get multiple Executable Test Suites as XML", notes = ETS_MODEL_DESCRIPTION, tags = {
+            SERVICE_CAP_TAG_NAME})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "EtfItemCollection with multiple Executable Test Suite"),
+    })
+    @RequestMapping(value = {ETS_URL + ".xml"}, method = RequestMethod.GET)
+    public void listExecutableTestSuitesXml(
+            @ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
+            @ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+            @ApiParam(value = FIELDS_DESCRIPTION) @RequestParam(required = false, defaultValue = "*") String fields,
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+        streaming.asXml2(etsDao, request, response, new SimpleFilter(offset, limit, fields));
+    }
 
-	@ApiOperation(value = "Get Executable Test Suite as XML", notes = ETS_MODEL_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with one Executable Test Suite"),
-			@ApiResponse(code = 404, message = "Executable Test Suite not found")
-	})
-	@RequestMapping(value = {ETS_URL + "/{id}.xml"}, method = RequestMethod.GET)
-	public void executableTestSuiteXmlById(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
-			HttpServletRequest request, HttpServletResponse response)
-			throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streaming.asXml2(etsDao, request, response, id);
-	}
+    @ApiOperation(value = "Get Executable Test Suite as XML", notes = ETS_MODEL_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "EtfItemCollection with one Executable Test Suite"),
+            @ApiResponse(code = 404, message = "Executable Test Suite not found")
+    })
+    @RequestMapping(value = {ETS_URL + "/{id}.xml"}, method = RequestMethod.GET)
+    public void executableTestSuiteXmlById(
+            @ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
+            HttpServletRequest request, HttpServletResponse response)
+            throws IOException, StorageException, ObjectWithIdNotFoundException {
+        streaming.asXml2(etsDao, request, response, id);
+    }
 
-	@ApiOperation(value = "Get Executable Test Suite as JSON", notes = ETS_MODEL_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with one Executable Test Suite"),
-			@ApiResponse(code = 404, message = "Executable Test Suite not found")
-	})
-	@RequestMapping(value = {ETS_URL + "/{id}",
-			ETS_URL + "/{id}.json"}, method = RequestMethod.GET, produces = "application/json")
-	public void executableTestSuiteJsonById(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
-		streaming.asJson2(etsDao, request, response, id);
-	}
+    @ApiOperation(value = "Get Executable Test Suite as JSON", notes = ETS_MODEL_DESCRIPTION, tags = {SERVICE_CAP_TAG_NAME})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "EtfItemCollection with one Executable Test Suite"),
+            @ApiResponse(code = 404, message = "Executable Test Suite not found")
+    })
+    @RequestMapping(value = {ETS_URL + "/{id}",
+            ETS_URL + "/{id}.json"}, method = RequestMethod.GET, produces = "application/json")
+    public void executableTestSuiteJsonById(
+            @ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
+        streaming.asJson2(etsDao, request, response, id);
+    }
 
-	@ApiOperation(value = "Check if Executable Test Suite exists", tags = {SERVICE_CAP_TAG_NAME})
-	@ApiResponses(value = {
-			@ApiResponse(code = 204, message = "Executable Test Suite exists"),
-			@ApiResponse(code = 308, message = "Executable Test Suite exists but has been replaced by a newer version. "
-					+ "The URL to the newer version is provided in the 'Location'-Header field and identical with "
-					+ "the 'replacedBy' model property."),
-			@ApiResponse(code = 423, message = "Executable Test Suite exists but is disabled and can not be executed"),
-			@ApiResponse(code = 404, message = "Executable Test Suite does not exist")
-	})
-	@RequestMapping(value = {ETS_URL + "/{id}"}, method = RequestMethod.HEAD)
-	public ResponseEntity<String> exists(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id)
-			throws IOException, ObjectWithIdNotFoundException {
-		final EID eid = EidConverter.toEid(id);
-		if (etsDao.exists(eid)) {
-			if (etsDao.isDisabled(eid)) {
-				return new ResponseEntity(HttpStatus.LOCKED);
-			} else {
-				return new ResponseEntity(HttpStatus.NO_CONTENT);
-			}
-		} else {
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
-		}
-	}
+    @ApiOperation(value = "Check if Executable Test Suite exists", tags = {SERVICE_CAP_TAG_NAME})
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Executable Test Suite exists"),
+            @ApiResponse(code = 308, message = "Executable Test Suite exists but has been replaced by a newer version. "
+                    + "The URL to the newer version is provided in the 'Location'-Header field and identical with "
+                    + "the 'replacedBy' model property."),
+            @ApiResponse(code = 423, message = "Executable Test Suite exists but is disabled and can not be executed"),
+            @ApiResponse(code = 404, message = "Executable Test Suite does not exist")
+    })
+    @RequestMapping(value = {ETS_URL + "/{id}"}, method = RequestMethod.HEAD)
+    public ResponseEntity<String> exists(
+            @ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id)
+            throws IOException, ObjectWithIdNotFoundException {
+        final EID eid = EidConverter.toEid(id);
+        if (etsDao.exists(eid)) {
+            if (etsDao.isDisabled(eid)) {
+                return new ResponseEntity(HttpStatus.LOCKED);
+            } else {
+                return new ResponseEntity(HttpStatus.NO_CONTENT);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
 
-	@ApiOperation(value = "Get the parameter of an Executable Test Suite ", notes = "Get the parameter of an Executable Test Suite as JSON", tags = {
-			SERVICE_CAP_TAG_NAME}, response = Parameterizable.Parameter.class, responseContainer = "List")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Arguments"),
-			@ApiResponse(code = 404, message = "Executable Test Suite not found")
-	})
-	@RequestMapping(value = {ETS_URL + "/{etsId}/arguments.json"}, method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody Collection<Parameterizable.Parameter> etsParameterById(@PathVariable String etsId)
-			throws StorageException, ConfigurationException, ObjectWithIdNotFoundException {
-		// Get ETS and translation bundle to translate the description text
-		final ExecutableTestSuiteDto dto = etsDao.getById(EidConverter.toEid(etsId)).getDto();
-		if (dto.getParameters() == null) {
-			return null;
-		}
-		final ParameterSet transferParameters = new ParameterSet();
-		final TranslationTemplateBundleDto bundleDto = dto.getTranslationTemplateBundle();
-		for (final Parameterizable.Parameter parameter : dto.getParameters().getParameters()) {
-			final ParameterSet.MutableParameter copiedParam = new ParameterSet.MutableParameter(parameter);
-			if (parameter.getDescription() != null) {
-				final TranslationTemplateDto template = bundleDto.getTranslationTemplate(parameter.getDescription(), "en");
-				if (template != null && template.getStrWithTokens() != null) {
-					copiedParam.setDescription(template.getStrWithTokens());
-				}
-			}
-			transferParameters.addParameter(copiedParam);
-		}
-		return transferParameters.getParameters();
-	}
+    @ApiOperation(value = "Get the parameter of an Executable Test Suite ", notes = "Get the parameter of an Executable Test Suite as JSON", tags = {
+            SERVICE_CAP_TAG_NAME}, response = Parameterizable.Parameter.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Arguments"),
+            @ApiResponse(code = 404, message = "Executable Test Suite not found")
+    })
+    @RequestMapping(value = {ETS_URL + "/{etsId}/arguments.json"}, method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody Collection<Parameterizable.Parameter> etsParameterById(@PathVariable String etsId)
+            throws StorageException, ConfigurationException, ObjectWithIdNotFoundException {
+        // Get ETS and translation bundle to translate the description text
+        final ExecutableTestSuiteDto dto = etsDao.getById(EidConverter.toEid(etsId)).getDto();
+        if (dto.getParameters() == null) {
+            return null;
+        }
+        final ParameterSet transferParameters = new ParameterSet();
+        final TranslationTemplateBundleDto bundleDto = dto.getTranslationTemplateBundle();
+        for (final Parameterizable.Parameter parameter : dto.getParameters().getParameters()) {
+            final ParameterSet.MutableParameter copiedParam = new ParameterSet.MutableParameter(parameter);
+            if (parameter.getDescription() != null) {
+                final TranslationTemplateDto template = bundleDto.getTranslationTemplate(parameter.getDescription(), "en");
+                if (template != null && template.getStrWithTokens() != null) {
+                    copiedParam.setDescription(template.getStrWithTokens());
+                }
+            }
+            transferParameters.addParameter(copiedParam);
+        }
+        return transferParameters.getParameters();
+    }
 
-	private static class DependenciesJsonView {
-		public final String id;
-		public final String description;
-		public final String label;
+    private static class DependenciesJsonView {
+        public final String id;
+        public final String description;
+        public final String label;
 
-		DependenciesJsonView(ExecutableTestSuiteDto ets) {
-			id = ets.getId().toString();
-			description = ets.getDescription();
-			label = ets.getLabel();
-		}
-	}
+        DependenciesJsonView(ExecutableTestSuiteDto ets) {
+            id = ets.getId().toString();
+            description = ets.getDescription();
+            label = ets.getLabel();
+        }
+    }
 
-	@ApiOperation(value = "Get the dependencies of an Executable Test Suite", notes = "Get the dependencies of an Executable Test Suite as JSON", tags = {
-			SERVICE_CAP_TAG_NAME}, response = DependenciesJsonView.class, responseContainer = "List")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Dependencies"),
-			@ApiResponse(code = 404, message = "Executable Test Suite not found")
-	})
-	@RequestMapping(value = {ETS_URL + "/{etsId}/dependencies.json"}, method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<DependenciesJsonView> etsDependenciesById(@PathVariable String etsId)
-			throws StorageException, ConfigurationException, ObjectWithIdNotFoundException {
-		final Collection<ExecutableTestSuiteDto> dependencies = testDriverController
-				.getExecutableTestSuiteById(EidConverter.toEid(etsId)).getDependencies();
-		final DependencyGraph<ExecutableTestSuiteDto> graph = new DependencyGraph(dependencies);
-		final List<ExecutableTestSuiteDto> sortedDependencies = graph.sortIgnoreCylce();
-		final List<DependenciesJsonView> depsJson = sortedDependencies.stream().map(DependenciesJsonView::new)
-				.collect(Collectors.toList());
-		return depsJson;
-	}
+    @ApiOperation(value = "Get the dependencies of an Executable Test Suite", notes = "Get the dependencies of an Executable Test Suite as JSON", tags = {
+            SERVICE_CAP_TAG_NAME}, response = DependenciesJsonView.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Dependencies"),
+            @ApiResponse(code = 404, message = "Executable Test Suite not found")
+    })
+    @RequestMapping(value = {ETS_URL + "/{etsId}/dependencies.json"}, method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody List<DependenciesJsonView> etsDependenciesById(@PathVariable String etsId)
+            throws StorageException, ConfigurationException, ObjectWithIdNotFoundException {
+        final Collection<ExecutableTestSuiteDto> dependencies = testDriverController
+                .getExecutableTestSuiteById(EidConverter.toEid(etsId)).getDependencies();
+        final DependencyGraph<ExecutableTestSuiteDto> graph = new DependencyGraph(dependencies);
+        final List<ExecutableTestSuiteDto> sortedDependencies = graph.sortIgnoreCylce();
+        final List<DependenciesJsonView> depsJson = sortedDependencies.stream().map(DependenciesJsonView::new)
+                .collect(Collectors.toList());
+        return depsJson;
+    }
 
 }
