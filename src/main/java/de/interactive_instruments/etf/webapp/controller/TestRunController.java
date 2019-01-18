@@ -1,5 +1,5 @@
 /**
- * Copyright 2017-2019 European Union, interactive instruments GmbH
+ * Copyright 2017-2018 European Union, interactive instruments GmbH
  * Licensed under the EUPL, Version 1.2 or - as soon they will be approved by
  * the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
@@ -105,10 +105,11 @@ public class TestRunController implements TestRunEventListener {
 
 	private final static String TEST_RUNS_URL = API_BASE_URL + "/TestRuns";
 
-	public final static int MAX_PARALLEL_RUNS = Runtime.getRuntime().availableProcessors();
+	public static int MAX_PARALLEL_RUNS;
+	public static int MAX_QUEUE_SIZE;
 
-	private final TaskPoolRegistry<TestRunDto, TestRun> taskPoolRegistry = new TaskPoolRegistry<>(MAX_PARALLEL_RUNS,
-			MAX_PARALLEL_RUNS);
+	private TaskPoolRegistry<TestRunDto, TestRun> taskPoolRegistry;
+	
 	private final Logger logger = LoggerFactory.getLogger(TestRunController.class);
 
 	public TestRunController() {}
@@ -223,6 +224,30 @@ public class TestRunController implements TestRunEventListener {
 		// 7,5 minutes
 		timer.scheduleAtFixedRate(timedExpiredItemsRemover, 450000, 450000);
 
+		String maxThreads = etfConfig.getProperty("etf.testruns.threads.max");
+		try {
+			MAX_PARALLEL_RUNS = Integer.parseInt(maxThreads);
+		}catch(NumberFormatException e) {
+			if("auto".equals(maxThreads)) {
+				MAX_PARALLEL_RUNS = Runtime.getRuntime().availableProcessors();
+			}
+			else {
+				throw new RuntimeException(maxThreads+" is not a valid value for etf.testruns.max.threads");
+			}
+		}
+		String maxQueues = etfConfig.getProperty("etf.testruns.queued.max");
+		try {
+			MAX_QUEUE_SIZE = Integer.parseInt(maxQueues);
+		}catch(NumberFormatException e) {
+			if("auto".equals(maxQueues)) {
+				MAX_QUEUE_SIZE = Runtime.getRuntime().availableProcessors() * 3;
+			}
+			else {
+				throw new RuntimeException(maxQueues+" is not a valid value for etf.testruns.max.queued");
+			}
+		}
+		taskPoolRegistry = new TaskPoolRegistry<>(MAX_PARALLEL_RUNS,MAX_PARALLEL_RUNS,MAX_QUEUE_SIZE);
+		
 		logger.info("Test Run controller initialized!");
 	}
 
