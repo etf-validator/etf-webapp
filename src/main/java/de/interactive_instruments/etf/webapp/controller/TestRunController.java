@@ -232,7 +232,7 @@ public class TestRunController implements TestRunEventListener {
 				MAX_PARALLEL_RUNS = Runtime.getRuntime().availableProcessors();
 			}
 			else {
-				throw new RuntimeException(maxThreads+" is not a valid value for etf.testruns.max.threads");
+				throw new ConfigurationException(maxThreads+" is not a valid value for etf.testruns.max.threads");
 			}
 		}
 		String maxQueues = etfConfig.getProperty("etf.testruns.queued.max");
@@ -243,7 +243,7 @@ public class TestRunController implements TestRunEventListener {
 				MAX_QUEUE_SIZE = Runtime.getRuntime().availableProcessors() * 3;
 			}
 			else {
-				throw new RuntimeException(maxQueues+" is not a valid value for etf.testruns.max.queued");
+				throw new ConfigurationException(maxQueues+" is not a valid value for etf.testruns.max.queued");
 			}
 		}
 		taskPoolRegistry = new TaskPoolRegistry<>(MAX_PARALLEL_RUNS,MAX_PARALLEL_RUNS,MAX_QUEUE_SIZE);
