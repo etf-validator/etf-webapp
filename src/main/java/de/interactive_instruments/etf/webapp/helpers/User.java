@@ -33,46 +33,46 @@ import de.interactive_instruments.exceptions.ExcUtils;
  */
 public class User {
 
-	private static String[] evalProxyHeaders = new String[]{
-			"X-Forwarded-For",
-			"HTTP_X_FORWARDED_FOR",
-			"X-Real-IP",
-			"Proxy-Client-IP",
-			"WL-Proxy-Client-IP",
-			"HTTP_CLIENT_IP"
-	};
+    private static String[] evalProxyHeaders = new String[]{
+            "X-Forwarded-For",
+            "HTTP_X_FORWARDED_FOR",
+            "X-Real-IP",
+            "Proxy-Client-IP",
+            "WL-Proxy-Client-IP",
+            "HTTP_CLIENT_IP"
+    };
 
-	public static String getUser(final HttpServletRequest request) {
-		final String userNamePrefix;
-		if (!SUtils.isNullOrEmpty(request.getRemoteUser())) {
-			userNamePrefix = request.getRemoteUser() + "@";
-		} else {
-			userNamePrefix = "";
-		}
-		return userNamePrefix + getRemoteAddr(request);
-	}
+    public static String getUser(final HttpServletRequest request) {
+        final String userNamePrefix;
+        if (!SUtils.isNullOrEmpty(request.getRemoteUser())) {
+            userNamePrefix = request.getRemoteUser() + "@";
+        } else {
+            userNamePrefix = "";
+        }
+        return userNamePrefix + getRemoteAddr(request);
+    }
 
-	private static String getRemoteAddr(final HttpServletRequest request) {
-		if ("false".equals(EtfConfigController.getInstance().getPropertyOrDefault("etf.users.log", "false"))) {
-			return "unknown";
-		}
-		final String remoteAddr = request.getRemoteAddr();
-		try {
-			if (UriUtils.isPrivateNet(remoteAddr)) {
-				for (final String evalProxyHeader : evalProxyHeaders) {
-					final String h = request.getHeader(evalProxyHeader);
-					if (!SUtils.isNullOrEmpty(h)) {
-						final String firstIp = SUtils.leftOfSubStrOrNull(h, ",");
-						if (firstIp != null) {
-							return firstIp;
-						}
-						return h;
-					}
-				}
-			}
-		} catch (final UnknownHostException e) {
-			ExcUtils.suppress(e);
-		}
-		return remoteAddr;
-	}
+    private static String getRemoteAddr(final HttpServletRequest request) {
+        if ("false".equals(EtfConfigController.getInstance().getPropertyOrDefault("etf.users.log", "false"))) {
+            return "unknown";
+        }
+        final String remoteAddr = request.getRemoteAddr();
+        try {
+            if (UriUtils.isPrivateNet(remoteAddr)) {
+                for (final String evalProxyHeader : evalProxyHeaders) {
+                    final String h = request.getHeader(evalProxyHeader);
+                    if (!SUtils.isNullOrEmpty(h)) {
+                        final String firstIp = SUtils.leftOfSubStrOrNull(h, ",");
+                        if (firstIp != null) {
+                            return firstIp;
+                        }
+                        return h;
+                    }
+                }
+            }
+        } catch (final UnknownHostException e) {
+            ExcUtils.suppress(e);
+        }
+        return remoteAddr;
+    }
 }

@@ -26,15 +26,15 @@ import org.springframework.format.FormatterRegistry;
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class EtfFormatterRegistrar implements FormatterRegistrar {
-	@Override
-	public void registerFormatters(final FormatterRegistry registry) {
-		addConverter(registry, new EidConverter());
-		addConverter(registry, new VersionConverter());
-	}
+    @Override
+    public void registerFormatters(final FormatterRegistry registry) {
+        addConverter(registry, new EidConverter());
+        addConverter(registry, new VersionConverter());
+    }
 
-	private static void addConverter(final FormatterRegistry registry, final EtfConverter converter) {
-		registry.addConverter(converter.strToTypeConverter());
-		registry.addConverter(converter.typeToStrConverter());
-		registry.addFormatter(converter);
-	}
+    private static void addConverter(final FormatterRegistry registry, final EtfConverter converter) {
+        registry.addConverter(converter.strToTypeConverter());
+        registry.addConverter(converter.typeToStrConverter());
+        registry.addFormatter(converter);
+    }
 }

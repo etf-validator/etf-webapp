@@ -25,17 +25,17 @@ import org.springframework.validation.Validator;
 
 public class TestRunValidator implements Validator {
 
-	@Override
-	public boolean supports(Class<?> clasz) {
-		// return TestRunDto.class.isAssignableFrom(clasz);
-		return true;
-	}
+    @Override
+    public boolean supports(Class<?> clasz) {
+        // return TestRunDto.class.isAssignableFrom(clasz);
+        return true;
+    }
 
-	@Override
-	public void validate(Object target, Errors errors) {
+    @Override
+    public void validate(Object target, Errors errors) {
 
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "label",
-				"l.enter.label", "Please enter a label!");
-	}
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "label",
+                "l.enter.label", "Please enter a label!");
+    }
 
 }
