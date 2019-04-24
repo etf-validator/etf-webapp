@@ -486,29 +486,33 @@ public class EtfConfigController implements PropertyHolder {
     private void updateTestDrivers() throws IOException {
         final IFile tdDir = etfDir.expandPath(defaultProperties.get(ETF_TESTDRIVERS_DIR));
         tdDir.mkdirs();
-        final IFile.VersionedFileList latestDriverVersions = tdDir.getVersionedFilesInDir();
-
-        // Copy test drivers
-        final String tdDirName = "/testdrivers";
-        final Set<String> tds = servletContext.getResourcePaths(tdDirName);
-        if (tds != null) {
-            for (final String td : tds) {
-                final String testDriverName = td.substring(tdDirName.length());
-                if (!SUtils.isNullOrEmpty(testDriverName) && latestDriverVersions.isNewer(testDriverName)) {
-                    logger.info("Installing Test Driver " + testDriverName);
-                    final IFile tdJar = new IFile(tdDir, testDriverName);
-                    final InputStream jarStream = servletContext.getResourceAsStream(td);
-                    try (final FileOutputStream out = new FileOutputStream(tdJar)) {
-                        IOUtils.copy(jarStream, out);
-                    } catch (final IOException e) {
-                        tdJar.delete();
-                        logger.error("Could not copy test driver: ", e);
-                    } finally {
-                        jarStream.close();
-                    }
-                }
-            }
-        }
+        if (tdDir.secureExpandPathDown(".etf_do_not_touch_drivers").exists()) {
+            logger.debug("Drivers are not touched.");
+        } else {
+	        final IFile.VersionedFileList latestDriverVersions = tdDir.getVersionedFilesInDir();
+	
+	        // Copy test drivers
+	        final String tdDirName = "/testdrivers";
+	        final Set<String> tds = servletContext.getResourcePaths(tdDirName);
+	        if (tds != null) {
+	            for (final String td : tds) {
+	                final String testDriverName = td.substring(tdDirName.length());
+	                if (!SUtils.isNullOrEmpty(testDriverName) && latestDriverVersions.isNewer(testDriverName)) {
+	                    logger.info("Installing Test Driver " + testDriverName);
+	                    final IFile tdJar = new IFile(tdDir, testDriverName);
+	                    final InputStream jarStream = servletContext.getResourceAsStream(td);
+	                    try (final FileOutputStream out = new FileOutputStream(tdJar)) {
+	                        IOUtils.copy(jarStream, out);
+	                    } catch (final IOException e) {
+	                        tdJar.delete();
+	                        logger.error("Could not copy test driver: ", e);
+	                    } finally {
+	                        jarStream.close();
+	                    }
+	                }
+	            }
+	        }
+	    }
     }
 
     public static EtfConfigController getInstance() {
