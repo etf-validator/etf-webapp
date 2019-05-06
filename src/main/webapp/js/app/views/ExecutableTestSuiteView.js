@@ -92,13 +92,25 @@ define([
                     e.stopPropagation();
                     e.stopImmediatePropagation();
                     e.preventDefault();
+                    markDependants(e.currentTarget.querySelectorAll("option")[1].value);
                 });
 
                 _this.container.trigger('create');
                 _this.container.listview().listview('refresh');
             });
         },
-    });
 
+    });
+    
+    function markDependants(id){
+        var model = router.executableTestSuitesView.collection.models.filter((x) => x.id==id)[0];
+        if ((typeof model.attributes.dependencies !== "undefined")){
+    		var id_dependency = model.attributes.dependencies.executableTestSuite.ref;
+    		document.querySelector("option[value="+id_dependency+"]").parentElement.parentElement.classList.toggle("ui-flipswitch-active");
+    		markDependants(id_dependency);
+        }
+    }
+    
     return ExecutableTestSuiteView;
 } );
+
