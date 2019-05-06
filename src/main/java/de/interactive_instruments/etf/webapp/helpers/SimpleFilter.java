@@ -26,44 +26,44 @@ import de.interactive_instruments.etf.dal.dao.Filter;
  */
 public class SimpleFilter implements Filter {
 
-	private final int offset;
-	private final int limit;
-	private final String fields;
+    private final int offset;
+    private final int limit;
+    private final String fields;
 
-	public SimpleFilter(final int offset, final int limit) {
-		this(offset, limit, "*");
-	}
+    public SimpleFilter(final int offset, final int limit) {
+        this(offset, limit, "*");
+    }
 
-	public SimpleFilter(final int offset, final int limit, final String fields) {
-		this.offset = offset > 0 ? offset : 0;
-		this.limit = limit > 0 && limit < 5000 ? limit : 1500;
-		this.fields = fields != null ? fields.trim() : "*";
-	}
+    public SimpleFilter(final int offset, final int limit, final String fields) {
+        this.offset = offset > 0 ? offset : 0;
+        this.limit = limit > 0 && limit < 5000 ? limit : 1500;
+        this.fields = fields != null ? fields.trim() : "*";
+    }
 
-	public SimpleFilter(final String fields) {
-		this.offset = 0;
-		this.limit = 1500;
-		this.fields = fields != null ? fields.trim() : "*";
-	}
+    public SimpleFilter(final String fields) {
+        this.offset = 0;
+        this.limit = 1500;
+        this.fields = fields != null ? fields.trim() : "*";
+    }
 
-	public SimpleFilter() {
-		this.offset = 0;
-		this.limit = 1500;
-		this.fields = "*";
-	}
+    public SimpleFilter() {
+        this.offset = 0;
+        this.limit = 1500;
+        this.fields = "*";
+    }
 
-	@Override
-	public int offset() {
-		return offset;
-	}
+    @Override
+    public int offset() {
+        return offset;
+    }
 
-	@Override
-	public int limit() {
-		return limit;
-	}
+    @Override
+    public int limit() {
+        return limit;
+    }
 
-	@Override
-	public String fields() {
-		return fields;
-	}
+    @Override
+    public String fields() {
+        return fields;
+    }
 }

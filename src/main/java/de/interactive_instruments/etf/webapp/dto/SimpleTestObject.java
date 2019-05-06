@@ -53,86 +53,86 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "TestObject", description = "Simplified Test Object definition")
 public class SimpleTestObject {
 
-	@ApiModelProperty(value = EID_DESCRIPTION + ". " +
-			"Either an id or a resource property must be provided.", example = EID_EXAMPLE, dataType = "String")
-	@JsonProperty
-	@Pattern(regexp = EidConverter.EID_PATTERN, flags = {Pattern.Flag.CASE_INSENSITIVE})
-	private String id;
+    @ApiModelProperty(value = EID_DESCRIPTION + ". " +
+            "Either an id or a resource property must be provided.", example = EID_EXAMPLE, dataType = "String")
+    @JsonProperty
+    @Pattern(regexp = EidConverter.EID_PATTERN, flags = {Pattern.Flag.CASE_INSENSITIVE})
+    private String id;
 
-	@ApiModelProperty(value = "List of online resources as name / resource pairs. "
-			+ "Currently two resource types are supported: if a web service resource is defined, the resource name must be 'serviceEndpoint'. "
-			+ "If a data set resource is defined, the resource name must be 'data'. "
-			+ "PLEASE NOTE: only the one resource can be used in the current version. "
-			+ "Either an id or a resource property must be provided.")
-	@JsonProperty
-	private Map<String, String> resources;
+    @ApiModelProperty(value = "List of online resources as name / resource pairs. "
+            + "Currently two resource types are supported: if a web service resource is defined, the resource name must be 'serviceEndpoint'. "
+            + "If a data set resource is defined, the resource name must be 'data'. "
+            + "PLEASE NOTE: only the one resource can be used in the current version. "
+            + "Either an id or a resource property must be provided.")
+    @JsonProperty
+    private Map<String, String> resources;
 
-	@ApiModelProperty(value = "Username for resources. "
-			+ "Optional and only used when the resource property is defined.", example = "FrankDrebin", dataType = "String")
-	@JsonProperty
-	private String username;
+    @ApiModelProperty(value = "Username for resources. "
+            + "Optional and only used when the resource property is defined.", example = "FrankDrebin", dataType = "String")
+    @JsonProperty
+    private String username;
 
-	@ApiModelProperty(value = "Password for resources"
-			+ "Optional and only used when the resource property is defined.", example = "S3CR3T", dataType = "String")
-	@JsonProperty
-	private String password;
+    @ApiModelProperty(value = "Password for resources"
+            + "Optional and only used when the resource property is defined.", example = "S3CR3T", dataType = "String")
+    @JsonProperty
+    private String password;
 
-	Map<String, String> getResources() {
-		return resources;
-	}
+    Map<String, String> getResources() {
+        return resources;
+    }
 
-	public String getId() {
-		return "EID" + toEid(id).toString();
-	}
+    public String getId() {
+        return "EID" + toEid(id).toString();
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public SimpleTestObject() {}
+    public SimpleTestObject() {}
 
-	public SimpleTestObject(final TestObjectDto testObject) {
-		this.id = testObject.getId().getId();
-	}
+    public SimpleTestObject(final TestObjectDto testObject) {
+        this.id = testObject.getId().getId();
+    }
 
-	public TestObjectDto toTestObject(final PreparedDtoResolver<TestObjectDto> testObjectDao)
-			throws URISyntaxException, IOException, ObjectWithIdNotFoundException, StorageException {
-		final TestObjectDto testObject;
-		if (resources != null && !resources.isEmpty()) {
-			testObject = new TestObjectDto();
-			for (final Map.Entry<String, String> nameUriEntry : resources.entrySet()) {
-				testObject.addResource(new ResourceDto(nameUriEntry.getKey(), HtmlUtils.htmlUnescape(nameUriEntry.getValue())));
-			}
-			testObject.properties().setProperty("temporary", "true");
-			testObject.setVersionFromStr("1.0.0");
-			testObject.setCreationDateNowIfNotSet();
-			// testObject.setRemoteResource(URI.create("http://private"));
-			testObject.setLocalPath(".");
-			final Credentials credentials;
-			if (!SUtils.isNullOrEmpty(username)) {
-				testObject.properties().setProperty("username", username);
-				testObject.properties().setProperty("password", password);
-				credentials = Credentials.fromProperties(testObject.properties());
-				testObject.setDescription("Web Test Object (from protected resource location)");
-			} else {
-				credentials = null;
-				testObject.setDescription("Web Test Object");
-			}
-			if (resources.size() == 1) {
-				final String tmpLabel = UriUtils.proposeFilename(
-						testObject.getResourceCollection().iterator().next().getUri(), credentials, true);
-				testObject.setLabel(tmpLabel);
-			} else {
-				testObject.setLabel("Temporary Test Object");
-			}
-		} else {
-			testObject = testObjectDao.getById(
-					EidFactory.getDefault().createAndPreserveStr(toEid(id).toString())).getDto();
-		}
-		return testObject;
-	}
+    public TestObjectDto toTestObject(final PreparedDtoResolver<TestObjectDto> testObjectDao)
+            throws URISyntaxException, IOException, ObjectWithIdNotFoundException, StorageException {
+        final TestObjectDto testObject;
+        if (resources != null && !resources.isEmpty()) {
+            testObject = new TestObjectDto();
+            for (final Map.Entry<String, String> nameUriEntry : resources.entrySet()) {
+                testObject.addResource(new ResourceDto(nameUriEntry.getKey(), HtmlUtils.htmlUnescape(nameUriEntry.getValue())));
+            }
+            testObject.properties().setProperty("temporary", "true");
+            testObject.setVersionFromStr("1.0.0");
+            testObject.setCreationDateNowIfNotSet();
+            // testObject.setRemoteResource(URI.create("http://private"));
+            testObject.setLocalPath(".");
+            final Credentials credentials;
+            if (!SUtils.isNullOrEmpty(username)) {
+                testObject.properties().setProperty("username", username);
+                testObject.properties().setProperty("password", password);
+                credentials = Credentials.fromProperties(testObject.properties());
+                testObject.setDescription("Web Test Object (from protected resource location)");
+            } else {
+                credentials = null;
+                testObject.setDescription("Web Test Object");
+            }
+            if (resources.size() == 1) {
+                final String tmpLabel = UriUtils.proposeFilename(
+                        testObject.getResourceCollection().iterator().next().getUri(), credentials, true);
+                testObject.setLabel(tmpLabel);
+            } else {
+                testObject.setLabel("Temporary Test Object");
+            }
+        } else {
+            testObject = testObjectDao.getById(
+                    EidFactory.getDefault().createAndPreserveStr(toEid(id).toString())).getDto();
+        }
+        return testObject;
+    }
 }

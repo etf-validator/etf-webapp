@@ -26,17 +26,17 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class RequestHelper {
 
-	private RequestHelper() {}
+    private RequestHelper() {}
 
-	public static boolean isOnlyHtmlRequested(final HttpServletRequest request) {
-		final String acceptHeader = request.getHeader("Accept");
-		if (request.getRequestURI().endsWith(".html") && (acceptHeader == null || acceptHeader.contains("html"))) {
-			return true;
-		}
-		if (acceptHeader.contains("xml") || acceptHeader.contains("json") || acceptHeader.contains("*/*")) {
-			return false;
-		}
-		return true;
-	}
+    public static boolean isOnlyHtmlRequested(final HttpServletRequest request) {
+        final String acceptHeader = request.getHeader("Accept");
+        if (request.getRequestURI().endsWith(".html") && (acceptHeader == null || acceptHeader.contains("html"))) {
+            return true;
+        }
+        if (acceptHeader.contains("xml") || acceptHeader.contains("json") || acceptHeader.contains("*/*")) {
+            return false;
+        }
+        return true;
+    }
 
 }
