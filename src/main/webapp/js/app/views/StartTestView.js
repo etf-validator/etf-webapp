@@ -92,7 +92,9 @@ define([
             // Todo: use base types
             if(_.isUndefined(this.testObjectTypes['EID88311f83-818c-46ed-8a9a-cec4f3707365']) &&
                 _.isUndefined(this.testObjectTypes['EID9b6ef734-981e-4d60-aa81-d6730a1c6389']) &&
-                _.isUndefined(this.testObjectTypes['EID49d881ae-b115-4b91-aabe-31d5791bce52'])) {
+                _.isUndefined(this.testObjectTypes['EID49d881ae-b115-4b91-aabe-31d5791bce52']) &&
+                _.isUndefined(this.testObjectTypes['dac58b52-3ffd-4eb5-96e3-64723d8f0f51']) &&
+                _.isUndefined(this.testObjectTypes['f897f313-55f0-4e51-928a-0e9869f5a1d6'])) {
                 this.serviceTest = false;
             }else{
                 this.serviceTest = true;
