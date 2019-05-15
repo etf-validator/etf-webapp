@@ -129,6 +129,16 @@ define([
                 classListDependency.remove("ui-disabled");
                 markDependants(id_dependency);
             }
+            let dependenciesTreeEmpty = true;
+            for (let i in dependenciesTree) {
+                dependenciesTreeEmpty &= (dependenciesTree[i].length === 0);
+            }
+            if(dependenciesTreeEmpty){
+                document.querySelectorAll("option").forEach(function(option){
+                    classListDependency = option.parentElement.parentElement.classList;
+                    classListDependency.remove("ui-disabled");
+                });
+            }
         }
     }
     
