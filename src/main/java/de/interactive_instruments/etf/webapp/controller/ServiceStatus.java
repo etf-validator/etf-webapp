@@ -25,7 +25,7 @@ package de.interactive_instruments.etf.webapp.controller;
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public enum ServiceStatus {
-	STARTING, GOOD, MINOR, // increased exception rate, 1 exception found in the last 100 log file lines
-	MAJOR, // failed to load component
-	MAINTENANCE, SHUTDOWN
+    STARTING, GOOD, MINOR, // increased exception rate, 1 exception found in the last 100 log file lines
+    MAJOR, // failed to load component
+    MAINTENANCE, SHUTDOWN
 }

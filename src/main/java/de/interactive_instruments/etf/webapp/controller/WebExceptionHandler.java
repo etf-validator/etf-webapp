@@ -43,75 +43,75 @@ import de.interactive_instruments.etf.webapp.helpers.View;
 @ControllerAdvice(annotations = Controller.class)
 class WebExceptionHandler {
 
-	@Autowired
-	private StatusController statusController;
+    @Autowired
+    private StatusController statusController;
 
-	public static final String DEFAULT_ERROR_VIEW = "error";
+    public static final String DEFAULT_ERROR_VIEW = "error";
 
-	private final org.slf4j.Logger logger = LoggerFactory.getLogger(WebExceptionHandler.class);
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(WebExceptionHandler.class);
 
-	private static byte[] reserve = new byte[30 * 1024 * 1024]; // Reserve 30 MB
+    private static byte[] reserve = new byte[30 * 1024 * 1024]; // Reserve 30 MB
 
-	private final static String contactAdminText = " This is a critical error and the system "
-			+ "will try to prevent data loss by " + " switching into maintenance mode.";
+    private final static String contactAdminText = " This is a critical error and the system "
+            + "will try to prevent data loss by " + " switching into maintenance mode.";
 
-	private ModelAndView createError(final Exception e, final String hint, final String url, boolean submitReport)
-			throws Exception {
-		if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
-			// Not associated with a view
-			throw e;
-		}
+    private ModelAndView createError(final Exception e, final String hint, final String url, boolean submitReport)
+            throws Exception {
+        if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
+            // Not associated with a view
+            throw e;
+        }
 
-		final ModelAndView mav = new ModelAndView();
-		mav.addObject("ex", e);
-		if (hint != null) {
-			mav.addObject("hint", hint);
-		}
-		mav.addObject("url", url);
-		final UUID exceptionId = UUID.randomUUID();
-		mav.addObject("exid", "EXID-" + exceptionId.toString());
-		logger.error(
-				"EXID-" + exceptionId.toString() + ": An exception occurred while trying to access \"" +
-						url + "\"",
-				e);
-		mav.addObject("submitReport", submitReport && View.getSubmitAnalysisData().equals("true"));
-		mav.setViewName(DEFAULT_ERROR_VIEW);
-		return mav;
-	}
+        final ModelAndView mav = new ModelAndView();
+        mav.addObject("ex", e);
+        if (hint != null) {
+            mav.addObject("hint", hint);
+        }
+        mav.addObject("url", url);
+        final UUID exceptionId = UUID.randomUUID();
+        mav.addObject("exid", "EXID-" + exceptionId.toString());
+        logger.error(
+                "EXID-" + exceptionId.toString() + ": An exception occurred while trying to access \"" +
+                        url + "\"",
+                e);
+        mav.addObject("submitReport", submitReport && View.getSubmitAnalysisData().equals("true"));
+        mav.setViewName(DEFAULT_ERROR_VIEW);
+        return mav;
+    }
 
-	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler(value = Exception.class)
-	public ModelAndView defaultErrorHandler(final HttpServletRequest request, final Exception e) throws Exception {
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = Exception.class)
+    public ModelAndView defaultErrorHandler(final HttpServletRequest request, final Exception e) throws Exception {
 
-		if (e != null && e.getCause() != null && e.getCause() instanceof OutOfMemoryError) {
-			// Recover the reserved memory
-			reserve = null;
-			System.gc();
-		}
+        if (e != null && e.getCause() != null && e.getCause() instanceof OutOfMemoryError) {
+            // Recover the reserved memory
+            reserve = null;
+            System.gc();
+        }
 
-		final String hint;
-		final boolean submitReport;
-		if (e.getCause() != null && e.getCause() instanceof OutOfMemoryError) {
-			hint = "The Java Virtual Machine is out of memory and"
-					+ " no more memory could be made available. "
-					+ " Ask your System Administrator to increase the Java heap space by "
-					+ " adjusting the '-Xmx' parameter!" + contactAdminText;
-			submitReport = false;
-			statusController.triggerMaintenance();
-		} else if (Objects.equals(e.getMessage(), "No space left on device")
-				|| e.getCause() != null && e.getCause() instanceof IOException &&
-						Objects.equals(e.getCause().getMessage(), "No space left on device")) {
-			hint = "Disk space critical. Contact your system Administrator. " + contactAdminText;
-			statusController.triggerMaintenance();
-			submitReport = false;
-		} else if (e.getCause() != null && e.getCause() instanceof StackOverflowError || e
-				.getCause() instanceof StackOverflowError) {
-			hint = "This is most likely a fatal bug in the application." + " Please report it!";
-			submitReport = true;
-		} else {
-			hint = null;
-			submitReport = true;
-		}
-		return createError(e, hint, request.getRequestURL().toString(), submitReport);
-	}
+        final String hint;
+        final boolean submitReport;
+        if (e.getCause() != null && e.getCause() instanceof OutOfMemoryError) {
+            hint = "The Java Virtual Machine is out of memory and"
+                    + " no more memory could be made available. "
+                    + " Ask your System Administrator to increase the Java heap space by "
+                    + " adjusting the '-Xmx' parameter!" + contactAdminText;
+            submitReport = false;
+            statusController.triggerMaintenance();
+        } else if (Objects.equals(e.getMessage(), "No space left on device")
+                || e.getCause() != null && e.getCause() instanceof IOException &&
+                        Objects.equals(e.getCause().getMessage(), "No space left on device")) {
+            hint = "Disk space critical. Contact your system Administrator. " + contactAdminText;
+            statusController.triggerMaintenance();
+            submitReport = false;
+        } else if (e.getCause() != null && e.getCause() instanceof StackOverflowError || e
+                .getCause() instanceof StackOverflowError) {
+            hint = "This is most likely a fatal bug in the application." + " Please report it!";
+            submitReport = true;
+        } else {
+            hint = null;
+            submitReport = true;
+        }
+        return createError(e, hint, request.getRequestURL().toString(), submitReport);
+    }
 }

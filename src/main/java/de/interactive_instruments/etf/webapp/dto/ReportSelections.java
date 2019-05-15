@@ -25,22 +25,22 @@ import de.interactive_instruments.etf.model.EID;
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class ReportSelections {
-	private EID report1;
-	private EID report2;
+    private EID report1;
+    private EID report2;
 
-	public EID getReport1() {
-		return report1;
-	}
+    public EID getReport1() {
+        return report1;
+    }
 
-	public void setReport1(EID report1) {
-		this.report1 = report1;
-	}
+    public void setReport1(EID report1) {
+        this.report1 = report1;
+    }
 
-	public EID getReport2() {
-		return report2;
-	}
+    public EID getReport2() {
+        return report2;
+    }
 
-	public void setReport2(EID report2) {
-		this.report2 = report2;
-	}
+    public void setReport2(EID report2) {
+        this.report2 = report2;
+    }
 }

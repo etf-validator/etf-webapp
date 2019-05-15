@@ -23,9 +23,9 @@ package de.interactive_instruments.etf.webapp;
  * Created by herrmann@interactive-instruments.de.
  */
 public class WebAppConstants {
-	private WebAppConstants() {}
+    private WebAppConstants() {}
 
-	public static final String TESTDOMAIN_PARAM = "testdomain";
+    public static final String TESTDOMAIN_PARAM = "testdomain";
 
-	public static final String API_BASE_URL = "v2";
+    public static final String API_BASE_URL = "v2";
 }
