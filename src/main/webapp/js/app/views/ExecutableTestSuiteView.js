@@ -104,10 +104,31 @@ define([
     
     function markDependants(id){
         var model = router.executableTestSuitesView.collection.models.filter((x) => x.id==id)[0];
-        if ((typeof model.attributes.dependencies !== "undefined")){
-    		var id_dependency = model.attributes.dependencies.executableTestSuite.ref;
-    		document.querySelector("option[value="+id_dependency+"]").parentElement.parentElement.classList.toggle("ui-flipswitch-active");
-    		markDependants(id_dependency);
+        let classList = document.querySelector("option[value="+id+"]").parentElement.parentElement.classList;
+        if (typeof model.attributes.dependencies !== "undefined" && !classList.contains("ui-disabled")){
+            var id_dependency = model.attributes.dependencies.executableTestSuite.ref;
+            if(!dependenciesTree[id_dependency]){
+                dependenciesTree[id_dependency] = [];
+            }
+            let classListDependency = document.querySelector("option[value="+id_dependency+"]").parentElement.parentElement.classList;
+            let activating = classList.contains("ui-flipswitch-active");
+            if(activating){
+                dependenciesTree[id_dependency].push(id);
+            }else{
+                dependenciesTree[id_dependency].splice(dependenciesTree[id_dependency].indexOf(id),1);
+            }
+            if(activating && !classListDependency.contains("ui-flipswitch-active")){
+                classListDependency.add("ui-flipswitch-active");
+                markDependants(id_dependency);
+            }
+            if(activating && !classListDependency.contains("ui-disabled")){
+                classListDependency.add("ui-disabled");
+            }
+            if(dependenciesTree[id_dependency].length === 0){
+                classListDependency.remove("ui-flipswitch-active");
+                classListDependency.remove("ui-disabled");
+                markDependants(id_dependency);
+            }
         }
     }
     
