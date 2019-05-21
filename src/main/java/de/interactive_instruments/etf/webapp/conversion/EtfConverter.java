@@ -29,13 +29,13 @@ import org.springframework.format.Formatter;
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public interface EtfConverter<T> extends Formatter<T> {
-	Class<T> getType();
+    Class<T> getType();
 
-	JsonDeserializer<T> jsonDeserializer();
+    JsonDeserializer<T> jsonDeserializer();
 
-	JsonSerializer<T> jsonSerializer();
+    JsonSerializer<T> jsonSerializer();
 
-	Converter<String, T> typeToStrConverter();
+    Converter<String, T> typeToStrConverter();
 
-	Converter<T, String> strToTypeConverter();
+    Converter<T, String> strToTypeConverter();
 }

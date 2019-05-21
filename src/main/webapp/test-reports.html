@@ -120,7 +120,7 @@
                 <a href="<%= reportBaseUrl + testRun.id + '.html' %>" data-icon="eye" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.open.report}">[[#{l.open.report}]]</a>
                 <a href="<%= reportBaseUrl + testRun.id + '.html?download=true' %>" data-icon="arrow-d-r" data-role="button" data-inline="true" data-mini="true" data-ajax="false" th:text="#{l.download.report}">[[#{l.download.report}]]</a>
             <% }; %>
-            <a href="<%= reportBaseUrl + testRun.id + '/log' %>" data-role="button" data-icon="info" data-inline="true" data-mini="true"  data-ajax="false"  th:text="#{l.open.log}">[[#{l.open.log}]]</a>
+            <a href="<%= reportBaseUrl + testRun.id + '/log' %>" data-role="button" data-icon="info" data-inline="true" data-mini="true"  data-ajax="false"  th:text="#{l.open.log}" target="_blank">[[#{l.open.log}]]</a>
             <a href="#remove-test-report?id=<%= testRun.id %>" class="delete-button-tr" data-icon="delete" data-role="button" data-inline="true" data-mini="true" th:text="#{l.delete.report}">[[#{l.delete.report}]]</a>
         	<a href="#rerun-tests?id=<%= testRun.id %>" data-icon="refresh" data-role="button" data-inline="true" data-mini="true" th:text="#{l.rerun.test}">[[#{l.rerun.test}]]</a>
 		</div>

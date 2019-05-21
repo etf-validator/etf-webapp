@@ -41,27 +41,27 @@ import de.interactive_instruments.exceptions.config.ConfigurationException;
 @Controller
 public class ViewController {
 
-	@Autowired
-	TestRunController testRunController;
+    @Autowired
+    TestRunController testRunController;
 
-	@Autowired
-	EtfConfigController configController;
+    @Autowired
+    EtfConfigController configController;
 
-	@RequestMapping(value = {"/", "/etf", "/index.html"}, method = RequestMethod.GET)
-	public String overview(Model model) throws StorageException, ConfigurationException {
-		testRunController.addMetaData(model);
-		model.addAttribute("maxUploadSizeHr", FileUtils.byteCountToDisplaySize(
-				configController.getPropertyAsLong(ETF_MAX_UPLOAD_SIZE)));
-		model.addAttribute("maxUploadSize",
-				configController.getPropertyAsLong(ETF_MAX_UPLOAD_SIZE));
+    @RequestMapping(value = {"/", "/etf", "/index.html"}, method = RequestMethod.GET)
+    public String overview(Model model) throws StorageException, ConfigurationException {
+        testRunController.addMetaData(model);
+        model.addAttribute("maxUploadSizeHr", FileUtils.byteCountToDisplaySize(
+                configController.getPropertyAsLong(ETF_MAX_UPLOAD_SIZE)));
+        model.addAttribute("maxUploadSize",
+                configController.getPropertyAsLong(ETF_MAX_UPLOAD_SIZE));
 
-		final long reportExp = configController.getPropertyAsLong(ETF_TESTREPORTS_LIFETIME_EXPIRATION);
-		if (reportExp > 0) {
-			model.addAttribute("maxTestRunLifetime",
-					DurationFormatUtils.formatDurationWords(TimeUnit.MINUTES.toMillis(reportExp), true, true));
-		}
+        final long reportExp = configController.getPropertyAsLong(ETF_TESTREPORTS_LIFETIME_EXPIRATION);
+        if (reportExp > 0) {
+            model.addAttribute("maxTestRunLifetime",
+                    DurationFormatUtils.formatDurationWords(TimeUnit.MINUTES.toMillis(reportExp), true, true));
+        }
 
-		return "etf";
-	}
+        return "etf";
+    }
 
 }

@@ -41,97 +41,97 @@ import de.interactive_instruments.etf.model.exceptions.IllegalEidException;
  */
 public final class EidConverter implements EtfConverter<EID> {
 
-	// CASE_INSENSITIVE
-	public static final String EID_PATTERN = "EID[0-9A-F]{8}-[0-9A-F]{4}-[1-5][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}";
+    // CASE_INSENSITIVE
+    public static final String EID_PATTERN = "EID[0-9A-F]{8}-[0-9A-F]{4}-[1-5][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}";
 
-	private static EidFactory eidFactory = EidFactory.getDefault();
+    private static EidFactory eidFactory = EidFactory.getDefault();
 
-	private static Deserializer deserializer = new Deserializer();
-	private static Serializer serializer = new Serializer();
+    private static Deserializer deserializer = new Deserializer();
+    private static Serializer serializer = new Serializer();
 
-	public static EID toEid(final String eid) {
-		if (SUtils.isNullOrEmpty(eid)) {
-			throw new IllegalEidException("ID is null or empty");
-		}
-		final int length = eid.length();
-		if (length == 39 && eid.startsWith("EID")) {
-			return eidFactory.createAndPreserveStr(eid.substring(3));
-		} else if (length == 36) {
-			return eidFactory.createAndPreserveStr(eid);
-		} else {
-			throw new IllegalEidException(
-					"Illegal identifier length (" + length + "): the ETF ID must be an 36 characters long "
-							+ "hexadecimal Universally Unique Identifier "
-							+ "or an UUID prefixed with 'EID'");
-		}
-	}
+    public static EID toEid(final String eid) {
+        if (SUtils.isNullOrEmpty(eid)) {
+            throw new IllegalEidException("ID is null or empty");
+        }
+        final int length = eid.length();
+        if (length == 39 && eid.startsWith("EID")) {
+            return eidFactory.createAndPreserveStr(eid.substring(3));
+        } else if (length == 36) {
+            return eidFactory.createAndPreserveStr(eid);
+        } else {
+            throw new IllegalEidException(
+                    "Illegal identifier length (" + length + "): the ETF ID must be an 36 characters long "
+                            + "hexadecimal Universally Unique Identifier "
+                            + "or an UUID prefixed with 'EID'");
+        }
+    }
 
-	public static String toStr(final EID eid) {
-		return Objects.requireNonNull(eid, "Cannot convert empty ETF ID").getId();
-	}
+    public static String toStr(final EID eid) {
+        return Objects.requireNonNull(eid, "Cannot convert empty ETF ID").getId();
+    }
 
-	@Override
-	public EID parse(final String text, final Locale locale) throws ParseException {
-		return toEid(text);
-	}
+    @Override
+    public EID parse(final String text, final Locale locale) throws ParseException {
+        return toEid(text);
+    }
 
-	@Override
-	public String print(final EID eid, final Locale locale) {
-		return toStr(eid);
-	}
+    @Override
+    public String print(final EID eid, final Locale locale) {
+        return toStr(eid);
+    }
 
-	@Override
-	public Class<EID> getType() {
-		return EID.class;
-	}
+    @Override
+    public Class<EID> getType() {
+        return EID.class;
+    }
 
-	@Override
-	public JsonDeserializer<EID> jsonDeserializer() {
-		return deserializer;
-	}
+    @Override
+    public JsonDeserializer<EID> jsonDeserializer() {
+        return deserializer;
+    }
 
-	@Override
-	public JsonSerializer<EID> jsonSerializer() {
-		return serializer;
-	}
+    @Override
+    public JsonSerializer<EID> jsonSerializer() {
+        return serializer;
+    }
 
-	@Override
-	public Converter<String, EID> typeToStrConverter() {
-		return deserializer;
-	}
+    @Override
+    public Converter<String, EID> typeToStrConverter() {
+        return deserializer;
+    }
 
-	@Override
-	public Converter<EID, String> strToTypeConverter() {
-		return serializer;
-	}
+    @Override
+    public Converter<EID, String> strToTypeConverter() {
+        return serializer;
+    }
 
-	private final static class Deserializer extends JsonDeserializer<EID> implements Converter<String, EID> {
-		@Override
-		public EID deserialize(final JsonParser jp, final DeserializationContext ctxt)
-				throws IOException, JsonProcessingException {
-			final JsonNode node = jp.getCodec().readTree(jp);
-			return toEid(node.asText());
-		}
+    private final static class Deserializer extends JsonDeserializer<EID> implements Converter<String, EID> {
+        @Override
+        public EID deserialize(final JsonParser jp, final DeserializationContext ctxt)
+                throws IOException, JsonProcessingException {
+            final JsonNode node = jp.getCodec().readTree(jp);
+            return toEid(node.asText());
+        }
 
-		@Override
-		public EID convert(final String source) {
-			return toEid(source);
-		}
-	}
+        @Override
+        public EID convert(final String source) {
+            return toEid(source);
+        }
+    }
 
-	private final static class Serializer extends JsonSerializer<EID> implements Converter<EID, String> {
-		@Override
-		public void serialize(final EID value, final JsonGenerator gen, final SerializerProvider serializers)
-				throws IOException, JsonProcessingException {
-			if (value != null) {
-				gen.writeString(value.getId());
-			}
-		}
+    private final static class Serializer extends JsonSerializer<EID> implements Converter<EID, String> {
+        @Override
+        public void serialize(final EID value, final JsonGenerator gen, final SerializerProvider serializers)
+                throws IOException, JsonProcessingException {
+            if (value != null) {
+                gen.writeString(value.getId());
+            }
+        }
 
-		@Override
-		public String convert(final EID source) {
-			return toStr(source);
-		}
-	}
+        @Override
+        public String convert(final EID source) {
+            return toStr(source);
+        }
+    }
 
 }

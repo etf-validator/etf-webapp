@@ -44,37 +44,37 @@ import de.interactive_instruments.exceptions.config.ConfigurationException;
 @Service
 public class DataStorageService {
 
-	@Autowired
-	ServletContext servletContext;
+    @Autowired
+    ServletContext servletContext;
 
-	@Autowired
-	private EtfConfigController etfConfig;
+    @Autowired
+    private EtfConfigController etfConfig;
 
-	private DataStorage dataStorage;
+    private DataStorage dataStorage;
 
-	DataStorageService() {}
+    DataStorageService() {}
 
-	private final Logger logger = LoggerFactory.getLogger(DataStorageService.class);
+    private final Logger logger = LoggerFactory.getLogger(DataStorageService.class);
 
-	@PostConstruct
-	void init() throws InitializationException, InvalidStateTransitionException, ConfigurationException {
-		dataStorage = new BsxDataStorage();
-		dataStorage.getConfigurationProperties().setPropertiesFrom(etfConfig, true);
-		dataStorage.init();
-		DataStorageRegistry.instance().register(dataStorage);
-		logger.info("Data Storage service initialized");
-	}
+    @PostConstruct
+    void init() throws InitializationException, InvalidStateTransitionException, ConfigurationException {
+        dataStorage = new BsxDataStorage();
+        dataStorage.getConfigurationProperties().setPropertiesFrom(etfConfig, true);
+        dataStorage.init();
+        DataStorageRegistry.instance().register(dataStorage);
+        logger.info("Data Storage service initialized");
+    }
 
-	@PreDestroy
-	private void shutdown() {
-		dataStorage.release();
-	}
+    @PreDestroy
+    private void shutdown() {
+        dataStorage.release();
+    }
 
-	<T extends Dto> Dao<T> getDao(final Class<T> dtoType) {
-		return dataStorage.getDao(dtoType);
-	}
+    <T extends Dto> Dao<T> getDao(final Class<T> dtoType) {
+        return dataStorage.getDao(dtoType);
+    }
 
-	DataStorage getDataStorage() {
-		return dataStorage;
-	}
+    DataStorage getDataStorage() {
+        return dataStorage;
+    }
 }

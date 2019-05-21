@@ -1,0 +1,23 @@
+version: "{branch} {build}"
+
+init:
+ - cmd: tzutil /s "W. Europe Standard Time"
+ - ps: if ($env:APPVEYOR_REPO_BRANCH -eq "master" -and !$env:APPVEYOR_PULL_REQUEST_TITLE) {Exit-AppveyorBuild}
+
+build:
+  verbosity: detailed
+
+build_script:
+  - cmd: .\gradlew.bat clean --info --no-daemon
+  - cmd: .\gradlew.bat assemble --info --no-daemon
+
+test_script:
+  - cmd: .\gradlew.bat check --no-daemon -Ptest.gradle-versions=4.0
+
+environment:
+  matrix:
+    - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+
+cache:
+  - '%USERPROFILE%\.gradle\caches -> build.gradle'
+  - '%USERPROFILE%\.gradle\wrapper -> gradle\wrapper\gradle-wrapper.properties'

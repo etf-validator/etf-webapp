@@ -117,8 +117,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	private FileStorage fileStorage;
 	private FileContentFilterHolder baseFilter;
 	private WriteDao<TestObjectDto> testObjectDao;
-	private final Cache<EID, TestObjectDto> transientTestObjects = Caffeine.newBuilder().expireAfterWrite(
-			T_CREATION_WINDOW, TimeUnit.MINUTES).build();
+	private final Cache<EID, TestObjectDto> transientTestObjects = Caffeine.newBuilder()
+			.expireAfterWrite(T_CREATION_WINDOW, TimeUnit.MINUTES).build();
 
 	private final static String TEST_OBJECT_DESCRIPTION = "The Test Object model is described in the "
 			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/capabilities_xsd.html#TestObject). "
@@ -129,8 +129,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		private final IFile testDataDir;
 		private final static Logger logger = LoggerFactory.getLogger(TestObjectCleaner.class);
 
-		private TestObjectCleaner(final Dao<TestObjectDto> testObjectDao,
-				final IFile testDataDir) {
+		private TestObjectCleaner(final Dao<TestObjectDto> testObjectDao, final IFile testDataDir) {
 			this.testObjectDao = (WriteDao<TestObjectDto>) testObjectDao;
 			this.testDataDir = testDataDir;
 		}
@@ -143,7 +142,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 				final PreparedDtoCollection<TestObjectDto> all = testObjectDao.getAll(new SimpleFilter());
 				for (final TestObjectDto testObjectDto : all) {
 					if ("true".equals(testObjectDto.properties().getPropertyOrDefault("temporary", "false"))) {
-						final long expirationTime = testObjectDto.getCreationDate().getTime() + unit.toMillis(maxLifeTime);
+						final long expirationTime = testObjectDto.getCreationDate().getTime()
+								+ unit.toMillis(maxLifeTime);
 						if (System.currentTimeMillis() > expirationTime) {
 							final Map<String, ResourceDto> res = testObjectDto.getResources();
 							if (res != null) {
@@ -188,8 +188,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 
 	private static class GmlAtomFilter implements FileContentFilterHolder {
 		private ContentTypeFilter contentFilter = new ContentTypeFilter(
-				new String[]{"application/xml", "application/gml+xml", "application/atom+xml"});
-		private MultiFileFilter filenameFilter = new FilenameExtensionFilter(new String[]{".xml", ".gml"});
+				new String[] { "application/xml", "application/gml+xml", "application/atom+xml" });
+		private MultiFileFilter filenameFilter = new FilenameExtensionFilter(new String[] { ".xml", ".gml" });
 
 		public ContentTypeFilter content() {
 			return this.contentFilter;
@@ -231,8 +231,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			timedExpiredItemsRemover.addExpirationItemHolder(new TestObjectCleaner(testObjectDao, testDataDir), exp,
 					TimeUnit.MINUTES);
 			cleanTimer.scheduleAtFixedRate(timedExpiredItemsRemover,
-					TimeUnit.SECONDS.toMillis(TimeUtils.calcDelay(0, 9, 0)),
-					86400000);
+					TimeUnit.SECONDS.toMillis(TimeUtils.calcDelay(0, 9, 0)), 86400000);
 			logger.info("Temporary Test Objects older than {} minutes are removed.", exp);
 		}
 
@@ -296,8 +295,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 				}
 			}
 
-			hash = UriUtils.hashFromContent(serviceEndpoint,
-					Credentials.fromProperties(testObject.properties()));
+			hash = UriUtils.hashFromContent(serviceEndpoint, Credentials.fromProperties(testObject.properties()));
 		} catch (final UriUtils.ConnectionException e) {
 			if (e.getResponseCode() == 400 && e.getUrl() != null) {
 				hash = "0000000000000400";
@@ -354,20 +352,20 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		if (resURI != null) {
 			if (UriUtils.isFile(resURI)) {
 				// Relative path in test object directory
-				testObjectDir = testDataDir.secureExpandPathDown(
-						resURI.getPath());
+				testObjectDir = testDataDir.secureExpandPathDown(resURI.getPath());
 				testObjectDir.expectDirIsReadable();
 				resourceName = "data";
 			} else {
 				// URL
 				final Credentials credentials = Credentials.fromProperties(testObject.properties());
-				final FileStorage.DownloadCmd downloadCmd = fileStorage.download(
-						testObject, additionalRegexFilter, credentials, resURI);
+				final FileStorage.DownloadCmd downloadCmd = fileStorage.download(testObject, additionalRegexFilter,
+						credentials, resURI);
 				testObjectDir = downloadCmd.download();
 				resourceName = "download." + testObject.getResourcesSize();
 			}
 		} else if (uploadFiles != null && !uploadFiles.isEmpty()) {
-			final FileStorage.UploadCmd uploadCmd = this.fileStorage.upload(testObject, additionalRegexFilter, uploadFiles);
+			final FileStorage.UploadCmd uploadCmd = this.fileStorage.upload(testObject, additionalRegexFilter,
+					uploadFiles);
 			testObjectDir = uploadCmd.upload();
 			resourceName = "upload." + testObject.getResourcesSize();
 		} else {
@@ -391,7 +389,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			if (v.getFileCount() == 1) {
 				throw new LocalizableApiError("l.testObject.one.file.with.zero.size", false, 400, v.getFileCount());
 			} else {
-				throw new LocalizableApiError("l.testObject.multiple.files.with.zero.size", false, 400, v.getFileCount());
+				throw new LocalizableApiError("l.testObject.multiple.files.with.zero.size", false, 400,
+						v.getFileCount());
 			}
 		}
 
@@ -412,7 +411,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 
 	// Main entry point for Test Run contoller
 	public void initResourcesAndAdd(final TestObjectDto testObject, final Set<EID> supportedTestObjectTypes)
-			throws StorageException, IOException, ObjectWithIdNotFoundException, LocalizableApiError, InvalidPropertyException {
+			throws StorageException, IOException, ObjectWithIdNotFoundException, LocalizableApiError,
+			InvalidPropertyException {
 
 		// If the ID is null, the Test Object references external data
 		if (testObject.getId() == null) {
@@ -448,6 +448,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		if (!testObjectDao.exists(testObject.getId())) {
 			testObjectDao.add(testObject);
 		}
+		testObjectDao.add(testObject);
 	}
 
 	//
@@ -455,7 +456,7 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Undocumented interface for internal use
-	@RequestMapping(value = {WebAppConstants.API_BASE_URL + "/TestDataDirs"}, method = RequestMethod.GET)
+	@RequestMapping(value = { WebAppConstants.API_BASE_URL + "/TestDataDirs" }, method = RequestMethod.GET)
 	public List<String> testDataDirs() throws IOException, StorageException, ObjectWithIdNotFoundException {
 		if (!"standard".equals(View.getWorkflowType())) {
 			// forbidden in non standard workflow
@@ -474,9 +475,9 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		return testDataDirs;
 	}
 
-	@ApiOperation(value = "Get Test Object as JSON", notes = TEST_OBJECT_DESCRIPTION, tags = {TEST_OBJECTS_TAG_NAME})
-	@RequestMapping(value = {TESTOBJECTS_URL + "/{id}",
-			TESTOBJECTS_URL + "/{id}.json"}, method = RequestMethod.GET, produces = "application/json")
+	@ApiOperation(value = "Get Test Object as JSON", notes = TEST_OBJECT_DESCRIPTION, tags = { TEST_OBJECTS_TAG_NAME })
+	@RequestMapping(value = { TESTOBJECTS_URL + "/{id}",
+			TESTOBJECTS_URL + "/{id}.json" }, method = RequestMethod.GET, produces = "application/json")
 	public void testObjectByIdJson(@PathVariable String id, @RequestParam(required = false) String search,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException, StorageException, ObjectWithIdNotFoundException, LocalizableApiError {
@@ -486,38 +487,34 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		streaming.asJson2(testObjectDao, request, response, id);
 	}
 
-	@ApiOperation(value = "Get multiple Test Objects as JSON", notes = TEST_OBJECT_DESCRIPTION, tags = {TEST_OBJECTS_TAG_NAME})
-	@RequestMapping(value = {TESTOBJECTS_URL, TESTOBJECTS_URL + ".json"}, method = RequestMethod.GET)
+	@ApiOperation(value = "Get multiple Test Objects as JSON", notes = TEST_OBJECT_DESCRIPTION, tags = {
+			TEST_OBJECTS_TAG_NAME })
+	@RequestMapping(value = { TESTOBJECTS_URL, TESTOBJECTS_URL + ".json" }, method = RequestMethod.GET)
 	public void listTestObjectsJson(
 			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
 			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
-			HttpServletRequest request,
-			HttpServletResponse response)
+			HttpServletRequest request, HttpServletResponse response)
 			throws StorageException, ConfigurationException, IOException, ObjectWithIdNotFoundException {
 		streaming.asJson2(testObjectDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get multiple Test Objects as XML", notes = TEST_OBJECT_DESCRIPTION, tags = {
-			TEST_OBJECTS_TAG_NAME}, produces = "text/xml")
+			TEST_OBJECTS_TAG_NAME }, produces = "text/xml")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Objects", reference = "www.interactive-instruments.de")
-	})
-	@RequestMapping(value = {TESTOBJECTS_URL + ".xml"}, method = RequestMethod.GET)
-	public void listTestObjectXml(
-			@RequestParam(required = false, defaultValue = "0") int offset,
-			@RequestParam(required = false, defaultValue = "0") int limit,
-			HttpServletRequest request,
+			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Objects", reference = "www.interactive-instruments.de") })
+	@RequestMapping(value = { TESTOBJECTS_URL + ".xml" }, method = RequestMethod.GET)
+	public void listTestObjectXml(@RequestParam(required = false, defaultValue = "0") int offset,
+			@RequestParam(required = false, defaultValue = "0") int limit, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, StorageException, ObjectWithIdNotFoundException {
 		streaming.asXml2(testObjectDao, request, response, new SimpleFilter(offset, limit));
 	}
 
 	@ApiOperation(value = "Get Test Object as XML", notes = TEST_OBJECT_DESCRIPTION, tags = {
-			TEST_OBJECTS_TAG_NAME}, produces = "text/xml")
+			TEST_OBJECTS_TAG_NAME }, produces = "text/xml")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Test Object", reference = "www.interactive-instruments.de"),
-			@ApiResponse(code = 404, message = "Test Object not found")
-	})
-	@RequestMapping(value = {TESTOBJECTS_URL + "/{id}.xml"}, method = RequestMethod.GET)
+			@ApiResponse(code = 404, message = "Test Object not found") })
+	@RequestMapping(value = { TESTOBJECTS_URL + "/{id}.xml" }, method = RequestMethod.GET)
 	public void testObjectByIdXml(
 			@ApiParam(value = "ID of Test Object that needs to be fetched", example = "EID-1ffe6ea2-5c29-4ce9-9a7e-f4d9d71119e8", required = true) @PathVariable String id,
 			HttpServletRequest request, HttpServletResponse response)
@@ -528,11 +525,9 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 		streaming.asXml2(testObjectDao, request, response, id);
 	}
 
-	@ApiOperation(value = "Delete Test Object", tags = {TEST_OBJECTS_TAG_NAME})
-	@ApiResponses(value = {
-			@ApiResponse(code = 204, message = "Test Object deleted"),
-			@ApiResponse(code = 404, message = "Test Object not found")
-	})
+	@ApiOperation(value = "Delete Test Object", tags = { TEST_OBJECTS_TAG_NAME })
+	@ApiResponses(value = { @ApiResponse(code = 204, message = "Test Object deleted"),
+			@ApiResponse(code = 404, message = "Test Object not found") })
 	@RequestMapping(value = TESTOBJECTS_URL + "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> delete(@PathVariable String id, HttpServletResponse response)
 			throws StorageException, ObjectWithIdNotFoundException, IOException {
@@ -544,14 +539,12 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	}
 
 	@ApiOperation(value = "Check if Test Object exists", notes = "Please note that this interface will always return HTTP status code '404' for temporary Test Object IDs.", tags = {
-			TEST_OBJECTS_TAG_NAME})
-	@ApiResponses(value = {
-			@ApiResponse(code = 204, message = "Test Object exists"),
-			@ApiResponse(code = 404, message = "Test Object does not exist")
-	})
-	@RequestMapping(value = {TESTOBJECTS_URL + "/{id}"}, method = RequestMethod.HEAD)
-	public ResponseEntity<String> exists(
-			@PathVariable String id) throws IOException, StorageException, ObjectWithIdNotFoundException {
+			TEST_OBJECTS_TAG_NAME })
+	@ApiResponses(value = { @ApiResponse(code = 204, message = "Test Object exists"),
+			@ApiResponse(code = 404, message = "Test Object does not exist") })
+	@RequestMapping(value = { TESTOBJECTS_URL + "/{id}" }, method = RequestMethod.HEAD)
+	public ResponseEntity<String> exists(@PathVariable String id)
+			throws IOException, StorageException, ObjectWithIdNotFoundException {
 		return testObjectDao.exists(EidConverter.toEid(id)) ? new ResponseEntity(HttpStatus.NO_CONTENT)
 				: new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
@@ -600,8 +593,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			this.files = new ArrayList<>();
 			for (final List<MultipartFile> multipartFile : multipartFiles) {
 				for (final MultipartFile mpf : multipartFile) {
-					this.files.add(
-							new UploadMetadata(IFile.sanitize(mpf.getOriginalFilename()), mpf.getSize(), mpf.getContentType()));
+					this.files.add(new UploadMetadata(IFile.sanitize(mpf.getOriginalFilename()), mpf.getSize(),
+							mpf.getContentType()));
 				}
 			}
 		}
@@ -615,19 +608,15 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 			+ "The property 'data.downloadable' of a TEMPORARY Test Object is always set to true. "
 			+ "Also note that the Swagger UI does only allow single file uploads in contrast to the API which allows multi file uploads.",
 
-			tags = {
-					TEST_OBJECTS_TAG_NAME}, produces = "application/json")
+			tags = { TEST_OBJECTS_TAG_NAME }, produces = "application/json")
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "fileupload", required = true, dataType = "file", paramType = "form"),
-	})
+			@ApiImplicitParam(name = "fileupload", required = true, dataType = "file", paramType = "form"), })
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "File uploaded and temporary Test Object created", response = TestObjectUpload.class),
 			@ApiResponse(code = 400, message = "File upload failed", response = ApiError.class),
-			@ApiResponse(code = 413, message = "Uploaded test data are too large", response = ApiError.class)
-	})
-	@RequestMapping(value = {TESTOBJECTS_URL}, params = "action=upload", method = RequestMethod.POST)
-	public TestObjectUpload uploadData(
-			@ApiIgnore final MultipartHttpServletRequest request)
+			@ApiResponse(code = 413, message = "Uploaded test data are too large", response = ApiError.class) })
+	@RequestMapping(value = { TESTOBJECTS_URL }, params = "action=upload", method = RequestMethod.POST)
+	public TestObjectUpload uploadData(@ApiIgnore final MultipartHttpServletRequest request)
 			throws LocalizableApiError, InvalidPropertyException, ObjectWithIdNotFoundException {
 
 		statusController.ensureStatusNotMajor();
@@ -656,61 +645,61 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 	}
 
 	@ApiOperation(value = "Get all Test Object resources", notes = "Download the Test Object - as long as the creator did not set the 'data.downloadable' property to 'false'.", tags = {
-			TEST_OBJECTS_TAG_NAME})
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Test Object resources returned"),
-			@ApiResponse(code = 400, message = "Invalid Test Object ID", response = ApiError.class),
-			@ApiResponse(code = 403, message = "Resource download forbidden"),
-			@ApiResponse(code = 404, message = "Test Object not found", response = ApiError.class)
-	})
-	@RequestMapping(value = {TESTOBJECTS_URL + "/{id}/data"}, method = RequestMethod.GET)
-	public void getResources(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
-			final HttpServletResponse response)
-			throws StorageException, IOException, ObjectWithIdNotFoundException, LocalizableApiError {
-		final TestObjectDto testObject = testObjectDao.getById(EidConverter.toEid(id)).getDto();
-		if ("true".equals(testObject.properties().getPropertyOrDefault("data.downloadable", "false"))) {
-			if (testObject.getResourcesSize() == 1) {
-				final URI uri = testObject.getResourceCollection().iterator().next().getUri();
-				if (!UriUtils.isFile(uri)) {
-					// stream url
-					UriUtils.stream(uri, response.getOutputStream());
-				} else {
-					// compress one file/dir
-					final IFile file = new IFile(uri);
-					response.setContentType("application/zip");
-					response.setHeader("Content-disposition",
-							"attachment; filename=\"TestObject." + id + ".zip\"");
-					file.compressTo(response.getOutputStream());
-				}
-			} else {
-				// compress multiple files
-				final List<IFile> tmpDownloadedFiles = new ArrayList<>();
-				try {
-					final List<IFile> files = new ArrayList<>();
-					for (final ResourceDto resource : testObject.getResourceCollection()) {
-						final URI uri = resource.getUri();
-						if (!UriUtils.isFile(uri)) {
-							// download
-							final IFile tmpFile = UriUtils.download(uri);
-							tmpDownloadedFiles.add(tmpFile);
-							files.add(tmpFile);
-						} else {
-							files.add(new IFile(uri));
-						}
-					}
-					response.setContentType("application/zip");
-					response.setHeader("Content-disposition",
-							"attachment; filename=\"TestObject." + id + ".zip\"");
-					IFile.compressTo(files, response.getOutputStream());
-				} finally {
-					tmpDownloadedFiles.forEach(f -> f.delete());
-				}
-			}
-		} else {
-			response.setStatus(403);
-			response.getWriter().print(
-					"Data download forbidden through \"data.downloadable\" property");
-		}
-	}
+            TEST_OBJECTS_TAG_NAME})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Test Object resources returned"),
+            @ApiResponse(code = 400, message = "Invalid Test Object ID", response = ApiError.class),
+            @ApiResponse(code = 403, message = "Resource download forbidden"),
+            @ApiResponse(code = 404, message = "Test Object not found", response = ApiError.class)
+    })
+    @RequestMapping(value = {TESTOBJECTS_URL + "/{id}/data"}, method = RequestMethod.GET)
+    public void getResources(
+            @ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
+            final HttpServletResponse response)
+            throws StorageException, IOException, ObjectWithIdNotFoundException, LocalizableApiError {
+        final TestObjectDto testObject = testObjectDao.getById(EidConverter.toEid(id)).getDto();
+        if ("true".equals(testObject.properties().getPropertyOrDefault("data.downloadable", "false"))) {
+            if (testObject.getResourcesSize() == 1) {
+                final URI uri = testObject.getResourceCollection().iterator().next().getUri();
+                if (!UriUtils.isFile(uri)) {
+                    // stream url
+                    UriUtils.stream(uri, response.getOutputStream());
+                } else {
+                    // compress one file/dir
+                    final IFile file = new IFile(uri);
+                    response.setContentType("application/zip");
+                    response.setHeader("Content-disposition",
+                            "attachment; filename=\"TestObject." + id + ".zip\"");
+                    file.compressTo(response.getOutputStream());
+                }
+            } else {
+                // compress multiple files
+                final List<IFile> tmpDownloadedFiles = new ArrayList<>();
+                try {
+                    final List<IFile> files = new ArrayList<>();
+                    for (final ResourceDto resource : testObject.getResourceCollection()) {
+                        final URI uri = resource.getUri();
+                        if (!UriUtils.isFile(uri)) {
+                            // download
+                            final IFile tmpFile = UriUtils.download(uri);
+                            tmpDownloadedFiles.add(tmpFile);
+                            files.add(tmpFile);
+                        } else {
+                            files.add(new IFile(uri));
+                        }
+                    }
+                    response.setContentType("application/zip");
+                    response.setHeader("Content-disposition",
+                            "attachment; filename=\"TestObject." + id + ".zip\"");
+                    IFile.compressTo(files, response.getOutputStream());
+                } finally {
+                    tmpDownloadedFiles.forEach(f -> f.delete());
+                }
+            }
+        } else {
+            response.setStatus(403);
+            response.getWriter().print(
+                    "Data download forbidden through \"data.downloadable\" property");
+        }
+    }>>>>>>>next
 }
