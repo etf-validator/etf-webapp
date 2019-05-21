@@ -1,0 +1,16 @@
+# end_of_line is handled by git
+
+root = true
+
+[*.{js,java,groovy}]
+charset = utf-8
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = 128
+
+[*.{md,txt}]
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = false

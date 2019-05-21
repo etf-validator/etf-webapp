@@ -52,7 +52,8 @@ define([
                 }
             };
             this.targetObject.destroy(callbacks);
-            $.mobile.changePage(this.backPage, {role: 'page', reverse: false, changeHash:false});
+            const backUrl = this.backPage.context.baseURI + "#test-reports";
+            window.location.replace(backUrl);
             // Will change to the correct url and trigger a rerender event
             // window.location.href = "#test-objects-page";
         },
@@ -60,7 +61,8 @@ define([
         cancel: function(e){
             e.preventDefault();
             console.log("Canceled "+this.typeName+" deletion");
-            $.mobile.changePage(this.backPage, {role: 'page', reverse: false, changeHash:false});
+            const backUrl = this.backPage.context.baseURI + "#test-reports";
+            window.location.replace(backUrl);
 
         },
     });

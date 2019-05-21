@@ -35,47 +35,47 @@ import io.swagger.annotations.ApiModel;
  */
 public class AttachmentCollection {
 
-	@ApiModel(value = "Attachment", description = "Report attachment gathered during a test run")
-	public final static class Attachment {
-		@JsonProperty
-		private String id;
+    @ApiModel(value = "Attachment", description = "Report attachment gathered during a test run")
+    public final static class Attachment {
+        @JsonProperty
+        private String id;
 
-		@JsonProperty
-		private String label;
+        @JsonProperty
+        private String label;
 
-		@JsonProperty
-		private String encoding;
+        @JsonProperty
+        private String encoding;
 
-		@JsonProperty
-		private String mimeType;
+        @JsonProperty
+        private String mimeType;
 
-		@JsonProperty
-		private String type;
+        @JsonProperty
+        private String type;
 
-		@JsonProperty
-		private String embeddedData;
+        @JsonProperty
+        private String embeddedData;
 
-		@JsonProperty
-		private String size;
+        @JsonProperty
+        private String size;
 
-		public Attachment(final AttachmentDto attachmentDto) {
-			this.id = attachmentDto.getId().getId();
-			this.label = attachmentDto.getLabel();
-			this.encoding = attachmentDto.getEncoding();
-			this.mimeType = attachmentDto.getMimeType();
-			this.type = attachmentDto.getType();
-			this.embeddedData = attachmentDto.getEmbeddedData();
-			try {
-				this.size = String.valueOf(UriUtils.getContentLength(attachmentDto.getReferencedData()));
-			} catch (IOException ign) {
-				ExcUtils.suppress(ign);
-			}
-		}
-	}
+        public Attachment(final AttachmentDto attachmentDto) {
+            this.id = attachmentDto.getId().getId();
+            this.label = attachmentDto.getLabel();
+            this.encoding = attachmentDto.getEncoding();
+            this.mimeType = attachmentDto.getMimeType();
+            this.type = attachmentDto.getType();
+            this.embeddedData = attachmentDto.getEmbeddedData();
+            try {
+                this.size = String.valueOf(UriUtils.getContentLength(attachmentDto.getReferencedData()));
+            } catch (IOException ign) {
+                ExcUtils.suppress(ign);
+            }
+        }
+    }
 
-	private AttachmentCollection() {}
+    private AttachmentCollection() {}
 
-	public static final Collection<Attachment> create(final Collection<AttachmentDto> attachmentDtos) {
-		return attachmentDtos.stream().map(Attachment::new).collect(Collectors.toList());
-	}
+    public static final Collection<Attachment> create(final Collection<AttachmentDto> attachmentDtos) {
+        return attachmentDtos.stream().map(Attachment::new).collect(Collectors.toList());
+    }
 }
