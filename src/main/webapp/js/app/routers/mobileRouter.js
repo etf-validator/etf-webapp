@@ -233,8 +233,7 @@ define([
                 _this.showDialog(_this.startTestView, { executableTestSuites: selectedExecutableTestSuites });
 
                 // Correct back button
-                $("#start-tests-dialog > div > div[data-role='header'] a[role='button']").attr('href', window.location.pathname+'#start-tests');
-            });
+                $("#start-tests-dialog > div > div[data-role='header'] a[role='button']").attr('href', '/#start-tests');            });
         },
 
         home: function() {
