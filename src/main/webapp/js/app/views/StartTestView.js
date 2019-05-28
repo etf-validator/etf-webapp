@@ -93,6 +93,8 @@ define([
             if(_.isUndefined(this.testObjectTypes['EID88311f83-818c-46ed-8a9a-cec4f3707365']) &&
                 _.isUndefined(this.testObjectTypes['EID9b6ef734-981e-4d60-aa81-d6730a1c6389']) &&
                 _.isUndefined(this.testObjectTypes['EID49d881ae-b115-4b91-aabe-31d5791bce52']) &&
+                _.isUndefined(this.testObjectTypes['EIDdac58b52-3ffd-4eb5-96e3-64723d8f0f51']) &&
+                _.isUndefined(this.testObjectTypes['EIDf897f313-55f0-4e51-928a-0e9869f5a1d6']) &&
                 _.isUndefined(this.testObjectTypes['EID9981e87e-d642-43b3-ad5f-e77469075e74']) &&
                 _.isUndefined(this.testObjectTypes['EID380b969c-215e-46f8-a4e9-16f002f7d6c3']) &&
                 _.isUndefined(this.testObjectTypes['EIDae35f7cd-86d9-475a-aa3a-e0bfbda2bb5f'])) {
