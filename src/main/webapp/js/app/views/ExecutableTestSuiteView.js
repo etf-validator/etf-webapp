@@ -48,7 +48,7 @@ define([
                     _this.template({"moment": moment, "v2": v2, "collection": _this.collection.toJSON()})
                 );
 
-                $('.executable-test-suite-selection').on('change', function () {
+                $('.executable-test-suite-selection').on('change', function (e) {
                     var i = $(".executable-test-suite-selection option[value!='X']:selected").length;
                     if (i == 0) {
                         $('#fadin-start-tests-button').hide('scale');
@@ -59,6 +59,7 @@ define([
                         $('.executable-test-suite-selection' +
                             v2.getClassNamesForNotSelection(this, "test-object-type-")).parent().addClass("ui-disabled");
                     }
+                    markDependants(e.currentTarget.querySelectorAll("option")[1].value);
                 });
 
                 $('#fadin-start-tests-button').on('click', function (e) {
@@ -92,9 +93,8 @@ define([
                     e.stopPropagation();
                     e.stopImmediatePropagation();
                     e.preventDefault();
-                    markDependants(e.currentTarget.querySelectorAll("option")[1].value);
                 });
-
+                
                 _this.container.trigger('create');
                 _this.container.listview().listview('refresh');
             });
@@ -102,6 +102,8 @@ define([
 
     });
     
+    var dependenciesTree = {};
+
     function markDependants(id){
         var model = router.executableTestSuitesView.collection.models.filter((x) => x.id==id)[0];
         let classList = document.querySelector("option[value="+id+"]").parentElement.parentElement.classList;
