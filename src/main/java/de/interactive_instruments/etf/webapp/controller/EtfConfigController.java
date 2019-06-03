@@ -581,7 +581,7 @@ public class EtfConfigController implements PropertyHolder {
     // Rest interfaces
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private static String[] logLevels = { "OFF", "ERROR", "WARN", "INFO", "DEBUG", "TRACE", "ALL" };
+    private static String[] logLevels = {"OFF", "ERROR", "WARN", "INFO", "DEBUG", "TRACE", "ALL"};
 
     @RequestMapping(value = "/v2/admin/log", method = RequestMethod.GET, produces = "application/json")
     private @ResponseBody List<String> logFile(@RequestParam(value = "max", required = false) String maxLinesStr,

@@ -112,8 +112,7 @@ public class TestRunController implements TestRunEventListener {
 
     private final Logger logger = LoggerFactory.getLogger(TestRunController.class);
 
-    public TestRunController() {
-    }
+    public TestRunController() {}
 
     final static class TaskProgressDto {
 
@@ -131,8 +130,7 @@ public class TestRunController implements TestRunEventListener {
             this.log = log;
         }
 
-        public TaskProgressDto() {
-        }
+        public TaskProgressDto() {}
 
         static TaskProgressDto createCompletedMsg(TaskProgress p) {
             return new TaskProgressDto(String.valueOf(p.getMaxSteps()), new ArrayList<>());
@@ -271,12 +269,7 @@ public class TestRunController implements TestRunEventListener {
             // Check if the test object has changed since the last run
             // and update the test object
             // todo
-            /*
-             * final TestObject tO = testRunTask.getTestRun().getTestObject(); if
-             * (testRunTask.getTestRun().isTestObjectResourceUpdateRequired() &&
-             * testObjectController.getTestObjStore().exists(tO.getId())) {
-             * testObjectController.getTestObjStore().update(tO); }
-             */
+            /* final TestObject tO = testRunTask.getTestRun().getTestObject(); if (testRunTask.getTestRun().isTestObjectResourceUpdateRequired() && testObjectController.getTestObjStore().exists(tO.getId())) { testObjectController.getTestObjStore().update(tO); } */
             testResultController.storeTestRun(testRunDto);
             logger.info("TestRun " + testRunDto.getDescriptiveLabel() + " initialized");
             taskPoolRegistry.submitTask(testRun);
@@ -312,10 +305,10 @@ public class TestRunController implements TestRunEventListener {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @ApiOperation(value = "Get the Test Run progress as JSON", notes = "Retrieve one Test Run status including log messages, the estimated total number of Test Steps and the number of already executed Test Steps", produces = "application/json", tags = {
-            TEST_RUNS_TAG_NAME })
+            TEST_RUNS_TAG_NAME})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Task progress returned", response = TaskProgressDto.class),
-            @ApiResponse(code = 404, message = "Test Run not found", response = Void.class), })
+            @ApiResponse(code = 404, message = "Test Run not found", response = Void.class),})
     @RequestMapping(value = API_BASE_URL + "/TestRuns/{id}/progress", method = RequestMethod.GET)
     @ResponseBody
     public TaskProgressDto progressLog(
@@ -384,8 +377,8 @@ public class TestRunController implements TestRunEventListener {
     }
 
     @ApiOperation(value = "Get the progress of all Test Runs", notes = "Retrieve status information about all non-completed Test Runs", tags = {
-            TEST_RUNS_TAG_NAME })
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"), })
+            TEST_RUNS_TAG_NAME})
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),})
     @RequestMapping(value = API_BASE_URL + "/TestRuns", params = "view=progress", method = RequestMethod.GET)
     public @ResponseBody List<TestRunsJsonView> listTestRunsJson() throws StorageException, ConfigurationException {
         final List<TestRunsJsonView> testRunsJsonViews = new ArrayList<TestRunsJsonView>();
@@ -394,10 +387,10 @@ public class TestRunController implements TestRunEventListener {
     }
 
     @ApiOperation(value = "Check if the Test Run exists", notes = "Checks whether a Test Run is running or has already been completed and a report has been saved. ", tags = {
-            TEST_RESULTS_TAG_NAME, TEST_RUNS_TAG_NAME })
-    @ApiResponses(value = { @ApiResponse(code = 204, message = "Test Run exists", response = Void.class),
-            @ApiResponse(code = 404, message = "Test Run does not exist", response = Void.class), })
-    @RequestMapping(value = { TEST_RUNS_URL + "/{id}" }, method = RequestMethod.HEAD)
+            TEST_RESULTS_TAG_NAME, TEST_RUNS_TAG_NAME})
+    @ApiResponses(value = {@ApiResponse(code = 204, message = "Test Run exists", response = Void.class),
+            @ApiResponse(code = 404, message = "Test Run does not exist", response = Void.class),})
+    @RequestMapping(value = {TEST_RUNS_URL + "/{id}"}, method = RequestMethod.HEAD)
     public ResponseEntity exists(
             @ApiParam(value = "Test Run ID. "
                     + EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id)
@@ -408,12 +401,12 @@ public class TestRunController implements TestRunEventListener {
     }
 
     @ApiOperation(value = "Cancel and delete a Test Run", notes = "Cancels a running Test Run or deletes an already completed and saved report.", response = Void.class, tags = {
-            TEST_RESULTS_TAG_NAME, TEST_RUNS_TAG_NAME })
+            TEST_RESULTS_TAG_NAME, TEST_RUNS_TAG_NAME})
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Test Run deleted", responseHeaders = {
                     @ResponseHeader(name = "action", description = "Set to 'canceled' if the Test Run was canceled or "
-                            + "'deleted' if a persisted Test Run was removed") }),
-            @ApiResponse(code = 404, message = "Test Run not found", response = ApiError.class) })
+                            + "'deleted' if a persisted Test Run was removed")}),
+            @ApiResponse(code = 404, message = "Test Run not found", response = ApiError.class)})
     @RequestMapping(value = TEST_RUNS_URL + "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity delete(
             @ApiParam(value = "Test Run ID. "
@@ -474,12 +467,12 @@ public class TestRunController implements TestRunEventListener {
             + "        \"arguments\": {\n" + "            \"files_to_test\": \".*\",\n"
             + "            \"tests_to_execute\": \".*\"\n" + "        },\n" + "        \"testObject\": {\n"
             + "            \"resources\": {\n" + "                \"data\": \"http://example.com/test-data.xml\"\n"
-            + "            }\n" + "        }\n" + "    }\n" + "\n\n", tags = { TEST_RUNS_TAG_NAME })
-    @ApiResponses(value = { @ApiResponse(code = 201, message = "Test Run created"),
+            + "            }\n" + "        }\n" + "    }\n" + "\n\n", tags = {TEST_RUNS_TAG_NAME})
+    @ApiResponses(value = {@ApiResponse(code = 201, message = "Test Run created"),
             @ApiResponse(code = 400, message = "Invalid request", response = ApiError.class),
             @ApiResponse(code = 404, message = "Test Object or Executable Test Suite with ID not found", response = ApiError.class),
             @ApiResponse(code = 409, message = "Test Object already in use", response = ApiError.class),
-            @ApiResponse(code = 500, message = "Internal error", response = ApiError.class), })
+            @ApiResponse(code = 500, message = "Internal error", response = ApiError.class),})
     @RequestMapping(value = TEST_RUNS_URL, method = RequestMethod.POST)
     public void start(@RequestBody @Valid StartTestRunRequest testRunRequest, BindingResult result,
             HttpServletRequest request, HttpServletResponse response)
