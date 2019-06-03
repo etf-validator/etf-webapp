@@ -124,37 +124,38 @@ public class EtfConfigController implements PropertyHolder {
 
     private final Logger logger = LoggerFactory.getLogger(EtfConfigController.class);
 
-    private static final Map<String, String> defaultProperties = Collections.unmodifiableMap(new HashMap<String, String>() {
-        {
-            put(ETF_WEBAPP_BASE_URL, "http://localhost:8080/etf-webapp");
-            put(ETF_BRANDING_TEXT, "ETF");
-            put(ETF_TESTOBJECT_ALLOW_PRIVATENET_ACCESS, "false");
-            put(ETF_TEST_OBJECT_MAX_SIZE, "5368709120");
-            put(ETF_REPORT_COMPARISON, "false");
-            // 8 h
-            put(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION, "480");
-            // 8 days
-            put(ETF_TESTREPORTS_LIFETIME_EXPIRATION, "11520");
-            put(ETF_HELP_PAGE_URL,
-                    "https://docs.etf-validator.net/v2.0/User_manuals/Simplified_workflows.html");
-            put(ETF_BSX_RECREATE_CONFIG, "true");
-            put(ETF_SUBMIT_ERRORS, "false");
-            put(ETF_MAX_UPLOAD_SIZE, "auto");
-            put(ETF_WORKFLOWS, "simplified");
-            put(EtfConstants.ETF_PROJECTS_DIR, "projects");
-            put(EtfConstants.ETF_REPORTSTYLES_DIR, "reportstyles");
-            put(ETF_TESTDRIVERS_DIR, "td");
-            put(EtfConstants.ETF_DATASOURCE_DIR, "ds");
-            put(EtfConstants.ETF_ATTACHMENT_DIR, "ds/attachments/");
-            put(EtfConstants.ETF_BACKUP_DIR, "bak");
-            // put(ETF_FEED_DIR, ".feed");
-            put(ETF_TESTDATA_DIR, "testdata");
-            put(ETF_TESTDATA_UPLOAD_DIR, "http_uploads");
-            put(ETF_PARALLEL_EXECUTIONS, "" + Runtime.getRuntime().availableProcessors());
-            put(ETF_QUEUE_SIZE, "" + Runtime.getRuntime().availableProcessors() * 3);
+    private static final Map<String, String> defaultProperties = Collections
+            .unmodifiableMap(new HashMap<String, String>() {
+                {
+                    put(ETF_WEBAPP_BASE_URL, "http://localhost:8080/etf-webapp");
+                    put(ETF_BRANDING_TEXT, "ETF");
+                    put(ETF_TESTOBJECT_ALLOW_PRIVATENET_ACCESS, "false");
+                    put(ETF_TEST_OBJECT_MAX_SIZE, "5368709120");
+                    put(ETF_REPORT_COMPARISON, "false");
+                    // 8 h
+                    put(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION, "480");
+                    // 8 days
+                    put(ETF_TESTREPORTS_LIFETIME_EXPIRATION, "11520");
+                    put(ETF_HELP_PAGE_URL,
+                            "https://docs.etf-validator.net/v2.0/User_manuals/Simplified_workflows.html");
+                    put(ETF_BSX_RECREATE_CONFIG, "true");
+                    put(ETF_SUBMIT_ERRORS, "false");
+                    put(ETF_MAX_UPLOAD_SIZE, "auto");
+                    put(ETF_WORKFLOWS, "simplified");
+                    put(EtfConstants.ETF_PROJECTS_DIR, "projects");
+                    put(EtfConstants.ETF_REPORTSTYLES_DIR, "reportstyles");
+                    put(ETF_TESTDRIVERS_DIR, "td");
+                    put(EtfConstants.ETF_DATASOURCE_DIR, "ds");
+                    put(EtfConstants.ETF_ATTACHMENT_DIR, "ds/attachments/");
+                    put(EtfConstants.ETF_BACKUP_DIR, "bak");
+                    // put(ETF_FEED_DIR, ".feed");
+                    put(ETF_TESTDATA_DIR, "testdata");
+                    put(ETF_TESTDATA_UPLOAD_DIR, "http_uploads");
+                    put(ETF_PARALLEL_EXECUTIONS, "" + Runtime.getRuntime().availableProcessors());
+                    put(ETF_QUEUE_SIZE, "" + Runtime.getRuntime().availableProcessors() * 3);
 
-        }
-    });
+                }
+            });
 
     private static final Set<String> filePathPropertyKeys = Collections.unmodifiableSet(new LinkedHashSet<String>() {
         {
@@ -173,16 +174,16 @@ public class EtfConfigController implements PropertyHolder {
     private IFile checkDirForConfig(final IFile dir) {
         if (dir.exists()) {
             final IFile configFile = dir.expandPath(ETF_CONFIG_PROPERTY_FILENAME);
-            final IFile configFallbackFile = dir.expandPath(ETF_CONFIG_DIR_NAME).expandPath(ETF_CONFIG_PROPERTY_FILENAME);
+            final IFile configFallbackFile = dir.expandPath(ETF_CONFIG_DIR_NAME)
+                    .expandPath(ETF_CONFIG_PROPERTY_FILENAME);
             if (configFile.exists() && configFile.length() > 0) {
                 return configFile;
             } else if (configFallbackFile.exists() && configFallbackFile.length() > 0) {
                 return configFallbackFile;
             } else {
-                logger.warn("Skipping directory '" + dir.getAbsolutePath() +
-                        "' which does not contain a '" + ETF_CONFIG_PROPERTY_FILENAME +
-                        "' configuration file or a '" + ETF_CONFIG_DIR_NAME + "' subdirectory containing the '" +
-                        ETF_CONFIG_PROPERTY_FILENAME + "' file.");
+                logger.warn("Skipping directory '" + dir.getAbsolutePath() + "' which does not contain a '"
+                        + ETF_CONFIG_PROPERTY_FILENAME + "' configuration file or a '" + ETF_CONFIG_DIR_NAME
+                        + "' subdirectory containing the '" + ETF_CONFIG_PROPERTY_FILENAME + "' file.");
                 return null;
             }
         }
@@ -190,8 +191,7 @@ public class EtfConfigController implements PropertyHolder {
     }
 
     @PostConstruct
-    private void init()
-            throws IOException, MissingPropertyException, URISyntaxException {
+    private void init() throws IOException, MissingPropertyException, URISyntaxException {
         version = getManifest().getMainAttributes().getValue("Implementation-Version");
         if (version == null) {
             version = "unknown";
@@ -201,9 +201,7 @@ public class EtfConfigController implements PropertyHolder {
                     "-b" + getManifest().getMainAttributes().getValue("Build-Time").substring(2));
         }
 
-        logger.info(EtfConstants.ETF_ASCII +
-                "ETF WebApp " + version + SUtils.ENDL +
-                II_Constants.II_COPYRIGHT);
+        logger.info(EtfConstants.ETF_ASCII + "ETF WebApp " + version + SUtils.ENDL + II_Constants.II_COPYRIGHT);
 
         // Set HTTP Client to ETF
         System.setProperty("http.ii.agent", "ETF validator (" + version + ")");
@@ -214,9 +212,8 @@ public class EtfConfigController implements PropertyHolder {
         if (!"UTF-8".equalsIgnoreCase(System.getProperty("file.encoding"))) {
             System.setProperty("file.encoding", "UTF-8");
             // Print as error and sleep for 3 seconds, so it is noticed by Admins
-            logger.error(LogUtils.ADMIN_MESSAGE,
-                    "The file encoding must be set to UTF-8 " +
-                            "(for instance by adding   -Dfile.encoding=UTF-8   to the JAVA_OPTS)");
+            logger.error(LogUtils.ADMIN_MESSAGE, "The file encoding must be set to UTF-8 "
+                    + "(for instance by adding   -Dfile.encoding=UTF-8   to the JAVA_OPTS)");
             try {
                 Thread.sleep(3000);
             } catch (final InterruptedException ign) {
@@ -240,7 +237,8 @@ public class EtfConfigController implements PropertyHolder {
             final String propertiesFilePath = PropertyUtils.getenvOrProperty("ETF_WEBAPP_PROPERTIES_FILE", null);
             final String configFileIdentifier = "ETF_CONFIG_PROPERTY_FILE";
             if (!SUtils.isNullOrEmpty(propertiesFilePath)) {
-                logger.info("Using environment variable ETF_WEBAPP_PROPERTIES_FILE for property file {}", propertiesFilePath);
+                logger.info("Using environment variable ETF_WEBAPP_PROPERTIES_FILE for property file {}",
+                        propertiesFilePath);
                 if (propertiesFilePath.contains(ETF_CONFIG_PROPERTY_FILENAME)) {
                     propertiesFile = new IFile(propertiesFilePath, configFileIdentifier);
                 } else {
@@ -297,14 +295,16 @@ public class EtfConfigController implements PropertyHolder {
 
         final String propertyFileVersion = configProperties.getProperty("etf.config.properties.version");
         if (propertyFileVersion == null) {
-            throw new RuntimeException("Required \"etf.config.properties.version\" property not found in configuration file!");
+            throw new RuntimeException(
+                    "Required \"etf.config.properties.version\" property not found in configuration file!");
         }
         if (!requiredConfigVersion.equals(propertyFileVersion)) {
             throw new RuntimeException("Configuration Property file version " + propertyFileVersion + " not supported. "
                     + "Version " + requiredConfigVersion + " expected.");
         }
 
-        // Check if etfDir is set in configuration, otherwise default to directory with the config file
+        // Check if etfDir is set in configuration, otherwise default to directory with
+        // the config file
         if (configProperties.getProperty(ETF_DIR) != null) {
             etfDir = new IFile(configProperties.getProperty(ETF_DIR), "ETF_DIR");
         } else {
@@ -329,13 +329,12 @@ public class EtfConfigController implements PropertyHolder {
         // Basex data source
         final IFile bsxConfigDir = getPropertyAsFile(EtfConstants.ETF_DATASOURCE_DIR).expandPath("db");
         System.setProperty("org.basex.path", bsxConfigDir.getAbsolutePath());
-        if (bsxConfigDir.exists() && hasProperty(ETF_BSX_RECREATE_CONFIG) &&
-                "true".equals(getProperty(ETF_BSX_RECREATE_CONFIG))) {
+        if (bsxConfigDir.exists() && hasProperty(ETF_BSX_RECREATE_CONFIG)
+                && "true".equals(getProperty(ETF_BSX_RECREATE_CONFIG))) {
             final IFile bsxConfigFile = bsxConfigDir.expandPath(".basex");
             logger.info("Deleting basex config file " + bsxConfigFile.getAbsolutePath());
             if (!bsxConfigFile.delete() && bsxConfigFile.exists()) {
-                throw new IOException(
-                        "Unable to delete .basex configuration file: " + bsxConfigFile.getAbsolutePath());
+                throw new IOException("Unable to delete .basex configuration file: " + bsxConfigFile.getAbsolutePath());
             }
         }
 
@@ -379,7 +378,8 @@ public class EtfConfigController implements PropertyHolder {
                 final String maxUploadSize = configProperties.getProperty(ETF_MAX_UPLOAD_SIZE);
                 if (maxUploadSize.equalsIgnoreCase("auto")) {
                     logger.info("Automatic setting max upload size based on presumable free memory");
-                    final long allocatedMemory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
+                    final long allocatedMemory = (Runtime.getRuntime().totalMemory()
+                            - Runtime.getRuntime().freeMemory());
                     final long presumableFreeMemory = Runtime.getRuntime().maxMemory() - allocatedMemory;
                     final long maxTestDatabaseSize = presumableFreeMemory * 2;
                     final long maxCompressedFileUploadSize = maxTestDatabaseSize / 15;
@@ -398,10 +398,12 @@ public class EtfConfigController implements PropertyHolder {
             final long maxUploadSize = getPropertyAsLong(ETF_MAX_UPLOAD_SIZE);
             final long maxObjectSize = getPropertyAsLong(ETF_TEST_OBJECT_MAX_SIZE);
             if (maxUploadSize > maxObjectSize) {
-                logger.warn("The value of the {} property should be set to value greater "
-                        + "than the value {} of the {} property.",
+                logger.warn(
+                        "The value of the {} property should be set to value greater "
+                                + "than the value {} of the {} property.",
                         ETF_TEST_OBJECT_MAX_SIZE, maxUploadSize, ETF_MAX_UPLOAD_SIZE);
-                configProperties.setProperty(ETF_TEST_OBJECT_MAX_SIZE, configProperties.getProperty(ETF_MAX_UPLOAD_SIZE));
+                configProperties.setProperty(ETF_TEST_OBJECT_MAX_SIZE,
+                        configProperties.getProperty(ETF_MAX_UPLOAD_SIZE));
             }
         } catch (InvalidPropertyException e) {
             // Should never happen
@@ -421,24 +423,22 @@ public class EtfConfigController implements PropertyHolder {
         try {
             minutes = this.getPropertyAsLong(property);
         } catch (InvalidPropertyException e) {
-            logger.error("{} : not a number : {}. Setting default value: {}",
-                    property, this.getProperty(property), defaultVal);
+            logger.error("{} : not a number : {}. Setting default value: {}", property, this.getProperty(property),
+                    defaultVal);
             configProperties.setProperty(property, defaultVal);
             return;
         }
         if (minutes < 0) {
-            logger.error("{} : a negative value is not allowed: {}. Setting default value: {}",
-                    property, minutes, defaultVal);
+            logger.error("{} : a negative value is not allowed: {}. Setting default value: {}", property, minutes,
+                    defaultVal);
             configProperties.setProperty(property, defaultVal);
         } else if (minutes < 20 && logger.isDebugEnabled()) {
             // Values less than 20 minutes are allowed in debug mode
             logger.error("{} : a value less than 20 minutes ( {}) can interfere with the Test "
-                    + "Runs. Setting default value: {}",
-                    property, minutes, defaultVal);
+                    + "Runs. Setting default value: {}", property, minutes, defaultVal);
             configProperties.setProperty(property, defaultVal);
         } else if (minutes > 131400) {
-            logger.warn("{} : a value higher than 3 month might be be very optimistic: {}",
-                    property, minutes);
+            logger.warn("{} : a value higher than 3 month might be be very optimistic: {}", property, minutes);
             configProperties.setProperty(property, defaultVal);
         }
     }
@@ -463,7 +463,8 @@ public class EtfConfigController implements PropertyHolder {
         // Copy config template to ETF_CONFIG_DIR_NAME / ETF_CONFIG_PROPERTY_FILENAME
         final IFile configFileDir = etfDir.expandPath(ETF_CONFIG_DIR_NAME);
         configFileDir.mkdirs();
-        final InputStream stream = servletContext.getResourceAsStream("/WEB-INF/classes/" + ETF_CONFIG_PROPERTY_FILENAME);
+        final InputStream stream = servletContext
+                .getResourceAsStream("/WEB-INF/classes/" + ETF_CONFIG_PROPERTY_FILENAME);
         if (stream == null) {
             // Debugging and running jettyRun instead of jettyRunWar ?
             throw new RuntimeException("Unknown internal error: "
@@ -489,30 +490,30 @@ public class EtfConfigController implements PropertyHolder {
         if (tdDir.secureExpandPathDown(".etf_do_not_touch_drivers").exists()) {
             logger.debug("Drivers are not touched.");
         } else {
-	        final IFile.VersionedFileList latestDriverVersions = tdDir.getVersionedFilesInDir();
-	
-	        // Copy test drivers
-	        final String tdDirName = "/testdrivers";
-	        final Set<String> tds = servletContext.getResourcePaths(tdDirName);
-	        if (tds != null) {
-	            for (final String td : tds) {
-	                final String testDriverName = td.substring(tdDirName.length());
-	                if (!SUtils.isNullOrEmpty(testDriverName) && latestDriverVersions.isNewer(testDriverName)) {
-	                    logger.info("Installing Test Driver " + testDriverName);
-	                    final IFile tdJar = new IFile(tdDir, testDriverName);
-	                    final InputStream jarStream = servletContext.getResourceAsStream(td);
-	                    try (final FileOutputStream out = new FileOutputStream(tdJar)) {
-	                        IOUtils.copy(jarStream, out);
-	                    } catch (final IOException e) {
-	                        tdJar.delete();
-	                        logger.error("Could not copy test driver: ", e);
-	                    } finally {
-	                        jarStream.close();
-	                    }
-	                }
-	            }
-	        }
-	    }
+            final IFile.VersionedFileList latestDriverVersions = tdDir.getVersionedFilesInDir();
+
+            // Copy test drivers
+            final String tdDirName = "/testdrivers";
+            final Set<String> tds = servletContext.getResourcePaths(tdDirName);
+            if (tds != null) {
+                for (final String td : tds) {
+                    final String testDriverName = td.substring(tdDirName.length());
+                    if (!SUtils.isNullOrEmpty(testDriverName) && latestDriverVersions.isNewer(testDriverName)) {
+                        logger.info("Installing Test Driver " + testDriverName);
+                        final IFile tdJar = new IFile(tdDir, testDriverName);
+                        final InputStream jarStream = servletContext.getResourceAsStream(td);
+                        try (final FileOutputStream out = new FileOutputStream(tdJar)) {
+                            IOUtils.copy(jarStream, out);
+                        } catch (final IOException e) {
+                            tdJar.delete();
+                            logger.error("Could not copy test driver: ", e);
+                        } finally {
+                            jarStream.close();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static EtfConfigController getInstance() {
@@ -580,11 +581,10 @@ public class EtfConfigController implements PropertyHolder {
     // Rest interfaces
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private static String[] logLevels = {"OFF", "ERROR", "WARN", "INFO", "DEBUG", "TRACE", "ALL"};
+    private static String[] logLevels = { "OFF", "ERROR", "WARN", "INFO", "DEBUG", "TRACE", "ALL" };
 
     @RequestMapping(value = "/v2/admin/log", method = RequestMethod.GET, produces = "application/json")
-    private @ResponseBody List<String> logFile(
-            @RequestParam(value = "max", required = false) String maxLinesStr,
+    private @ResponseBody List<String> logFile(@RequestParam(value = "max", required = false) String maxLinesStr,
             @RequestParam(value = "search", required = false) String search) throws IOException {
         final long defaultMax = 45;
         long maxLines = defaultMax;
@@ -595,8 +595,8 @@ public class EtfConfigController implements PropertyHolder {
             }
         }
         final File relEtfLog = new File("etf.log");
-        final File logFile = relEtfLog.exists() ? relEtfLog : new File(PropertyUtils.getenvOrProperty(
-                "ETF_DIR", "./"), "logs/etf.log");
+        final File logFile = relEtfLog.exists() ? relEtfLog
+                : new File(PropertyUtils.getenvOrProperty("ETF_DIR", "./"), "logs/etf.log");
         if (logFile.exists()) {
             try (ReversedLinesFileReader reader = new ReversedLinesFileReader(logFile, StandardCharsets.UTF_8)) {
                 int i = 0;
@@ -652,14 +652,13 @@ public class EtfConfigController implements PropertyHolder {
     }
 
     @RequestMapping(value = "/v2/admin/loglevel", method = RequestMethod.POST, produces = "application/json")
-    private ResponseEntity<String> logLevel(
-            @RequestBody String logLevel) {
+    private ResponseEntity<String> logLevel(@RequestBody String logLevel) {
         if (!SUtils.isNullOrEmpty(logLevel)) {
             try {
-                final ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(
-                        Logger.ROOT_LOGGER_NAME);
-                final ch.qos.logback.classic.Level newLevel = ch.qos.logback.classic.Level.toLevel(logLevel.toUpperCase(),
-                        ch.qos.logback.classic.Level.ALL);
+                final ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory
+                        .getLogger(Logger.ROOT_LOGGER_NAME);
+                final ch.qos.logback.classic.Level newLevel = ch.qos.logback.classic.Level
+                        .toLevel(logLevel.toUpperCase(), ch.qos.logback.classic.Level.ALL);
                 final ch.qos.logback.classic.Level currentLevel = rootLogger.getLevel();
                 if (currentLevel == newLevel) {
                     return new ResponseEntity("NO CHANGE", HttpStatus.FOUND);
@@ -685,14 +684,14 @@ public class EtfConfigController implements PropertyHolder {
 
     @RequestMapping(value = "/v2/admin/configuration", method = RequestMethod.POST, produces = "application/json")
     private @ResponseBody Set<Map.Entry<String, String>> getConfiguration(
-            @RequestBody Set<Map.Entry<String, String>> newConfiguration)
-            throws LocalizableApiError {
+            @RequestBody Set<Map.Entry<String, String>> newConfiguration) throws LocalizableApiError {
 
         // No path properties are allowed
         for (Map.Entry<String, String> e : newConfiguration) {
             if (filePathPropertyKeys.contains(e.getKey())) {
                 logger.error("Denied attempt to overwrite path property '{}' in configuration", e.getKey());
-                throw new LocalizableApiError("l.overwriting.path.properties.not.allowed", false, HttpStatus.FORBIDDEN.value());
+                throw new LocalizableApiError("l.overwriting.path.properties.not.allowed", false,
+                        HttpStatus.FORBIDDEN.value());
             }
         }
 
