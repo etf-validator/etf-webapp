@@ -448,7 +448,6 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
         if (!testObjectDao.exists(testObject.getId())) {
             testObjectDao.add(testObject);
         }
-        testObjectDao.add(testObject);
     }
 
     //
