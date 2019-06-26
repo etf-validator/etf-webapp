@@ -105,31 +105,31 @@ define([
     var dependenciesTree = {};
 
     function markDependants(id){
-        var model = router.executableTestSuitesView.collection.models.filter((x) => x.id==id)[0];
+        var model = router.executableTestSuitesView.collection.models.filter((x) => x.id === id)[0];
         let classList = document.querySelector("option[value="+id+"]").parentElement.parentElement.classList;
         if (typeof model.attributes.dependencies !== "undefined" && !classList.contains("ui-disabled")){
-            var id_dependency = model.attributes.dependencies.executableTestSuite.ref;
-            if(!dependenciesTree[id_dependency]){
-                dependenciesTree[id_dependency] = [];
+            var idDependency = model.attributes.dependencies.executableTestSuite.ref;
+            if(!dependenciesTree[idDependency]){
+                dependenciesTree[idDependency] = [];
             }
-            let classListDependency = document.querySelector("option[value="+id_dependency+"]").parentElement.parentElement.classList;
+            let classListDependency = document.querySelector("option[value="+idDependency+"]").parentElement.parentElement.classList;
             let activating = classList.contains("ui-flipswitch-active");
             if(activating){
-                dependenciesTree[id_dependency].push(id);
+                dependenciesTree[idDependency].push(id);
             }else{
-                dependenciesTree[id_dependency].splice(dependenciesTree[id_dependency].indexOf(id),1);
+                dependenciesTree[idDependency].splice(dependenciesTree[idDependency].indexOf(id),1);
             }
             if(activating && !classListDependency.contains("ui-flipswitch-active")){
                 classListDependency.add("ui-flipswitch-active");
-                markDependants(id_dependency);
+                markDependants(idDependency);
             }
             if(activating && !classListDependency.contains("ui-disabled")){
                 classListDependency.add("ui-disabled");
             }
-            if(dependenciesTree[id_dependency].length === 0){
+            if(dependenciesTree[idDependency].length === 0){
                 classListDependency.remove("ui-flipswitch-active");
                 classListDependency.remove("ui-disabled");
-                markDependants(id_dependency);
+                markDependants(idDependency);
             }
             let dependenciesTreeEmpty = true;
             for (let i in dependenciesTree) {
