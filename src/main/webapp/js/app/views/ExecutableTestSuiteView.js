@@ -27,7 +27,49 @@ define([
     "toastr",
     "../models/ExecutableTestSuiteModel",
 ], function( $, Backbone, v2, EtfView, moment, ExecutableTestSuiteModel ) {
+	
+	var dependenciesTree = {};
 
+    function markDependants(id){
+        var model = router.executableTestSuitesView.collection.models.filter((x) => x.id === id)[0];
+        let classList = document.querySelector("option[value="+id+"]").parentElement.parentElement.classList;
+        if (typeof model.attributes.dependencies !== "undefined" && !classList.contains("ui-disabled")){
+            var idDependency = model.attributes.dependencies.executableTestSuite.ref;
+            if(!dependenciesTree[idDependency]){
+                dependenciesTree[idDependency] = [];
+            }
+            let classListDependency = document.querySelector("option[value="+idDependency+"]").parentElement.parentElement.classList;
+            let activating = classList.contains("ui-flipswitch-active");
+            if(activating){
+                dependenciesTree[idDependency].push(id);
+            }else{
+                dependenciesTree[idDependency].splice(dependenciesTree[idDependency].indexOf(id),1);
+            }
+            if(activating && !classListDependency.contains("ui-flipswitch-active")){
+                classListDependency.add("ui-flipswitch-active");
+                markDependants(idDependency);
+            }
+            if(activating && !classListDependency.contains("ui-disabled")){
+                classListDependency.add("ui-disabled");
+            }
+            if(dependenciesTree[idDependency].length === 0){
+                classListDependency.remove("ui-flipswitch-active");
+                classListDependency.remove("ui-disabled");
+                markDependants(idDependency);
+            }
+            let dependenciesTreeEmpty = true;
+            for (let i in dependenciesTree) {
+                dependenciesTreeEmpty &= (dependenciesTree[i].length === 0);
+            }
+            if(dependenciesTreeEmpty){
+                document.querySelectorAll("option").forEach(function(option){
+                    classListDependency = option.parentElement.parentElement.classList;
+                    classListDependency.remove("ui-disabled");
+                });
+            }
+        }
+    }
+	
     var ExecutableTestSuiteView = EtfView.extend( {
 
         el: $('#start-tests-page'),
@@ -101,48 +143,6 @@ define([
         },
 
     });
-    
-    var dependenciesTree = {};
-
-    function markDependants(id){
-        var model = router.executableTestSuitesView.collection.models.filter((x) => x.id === id)[0];
-        let classList = document.querySelector("option[value="+id+"]").parentElement.parentElement.classList;
-        if (typeof model.attributes.dependencies !== "undefined" && !classList.contains("ui-disabled")){
-            var idDependency = model.attributes.dependencies.executableTestSuite.ref;
-            if(!dependenciesTree[idDependency]){
-                dependenciesTree[idDependency] = [];
-            }
-            let classListDependency = document.querySelector("option[value="+idDependency+"]").parentElement.parentElement.classList;
-            let activating = classList.contains("ui-flipswitch-active");
-            if(activating){
-                dependenciesTree[idDependency].push(id);
-            }else{
-                dependenciesTree[idDependency].splice(dependenciesTree[idDependency].indexOf(id),1);
-            }
-            if(activating && !classListDependency.contains("ui-flipswitch-active")){
-                classListDependency.add("ui-flipswitch-active");
-                markDependants(idDependency);
-            }
-            if(activating && !classListDependency.contains("ui-disabled")){
-                classListDependency.add("ui-disabled");
-            }
-            if(dependenciesTree[idDependency].length === 0){
-                classListDependency.remove("ui-flipswitch-active");
-                classListDependency.remove("ui-disabled");
-                markDependants(idDependency);
-            }
-            let dependenciesTreeEmpty = true;
-            for (let i in dependenciesTree) {
-                dependenciesTreeEmpty &= (dependenciesTree[i].length === 0);
-            }
-            if(dependenciesTreeEmpty){
-                document.querySelectorAll("option").forEach(function(option){
-                    classListDependency = option.parentElement.parentElement.classList;
-                    classListDependency.remove("ui-disabled");
-                });
-            }
-        }
-    }
     
     return ExecutableTestSuiteView;
 } );
