@@ -29,40 +29,40 @@ import org.springframework.validation.Validator;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 
 public class TObjectValidator implements Validator {
-	@Override
-	public boolean supports(Class<?> clasz) {
-		return TestObjectDto.class.isAssignableFrom(clasz);
-	}
+    @Override
+    public boolean supports(Class<?> clasz) {
+        return TestObjectDto.class.isAssignableFrom(clasz);
+    }
 
-	@Override
-	public void validate(Object target, Errors errors) {
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "label",
-				"l.enter.label", "Please enter a label!");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description",
-				"l.enter.description", "Please enter a description!");
+    @Override
+    public void validate(Object target, Errors errors) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "label",
+                "l.enter.label", "Please enter a label!");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description",
+                "l.enter.description", "Please enter a description!");
 
-		final TestObjectDto to = (TestObjectDto) target;
+        final TestObjectDto to = (TestObjectDto) target;
 
-		final String regex = to.properties().getProperty("regex");
-		if (regex != null && !regex.isEmpty()) {
+        final String regex = to.properties().getProperty("regex");
+        if (regex != null && !regex.isEmpty()) {
 
-			try {
-				Pattern.compile(regex);
-			} catch (PatternSyntaxException e) {
-				// Try to quote it
-				final String quotedRegex = Pattern.quote(regex);
-				try {
-					Pattern.compile(regex);
-					// Set the usable pattern
-					to.properties().setProperty("regex", quotedRegex);
-				} catch (PatternSyntaxException eQuoted) {
-					// Throw the unquoted error message
-					errors.reject("l.invalid.regex", new Object[]{e.getMessage()},
-							"Der reguläre Ausdruck ist fehlerhaft: {}");
-				}
-			}
-		}
+            try {
+                Pattern.compile(regex);
+            } catch (PatternSyntaxException e) {
+                // Try to quote it
+                final String quotedRegex = Pattern.quote(regex);
+                try {
+                    Pattern.compile(regex);
+                    // Set the usable pattern
+                    to.properties().setProperty("regex", quotedRegex);
+                } catch (PatternSyntaxException eQuoted) {
+                    // Throw the unquoted error message
+                    errors.reject("l.invalid.regex", new Object[]{e.getMessage()},
+                            "Der reguläre Ausdruck ist fehlerhaft: {}");
+                }
+            }
+        }
 
-	}
+    }
 
 }

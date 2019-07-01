@@ -66,118 +66,118 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 public class TestObjectTypeController {
 
-	@Autowired
-	private DataStorageService dataStorageService;
+    @Autowired
+    private DataStorageService dataStorageService;
 
-	@Autowired
-	private StreamingService streaming;
+    @Autowired
+    private StreamingService streaming;
 
-	private final Logger logger = LoggerFactory.getLogger(TestObjectTypeController.class);
+    private final Logger logger = LoggerFactory.getLogger(TestObjectTypeController.class);
 
-	private Dao<TestObjectTypeDto> testObjectTypeDao;
-	private final static String TEST_OBJECT_TYPES_URL = WebAppConstants.API_BASE_URL + "/TestObjectTypes";
+    private Dao<TestObjectTypeDto> testObjectTypeDao;
+    private final static String TEST_OBJECT_TYPES_URL = WebAppConstants.API_BASE_URL + "/TestObjectTypes";
 
-	private final static String TEST_OBJECT_TYPE_DESCRIPTION = "The Test Object model is described in the "
-			+ "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/capabilities_xsd.html#TestObjectType) "
-			+ ETF_ITEM_COLLECTION_DESCRIPTION;
+    private final static String TEST_OBJECT_TYPE_DESCRIPTION = "The Test Object model is described in the "
+            + "[XML schema documentation](https://services.interactive-instruments.de/etf/schemadoc/capabilities_xsd.html#TestObjectType) "
+            + ETF_ITEM_COLLECTION_DESCRIPTION;
 
-	@PostConstruct
-	private void init() throws IOException, TransformerConfigurationException, ObjectWithIdNotFoundException {
-		testObjectTypeDao = dataStorageService.getDao(TestObjectTypeDto.class);
-		final EidMap<TestObjectTypeDto> supportedTypes = TestObjectTypeDetectorManager.getSupportedTypes();
-		((WriteDao) testObjectTypeDao).deleteAllExisting(supportedTypes.keySet());
-		((WriteDao) testObjectTypeDao).addAll(supportedTypes.values());
+    @PostConstruct
+    private void init() throws IOException, TransformerConfigurationException, ObjectWithIdNotFoundException {
+        testObjectTypeDao = dataStorageService.getDao(TestObjectTypeDto.class);
+        final EidMap<TestObjectTypeDto> supportedTypes = TestObjectTypeDetectorManager.getSupportedTypes();
+        ((WriteDao) testObjectTypeDao).deleteAllExisting(supportedTypes.keySet());
+        ((WriteDao) testObjectTypeDao).addAll(supportedTypes.values());
 
-		streaming.prepareCache(testObjectTypeDao, new SimpleFilter());
-		logger.info("Test Object Type controller initialized");
-	}
+        streaming.prepareCache(testObjectTypeDao, new SimpleFilter());
+        logger.info("Test Object Type controller initialized");
+    }
 
-	public void checkAndResolveTypes(final TestObjectDto dto, final Set<EID> expectedTypes)
-			throws IOException, LocalizableApiError,
-			ObjectWithIdNotFoundException {
-		// First resource is the main resource
-		final ResourceDto resourceDto = dto.getResourceCollection().iterator().next();
-		final Resource resource = Resource.create(resourceDto.getName(),
-				resourceDto.getUri(), Credentials.fromProperties(dto.properties()));
-		final DetectedTestObjectType detectedTestObjectType;
-		try {
-			detectedTestObjectType = TestObjectTypeDetectorManager.detect(resource, expectedTypes);
-		} catch (final TestObjectTypeNotDetected e) {
-			throw new LocalizableApiError(e);
-		} catch (IncompatibleTestObjectTypeException e) {
-			throw new LocalizableApiError(e);
-		}
-		detectedTestObjectType.enrichAndNormalize(dto);
-		if (!UriUtils.isFile(resourceDto.getUri())) {
-			// service URI
-			dto.setRemoteResource(resourceDto.getUri());
-		} else {
-			// fallback download URI
-			final URI downloadUri = dto.getResourceByName("data");
-			if (downloadUri != null && !UriUtils.isFile(downloadUri)) {
-				dto.setRemoteResource(downloadUri);
-			}
-		}
-	}
+    public void checkAndResolveTypes(final TestObjectDto dto, final Set<EID> expectedTypes)
+            throws IOException, LocalizableApiError,
+            ObjectWithIdNotFoundException {
+        // First resource is the main resource
+        final ResourceDto resourceDto = dto.getResourceCollection().iterator().next();
+        final Resource resource = Resource.create(resourceDto.getName(),
+                resourceDto.getUri(), Credentials.fromProperties(dto.properties()));
+        final DetectedTestObjectType detectedTestObjectType;
+        try {
+            detectedTestObjectType = TestObjectTypeDetectorManager.detect(resource, expectedTypes);
+        } catch (final TestObjectTypeNotDetected e) {
+            throw new LocalizableApiError(e);
+        } catch (IncompatibleTestObjectTypeException e) {
+            throw new LocalizableApiError(e);
+        }
+        detectedTestObjectType.enrichAndNormalize(dto);
+        if (!UriUtils.isFile(resourceDto.getUri())) {
+            // service URI
+            dto.setRemoteResource(resourceDto.getUri());
+        } else {
+            // fallback download URI
+            final URI downloadUri = dto.getResourceByName("data");
+            if (downloadUri != null && !UriUtils.isFile(downloadUri)) {
+                dto.setRemoteResource(downloadUri);
+            }
+        }
+    }
 
-	//
-	// Rest interfaces
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Rest interfaces
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@ApiOperation(value = "Get Test Object Type as JSON", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
-			SERVICE_CAP_TAG_NAME})
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Test Object Type"),
-			@ApiResponse(code = 404, message = "Test Object Type not found")
-	})
-	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + "/{id}", TEST_OBJECT_TYPES_URL + "/{id}.json"}, method = RequestMethod.GET)
-	public void testObjectTypesByIdJson(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ObjectWithIdNotFoundException {
-		streaming.asJson2(testObjectTypeDao, request, response, id);
-	}
+    @ApiOperation(value = "Get Test Object Type as JSON", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
+            SERVICE_CAP_TAG_NAME})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Test Object Type"),
+            @ApiResponse(code = 404, message = "Test Object Type not found")
+    })
+    @RequestMapping(value = {TEST_OBJECT_TYPES_URL + "/{id}", TEST_OBJECT_TYPES_URL + "/{id}.json"}, method = RequestMethod.GET)
+    public void testObjectTypesByIdJson(
+            @ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ObjectWithIdNotFoundException {
+        streaming.asJson2(testObjectTypeDao, request, response, id);
+    }
 
-	@ApiOperation(value = "Get multiple Test Object Types as JSON", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
-			SERVICE_CAP_TAG_NAME})
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Object Types")
-	})
-	@RequestMapping(value = {TEST_OBJECT_TYPES_URL, TEST_OBJECT_TYPES_URL + ".json"}, method = RequestMethod.GET)
-	public void listTestObjectTypesJson(
-			@ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
-			@ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
-			HttpServletRequest request,
-			HttpServletResponse response)
-			throws ConfigurationException, IOException, ObjectWithIdNotFoundException {
-		streaming.asJson2(testObjectTypeDao, request, response, new SimpleFilter(offset, limit));
-	}
+    @ApiOperation(value = "Get multiple Test Object Types as JSON", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
+            SERVICE_CAP_TAG_NAME})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Object Types")
+    })
+    @RequestMapping(value = {TEST_OBJECT_TYPES_URL, TEST_OBJECT_TYPES_URL + ".json"}, method = RequestMethod.GET)
+    public void listTestObjectTypesJson(
+            @ApiParam(value = OFFSET_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int offset,
+            @ApiParam(value = LIMIT_DESCRIPTION) @RequestParam(required = false, defaultValue = "0") int limit,
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws ConfigurationException, IOException, ObjectWithIdNotFoundException {
+        streaming.asJson2(testObjectTypeDao, request, response, new SimpleFilter(offset, limit));
+    }
 
-	@ApiOperation(value = "Get multiple Test Object Types as XML", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
-			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Object Types")
-	})
-	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + ".xml"}, method = RequestMethod.GET)
-	public void listTestObjectTypesXml(
-			@RequestParam(required = false, defaultValue = "0") int offset,
-			@RequestParam(required = false, defaultValue = "0") int limit,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ObjectWithIdNotFoundException {
-		streaming.asXml2(testObjectTypeDao, request, response, new SimpleFilter(offset, limit));
-	}
+    @ApiOperation(value = "Get multiple Test Object Types as XML", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
+            SERVICE_CAP_TAG_NAME}, produces = "text/xml")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "EtfItemCollection with multiple Test Object Types")
+    })
+    @RequestMapping(value = {TEST_OBJECT_TYPES_URL + ".xml"}, method = RequestMethod.GET)
+    public void listTestObjectTypesXml(
+            @RequestParam(required = false, defaultValue = "0") int offset,
+            @RequestParam(required = false, defaultValue = "0") int limit,
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ObjectWithIdNotFoundException {
+        streaming.asXml2(testObjectTypeDao, request, response, new SimpleFilter(offset, limit));
+    }
 
-	@ApiOperation(value = "Get Test Object Type as XML", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
-			SERVICE_CAP_TAG_NAME}, produces = "text/xml")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Test Object Type"),
-			@ApiResponse(code = 404, message = "Test Object Type not found")
-	})
-	@RequestMapping(value = {TEST_OBJECT_TYPES_URL + "/{id}.xml"}, method = RequestMethod.GET)
-	public void testObjectTypesByIdXml(
-			@ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
-			HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ObjectWithIdNotFoundException {
-		streaming.asXml2(testObjectTypeDao, request, response, id);
-	}
+    @ApiOperation(value = "Get Test Object Type as XML", notes = TEST_OBJECT_TYPE_DESCRIPTION, tags = {
+            SERVICE_CAP_TAG_NAME}, produces = "text/xml")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Test Object Type"),
+            @ApiResponse(code = 404, message = "Test Object Type not found")
+    })
+    @RequestMapping(value = {TEST_OBJECT_TYPES_URL + "/{id}.xml"}, method = RequestMethod.GET)
+    public void testObjectTypesByIdXml(
+            @ApiParam(value = EID_DESCRIPTION, example = EID_EXAMPLE, required = true) @PathVariable String id,
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException, ObjectWithIdNotFoundException {
+        streaming.asXml2(testObjectTypeDao, request, response, id);
+    }
 }

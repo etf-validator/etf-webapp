@@ -53,127 +53,127 @@ import de.interactive_instruments.etf.model.EID;
  */
 public class ObjectMapperFactory implements FactoryBean<ObjectMapper> {
 
-	private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
-	// Base Filter
-	@JsonFilter("baseFilter")
-	@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT, property = "t")
-	@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-	@JsonIgnoreProperties(value = {"proxiedId", "cached", "descriptiveLabel", "typeName", "versionAsStr"})
-	private static abstract class BaseMixin {
-		@JsonManagedReference
-		EID id;
+    // Base Filter
+    @JsonFilter("baseFilter")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT, property = "t")
+    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+    @JsonIgnoreProperties(value = {"proxiedId", "cached", "descriptiveLabel", "typeName", "versionAsStr"})
+    private static abstract class BaseMixin {
+        @JsonManagedReference
+        EID id;
 
-		@JsonBackReference
-		protected ModelItemDto parent;
-	}
+        @JsonBackReference
+        protected ModelItemDto parent;
+    }
 
-	private final SimpleBeanPropertyFilter baseFilter = SimpleBeanPropertyFilter.serializeAllExcept(
-			"proxiedId", "cached", "descriptiveLabel", "typeName", "versionAsStr");
+    private final SimpleBeanPropertyFilter baseFilter = SimpleBeanPropertyFilter.serializeAllExcept(
+            "proxiedId", "cached", "descriptiveLabel", "typeName", "versionAsStr");
 
-	// Translation Template Filter
-	@JsonFilter("translationTemplateFilter")
-	@JsonRootName("TranslationTemplate")
-	private static abstract class TranslationTemplateMixin extends BaseMixin {}
+    // Translation Template Filter
+    @JsonFilter("translationTemplateFilter")
+    @JsonRootName("TranslationTemplate")
+    private static abstract class TranslationTemplateMixin extends BaseMixin {}
 
-	final SimpleBeanPropertyFilter translationTemplateFilter = SimpleBeanPropertyFilter.serializeAllExcept(
-			"strWithTokens");
+    final SimpleBeanPropertyFilter translationTemplateFilter = SimpleBeanPropertyFilter.serializeAllExcept(
+            "strWithTokens");
 
-	// Executable Test Suite Filter
-	@JsonFilter("etsFilter")
-	@JsonRootName("ExecutableTestSuite")
-	private static class ExecutableTestSuiteDtoMixin extends BaseMixin {
-		@JsonBackReference
-		private List<ExecutableTestSuiteDto> dependencies;
-	}
+    // Executable Test Suite Filter
+    @JsonFilter("etsFilter")
+    @JsonRootName("ExecutableTestSuite")
+    private static class ExecutableTestSuiteDtoMixin extends BaseMixin {
+        @JsonBackReference
+        private List<ExecutableTestSuiteDto> dependencies;
+    }
 
-	@JsonFilter("testObjectFilter")
-	@JsonRootName("TestObject")
-	private static class TestObjectDtoMixin extends BaseMixin {}
+    @JsonFilter("testObjectFilter")
+    @JsonRootName("TestObject")
+    private static class TestObjectDtoMixin extends BaseMixin {}
 
-	final SimpleBeanPropertyFilter testObjectFilter = SimpleBeanPropertyFilter.serializeAllExcept(
-			"resourceNames", "resourceCollection", "resourcesSize", "");
+    final SimpleBeanPropertyFilter testObjectFilter = SimpleBeanPropertyFilter.serializeAllExcept(
+            "resourceNames", "resourceCollection", "resourcesSize", "");
 
-	private final SimpleBeanPropertyFilter etsFilter = SimpleBeanPropertyFilter.serializeAllExcept("assertionsSize");
+    private final SimpleBeanPropertyFilter etsFilter = SimpleBeanPropertyFilter.serializeAllExcept("assertionsSize");
 
-	private static class HTMLCharacterEscapes extends CharacterEscapes {
-		private final int[] asciiEscapes;
+    private static class HTMLCharacterEscapes extends CharacterEscapes {
+        private final int[] asciiEscapes;
 
-		public HTMLCharacterEscapes() {
-			asciiEscapes = CharacterEscapes.standardAsciiEscapesForJSON();
-			asciiEscapes['<'] = CharacterEscapes.ESCAPE_CUSTOM;
-			asciiEscapes['>'] = CharacterEscapes.ESCAPE_CUSTOM;
-			asciiEscapes['&'] = CharacterEscapes.ESCAPE_CUSTOM;
-			asciiEscapes['"'] = CharacterEscapes.ESCAPE_CUSTOM;
-			asciiEscapes['\''] = CharacterEscapes.ESCAPE_CUSTOM;
-		}
+        public HTMLCharacterEscapes() {
+            asciiEscapes = CharacterEscapes.standardAsciiEscapesForJSON();
+            asciiEscapes['<'] = CharacterEscapes.ESCAPE_CUSTOM;
+            asciiEscapes['>'] = CharacterEscapes.ESCAPE_CUSTOM;
+            asciiEscapes['&'] = CharacterEscapes.ESCAPE_CUSTOM;
+            asciiEscapes['"'] = CharacterEscapes.ESCAPE_CUSTOM;
+            asciiEscapes['\''] = CharacterEscapes.ESCAPE_CUSTOM;
+        }
 
-		@Override
-		public int[] getEscapeCodesForAscii() {
-			return asciiEscapes;
-		}
+        @Override
+        public int[] getEscapeCodesForAscii() {
+            return asciiEscapes;
+        }
 
-		@Override
-		public SerializableString getEscapeSequence(int ch) {
-			return new SerializedString("\\u" + String.format("%04x", ch));
-		}
-	}
+        @Override
+        public SerializableString getEscapeSequence(int ch) {
+            return new SerializedString("\\u" + String.format("%04x", ch));
+        }
+    }
 
-	public static class JsonHtmlXssDeserializer extends JsonDeserializer<String> {
-		@Override
-		public String deserialize(final JsonParser jp, final DeserializationContext ctxt)
-				throws IOException, JsonProcessingException {
-			final JsonNode node = jp.getCodec().readTree(jp);
-			return HtmlUtils.htmlEscape(node.asText());
-		}
-	}
+    public static class JsonHtmlXssDeserializer extends JsonDeserializer<String> {
+        @Override
+        public String deserialize(final JsonParser jp, final DeserializationContext ctxt)
+                throws IOException, JsonProcessingException {
+            final JsonNode node = jp.getCodec().readTree(jp);
+            return HtmlUtils.htmlEscape(node.asText());
+        }
+    }
 
-	public ObjectMapperFactory() {
+    public ObjectMapperFactory() {
 
-		mapper.addMixIn(ModelItemDto.class, BaseMixin.class);
-		mapper.addMixIn(Dto.class, BaseMixin.class);
-		mapper.addMixIn(ExecutableTestSuiteDto.class, ExecutableTestSuiteDtoMixin.class);
-		mapper.addMixIn(TranslationTemplateDto.class, TranslationTemplateMixin.class);
-		mapper.addMixIn(TestObjectDto.class, TestObjectDtoMixin.class);
+        mapper.addMixIn(ModelItemDto.class, BaseMixin.class);
+        mapper.addMixIn(Dto.class, BaseMixin.class);
+        mapper.addMixIn(ExecutableTestSuiteDto.class, ExecutableTestSuiteDtoMixin.class);
+        mapper.addMixIn(TranslationTemplateDto.class, TranslationTemplateMixin.class);
+        mapper.addMixIn(TestObjectDto.class, TestObjectDtoMixin.class);
 
-		// important!
-		mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        // important!
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
-		final FilterProvider filters = new SimpleFilterProvider().setDefaultFilter(baseFilter)
-				.addFilter("translationTemplateFilter", translationTemplateFilter).addFilter("etsFilter", etsFilter)
-				.addFilter("testObjectFilter", testObjectFilter);
-		mapper.setFilterProvider(filters);
-		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        final FilterProvider filters = new SimpleFilterProvider().setDefaultFilter(baseFilter)
+                .addFilter("translationTemplateFilter", translationTemplateFilter).addFilter("etsFilter", etsFilter)
+                .addFilter("testObjectFilter", testObjectFilter);
+        mapper.setFilterProvider(filters);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-		final SimpleModule etfModule = new SimpleModule("EtfModule",
-				new Version(1, 0, 0, null,
-						"de.interactive_instruments", "etf"));
+        final SimpleModule etfModule = new SimpleModule("EtfModule",
+                new Version(1, 0, 0, null,
+                        "de.interactive_instruments", "etf"));
 
-		etfModule.addSerializer(EID.class, new EidConverter().jsonSerializer());
-		etfModule.addDeserializer(EID.class, new EidConverter().jsonDeserializer());
+        etfModule.addSerializer(EID.class, new EidConverter().jsonSerializer());
+        etfModule.addDeserializer(EID.class, new EidConverter().jsonDeserializer());
 
-		etfModule.addSerializer(de.interactive_instruments.Version.class, new VersionConverter().jsonSerializer());
-		etfModule.addDeserializer(de.interactive_instruments.Version.class, new VersionConverter().jsonDeserializer());
-		// Prevent XSS
-		etfModule.addDeserializer(String.class, new JsonHtmlXssDeserializer());
+        etfModule.addSerializer(de.interactive_instruments.Version.class, new VersionConverter().jsonSerializer());
+        etfModule.addDeserializer(de.interactive_instruments.Version.class, new VersionConverter().jsonDeserializer());
+        // Prevent XSS
+        etfModule.addDeserializer(String.class, new JsonHtmlXssDeserializer());
 
-		mapper.registerModule(etfModule);
+        mapper.registerModule(etfModule);
 
-		mapper.getFactory().setCharacterEscapes(new HTMLCharacterEscapes());
-	}
+        mapper.getFactory().setCharacterEscapes(new HTMLCharacterEscapes());
+    }
 
-	@Override
-	public ObjectMapper getObject() throws Exception {
-		return mapper;
-	}
+    @Override
+    public ObjectMapper getObject() throws Exception {
+        return mapper;
+    }
 
-	@Override
-	public Class<?> getObjectType() {
-		return ObjectMapper.class;
-	}
+    @Override
+    public Class<?> getObjectType() {
+        return ObjectMapper.class;
+    }
 
-	@Override
-	public boolean isSingleton() {
-		return true;
-	}
+    @Override
+    public boolean isSingleton() {
+        return true;
+    }
 }

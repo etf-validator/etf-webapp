@@ -64,130 +64,130 @@ import de.interactive_instruments.exceptions.config.ConfigurationException;
 @RestController
 public class TestDriverController implements PreparedDtoResolver<ExecutableTestSuiteDto> {
 
-	@Autowired
-	private EtfConfigController etfConfig;
+    @Autowired
+    private EtfConfigController etfConfig;
 
-	// Wait for TestObjectTypeController to activate all standard Test Object Types
-	@Autowired
-	private TestObjectTypeController testObjectTypeController;
+    // Wait for TestObjectTypeController to activate all standard Test Object Types
+    @Autowired
+    private TestObjectTypeController testObjectTypeController;
 
-	@Autowired
-	private DataStorageService dataStorageService;
+    @Autowired
+    private DataStorageService dataStorageService;
 
-	private TestDriverManager driverManager;
-	private MetadataFileTypeLoader metadataTypeLoader;
-	private Dao<ExecutableTestSuiteDto> etsDao;
-	private final Logger logger = LoggerFactory.getLogger(TestDriverController.class);
+    private TestDriverManager driverManager;
+    private MetadataFileTypeLoader metadataTypeLoader;
+    private Dao<ExecutableTestSuiteDto> etsDao;
+    private final Logger logger = LoggerFactory.getLogger(TestDriverController.class);
 
-	private static final Filter FILTER_GET_ALL = new Filter() {
-		@Override
-		public int offset() {
-			return 0;
-		}
+    private static final Filter FILTER_GET_ALL = new Filter() {
+        @Override
+        public int offset() {
+            return 0;
+        }
 
-		@Override
-		public int limit() {
-			return 2000;
-		}
-	};
+        @Override
+        public int limit() {
+            return 2000;
+        }
+    };
 
-	public TestDriverController() {}
+    public TestDriverController() {}
 
-	@PostConstruct
-	public void init()
-			throws ConfigurationException, InvalidStateTransitionException, InitializationException, StorageException {
+    @PostConstruct
+    public void init()
+            throws ConfigurationException, InvalidStateTransitionException, InitializationException, StorageException {
 
-		// Metadata need to be initialized first
-		metadataTypeLoader = new MetadataFileTypeLoader(dataStorageService.getDataStorage());
-		metadataTypeLoader.getConfigurationProperties().setPropertiesFrom(etfConfig, true);
-		metadataTypeLoader.init();
+        // Metadata need to be initialized first
+        metadataTypeLoader = new MetadataFileTypeLoader(dataStorageService.getDataStorage());
+        metadataTypeLoader.getConfigurationProperties().setPropertiesFrom(etfConfig, true);
+        metadataTypeLoader.init();
 
-		etsDao = dataStorageService.getDataStorage().getDao(ExecutableTestSuiteDto.class);
+        etsDao = dataStorageService.getDataStorage().getDao(ExecutableTestSuiteDto.class);
 
-		// Deactivate all ETS first and ensure that drivers only reactivate existing ETS
-		try {
-			// keyset() does not invoke full Dto resolution, so invalid Dtos are ingored.
-			((WriteDao) etsDao).deleteAll(etsDao.getAll(FILTER_GET_ALL).keySet());
-		} catch (final Exception e) {
-			logger.warn("Failed to clean Executable Test Suites ", e);
-		}
+        // Deactivate all ETS first and ensure that drivers only reactivate existing ETS
+        try {
+            // keyset() does not invoke full Dto resolution, so invalid Dtos are ingored.
+            ((WriteDao) etsDao).deleteAll(etsDao.getAll(FILTER_GET_ALL).keySet());
+        } catch (final Exception e) {
+            logger.warn("Failed to clean Executable Test Suites ", e);
+        }
 
-		// Initialize test driver
-		driverManager = TestDriverManager.getDefault();
-		driverManager.getConfigurationProperties().setPropertiesFrom(etfConfig, true);
-		driverManager.getConfigurationProperties().setProperty(ETF_DATA_STORAGE_NAME, "default");
-		driverManager.init();
-		driverManager.loadAll();
+        // Initialize test driver
+        driverManager = TestDriverManager.getDefault();
+        driverManager.getConfigurationProperties().setPropertiesFrom(etfConfig, true);
+        driverManager.getConfigurationProperties().setProperty(ETF_DATA_STORAGE_NAME, "default");
+        driverManager.init();
+        driverManager.loadAll();
 
-		logger.info("Test Driver service initialized");
-		if (driverManager.getTestDriverInfo().isEmpty()) {
-			logger.warn("No Test Driver loaded");
-		} else {
-			for (final ComponentInfo componentInfo : driverManager.getTestDriverInfo()) {
-				logger.info("Loaded Test Driver {} - {} ({})", componentInfo.getName(),
-						componentInfo.getVersion(), componentInfo.getId());
-			}
-			if (getExecutableTestSuites().size() == 0) {
-				logger.warn("No Executable Test Suites loaded");
-			} else {
-				logger.info("{} Executable Test Suites loaded", getExecutableTestSuites().size());
-			}
-		}
-	}
+        logger.info("Test Driver service initialized");
+        if (driverManager.getTestDriverInfo().isEmpty()) {
+            logger.warn("No Test Driver loaded");
+        } else {
+            for (final ComponentInfo componentInfo : driverManager.getTestDriverInfo()) {
+                logger.info("Loaded Test Driver {} - {} ({})", componentInfo.getName(),
+                        componentInfo.getVersion(), componentInfo.getId());
+            }
+            if (getExecutableTestSuites().size() == 0) {
+                logger.warn("No Executable Test Suites loaded");
+            } else {
+                logger.info("{} Executable Test Suites loaded", getExecutableTestSuites().size());
+            }
+        }
+    }
 
-	@PreDestroy
-	private void shutdown() {
-		driverManager.release();
-	}
+    @PreDestroy
+    private void shutdown() {
+        driverManager.release();
+    }
 
-	TestRun create(TestRunDto testRunDto) throws IncompleteDtoException, TestRunInitializationException {
-		testRunDto.setStartTimestamp(new Date());
-		testRunDto.ensureBasicValidity();
-		for (final TestTaskDto testTaskDto : testRunDto.getTestTasks()) {
-			testTaskDto.setId(EidFactory.getDefault().createRandomId());
-		}
-		return driverManager.createTestRun(testRunDto);
-	}
+    TestRun create(TestRunDto testRunDto) throws IncompleteDtoException, TestRunInitializationException {
+        testRunDto.setStartTimestamp(new Date());
+        testRunDto.ensureBasicValidity();
+        for (final TestTaskDto testTaskDto : testRunDto.getTestTasks()) {
+            testTaskDto.setId(EidFactory.getDefault().createRandomId());
+        }
+        return driverManager.createTestRun(testRunDto);
+    }
 
-	Collection<ExecutableTestSuiteDto> getExecutableTestSuites() throws ConfigurationException, StorageException {
-		return etsDao.getAll(FILTER_GET_ALL).asCollection();
-	}
+    Collection<ExecutableTestSuiteDto> getExecutableTestSuites() throws ConfigurationException, StorageException {
+        return etsDao.getAll(FILTER_GET_ALL).asCollection();
+    }
 
-	ExecutableTestSuiteDto getExecutableTestSuiteById(final EID id) throws StorageException, ObjectWithIdNotFoundException {
-		return etsDao.getById(id).getDto();
-	}
+    ExecutableTestSuiteDto getExecutableTestSuiteById(final EID id) throws StorageException, ObjectWithIdNotFoundException {
+        return etsDao.getById(id).getDto();
+    }
 
-	@Override
-	public PreparedDto<ExecutableTestSuiteDto> getById(final EID eid, final Filter filter)
-			throws StorageException, ObjectWithIdNotFoundException {
-		return this.etsDao.getById(eid, filter);
-	}
+    @Override
+    public PreparedDto<ExecutableTestSuiteDto> getById(final EID eid, final Filter filter)
+            throws StorageException, ObjectWithIdNotFoundException {
+        return this.etsDao.getById(eid, filter);
+    }
 
-	@Override
-	public PreparedDtoCollection<ExecutableTestSuiteDto> getByIds(final Set<EID> eids, final Filter filter)
-			throws StorageException, ObjectWithIdNotFoundException {
-		return this.etsDao.getByIds(eids, filter);
-	}
+    @Override
+    public PreparedDtoCollection<ExecutableTestSuiteDto> getByIds(final Set<EID> eids, final Filter filter)
+            throws StorageException, ObjectWithIdNotFoundException {
+        return this.etsDao.getByIds(eids, filter);
+    }
 
-	public Collection<ComponentDto> getTestDriverInfo() {
-		return driverManager.getTestDriverInfo().stream().map(ComponentDto::new).collect(Collectors.toList());
-	}
+    public Collection<ComponentDto> getTestDriverInfo() {
+        return driverManager.getTestDriverInfo().stream().map(ComponentDto::new).collect(Collectors.toList());
+    }
 
-	@RequestMapping(value = {MetaTypeController.COMPONENTS_URL}, params = "action=reload", method = RequestMethod.GET)
-	public ResponseEntity<String> reloadAll() throws LocalizableApiError {
-		if (!driverManager.getTestDriverInfo().isEmpty()) {
-			return new ResponseEntity("Operation not permitted if a test driver has already been loaded!",
-					HttpStatus.FORBIDDEN);
-		} else {
-			try {
-				driverManager.loadAll();
-			} catch (ConfigurationException e) {
-				new LocalizableApiError(e);
-			} catch (ComponentLoadingException e) {
-				new LocalizableApiError(e);
-			}
-			return new ResponseEntity("OK", HttpStatus.NO_CONTENT);
-		}
-	}
+    @RequestMapping(value = {MetaTypeController.COMPONENTS_URL}, params = "action=reload", method = RequestMethod.GET)
+    public ResponseEntity<String> reloadAll() throws LocalizableApiError {
+        if (!driverManager.getTestDriverInfo().isEmpty()) {
+            return new ResponseEntity("Operation not permitted if a test driver has already been loaded!",
+                    HttpStatus.FORBIDDEN);
+        } else {
+            try {
+                driverManager.loadAll();
+            } catch (ConfigurationException e) {
+                new LocalizableApiError(e);
+            } catch (ComponentLoadingException e) {
+                new LocalizableApiError(e);
+            }
+            return new ResponseEntity("OK", HttpStatus.NO_CONTENT);
+        }
+    }
 
 }

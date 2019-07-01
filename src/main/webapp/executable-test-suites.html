@@ -226,7 +226,7 @@
         </div>
         <div class="ui-field-contain">
             <label for="start-tests-password">Password</label>
-            <input type="text" id="start-tests-password" />
+            <input type="password" id="start-tests-password" />
         </div>
     </div>
 
@@ -294,10 +294,10 @@
     <div role="main" class="ui-content">
         <!-- Main -->
         <div class="progressbar">
-            <input type="range" id="monitor-test-run-progressbar" value="0" min="0" max="100" data-highlight="true" />
+            <input type="range" id="monitor-test-run-progressbar" value="0" min="0" max="100" data-highlight="true" disabled="true" />
         </div>
 
-        <textarea data-role="none" id="monitor-log-area" style="width:100%; height: 285px;">Connecting to test runner and waiting for new messages...</textarea>
+        <textarea data-role="none" id="monitor-log-area" style="width:100%; height: 285px;" disabled="true">Connecting to test runner and waiting for new messages...</textarea>
 
         <hr/>
         <div id="#monitor-test-run-container">

@@ -47,170 +47,170 @@ import de.interactive_instruments.exceptions.config.ConfigurationException;
  * @author Jon Herrmann ( herrmann aT interactive-instruments doT de )
  */
 public class LocalizableApiError extends LocalizableError {
-	protected final boolean sensitiveInformation;
-	protected final int sc;
+    protected final boolean sensitiveInformation;
+    protected final int sc;
 
-	public LocalizableApiError(final String id, final boolean sensitive, final int code) {
-		super(id);
-		sensitiveInformation = sensitive;
-		sc = code;
-	}
+    public LocalizableApiError(final String id, final boolean sensitive, final int code) {
+        super(id);
+        sensitiveInformation = sensitive;
+        sc = code;
+    }
 
-	public LocalizableApiError(final String id, final boolean sensitive, final int code, final Exception e) {
-		super(id, e);
-		sensitiveInformation = sensitive;
-		sc = code;
-	}
+    public LocalizableApiError(final String id, final boolean sensitive, final int code, final Exception e) {
+        super(id, e);
+        sensitiveInformation = sensitive;
+        sc = code;
+    }
 
-	public LocalizableApiError(final String id, final Exception e) {
-		super(id, e);
-		sensitiveInformation = false;
-		sc = 400;
-	}
+    public LocalizableApiError(final String id, final Exception e) {
+        super(id, e);
+        sensitiveInformation = false;
+        sc = 400;
+    }
 
-	public LocalizableApiError(final String id, final boolean sensitive, final int code, final Object... arguments) {
-		super(id, arguments);
-		sensitiveInformation = sensitive;
-		sc = code;
-	}
+    public LocalizableApiError(final String id, final boolean sensitive, final int code, final Object... arguments) {
+        super(id, arguments);
+        sensitiveInformation = sensitive;
+        sc = code;
+    }
 
-	public LocalizableApiError(final String id, final boolean sensitive, final int code, final Exception e,
-			final Object... arguments) {
-		super(id, e, arguments);
-		sensitiveInformation = sensitive;
-		sc = code;
-	}
+    public LocalizableApiError(final String id, final boolean sensitive, final int code, final Exception e,
+            final Object... arguments) {
+        super(id, e, arguments);
+        sensitiveInformation = sensitive;
+        sc = code;
+    }
 
-	public LocalizableApiError(final boolean sensitive, final int code, final Exception e) {
-		super(e);
-		sensitiveInformation = sensitive;
-		sc = code;
-	}
+    public LocalizableApiError(final boolean sensitive, final int code, final Exception e) {
+        super(e);
+        sensitiveInformation = sensitive;
+        sc = code;
+    }
 
-	public LocalizableApiError(final FieldError fieldError) {
-		super(fieldError.getDefaultMessage());
-		sensitiveInformation = false;
-		sc = 400;
-	}
+    public LocalizableApiError(final FieldError fieldError) {
+        super(fieldError.getDefaultMessage());
+        sensitiveInformation = false;
+        sc = 400;
+    }
 
-	public LocalizableApiError(final ConstraintViolation<StartTestRunRequest> violation) {
-		super(violation.getMessage());
-		sensitiveInformation = false;
-		sc = 400;
-	}
+    public LocalizableApiError(final ConstraintViolation<StartTestRunRequest> violation) {
+        super(violation.getMessage());
+        sensitiveInformation = false;
+        sc = 400;
+    }
 
-	public LocalizableApiError(final HttpMessageNotReadableException e) {
-		super(e.getMessage().contains("Required request body is missing:") ? "l.json.request.body.missing" : "", e);
-		sensitiveInformation = false;
-		sc = 400;
-	}
+    public LocalizableApiError(final HttpMessageNotReadableException e) {
+        super(e.getMessage().contains("Required request body is missing:") ? "l.json.request.body.missing" : "", e);
+        sensitiveInformation = false;
+        sc = 400;
+    }
 
-	public LocalizableApiError(final FileUploadBase.SizeLimitExceededException exception) {
-		super("l.max.upload.size.exceeded");
-		sensitiveInformation = false;
-		sc = 413;
-	}
+    public LocalizableApiError(final FileUploadBase.SizeLimitExceededException exception) {
+        super("l.max.upload.size.exceeded");
+        sensitiveInformation = false;
+        sc = 413;
+    }
 
-	public LocalizableApiError(final TestObjectTypeNotDetected e) {
-		super("l.testObject.type.not.detected", e);
-		sensitiveInformation = false;
-		sc = 400;
-	}
+    public LocalizableApiError(final TestObjectTypeNotDetected e) {
+        super("l.testObject.type.not.detected", e);
+        sensitiveInformation = false;
+        sc = 400;
+    }
 
-	public LocalizableApiError(final IncompatibleTestObjectTypeException e) {
-		super("l.testObject.type.incomaptible", e, e.getDetectedTestObjectType().getLabel());
-		sensitiveInformation = false;
-		sc = 400;
-	}
+    public LocalizableApiError(final IncompatibleTestObjectTypeException e) {
+        super("l.testObject.type.incomaptible", e, e.getDetectedTestObjectType().getLabel());
+        sensitiveInformation = false;
+        sc = 400;
+    }
 
-	public boolean isSensitiveInformation() {
-		return sensitiveInformation;
-	}
+    public boolean isSensitiveInformation() {
+        return sensitiveInformation;
+    }
 
-	public int getStatus() {
-		return sc;
-	}
+    public int getStatus() {
+        return sc;
+    }
 
-	void setError(final HttpServletResponse response) {
-		if (sc != 0) {
-			response.setStatus(sc);
-		}
-	}
+    void setError(final HttpServletResponse response) {
+        if (sc != 0) {
+            response.setStatus(sc);
+        }
+    }
 
-	public LocalizableApiError(final ComponentLoadingException e) {
-		super(e);
-		sensitiveInformation = false;
-		sc = 500;
-	}
+    public LocalizableApiError(final ComponentLoadingException e) {
+        super(e);
+        sensitiveInformation = false;
+        sc = 500;
+    }
 
-	public LocalizableApiError(final URISyntaxException e) {
-		super("l.invalid.url", e, e.getInput());
-		sensitiveInformation = false;
-		sc = 400;
-	}
+    public LocalizableApiError(final URISyntaxException e) {
+        super("l.invalid.url", e, e.getInput());
+        sensitiveInformation = false;
+        sc = 400;
+    }
 
-	public LocalizableApiError(final UriUtils.UriNotAbsoluteException e) {
-		super("l.uri.noSchema", e, e.getUri().toString());
-		sensitiveInformation = false;
-		sc = 400;
-	}
+    public LocalizableApiError(final UriUtils.UriNotAbsoluteException e) {
+        super("l.uri.noSchema", e, e.getUri().toString());
+        sensitiveInformation = false;
+        sc = 400;
+    }
 
-	public LocalizableApiError(final UriUtils.UriNotAnHttpAddressException e) {
-		super("l.uri.noSchema", e, e.getUri().toString());
-		sensitiveInformation = false;
-		sc = 400;
-	}
+    public LocalizableApiError(final UriUtils.UriNotAnHttpAddressException e) {
+        super("l.uri.noSchema", e, e.getUri().toString());
+        sensitiveInformation = false;
+        sc = 400;
+    }
 
-	public LocalizableApiError(final ObjectWithIdNotFoundException e) {
-		super("l.object.with.eid.not.found", e);
-		sensitiveInformation = false;
-		sc = 404;
-	}
+    public LocalizableApiError(final ObjectWithIdNotFoundException e) {
+        super("l.object.with.eid.not.found", e);
+        sensitiveInformation = false;
+        sc = 404;
+    }
 
-	public LocalizableApiError(final JsonMappingException e) {
-		super("l.json.mapping.error", e,
-				e.getLocation().getLineNr(),
-				e.getLocation().getColumnNr(),
-				e.getPath().get(0).getFieldName(),
-				e.getPath().get(0).getFrom().getClass().getSimpleName(),
-				e.getMessage().indexOf("\n at [") != 0 ? e.getMessage().substring(0, e.getMessage().indexOf("\n at ["))
-						: "unknown"
+    public LocalizableApiError(final JsonMappingException e) {
+        super("l.json.mapping.error", e,
+                e.getLocation().getLineNr(),
+                e.getLocation().getColumnNr(),
+                e.getPath().get(0).getFieldName(),
+                e.getPath().get(0).getFrom().getClass().getSimpleName(),
+                e.getMessage().indexOf("\n at [") != 0 ? e.getMessage().substring(0, e.getMessage().indexOf("\n at ["))
+                        : "unknown"
 
-		);
-		sensitiveInformation = false;
-		sc = 404;
-	}
+        );
+        sensitiveInformation = false;
+        sc = 404;
+    }
 
-	public LocalizableApiError(final JsonParseException e) {
-		super("l.json.parse.error", e,
-				e.getLocation().getLineNr(),
-				e.getLocation().getColumnNr(),
-				e.getOriginalMessage());
-		sensitiveInformation = false;
-		sc = 404;
-	}
+    public LocalizableApiError(final JsonParseException e) {
+        super("l.json.parse.error", e,
+                e.getLocation().getLineNr(),
+                e.getLocation().getColumnNr(),
+                e.getOriginalMessage());
+        sensitiveInformation = false;
+        sc = 404;
+    }
 
-	public LocalizableApiError(final NoSuchFileException e) {
-		super("l.json.parse.error", e);
-		sensitiveInformation = true;
-		sc = 500;
-	}
+    public LocalizableApiError(final NoSuchFileException e) {
+        super("l.json.parse.error", e);
+        sensitiveInformation = true;
+        sc = 500;
+    }
 
-	public LocalizableApiError(final IOException e) {
-		super(e);
-		sensitiveInformation = true;
-		sc = 500;
-	}
+    public LocalizableApiError(final IOException e) {
+        super(e);
+        sensitiveInformation = true;
+        sc = 500;
+    }
 
-	public LocalizableApiError(final ConfigurationException e) {
-		super(e);
-		sensitiveInformation = true;
-		sc = 500;
-	}
+    public LocalizableApiError(final ConfigurationException e) {
+        super(e);
+        sensitiveInformation = true;
+        sc = 500;
+    }
 
-	public LocalizableApiError(final StorageException e) {
-		super(e);
-		sensitiveInformation = true;
-		sc = 500;
-	}
+    public LocalizableApiError(final StorageException e) {
+        super(e);
+        sensitiveInformation = true;
+        sc = 500;
+    }
 }
