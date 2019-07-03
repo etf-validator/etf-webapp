@@ -59,8 +59,10 @@ define([
             }
             
             let dependenciesTreeEmpty = true;
-            for (dep in dependenciesTree){
-            	dependenciesTreeEmpty &= (dep.length === 0)
+            for (const dep in dependenciesTree){
+            	if(dep !== "undefined"){
+            	    dependenciesTreeEmpty &= (dep.length === 0)
+            	}
             }
             
             if(dependenciesTreeEmpty){
@@ -110,7 +112,7 @@ define([
                     var u = "#start-tests?ids=";
                     $.each($(".executable-test-suite-selection"), function () {
                         var val = $(this).val();
-                        if (val != "X") {
+                        if (val !== "X") {
                             u += val + ",";
                         }
                     })
