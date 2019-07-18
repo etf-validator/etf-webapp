@@ -54,6 +54,7 @@ import de.interactive_instruments.LogUtils;
 import de.interactive_instruments.SUtils;
 import de.interactive_instruments.etf.EtfConstants;
 import de.interactive_instruments.exceptions.ExcUtils;
+import de.interactive_instruments.exceptions.config.ConfigurationException;
 import de.interactive_instruments.exceptions.config.InvalidPropertyException;
 import de.interactive_instruments.exceptions.config.MissingPropertyException;
 import de.interactive_instruments.properties.PropertyHolder;
@@ -191,7 +192,7 @@ public class EtfConfigController implements PropertyHolder {
     }
 
     @PostConstruct
-    private void init() throws IOException, MissingPropertyException, URISyntaxException {
+    private void init() throws IOException, MissingPropertyException, URISyntaxException, ConfigurationException {
         version = getManifest().getMainAttributes().getValue("Implementation-Version");
         if (version == null) {
             version = "unknown";
@@ -409,7 +410,30 @@ public class EtfConfigController implements PropertyHolder {
             // Should never happen
             ExcUtils.suppress(e);
         }
-
+        
+        //Set parallel executions and queue size
+        String maxThreads = configProperties.getProperty(ETF_PARALLEL_EXECUTIONS);
+        try {
+            Integer.parseUnsignedInt(maxThreads);
+        } catch (NumberFormatException e) {
+            if ("auto".equals(maxThreads)) {
+                configProperties.setProperty(ETF_PARALLEL_EXECUTIONS, "" + Runtime.getRuntime().availableProcessors());
+            } else {
+                throw new ConfigurationException(maxThreads + " is not a valid value for etf.testruns.max.threads");
+            }
+        }
+        
+        String maxQueue = configProperties.getProperty("etf.testruns.queued.max");
+        try {
+            Integer.parseUnsignedInt(maxQueue);
+        } catch (NumberFormatException e) {
+            if ("auto".equals(maxQueue)) {
+                configProperties.setProperty(ETF_PARALLEL_EXECUTIONS, "" + Runtime.getRuntime().availableProcessors() * 3);
+            } else {
+                throw new ConfigurationException(maxThreads + " is not a valid value for etf.testruns.max.threads");
+            }
+        }
+        
         plausabilityCheckMinutes(ETF_TESTREPORTS_LIFETIME_EXPIRATION);
         plausabilityCheckMinutes(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION);
 
