@@ -105,6 +105,8 @@ public class TestRunController implements TestRunEventListener {
 
     private final static String TEST_RUNS_URL = API_BASE_URL + "/TestRuns";
 
+    public static int maxParallelRuns;
+
     private TaskPoolRegistry<TestRunDto, TestRun> taskPoolRegistry;
 
     private final Logger logger = LoggerFactory.getLogger(TestRunController.class);
@@ -219,11 +221,11 @@ public class TestRunController implements TestRunEventListener {
         // 7,5 minutes
         timer.scheduleAtFixedRate(timedExpiredItemsRemover, 450000, 450000);
 
-        Integer maxThreads = Integer.parseInt(etfConfig.getProperty("etf.testruns.threads.max"));
-        
+        maxParallelRuns = Integer.parseInt(etfConfig.getProperty("etf.testruns.threads.max"));
+
         Integer maxQueues = Integer.parseInt(etfConfig.getProperty("etf.testruns.queued.max"));
-        
-        taskPoolRegistry = new TaskPoolRegistry<>(maxThreads, maxThreads, maxQueues);
+
+        taskPoolRegistry = new TaskPoolRegistry<>(maxParallelRuns, maxParallelRuns, maxQueues);
 
         logger.info("Test Run controller initialized!");
     }

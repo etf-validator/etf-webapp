@@ -410,8 +410,8 @@ public class EtfConfigController implements PropertyHolder {
             // Should never happen
             ExcUtils.suppress(e);
         }
-        
-        //Set parallel executions and queue size
+
+        // Set parallel executions and queue size
         String maxThreads = configProperties.getProperty(ETF_PARALLEL_EXECUTIONS);
         try {
             Integer.parseUnsignedInt(maxThreads);
@@ -422,18 +422,18 @@ public class EtfConfigController implements PropertyHolder {
                 throw new ConfigurationException(maxThreads + " is not a valid value for etf.testruns.max.threads");
             }
         }
-        
+
         String maxQueue = configProperties.getProperty("etf.testruns.queued.max");
         try {
             Integer.parseUnsignedInt(maxQueue);
         } catch (NumberFormatException e) {
             if ("auto".equals(maxQueue)) {
-                configProperties.setProperty(ETF_PARALLEL_EXECUTIONS, "" + Runtime.getRuntime().availableProcessors() * 3);
+                configProperties.setProperty(ETF_PARALLEL_EXECUTIONS, "" + Integer.parseInt(configProperties.getProperty(ETF_PARALLEL_EXECUTIONS)) * 3);
             } else {
                 throw new ConfigurationException(maxThreads + " is not a valid value for etf.testruns.max.threads");
             }
         }
-        
+
         plausabilityCheckMinutes(ETF_TESTREPORTS_LIFETIME_EXPIRATION);
         plausabilityCheckMinutes(ETF_TESTOBJECT_UPLOADED_LIFETIME_EXPIRATION);
 
