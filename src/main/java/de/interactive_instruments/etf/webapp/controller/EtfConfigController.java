@@ -428,7 +428,8 @@ public class EtfConfigController implements PropertyHolder {
             Integer.parseUnsignedInt(maxQueue);
         } catch (NumberFormatException e) {
             if ("auto".equals(maxQueue)) {
-                configProperties.setProperty(ETF_PARALLEL_EXECUTIONS, "" + Integer.parseInt(configProperties.getProperty(ETF_PARALLEL_EXECUTIONS)) * 3);
+                configProperties.setProperty(ETF_PARALLEL_EXECUTIONS,
+                        "" + Integer.parseInt(configProperties.getProperty(ETF_PARALLEL_EXECUTIONS)) * 3);
             } else {
                 throw new ConfigurationException(maxThreads + " is not a valid value for etf.testruns.max.threads");
             }
