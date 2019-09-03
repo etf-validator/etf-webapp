@@ -60,8 +60,8 @@ define([
             
             let dependenciesTreeEmpty = true;
             for (const dep in dependenciesTree){
-            	if(dep !== "undefined"){
-            	    dependenciesTreeEmpty &= (dep.length === 0)
+                if(dep !== "undefined"){
+                    dependenciesTreeEmpty &= (dep.length === 0);
             	}
             }
             
