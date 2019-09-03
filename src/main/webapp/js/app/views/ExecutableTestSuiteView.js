@@ -29,7 +29,8 @@ define([
 ], function( $, Backbone, v2, EtfView, moment, ExecutableTestSuiteModel ) {
 	
 	var dependenciesTree = {};
-
+	
+	//Function to recursively switch all the dependents tests on selecting a test
     function markDependants(id){
         var model = router.executableTestSuitesView.collection.models.filter((x) => x.id === id)[0];
         let classList = document.querySelector("option[value="+id+"]").parentElement.parentElement.classList;
