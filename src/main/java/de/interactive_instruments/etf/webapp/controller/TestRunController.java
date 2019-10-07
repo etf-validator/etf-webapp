@@ -105,10 +105,10 @@ public class TestRunController implements TestRunEventListener {
 
     private final static String TEST_RUNS_URL = API_BASE_URL + "/TestRuns";
 
-    public final static int MAX_PARALLEL_RUNS = Runtime.getRuntime().availableProcessors();
+    public static int maxParallelRuns;
 
-    private final TaskPoolRegistry<TestRunDto, TestRun> taskPoolRegistry = new TaskPoolRegistry<>(MAX_PARALLEL_RUNS,
-            MAX_PARALLEL_RUNS);
+    private TaskPoolRegistry<TestRunDto, TestRun> taskPoolRegistry;
+
     private final Logger logger = LoggerFactory.getLogger(TestRunController.class);
 
     public TestRunController() {}
@@ -132,8 +132,7 @@ public class TestRunController implements TestRunEventListener {
         public TaskProgressDto() {}
 
         static TaskProgressDto createCompletedMsg(TaskProgress p) {
-            return new TaskProgressDto(
-                    String.valueOf(p.getMaxSteps()), new ArrayList<>());
+            return new TaskProgressDto(String.valueOf(p.getMaxSteps()), new ArrayList<>());
         }
 
         static TaskProgressDto createAlreadyCompleted() {
@@ -217,11 +216,16 @@ public class TestRunController implements TestRunEventListener {
         timer = new Timer(true);
         // Trigger every 30 Minutes
         final TimedExpiredItemsRemover timedExpiredItemsRemover = new TimedExpiredItemsRemover();
-        timedExpiredItemsRemover.addExpirationItemHolder(
-                (l, timeUnit) -> taskPoolRegistry.removeDone(),
-                0, TimeUnit.HOURS);
+        timedExpiredItemsRemover.addExpirationItemHolder((l, timeUnit) -> taskPoolRegistry.removeDone(), 0,
+                TimeUnit.HOURS);
         // 7,5 minutes
         timer.scheduleAtFixedRate(timedExpiredItemsRemover, 450000, 450000);
+
+        maxParallelRuns = Integer.parseInt(etfConfig.getProperty("etf.testruns.threads.max"));
+
+        Integer maxQueues = Integer.parseInt(etfConfig.getProperty("etf.testruns.queued.max"));
+
+        taskPoolRegistry = new TaskPoolRegistry<>(maxParallelRuns, maxParallelRuns, maxQueues);
 
         logger.info("Test Run controller initialized!");
     }
@@ -253,14 +257,13 @@ public class TestRunController implements TestRunEventListener {
             logger.info("TestRun " + testRunDto.getDescriptiveLabel() + " initialized");
             taskPoolRegistry.submitTask(testRun);
         } catch (Exception e) {
-            throw new LocalizableApiError(
-                    "l.internal.testrun.initialization.error",
-                    true, 500, e);
+            throw new LocalizableApiError("l.internal.testrun.initialization.error", true, 500, e);
         }
     }
 
     @Override
-    public void taskStateChangedEvent(final TestTask testTask, final TaskState.STATE current, final TaskState.STATE old) {
+    public void taskStateChangedEvent(final TestTask testTask, final TaskState.STATE current,
+            final TaskState.STATE old) {
         logger.trace("TaskStateChanged event received from Test Task {} : {} -> {}", testTask.getId(),
                 old == null ? "first light" : old, current);
 
@@ -268,8 +271,8 @@ public class TestRunController implements TestRunEventListener {
 
     @Override
     public void taskRunChangedEvent(final TestRun testRun, final TaskState.STATE current, final TaskState.STATE old) {
-        logger.trace("TaskStateChanged event received from Test Run {} : {} -> {} (Test Run label: {})", testRun.getId(),
-                old == null ? "first light" : old, current, testRun.getLabel());
+        logger.trace("TaskStateChanged event received from Test Run {} : {} -> {} (Test Run label: {})",
+                testRun.getId(), old == null ? "first light" : old, current, testRun.getLabel());
         if (current.isCompleted()) {
             try {
                 testResultController.updateTestRun(testRun);
@@ -288,8 +291,7 @@ public class TestRunController implements TestRunEventListener {
             TEST_RUNS_TAG_NAME})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Task progress returned", response = TaskProgressDto.class),
-            @ApiResponse(code = 404, message = "Test Run not found", response = Void.class),
-    })
+            @ApiResponse(code = 404, message = "Test Run not found", response = Void.class),})
     @RequestMapping(value = API_BASE_URL + "/TestRuns/{id}/progress", method = RequestMethod.GET)
     @ResponseBody
     public TaskProgressDto progressLog(
@@ -336,7 +338,8 @@ public class TestRunController implements TestRunEventListener {
                 taskPoolRegistry.release(EidConverter.toEid(id));
             }
         } else if (state.isCompleted() || state.isFinalizing()) {
-            // The Client should already be informed, that the task finished, but just send again
+            // The Client should already be informed, that the task finished, but just send
+            // again
             // JSON, which indicates that the task has been completed (with val==max)
             try {
                 Thread.sleep(1500);
@@ -350,16 +353,15 @@ public class TestRunController implements TestRunEventListener {
             return new TaskProgressDto(testRun.getProgress(), position);
         }
 
-        // The task is running, but does not provide any new information, so just respond
+        // The task is running, but does not provide any new information, so just
+        // respond
         // with an empty obj
         return new TaskProgressDto();
     }
 
     @ApiOperation(value = "Get the progress of all Test Runs", notes = "Retrieve status information about all non-completed Test Runs", tags = {
             TEST_RUNS_TAG_NAME})
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK"),
-    })
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),})
     @RequestMapping(value = API_BASE_URL + "/TestRuns", params = "view=progress", method = RequestMethod.GET)
     public @ResponseBody List<TestRunsJsonView> listTestRunsJson() throws StorageException, ConfigurationException {
         final List<TestRunsJsonView> testRunsJsonViews = new ArrayList<TestRunsJsonView>();
@@ -369,10 +371,8 @@ public class TestRunController implements TestRunEventListener {
 
     @ApiOperation(value = "Check if the Test Run exists", notes = "Checks whether a Test Run is running or has already been completed and a report has been saved. ", tags = {
             TEST_RESULTS_TAG_NAME, TEST_RUNS_TAG_NAME})
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Test Run exists", response = Void.class),
-            @ApiResponse(code = 404, message = "Test Run does not exist", response = Void.class),
-    })
+    @ApiResponses(value = {@ApiResponse(code = 204, message = "Test Run exists", response = Void.class),
+            @ApiResponse(code = 404, message = "Test Run does not exist", response = Void.class),})
     @RequestMapping(value = {TEST_RUNS_URL + "/{id}"}, method = RequestMethod.HEAD)
     public ResponseEntity exists(
             @ApiParam(value = "Test Run ID. "
@@ -389,8 +389,7 @@ public class TestRunController implements TestRunEventListener {
             @ApiResponse(code = 204, message = "Test Run deleted", responseHeaders = {
                     @ResponseHeader(name = "action", description = "Set to 'canceled' if the Test Run was canceled or "
                             + "'deleted' if a persisted Test Run was removed")}),
-            @ApiResponse(code = 404, message = "Test Run not found", response = ApiError.class)
-    })
+            @ApiResponse(code = 404, message = "Test Run not found", response = ApiError.class)})
     @RequestMapping(value = TEST_RUNS_URL + "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity delete(
             @ApiParam(value = "Test Run ID. "
@@ -429,63 +428,37 @@ public class TestRunController implements TestRunEventListener {
             + "setting exclusively the 'id' in the StartTestRunRequest's 'testObject' property. "
             + "If data do not need to be uploaded or a web service is tested, a temporary Test Object "
             + "can be created directly with this interface, by defining at least the "
-            + "'resources' property of the 'testObject' but omit except the 'id' property."
-            + "\n\n"
-            + "Example for starting a Test Run for a service Test:  <br/>"
-            + "\n\n"
-            + "    {\n"
+            + "'resources' property of the 'testObject' but omit except the 'id' property." + "\n\n"
+            + "Example for starting a Test Run for a service Test:  <br/>" + "\n\n" + "    {\n"
             + "        \"label\": \"Test run on 15:00 - 01.01.2017 with Conformance class Conformance Class: Download Service - Pre-defined WFS\",\n"
             + "        \"executableTestSuiteIds\": [\"EID174edf55-699b-446c-968c-1892a4d8d5bd\"],\n"
-            + "        \"arguments\": {},\n"
-            + "        \"testObject\": {\n"
-            + "            \"resources\": {\n"
+            + "        \"arguments\": {},\n" + "        \"testObject\": {\n" + "            \"resources\": {\n"
             + "                \"serviceEndpoint\": \"http://example.com/service?request=GetCapabilities&service=WFS\"\n"
-            + "            }\n"
-            + "        }\n"
-            + "    }\n"
-            + "\n\n"
-            + "Example for starting a Test Run for a file-based Test, using a temporary Test Object:<br/>"
-            + "\n\n"
+            + "            }\n" + "        }\n" + "    }\n" + "\n\n"
+            + "Example for starting a Test Run for a file-based Test, using a temporary Test Object:<br/>" + "\n\n"
             + "    {\n"
             + "        \"label\": \"Test run on 15:00 - 01.01.2017 with Conformance class INSPIRE Profile based on EN ISO 19115 and EN ISO 19119\",\n"
             + "        \"executableTestSuiteIds\": [\"EIDec7323d5-d8f0-4cfe-b23a-b826df86d58c\"],\n"
-            + "        \"arguments\": {\n"
-            + "            \"files_to_test\": \".*\",\n"
-            + "            \"tests_to_execute\": \".*\"\n"
-            + "        },\n"
-            + "        \"testObject\": {\n"
-            + "            \"id\": \"b502260f-1054-432e-8cd5-4a61302dfdba\"\n"
-            + "        }\n"
-            + "    }\n"
-            + "\n\n"
+            + "        \"arguments\": {\n" + "            \"files_to_test\": \".*\",\n"
+            + "            \"tests_to_execute\": \".*\"\n" + "        },\n" + "        \"testObject\": {\n"
+            + "            \"id\": \"b502260f-1054-432e-8cd5-4a61302dfdba\"\n" + "        }\n" + "    }\n" + "\n\n"
             + "Where \"EIDb502260f-1054-432e-8cd5-4a61302dfdba\" is the ID of the previous created temporary Test Object."
-            + "\n\n"
-            + "Example for starting a Test Run for a file-based Test, referencing Test data in the web:<br/>"
-            + "\n\n"
-            + "    {\n"
+            + "\n\n" + "Example for starting a Test Run for a file-based Test, referencing Test data in the web:<br/>"
+            + "\n\n" + "    {\n"
             + "        \"label\": \"Test run on 15:00 - 01.01.2017 with Conformance class INSPIRE Profile based on EN ISO 19115 and EN ISO 19119\",\n"
             + "        \"executableTestSuiteIds\": [\"EIDec7323d5-d8f0-4cfe-b23a-b826df86d58c\"],\n"
-            + "        \"arguments\": {\n"
-            + "            \"files_to_test\": \".*\",\n"
-            + "            \"tests_to_execute\": \".*\"\n"
-            + "        },\n"
-            + "        \"testObject\": {\n"
-            + "            \"resources\": {\n"
-            + "                \"data\": \"http://example.com/test-data.xml\"\n"
-            + "            }\n"
-            + "        }\n"
-            + "    }\n"
-            + "\n\n", tags = {TEST_RUNS_TAG_NAME})
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Test Run created"),
+            + "        \"arguments\": {\n" + "            \"files_to_test\": \".*\",\n"
+            + "            \"tests_to_execute\": \".*\"\n" + "        },\n" + "        \"testObject\": {\n"
+            + "            \"resources\": {\n" + "                \"data\": \"http://example.com/test-data.xml\"\n"
+            + "            }\n" + "        }\n" + "    }\n" + "\n\n", tags = {TEST_RUNS_TAG_NAME})
+    @ApiResponses(value = {@ApiResponse(code = 201, message = "Test Run created"),
             @ApiResponse(code = 400, message = "Invalid request", response = ApiError.class),
             @ApiResponse(code = 404, message = "Test Object or Executable Test Suite with ID not found", response = ApiError.class),
             @ApiResponse(code = 409, message = "Test Object already in use", response = ApiError.class),
-            @ApiResponse(code = 500, message = "Internal error", response = ApiError.class),
-    })
+            @ApiResponse(code = 500, message = "Internal error", response = ApiError.class),})
     @RequestMapping(value = TEST_RUNS_URL, method = RequestMethod.POST)
-    public void start(@RequestBody @Valid StartTestRunRequest testRunRequest, BindingResult result, HttpServletRequest request,
-            HttpServletResponse response)
+    public void start(@RequestBody @Valid StartTestRunRequest testRunRequest, BindingResult result,
+            HttpServletRequest request, HttpServletResponse response)
             throws LocalizableApiError, InvalidPropertyException {
 
         statusController.ensureStatusNotMajor();
@@ -509,9 +482,10 @@ public class TestRunController implements TestRunEventListener {
             final Set<EID> requiredTestObjectTypeIds = new HashSet<>();
             final Iterator<ExecutableTestSuiteDto> etsIterator = testRunDto.getExecutableTestSuites().iterator();
 
-            requiredTestObjectTypeIds
-                    .addAll(EidHolderWithParent.getAllIdsAndParentIds(etsIterator.next().getSupportedTestObjectTypes()));
-            // now iterate over the other ETS and delete all Test Object Types that are not supported by the first ETS
+            requiredTestObjectTypeIds.addAll(
+                    EidHolderWithParent.getAllIdsAndParentIds(etsIterator.next().getSupportedTestObjectTypes()));
+            // now iterate over the other ETS and delete all Test Object Types that are not
+            // supported by the first ETS
             while (etsIterator.hasNext()) {
                 final Set<EID> supportedIds = EidHolder.getAllIds(etsIterator.next().getSupportedTestObjectTypes());
                 requiredTestObjectTypeIds.removeIf(eid -> !supportedIds.contains(eid));
@@ -524,10 +498,9 @@ public class TestRunController implements TestRunEventListener {
 
             // Check if test object is already in use
             for (TestRun tR : taskPoolRegistry.getTasks()) {
-                if (!tR.getProgress().getState().isCompletedFailedCanceledOrFinalizing() &&
-                        tR.getResult() != null && tR.getResult().getTestObjects() != null &&
-                        tR.getResult().getTestObjects().get(0) != null &&
-                        tO.getId().equals(tR.getResult().getTestObjects().get(0).getId())) {
+                if (!tR.getProgress().getState().isCompletedFailedCanceledOrFinalizing() && tR.getResult() != null
+                        && tR.getResult().getTestObjects() != null && tR.getResult().getTestObjects().get(0) != null
+                        && tO.getId().equals(tR.getResult().getTestObjects().get(0).getId())) {
                     logger.info("Rejecting test start: test object " + tO.getId() + " is in use");
                     throw new LocalizableApiError("l.testObject.lock", false, 409, tO.getLabel());
                 }
