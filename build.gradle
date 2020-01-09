@@ -4,6 +4,19 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////
 
+apply plugin: 'maven'
+uploadArchives {
+    repositories {
+        maven {
+            url "https://nexus.terrestris.de/repository/terrestris-maven-public/"
+            credentials {
+                username "$mavenUser"
+                password "$mavenPassword"
+            }
+        }
+    }
+}
+
 buildscript {
     repositories {
         maven {
@@ -38,7 +51,6 @@ description = 'ETF Presentation and Controller Layer'
 apply plugin: 'war'
 apply from: 'jetty.gradle'
 // apply from: 'gretty.gradle'
-import groovy.json.JsonSlurper
 
 apply plugin: 'idea'
 
