@@ -97,7 +97,8 @@ define([
                 _.isUndefined(this.testObjectTypes['EIDf897f313-55f0-4e51-928a-0e9869f5a1d6']) &&
                 _.isUndefined(this.testObjectTypes['EID9981e87e-d642-43b3-ad5f-e77469075e74']) &&
                 _.isUndefined(this.testObjectTypes['EID380b969c-215e-46f8-a4e9-16f002f7d6c3']) &&
-                _.isUndefined(this.testObjectTypes['EIDae35f7cd-86d9-475a-aa3a-e0bfbda2bb5f'])) {
+                _.isUndefined(this.testObjectTypes['EIDae35f7cd-86d9-475a-aa3a-e0bfbda2bb5f']) &&
+                _.isUndefined(this.testObjectTypes['EID4b0fb35d-10f0-47df-bc0b-6d4548035ae2'])) {
                 this.serviceTest = false;
             }else{
                 this.serviceTest = true;
