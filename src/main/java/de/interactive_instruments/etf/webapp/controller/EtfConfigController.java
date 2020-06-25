@@ -106,6 +106,8 @@ public class EtfConfigController implements PropertyHolder {
     private static final String ETF_PARALLEL_EXECUTIONS = "etf.testruns.threads.max";
     private static final String ETF_QUEUE_SIZE = "etf.testruns.queued.max";
 
+    public static final String ETF_SHOWUSERNAME = "etf.showusername";
+
     @Autowired
     private ServletContext servletContext;
 
@@ -154,6 +156,8 @@ public class EtfConfigController implements PropertyHolder {
                     put(ETF_TESTDATA_UPLOAD_DIR, "http_uploads");
                     put(ETF_PARALLEL_EXECUTIONS, "" + Runtime.getRuntime().availableProcessors());
                     put(ETF_QUEUE_SIZE, "" + Runtime.getRuntime().availableProcessors() * 3);
+
+                    put(ETF_SHOWUSERNAME, "false");
 
                 }
             });

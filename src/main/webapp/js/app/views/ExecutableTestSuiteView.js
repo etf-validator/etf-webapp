@@ -123,7 +123,7 @@ define([
                     markDependants(e.currentTarget.querySelectorAll("option")[1].value);
                 });
 
-                $("#fadin-start-tests-button").on("clic", function (e) {
+                $("#fadin-start-tests-button").on("click", function (e) {
                     var u = "#start-tests?ids=";
                     $.each($(".executable-test-suite-selection"), function () {
                         var val = $(this).val();

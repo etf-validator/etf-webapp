@@ -54,6 +54,7 @@ import de.interactive_instruments.etf.dal.dao.Dao;
 import de.interactive_instruments.etf.dal.dao.WriteDao;
 import de.interactive_instruments.etf.dal.dto.capabilities.TestObjectDto;
 import de.interactive_instruments.etf.dal.dto.run.TestRunDto;
+import de.interactive_instruments.etf.dal.dto.run.TestTaskDto;
 import de.interactive_instruments.etf.dal.dto.test.ExecutableTestSuiteDto;
 import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.model.EidHolder;
@@ -504,6 +505,11 @@ public class TestRunController implements TestRunEventListener {
                     logger.info("Rejecting test start: test object " + tO.getId() + " is in use");
                     throw new LocalizableApiError("l.testObject.lock", false, 409, tO.getLabel());
                 }
+            }
+
+            // Add etf.showusername property
+            for (TestTaskDto testTaskDto : testRunDto.getTestTasks()) {
+                testTaskDto.getArguments().setValue("etf.showusername", etfConfig.getProperty("etf.showusername"));
             }
 
             // this will save the Dto
