@@ -507,11 +507,6 @@ public class TestRunController implements TestRunEventListener {
                 }
             }
 
-            // Add etf.showusername property
-            for (TestTaskDto testTaskDto : testRunDto.getTestTasks()) {
-                testTaskDto.getArguments().setValue("etf.showusername", etfConfig.getProperty("etf.showusername"));
-            }
-
             // this will save the Dto
             initAndSubmit(testRunDto);
 
