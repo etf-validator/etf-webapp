@@ -106,7 +106,7 @@ public class EtfConfigController implements PropertyHolder {
     private static final String ETF_PARALLEL_EXECUTIONS = "etf.testruns.threads.max";
     private static final String ETF_QUEUE_SIZE = "etf.testruns.queued.max";
 
-    public static final String ETF_SHOWUSERNAME = "etf.showusername";
+    public static final String ETF_SHOW_USERNAME = "etf.show.username";
 
     @Autowired
     private ServletContext servletContext;
