@@ -157,7 +157,7 @@ public class EtfConfigController implements PropertyHolder {
                     put(ETF_PARALLEL_EXECUTIONS, "" + Runtime.getRuntime().availableProcessors());
                     put(ETF_QUEUE_SIZE, "" + Runtime.getRuntime().availableProcessors() * 3);
 
-                    put(ETF_SHOWUSERNAME, "true");
+                    put(ETF_SHOW_USERNAME, "true");
 
                 }
             });
