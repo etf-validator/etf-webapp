@@ -293,7 +293,10 @@ public class StatusController {
 
     public void ensureStatusNotMajor() throws LocalizableApiError {
         if (ServiceStatus.valueOf(serviceStatus.get().status) == ServiceStatus.MAJOR) {
-            throw new LocalizableApiError("l.system.status.major", false, 503);
+            throw new LocalizableApiError("l.system.status.major",
+                    !(Boolean.parseBoolean(
+                            EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                    503);
         }
     }
 

@@ -28,6 +28,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import de.interactive_instruments.etf.EtfConstants;
+import de.interactive_instruments.etf.webapp.controller.EtfConfigController;
 import de.interactive_instruments.etf.webapp.controller.LocalizableApiError;
 
 import io.swagger.annotations.ApiModel;
@@ -102,7 +103,13 @@ public class ApiError {
                 this.error = "Internal error";
             }
         }
-        stacktrace = ExceptionUtils.getRootCauseStackTrace(e);
+        if ((localizableApiError != null && localizableApiError.isSensitiveInformation()) ||
+                (localizableApiError == null && !(Boolean.parseBoolean(EtfConfigController.getInstance().getProperty(
+                        EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))))) {
+            stacktrace = new String[]{};
+        } else {
+            stacktrace = ExceptionUtils.getRootCauseStackTrace(e);
+        }
         this.url = url;
     }
 

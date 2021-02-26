@@ -291,7 +291,10 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
 
             if (etfConfig.getProperty("etf.testobject.allow.privatenet.access").equals("false")) {
                 if (UriUtils.isPrivateNet(serviceEndpoint)) {
-                    throw new LocalizableApiError("l.rejected.private.subnet.access", false, 403);
+                    throw new LocalizableApiError("l.rejected.private.subnet.access", !(Boolean.parseBoolean(
+                            EtfConfigController.getInstance().getProperty(
+                                    EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                            403);
                 }
             }
 
@@ -300,13 +303,17 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
             if (e.getResponseCode() == 400 && e.getUrl() != null) {
                 hash = "0000000000000400";
             } else if ((e.getResponseCode() == 403 || e.getResponseCode() == 401) && e.getUrl() != null) {
-                throw new LocalizableApiError("l.url.secured", false, 400, e, e.getUrl().getHost());
+                throw new LocalizableApiError("l.url.secured", !(Boolean.parseBoolean(
+                        EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                        400, e, e.getUrl().getHost());
             } else if (e.getResponseCode() >= 401 && e.getResponseCode() < 500) {
                 throw new LocalizableApiError("l.url.client.error", e);
             } else if (e.getResponseCode() != -1) {
                 throw new LocalizableApiError("l.url.server.error", e);
             } else if (e.getCause() instanceof UnknownHostException && e.getUrl() != null) {
-                throw new LocalizableApiError("l.unknown.host", false, 400, e, e.getUrl().getHost());
+                throw new LocalizableApiError("l.unknown.host", !(Boolean.parseBoolean(
+                        EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                        400, e, e.getUrl().getHost());
             } else {
                 throw new LocalizableApiError("l.invalid.url", e);
             }
@@ -330,7 +337,9 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
                 }
             }
             if (size > etfConfig.getPropertyAsLong(EtfConfigController.ETF_MAX_UPLOAD_SIZE)) {
-                throw new LocalizableApiError("l.max.upload.size.exceeded", false, 400);
+                throw new LocalizableApiError("l.max.upload.size.exceeded", !(Boolean.parseBoolean(
+                        EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                        400);
             }
         }
 
@@ -369,7 +378,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
             testObjectDir = uploadCmd.upload();
             resourceName = "upload." + testObject.getResourcesSize();
         } else {
-            throw new LocalizableApiError("l.testobject.required", false, 400);
+            throw new LocalizableApiError("l.testobject.required", !(Boolean.parseBoolean(
+                    EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))), 400);
         }
 
         // Add new resource
@@ -380,17 +390,24 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
                 EnumSet.of(FileVisitOption.FOLLOW_LINKS), 5, v);
         if (v.getFileCount() == 0) {
             if (regex != null && !regex.isEmpty()) {
-                throw new LocalizableApiError("l.testObject.regex.null.selection", false, 400, regex);
+                throw new LocalizableApiError("l.testObject.regex.null.selection", !(Boolean.parseBoolean(
+                        EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))), 400,
+                        regex);
             } else {
-                throw new LocalizableApiError("l.testObject.testdir.no.xml.gml.found", false, 400);
+                throw new LocalizableApiError("l.testObject.testdir.no.xml.gml.found", !(Boolean.parseBoolean(
+                        EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                        400);
             }
         }
         if (v.getSize() == 0) {
             if (v.getFileCount() == 1) {
-                throw new LocalizableApiError("l.testObject.one.file.with.zero.size", false, 400, v.getFileCount());
+                throw new LocalizableApiError("l.testObject.one.file.with.zero.size", !(Boolean.parseBoolean(
+                        EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                        400, v.getFileCount());
             } else {
-                throw new LocalizableApiError("l.testObject.multiple.files.with.zero.size", false, 400,
-                        v.getFileCount());
+                throw new LocalizableApiError("l.testObject.multiple.files.with.zero.size", !(Boolean.parseBoolean(
+                        EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                        400, v.getFileCount());
             }
         }
 
@@ -481,7 +498,8 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, StorageException, ObjectWithIdNotFoundException, LocalizableApiError {
         if (transientTestObjects.getIfPresent(EidConverter.toEid(id)) != null) {
-            throw new LocalizableApiError("l.temporary.testobject.access", false, 404);
+            throw new LocalizableApiError("l.temporary.testobject.access", !(Boolean.parseBoolean(
+                    EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))), 404);
         }
         streaming.asJson2(testObjectDao, request, response, id);
     }
@@ -519,7 +537,10 @@ public class TestObjectController implements PreparedDtoResolver<TestObjectDto> 
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, StorageException, ObjectWithIdNotFoundException, LocalizableApiError {
         if (transientTestObjects.getIfPresent(EidConverter.toEid(id)) != null) {
-            throw new LocalizableApiError("l.temporary.testobject.access", false, 404);
+            throw new LocalizableApiError("l.temporary.testobject.access",
+                    !(Boolean.parseBoolean(EtfConfigController.getInstance().getProperty(
+                            EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                    404);
         }
         streaming.asXml2(testObjectDao, request, response, id);
     }

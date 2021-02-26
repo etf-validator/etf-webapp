@@ -130,14 +130,19 @@ class FileStorage {
                                 tmpSubDir.deleteDirectory();
                                 destinationSubDir.deleteDirectory();
                             } catch (IOException ignore) {}
-                            throw new LocalizableApiError("l.download.failed", false, 400, e);
+                            throw new LocalizableApiError("l.download.failed", !(Boolean.parseBoolean(
+                                    EtfConfigController.getInstance().getProperty(
+                                            EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                                    400, e);
                         }
                         prepare(download, destinationSubDir, download.getName(), fileFilter, remainingDownloadSize);
                     }
                 }
                 checkSize(destinationSubDir);
             } catch (IOsizeLimitExceededException e) {
-                throw new LocalizableApiError("l.max.download.size.exceeded", false, 400, e, maxStorageSizeHr);
+                throw new LocalizableApiError("l.max.download.size.exceeded", !(Boolean.parseBoolean(
+                        EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                        400, e, maxStorageSizeHr);
             }
             return destinationSubDir;
         }
@@ -181,7 +186,9 @@ class FileStorage {
                     tmpSubDir.deleteDirectory();
                     destinationSubDir.deleteDirectory();
                 } catch (IOException ignore) {}
-                throw new LocalizableApiError("l.max.upload.size.exceeded", false, 400, e, maxStorageSizeHr);
+                throw new LocalizableApiError("l.max.upload.size.exceeded", !(Boolean.parseBoolean(
+                        EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                        400, e, maxStorageSizeHr);
             } catch (IOException e) {
                 try {
                     tmpSubDir.deleteDirectory();
@@ -243,7 +250,9 @@ class FileStorage {
             try {
                 tmpFile.unzipTo(storageSubDir, fileFilter, maxSize);
             } catch (IOsizeLimitExceededException e) {
-                throw new LocalizableApiError("l.max.extract.size.exceeded", false, 400, e, maxStorageSizeHr);
+                throw new LocalizableApiError("l.max.extract.size.exceeded", !(Boolean.parseBoolean(
+                        EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                        400, e, maxStorageSizeHr);
             } catch (IOException e) {
                 throw new LocalizableApiError("l.decompress.failed", e);
             } finally {
@@ -253,7 +262,9 @@ class FileStorage {
         } else {
             if (!baseFilter.content().accept(type)) {
                 tmpFile.delete();
-                throw new LocalizableApiError("l.upload.invalid", false, 400, type);
+                throw new LocalizableApiError("l.upload.invalid", !(Boolean.parseBoolean(
+                        EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                        400, type);
             }
             try {
                 tmpFile.moveTo(storageSubDir.getPath() + File.separator + IFile.sanitize(originalFilename));

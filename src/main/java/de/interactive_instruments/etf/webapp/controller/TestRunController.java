@@ -257,7 +257,8 @@ public class TestRunController implements TestRunEventListener {
             logger.info("TestRun " + testRunDto.getDescriptiveLabel() + " initialized");
             taskPoolRegistry.submitTask(testRun);
         } catch (Exception e) {
-            throw new LocalizableApiError("l.internal.testrun.initialization.error", true, 500, e);
+            throw new LocalizableApiError("l.internal.testrun.initialization.error", !(Boolean.parseBoolean(
+                    EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))), 500, e);
         }
     }
 
@@ -492,7 +493,9 @@ public class TestRunController implements TestRunEventListener {
             }
             // if the list is now empty, the Test Suites are incompatible
             if (requiredTestObjectTypeIds.isEmpty()) {
-                throw new LocalizableApiError("l.ets.supported.testObject.type.incompatible", false, 400);
+                throw new LocalizableApiError("l.ets.supported.testObject.type.incompatible", !(Boolean.parseBoolean(
+                        EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                        400);
             }
             testObjectController.initResourcesAndAdd(tO, requiredTestObjectTypeIds);
 
@@ -502,7 +505,9 @@ public class TestRunController implements TestRunEventListener {
                         && tR.getResult().getTestObjects() != null && tR.getResult().getTestObjects().get(0) != null
                         && tO.getId().equals(tR.getResult().getTestObjects().get(0).getId())) {
                     logger.info("Rejecting test start: test object " + tO.getId() + " is in use");
-                    throw new LocalizableApiError("l.testObject.lock", false, 409, tO.getLabel());
+                    throw new LocalizableApiError("l.testObject.lock", !(Boolean.parseBoolean(
+                            EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                            409, tO.getLabel());
                 }
             }
 

@@ -98,7 +98,9 @@ public class ApiFilter extends OncePerRequestFilter {
                 response.setStatus(413);
                 response.setHeader("Content-Type", "application/json");
                 mapper.writeValue(response.getWriter(), new ApiError(new LocalizableApiError(
-                        "l.max.upload.size.exceeded", false, 413), request.getRequestURL().toString(), applicationContext));
+                        "l.max.upload.size.exceeded", !(Boolean.parseBoolean(EtfConfigController.getInstance().getProperty(
+                                EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                        413), request.getRequestURL().toString(), applicationContext));
                 response.getWriter().flush();
             }
         }

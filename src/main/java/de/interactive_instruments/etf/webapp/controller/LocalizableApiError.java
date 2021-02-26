@@ -105,9 +105,21 @@ public class LocalizableApiError extends LocalizableError {
         sc = 400;
     }
 
+    public LocalizableApiError(final boolean sensitive, final HttpMessageNotReadableException e) {
+        super(e.getMessage().contains("Required request body is missing:") ? "l.json.request.body.missing" : "", e);
+        sensitiveInformation = sensitive;
+        sc = 400;
+    }
+
     public LocalizableApiError(final FileUploadBase.SizeLimitExceededException exception) {
         super("l.max.upload.size.exceeded");
         sensitiveInformation = false;
+        sc = 413;
+    }
+
+    public LocalizableApiError(final boolean sensitive, final FileUploadBase.SizeLimitExceededException exception) {
+        super("l.max.upload.size.exceeded");
+        sensitiveInformation = sensitive;
         sc = 413;
     }
 
@@ -181,12 +193,35 @@ public class LocalizableApiError extends LocalizableError {
         sc = 404;
     }
 
+    public LocalizableApiError(final boolean sensitive, final JsonMappingException e) {
+        super("l.json.mapping.error", e,
+                e.getLocation().getLineNr(),
+                e.getLocation().getColumnNr(),
+                e.getPath().get(0).getFieldName(),
+                e.getPath().get(0).getFrom().getClass().getSimpleName(),
+                e.getMessage().indexOf("\n at [") != 0 ? e.getMessage().substring(0, e.getMessage().indexOf("\n at ["))
+                        : "unknown"
+
+        );
+        sensitiveInformation = sensitive;
+        sc = 404;
+    }
+
     public LocalizableApiError(final JsonParseException e) {
         super("l.json.parse.error", e,
                 e.getLocation().getLineNr(),
                 e.getLocation().getColumnNr(),
                 e.getOriginalMessage());
         sensitiveInformation = false;
+        sc = 404;
+    }
+
+    public LocalizableApiError(final boolean sensitive, final JsonParseException e) {
+        super("l.json.parse.error", e,
+                e.getLocation().getLineNr(),
+                e.getLocation().getColumnNr(),
+                e.getOriginalMessage());
+        sensitiveInformation = sensitive;
         sc = 404;
     }
 

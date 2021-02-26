@@ -108,6 +108,8 @@ public class EtfConfigController implements PropertyHolder {
 
     public static final String ETF_SHOW_USERNAME = "etf.show.username";
 
+    public static final String ETF_SHOW_SENSITIVEINFORMATION = "etf.show.sensitiveinformation";
+
     @Autowired
     private ServletContext servletContext;
 
@@ -156,8 +158,8 @@ public class EtfConfigController implements PropertyHolder {
                     put(ETF_TESTDATA_UPLOAD_DIR, "http_uploads");
                     put(ETF_PARALLEL_EXECUTIONS, "" + Runtime.getRuntime().availableProcessors());
                     put(ETF_QUEUE_SIZE, "" + Runtime.getRuntime().availableProcessors() * 3);
-
-                    put(ETF_SHOWUSERNAME, "true");
+                    put(ETF_SHOW_USERNAME, "false");
+                    put(ETF_SHOW_SENSITIVEINFORMATION, "false");
 
                 }
             });
@@ -719,7 +721,8 @@ public class EtfConfigController implements PropertyHolder {
         for (Map.Entry<String, String> e : newConfiguration) {
             if (filePathPropertyKeys.contains(e.getKey())) {
                 logger.error("Denied attempt to overwrite path property '{}' in configuration", e.getKey());
-                throw new LocalizableApiError("l.overwriting.path.properties.not.allowed", false,
+                throw new LocalizableApiError("l.overwriting.path.properties.not.allowed",
+                        !(Boolean.parseBoolean(this.configProperties.getProperty(ETF_SHOW_SENSITIVEINFORMATION))),
                         HttpStatus.FORBIDDEN.value());
             }
         }

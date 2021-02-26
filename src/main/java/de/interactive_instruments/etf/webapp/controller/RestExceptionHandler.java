@@ -92,19 +92,27 @@ class RestExceptionHandler {
             status = ((LocalizableApiError) exception.getCause()).getStatus();
             conv = null;
         } else if (exception.getCause() instanceof JsonMappingException) {
-            final LocalizableApiError e = new LocalizableApiError((JsonMappingException) exception.getCause());
+            final LocalizableApiError e = new LocalizableApiError(!(Boolean.parseBoolean(
+                    EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                    (JsonMappingException) exception.getCause());
             conv = new ApiError(e, request.getRequestURL().toString(), applicationContext);
             status = e.sc;
         } else if (exception.getCause() instanceof JsonParseException) {
-            final LocalizableApiError e = new LocalizableApiError((JsonParseException) exception.getCause());
+            final LocalizableApiError e = new LocalizableApiError(!(Boolean.parseBoolean(
+                    EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                    (JsonParseException) exception.getCause());
             conv = new ApiError(e, request.getRequestURL().toString(), applicationContext);
             status = e.sc;
         } else if (exception instanceof HttpMessageNotReadableException) {
-            final LocalizableApiError e = new LocalizableApiError((HttpMessageNotReadableException) exception);
+            final LocalizableApiError e = new LocalizableApiError(!(Boolean.parseBoolean(
+                    EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                    (HttpMessageNotReadableException) exception);
             conv = new ApiError(e, request.getRequestURL().toString(), applicationContext);
             status = e.sc;
         } else if (exception instanceof FileUploadBase.SizeLimitExceededException) {
-            final LocalizableApiError e = new LocalizableApiError((FileUploadBase.SizeLimitExceededException) exception);
+            final LocalizableApiError e = new LocalizableApiError(!(Boolean.parseBoolean(
+                    EtfConfigController.getInstance().getProperty(EtfConfigController.ETF_SHOW_SENSITIVEINFORMATION))),
+                    (FileUploadBase.SizeLimitExceededException) exception);
             conv = new ApiError(e, request.getRequestURL().toString(), applicationContext);
             status = e.sc;
         } else {
