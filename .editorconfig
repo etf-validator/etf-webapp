@@ -8,9 +8,18 @@ indent_style = space
 indent_size = 4
 trim_trailing_whitespace = true
 insert_final_newline = true
-max_line_length = 128
+max_line_length = 120
 
 [*.{md,txt}]
 indent_style = space
 indent_size = 4
 trim_trailing_whitespace = false
+max_line_length = 120
+
+[*.scala]
+charset = utf-8
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = 120
