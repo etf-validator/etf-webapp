@@ -216,7 +216,8 @@ public class StdTestObjectTypes {
                     OGC_API_FEATURES_1_TOT.setDetectionExpression(
                             "$.conformsTo[?(@ =~ /http://www.opengis.net/spec/ogcapi---features-1/1.0.*/i )]",
                             ExpressionType.JSONPATH);
-                    // OGC_API_FEATURES_1_TOT.setDetectionExpression("$.conformsTo[?(@ =~ /http://www.opengis.net/spec/ogcapi-features-1/1.0.*/i )]", ExpressionType.JSONPATH);
+                    // OGC_API_FEATURES_1_TOT.setDetectionExpression("$.conformsTo[?(@ =~
+                    // /http://www.opengis.net/spec/ogcapi-features-1/1.0.*/i )]", ExpressionType.JSONPATH);
                     OGC_API_FEATURES_1_TOT.setLabelExpression("$.info.title", ExpressionType.JSONPATH);
                     OGC_API_FEATURES_1_TOT.setDescriptionExpression("$.info.description", ExpressionType.JSONPATH);
                     OGC_API_FEATURES_1_TOT.setUriDetectionExpression("\\/api");

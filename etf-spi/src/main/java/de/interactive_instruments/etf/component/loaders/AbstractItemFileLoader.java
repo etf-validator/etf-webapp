@@ -79,7 +79,7 @@ public abstract class AbstractItemFileLoader<T extends Dto>
         this.resolvedDependencies.add(item);
         // re-lookup required
         final EidHolderMap<? extends Dto> resolvedDeps = this.registry.lookupDependency(
-            this.resolvedDependencies.keySet(), this);
+                this.resolvedDependencies.keySet(), this);
         this.unresolvedDependencies.removeAll(resolvedDeps.keySet());
         this.resolvedDependencies.putAll(resolvedDeps);
     }
@@ -292,18 +292,18 @@ public abstract class AbstractItemFileLoader<T extends Dto>
     public int compareTo(final ItemFileLoaderFactory.FileChangeListener o) {
         final AbstractItemFileLoader<?> otherFileLoader = (AbstractItemFileLoader<?>) o;
         // 0 if objects are identical
-        if(this==o) {
+        if (this == o) {
             return 0;
         }
         // Compare priorities
         final int prioCmp = Integer.compare(this.priority, otherFileLoader.priority);
         if (prioCmp == 0) {
             final int depsCmp = Integer.compare(
-                unresolvedDependencies.size(),
-                otherFileLoader.unresolvedDependencies.size());
-            if(depsCmp!=0) {
+                    unresolvedDependencies.size(),
+                    otherFileLoader.unresolvedDependencies.size());
+            if (depsCmp != 0) {
                 return depsCmp;
-            }else{
+            } else {
                 // Compare target files
                 final int f = this.file.compareTo(otherFileLoader.file);
                 return Integer.compare(f, 0);

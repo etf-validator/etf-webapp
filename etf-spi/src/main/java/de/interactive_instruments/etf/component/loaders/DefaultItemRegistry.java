@@ -337,8 +337,8 @@ public final class DefaultItemRegistry implements ItemRegistry {
 
     SortedSet<EID> unresolvedIds() {
         final SortedSet<EID> unresolvedIds = new TreeSet<>();
-        for(final Map.Entry<EID, DependencyEntry> dep : entries.entrySet()) {
-            if(!dep.getValue().isResolved()) {
+        for (final Map.Entry<EID, DependencyEntry> dep : entries.entrySet()) {
+            if (!dep.getValue().isResolved()) {
                 unresolvedIds.add(dep.getKey());
             }
         }

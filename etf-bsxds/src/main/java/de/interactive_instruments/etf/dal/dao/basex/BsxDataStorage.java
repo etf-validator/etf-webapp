@@ -34,7 +34,6 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 
-import de.interactive_instruments.exceptions.config.InvalidPropertyException;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
@@ -82,6 +81,7 @@ import de.interactive_instruments.etf.model.EID;
 import de.interactive_instruments.etf.model.EidSet;
 import de.interactive_instruments.exceptions.*;
 import de.interactive_instruments.exceptions.config.ConfigurationException;
+import de.interactive_instruments.exceptions.config.InvalidPropertyException;
 import de.interactive_instruments.exceptions.config.MissingPropertyException;
 import de.interactive_instruments.io.MultiFileFilter;
 import de.interactive_instruments.properties.ConfigProperties;
@@ -484,7 +484,7 @@ public final class BsxDataStorage implements BsxDsCtx, DataStorage {
         int maxSize;
         try {
             maxSize = this.configProperties.getPropertyOrDefaultAsInt(
-                ETF_PK_PREFIX+"internal.database.recovery.max", 20);
+                    ETF_PK_PREFIX + "internal.database.recovery.max", 20);
         } catch (InvalidPropertyException e) {
             maxSize = 20;
         }
