@@ -1,0 +1,328 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.model {
+
+        interface OutputFormat [[OutputFormat.html]] {
+            +compareTo(OutputFormat): int
+            {abstract} +getLabel(): String
+            {abstract} +getMediaTypeType(): MediaType
+            {abstract} +streamTo(PropertyHolder, InputStream, OutputStream): void
+        }
+
+        interface EidHolder [[EidHolder.html]] {
+            +compareTo(Object): int
+            {static} +getAllIds(Collection<?>): Set<EID>
+        }
+
+        interface ArgumentObjHolder [[ArgumentObjHolder.html]] {
+        }
+
+        interface ModelItemWithParent<T> [[ModelItemWithParent.html]] {
+            {abstract} +getParent(): T
+        }
+
+        class DefaultEidHolderMap<V> [[DefaultEidHolderMap.html]] {
+            +DefaultEidHolderMap()
+            +DefaultEidHolderMap(Map<EID, V>)
+            +DefaultEidHolderMap(Collection<V>)
+            +DefaultEidHolderMap(V[])
+            +DefaultEidHolderMap(V)
+            +unmodifiable(): EidHolderMap<V>
+            +createCopy(): EidHolderMap<V>
+            +toSet(): EidSet<V>
+            +getAll(Collection<?>): EidHolderMap<V>
+            +add(V): V
+            +addAll(Collection<V>): void
+            {static} +singleton(V): EidHolderMap<V>
+        }
+
+        interface NestedDependencyHolder<T> [[NestedDependencyHolder.html]] {
+        }
+
+        interface ArgumentHolder [[ArgumentHolder.html]] {
+            {abstract} +getArgumentForParameters(String): MutablePropertyHolder
+        }
+
+        interface Disableable [[Disableable.html]] {
+            {abstract} +isDisabled(): boolean
+            {abstract} +setDisabled(boolean): void
+        }
+
+        class ParameterSet [[ParameterSet.html]] {
+            +ParameterSet()
+            +ParameterSet(ParameterSet)
+            +asNameDefaultValuePairs(): Collection<String[]>
+            +getParamTypeName(): String
+            +getParameter(String): Parameterizable.Parameter
+            +addParameter(String, String): void
+            +addParameter(Parameterizable.Parameter): void
+            +isEmpty(): boolean
+        }
+
+        class de.interactive_instruments.etf.model.ParameterSet.MutableParameter [[ParameterSet.MutableParameter.html]] {
+            +MutableParameter()
+            +MutableParameter(Parameterizable.Parameter)
+            +MutableParameter(String, String)
+            +setName(String): void
+            +setDefaultValue(String): void
+            +setDescription(String): void
+            +setAllowedValues(String): void
+            +setType(String): void
+            +setRequired(boolean): void
+            +setExcludingParameter(Set<String>): void
+            +getName(): String
+            +getDefaultValue(): String
+            +getDescription(): String
+            +getAllowedValues(): String
+            +getType(): String
+            +isRequired(): boolean
+            +getExcludingParameter(): Set<String>
+        }
+
+        interface EidHolderWithParent<T> [[EidHolderWithParent.html]] {
+            {static} +getAllIdsAndParentIds(Collection<T>): Set<EID>
+        }
+
+        class DefaultEidMap<V> [[DefaultEidMap.html]] {
+            +DefaultEidMap()
+            +DefaultEidMap(Map<EID, V>)
+            +unmodifiable(): EidMap<V>
+            +createCopy(): EidMap<V>
+            +getAll(Collection<?>): EidMap<V>
+            +removeAll(Collection<?>): void
+            +size(): int
+            +isEmpty(): boolean
+            +_internalContainsKey(Object): boolean
+            +containsValue(Object): boolean
+            +put(EID, V): V
+            +_internalRemove(Object): V
+            +putAll(Map<?, ?>): void
+            +clear(): void
+            +keySet(): Set<EID>
+            +values(): Collection<V>
+            +entrySet(): Set<Map.Entry<EID, V>>
+            +_internalGet(Object): V
+        }
+
+        interface EidMap<V> [[EidMap.html]] {
+            +asCollection(): Collection
+            +asList(): List
+            +get(Object): V
+            +remove(Object): V
+            +containsKey(Object): boolean
+            {abstract} +unmodifiable(): EidMap<V>
+            {abstract} +getAll(Collection<?>): EidMap<V>
+            {abstract} +removeAll(Collection<?>): void
+            {abstract} +_internalGet(Object): V
+            {abstract} +_internalRemove(Object): V
+            {abstract} +_internalContainsKey(Object): boolean
+        }
+
+        enum ExpressionType [[ExpressionType.html]] {
+            {static} +XPATH
+        }
+
+        class DefaultEidSet<V> [[DefaultEidSet.html]] {
+            +DefaultEidSet()
+            +DefaultEidSet(Map<EID, V>)
+            +DefaultEidSet(Collection<V>)
+            +createCopy(): DefaultEidSet<V>
+            +unmodifiable(): EidSet<V>
+            +toMap(): EidMap<V>
+            +toList(): List<V>
+            +internalContains(Object): boolean
+            +internalRemove(Object): boolean
+            +internalContainsAll(Collection<?>): boolean
+            +internalRetainAll(Collection<?>): boolean
+            +internalRemoveAll(Collection<?>): boolean
+            +size(): int
+            +isEmpty(): boolean
+            +iterator(): Iterator<V>
+            +toArray(): Object[]
+            +toArray(T[]): T[]
+            +add(V): boolean
+            +addAll(Collection<?>): boolean
+            +clear(): void
+        }
+
+        interface EGAID [[EGAID.html]] {
+            {static} +EGAID: Pattern
+            {static} +EGAID_WP: Pattern
+            {static} +EGAID_REF: Pattern
+            +getEgaIdRef(): String
+            +compareTo(Object): int
+            {abstract} +getArtifactId(): String
+            {abstract} +getGroupId(): String
+            {abstract} +getEgaId(): String
+        }
+
+        interface EidSet<V> [[EidSet.html]] {
+            +contains(Object): boolean
+            +remove(Object): boolean
+            +containsAll(Collection<?>): boolean
+            +retainAll(Collection<?>): boolean
+            +removeAll(Collection<?>): boolean
+            {abstract} +unmodifiable(): EidSet<V>
+            {abstract} +toMap(): EidMap<V>
+            {abstract} +toList(): List<V>
+            {abstract} +internalContains(Object): boolean
+            {abstract} +internalRemove(Object): boolean
+            {abstract} +internalContainsAll(Collection<?>): boolean
+            {abstract} +internalRetainAll(Collection<?>): boolean
+            {abstract} +internalRemoveAll(Collection<?>): boolean
+        }
+
+        interface ResultStyle [[ResultStyle.html]] {
+            {abstract} +getPriority(): int
+            {abstract} +getResource(): URI
+        }
+
+        interface Parameterizable [[Parameterizable.html]] {
+            {abstract} +getParamTypeName(): String
+            {abstract} +getParameter(String): Parameterizable.Parameter
+        }
+
+        interface de.interactive_instruments.etf.model.Parameterizable.Parameter [[Parameterizable.Parameter.html]] {
+            {abstract} +getName(): String
+            {abstract} +getDefaultValue(): String
+            {abstract} +getDescription(): String
+            {abstract} +getAllowedValues(): String
+            {abstract} +getType(): String
+            {abstract} +isRequired(): boolean
+            {abstract} +getExcludingParameter(): Set<String>
+        }
+
+        interface FlatDependencyHolder<T> [[FlatDependencyHolder.html]] {
+            {abstract} +getDependencies(): Collection<T>
+        }
+
+        interface EgaidHolder [[EgaidHolder.html]] {
+            +getEgaIdAsString(): String
+        }
+
+        interface EID [[EID.html]] {
+            {abstract} +getId(): String
+            {abstract} +toUuid(): UUID
+        }
+
+        interface EidHolderMap<V> [[EidHolderMap.html]] {
+            {abstract} +unmodifiable(): EidHolderMap<V>
+            {abstract} +createCopy(): EidHolderMap<V>
+            {abstract} +toSet(): EidSet<V>
+            {abstract} +add(V): V
+            {abstract} +addAll(Collection<V>): void
+            {abstract} +getAll(Collection<?>): EidHolderMap<V>
+        }
+
+        interface EidFactory [[EidFactory.html]] {
+            {static} +getDefault(): EidFactory
+            {abstract} +createRandomId(): EID
+            {abstract} +createAndPreserveStr(String): EID
+            {abstract} +createUUID(String): EID
+            {abstract} +createAndPreserveUUID(UUID): EID
+            {abstract} +getPattern(): Pattern
+        }
+
+        interface java.lang.Comparable<T> {
+            {abstract} +compareTo(T): int
+        }
+        java.lang.Comparable <|.. OutputFormat
+
+        Parameterizable <|.. OutputFormat
+
+        java.lang.Comparable <|.. EidHolder
+
+        DefaultEidMap <|-- DefaultEidHolderMap
+
+        EidHolderMap <|.. DefaultEidHolderMap
+
+        FlatDependencyHolder <|.. NestedDependencyHolder
+
+        Parameterizable <|.. ParameterSet
+
+        de.interactive_instruments.etf.model.Parameterizable.Parameter <|.. de.interactive_instruments.etf.model.ParameterSet.MutableParameter
+
+        ParameterSet +-- de.interactive_instruments.etf.model.ParameterSet.MutableParameter
+
+        ModelItemWithParent <|.. EidHolderWithParent
+
+        EidHolder <|.. EidHolderWithParent
+
+        EidMap <|.. DefaultEidMap
+
+        interface java.util.Map<K, V> {
+            {abstract} +size(): int
+            {abstract} +isEmpty(): boolean
+            {abstract} +containsKey(Object): boolean
+            {abstract} +containsValue(Object): boolean
+            {abstract} +get(Object): V
+            {abstract} +put(K, V): V
+            {abstract} +remove(Object): V
+            {abstract} +putAll(Map<?, ?>): void
+            {abstract} +clear(): void
+            {abstract} +keySet(): Set<K>
+            {abstract} +values(): Collection<V>
+            {abstract} +entrySet(): Set<Map.Entry<K, V>>
+        }
+        java.util.Map <|.. EidMap
+
+        interface de.interactive_instruments.Copyable<T> {
+            {abstract} +createCopy(): T
+        }
+        de.interactive_instruments.Copyable <|.. EidMap
+
+        EidSet <|.. DefaultEidSet
+
+        interface de.interactive_instruments.Versionable {
+            {abstract} +getVersion(): ImmutableVersion
+        }
+        de.interactive_instruments.Versionable <|.. EGAID
+
+        java.lang.Comparable <|.. EGAID
+
+        interface java.util.Set<E> {
+            {abstract} +size(): int
+            {abstract} +isEmpty(): boolean
+            {abstract} +contains(Object): boolean
+            {abstract} +iterator(): Iterator<E>
+            {abstract} +toArray(): Object[]
+            {abstract} +toArray(T[]): T[]
+            {abstract} +add(E): boolean
+            {abstract} +remove(Object): boolean
+            {abstract} +containsAll(Collection<?>): boolean
+            {abstract} +addAll(Collection<?>): boolean
+            {abstract} +retainAll(Collection<?>): boolean
+            {abstract} +removeAll(Collection<?>): boolean
+            {abstract} +clear(): void
+        }
+        java.util.Set <|.. EidSet
+
+        de.interactive_instruments.Copyable <|.. EidSet
+
+        OutputFormat <|.. ResultStyle
+
+        Parameterizable +-- de.interactive_instruments.etf.model.Parameterizable.Parameter
+
+        de.interactive_instruments.Versionable <|.. EgaidHolder
+
+        java.lang.Comparable <|.. EID
+
+        EidMap <|.. EidHolderMap
+
+        OutputFormat --> EID: id
+
+        EidHolder --> EID: id
+
+        ArgumentObjHolder --> ArgumentHolder: argumentsDto
+
+        ParameterSet --> "*" de.interactive_instruments.etf.model.Parameterizable.Parameter: parameters
+
+        EidHolderWithParent --> "*" EID: idAndParentIds
+
+        Parameterizable --> "*" de.interactive_instruments.etf.model.Parameterizable.Parameter: parameters
+
+        EgaidHolder --> EGAID: egaId
+
+    }
+
+@enduml

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<descriptor type="o-x">
+   <name>de.interactive_instruments.etf.dal.dto.result.TestAssertionResultDto</name>
+   <comment>No children</comment>
+   <class-handle>
+      <type-name>de.interactive_instruments.etf.dal.dto.result.TestAssertionResultDto</type-name>
+   </class-handle>
+   <transactional-policy type="ox">
+      <descriptor-alias>TestAssertionResultDto</descriptor-alias>
+      <refresh-cache-policy/>
+      <caching-policy/>
+      <query-manager type="ox"/>
+      <locking-policy type="ox"/>
+      <primary-key-policy>
+         <primary-keys>
+            <xml-field>@id</xml-field>
+         </primary-keys>
+      </primary-key-policy>
+   </transactional-policy>
+   <mappings>
+      <mapping type="composite-object">
+         <name>arguments</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.TestAssertionResultDto</attribute-declaring-type-name>
+            <attribute-name>arguments</attribute-name>
+         </attribute-handle>
+         <uses-container-accessor>false</uses-container-accessor>
+         <reference-descriptor-handle>
+            <descriptor-name>de.interactive_instruments.etf.dal.dto.Arguments</descriptor-name>
+         </reference-descriptor-handle>
+         <xpath>etf:ArgumentList</xpath>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>duration</name>
+         <inherited>true</inherited>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.ResultModelItemDto</attribute-declaring-type-name>
+            <attribute-name>duration</attribute-name>
+         </attribute-handle>
+         <xml-field>duration/text()</xml-field>
+      </mapping>
+      <mapping type="xml-transformation">
+         <name>id</name>
+         <inherited>true</inherited>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.Dto</attribute-declaring-type-name>
+            <attribute-name>id</attribute-name>
+         </attribute-handle>
+         <attribute-transformer type="class-based">
+            <transformer-class-handle>
+               <type-name>de.interactive_instruments.etf.dal.dao.basex.transformers.EidAttributeTransformer</type-name>
+            </transformer-class-handle>
+         </attribute-transformer>
+         <field-transformer-associations type="xml">
+            <field-transformer type="class-based">
+               <transformer-class-handle>
+                  <type-name>de.interactive_instruments.etf.dal.dao.basex.transformers.EidFieldTransformer</type-name>
+               </transformer-class-handle>
+            </field-transformer>
+            <xml-field>@id</xml-field>
+         </field-transformer-associations>
+         <mutable>true</mutable>
+      </mapping>
+      <mapping type="composite-collection">
+         <name>messages</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.TestAssertionResultDto</attribute-declaring-type-name>
+            <attribute-name>messages</attribute-name>
+         </attribute-handle>
+         <uses-container-accessor>false</uses-container-accessor>
+         <reference-descriptor-handle>
+            <descriptor-name>de.interactive_instruments.etf.dal.dto.translation.TranslationArgumentCollectionDto</descriptor-name>
+         </reference-descriptor-handle>
+         <xpath>messages/message</xpath>
+         <container-policy type="list">
+            <container-class>
+               <uses-default-container-class>true</uses-default-container-class>
+            </container-class>
+         </container-policy>
+      </mapping>
+      <mapping type="xml-object-reference">
+         <name>parent</name>
+         <inherited>true</inherited>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.ModelItemDto</attribute-declaring-type-name>
+            <attribute-name>parent</attribute-name>
+         </attribute-handle>
+         <reference-descriptor-handle>
+            <descriptor-name>de.interactive_instruments.etf.dal.dto.test.TestStepDto</descriptor-name>
+         </reference-descriptor-handle>
+         <xml-field-pairs>
+            <field-pair>
+               <source-xml-field>parent/@ref</source-xml-field>
+               <target-xml-field>@id</target-xml-field>
+            </field-pair>
+         </xml-field-pairs>
+      </mapping>
+      <mapping type="xml-object-reference">
+         <name>resultedFrom</name>
+         <inherited>true</inherited>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.ResultModelItemDto</attribute-declaring-type-name>
+            <attribute-name>resultedFrom</attribute-name>
+         </attribute-handle>
+         <reference-descriptor-handle>
+            <descriptor-name>de.interactive_instruments.etf.dal.dto.test.TestAssertionDto</descriptor-name>
+         </reference-descriptor-handle>
+         <xml-field-pairs>
+            <field-pair>
+               <source-xml-field>resultedFrom/@ref</source-xml-field>
+               <target-xml-field>@id</target-xml-field>
+            </field-pair>
+         </xml-field-pairs>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>resultStatus</name>
+         <inherited>true</inherited>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.ResultModelItemDto</attribute-declaring-type-name>
+            <attribute-name>resultStatus</attribute-name>
+         </attribute-handle>
+         <xml-field>status/text()</xml-field>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>startTimestamp</name>
+         <inherited>true</inherited>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.ResultModelItemDto</attribute-declaring-type-name>
+            <attribute-name>startTimestamp</attribute-name>
+         </attribute-handle>
+         <xml-field>startTimestamp/text()</xml-field>
+      </mapping>
+   </mappings>
+   <inherited-attribute-handles>
+      <attribute-handle>
+         <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.ResultModelItemDto</attribute-declaring-type-name>
+         <attribute-name>children</attribute-name>
+      </attribute-handle>
+      <attribute-handle>
+         <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.ResultModelItemDto</attribute-declaring-type-name>
+         <attribute-name>duration</attribute-name>
+      </attribute-handle>
+      <attribute-handle>
+         <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.Dto</attribute-declaring-type-name>
+         <attribute-name>id</attribute-name>
+      </attribute-handle>
+      <attribute-handle>
+         <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.ModelItemDto</attribute-declaring-type-name>
+         <attribute-name>parent</attribute-name>
+      </attribute-handle>
+      <attribute-handle>
+         <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.ResultModelItemDto</attribute-declaring-type-name>
+         <attribute-name>resultedFrom</attribute-name>
+      </attribute-handle>
+      <attribute-handle>
+         <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.ResultModelItemDto</attribute-declaring-type-name>
+         <attribute-name>resultStatus</attribute-name>
+      </attribute-handle>
+      <attribute-handle>
+         <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.ResultModelItemDto</attribute-declaring-type-name>
+         <attribute-name>startTimestamp</attribute-name>
+      </attribute-handle>
+   </inherited-attribute-handles>
+   <schema-context-handle>
+      <schema>Result Set</schema>
+      <qname-path>
+         <qname component-type="element" namespace-uri="http://www.interactive-instruments.de/etf/2.0" local-name="TestAssertionResult"/>
+      </qname-path>
+   </schema-context-handle>
+   <default-root-element-handle>
+      <schema>Result Set</schema>
+      <qname-path>
+         <qname component-type="element" namespace-uri="http://www.interactive-instruments.de/etf/2.0" local-name="TestAssertionResult"/>
+      </qname-path>
+   </default-root-element-handle>
+   <root-descriptor>true</root-descriptor>
+</descriptor>

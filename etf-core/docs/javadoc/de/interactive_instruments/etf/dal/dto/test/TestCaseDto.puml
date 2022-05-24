@@ -1,0 +1,14 @@
+@startuml
+
+    class TestCaseDto [[TestCaseDto.html]] {
+        +TestCaseDto()
+        +getTestSteps(): List<TestStepDto>
+        +setTestSteps(List<TestStepDto>): void
+        +addTestStep(TestStepDto): void
+        +setDependencies(List<TestCaseDto>): void
+        +addDependency(TestCaseDto): void
+        +getDependencies(): Collection<TestCaseDto>
+        +createCopy(): TestCaseDto
+    }
+
+@enduml

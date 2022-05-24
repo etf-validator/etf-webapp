@@ -1,0 +1,9 @@
+@startuml
+
+    interface DetectedTestObjectType [[DetectedTestObjectType.html]] {
+        {abstract} +enrichAndNormalize(TestObjectDto): void
+        {abstract} +getNormalizedResource(): Resource
+        {abstract} +toTestObjectTypeDto(): TestObjectTypeDto
+    }
+
+@enduml

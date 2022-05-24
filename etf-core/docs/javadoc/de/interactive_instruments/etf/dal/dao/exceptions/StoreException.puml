@@ -1,0 +1,9 @@
+@startuml
+
+    class StoreException [[StoreException.html]] {
+        +StoreException(String)
+        +StoreException(Throwable)
+        +StoreException(String, Throwable)
+    }
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+
+    class TestObjectDto [[TestObjectDto.html]] {
+        +TestObjectDto()
+        +getTestObjectTypes(): List<TestObjectTypeDto>
+        +setTestObjectTypes(List<TestObjectTypeDto>): void
+        +setTestObjectType(TestObjectTypeDto): void
+        +properties(): Properties
+        +properties(Properties): void
+        +getResourceNames(): Set<String>
+        +getResourceCollection(): Collection<ResourceDto>
+        +getResources(): Map<String, ResourceDto>
+        +getResourcesSize(): int
+        +getResourceByName(String): URI
+        +setResources(Map<String, ResourceDto>): void
+        +addResource(ResourceDto): void
+        +addTestObjectType(TestObjectTypeDto): void
+        +ensureBasicValidity(): void
+        +createCopy(): TestObjectDto
+    }
+
+@enduml

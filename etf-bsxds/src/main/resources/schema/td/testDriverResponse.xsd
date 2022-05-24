@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.interactive-instruments.de/etf/2.0"
+           targetNamespace="http://www.interactive-instruments.de/etf/2.0"
+           elementFormDefault="qualified" version="1.0">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en"> testdriverResponse.xsd. Created by Jon Herrmann, (c) 2016-2017
+            interactive instruments GmbH. This file is part of ETF which is licensed under the
+            Apache License Version 2.0 </xs:documentation>
+    </xs:annotation>
+
+    <!-- =============================================================== -->
+    <!-- ================== includes and imports ======================= -->
+    <!-- =============================================================== -->
+    <xs:include schemaLocation="../model/items.xsd"/>
+    <xs:redefine schemaLocation="../basic/basicTypes.xsd">
+        <!-- =============================================================== -->
+        <!-- =============================================================== -->
+        <xs:group name="MetaDataItemGroup">
+            <xs:sequence>
+                <xs:choice>
+                    <xs:element ref="label"/>
+                    <xs:element ref="translatableLabel"/>
+                </xs:choice>
+                <xs:choice minOccurs="0">
+                    <xs:element ref="description"/>
+                    <xs:element ref="translatableDescription"/>
+                </xs:choice>
+                <xs:group ref="MetaDataItemGroup"/>
+            </xs:sequence>
+        </xs:group>
+
+        <!-- =============================================================== -->
+        <xs:complexType name="RefType">
+            <xs:complexContent>
+                <xs:extension base="RefType">
+                    <xs:attribute name="ref" type="xs:string" use="required"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+
+        <!-- =============================================================== -->
+        <xs:group name="RepositoryItemGroup">
+            <xs:sequence>
+                <xs:element name="remoteResource" type="httpUriType" minOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation>The remote Http URI from where the item has been fetched
+                            and will be synchonized by the ETF, e.g. a git URL</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:group ref="RepositoryItemGroup"/>
+            </xs:sequence>
+        </xs:group>
+
+    </xs:redefine>
+    <!-- =============================================================== -->
+
+
+    <xs:element name="TestDriverResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="executableTestSuites" minOccurs="0"/>
+                <xs:element ref="testObjectTypes" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Test object types this test driver
+                            defines</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element ref="translationTemplateBundles" minOccurs="0"/>
+                <xs:element ref="testTaskResults" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

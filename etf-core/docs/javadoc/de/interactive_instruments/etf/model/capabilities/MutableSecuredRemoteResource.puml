@@ -1,0 +1,8 @@
+@startuml
+
+    class MutableSecuredRemoteResource [[MutableSecuredRemoteResource.html]] {
+        +setQueyParameters(Map<String, String>): boolean
+        +createCopy(): MutableSecuredRemoteResource
+    }
+
+@enduml

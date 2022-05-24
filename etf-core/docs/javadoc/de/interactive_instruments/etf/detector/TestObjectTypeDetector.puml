@@ -1,0 +1,11 @@
+@startuml
+
+    interface TestObjectTypeDetector [[TestObjectTypeDetector.html]] {
+        +detectType(Resource): DetectedTestObjectType
+        +getPriority(): int
+        +compareTo(TestObjectTypeDetector): int
+        {abstract} +detectType(Resource, Set<EID>): DetectedTestObjectType
+        {abstract} +supportedTestObjectTypes(): EidMap<TestObjectTypeDto>
+    }
+
+@enduml

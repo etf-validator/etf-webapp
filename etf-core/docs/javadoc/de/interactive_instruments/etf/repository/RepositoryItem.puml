@@ -1,0 +1,10 @@
+@startuml
+
+    interface RepositoryItem [[RepositoryItem.html]] {
+        +compareTo(Object): int
+        {abstract} +getLastModifiedDate(): Date
+        {abstract} +getItemHash(): byte[]
+        {abstract} +getUri(): URI
+    }
+
+@enduml

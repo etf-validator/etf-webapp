@@ -1,0 +1,13 @@
+@startuml
+
+    class TranslationTemplateBundleDto [[TranslationTemplateBundleDto.html]] {
+        +TranslationTemplateBundleDto()
+        +addTranslationTemplates(Collection<TranslationTemplateDto>): void
+        +getTranslationTemplateCollection(String): LangTranslationTemplateCollectionDto
+        +getTranslationTemplate(String, String): TranslationTemplateDto
+        +getSource(): URI
+        +setSource(URI): void
+        +createCopy(): TranslationTemplateBundleDto
+    }
+
+@enduml

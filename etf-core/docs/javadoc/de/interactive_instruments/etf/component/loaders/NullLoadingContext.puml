@@ -1,0 +1,9 @@
+@startuml
+
+    class NullLoadingContext [[NullLoadingContext.html]] {
+        {static} +instance(): NullLoadingContext
+        +getItemRegistry(): ItemRegistry
+        +getItemFileObserverRegistry(): ItemFileObserverRegistry
+    }
+
+@enduml

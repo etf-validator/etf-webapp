@@ -1,0 +1,12 @@
+@startuml
+
+    abstract class Dto [[Dto.html]] {
+        #id: EID
+        +getId(): EID
+        +setId(EID): void
+        +getTypeName(): String
+        +getDescriptiveLabel(): String
+        +ensureBasicValidity(): void
+    }
+
+@enduml

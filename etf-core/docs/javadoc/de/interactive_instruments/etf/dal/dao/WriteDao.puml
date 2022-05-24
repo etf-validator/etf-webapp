@@ -1,0 +1,18 @@
+@startuml
+
+    interface WriteDao<T> [[WriteDao.html]] {
+        +update(T): T
+        +replace(T): void
+        +deleteAllExisting(Set<EID>): void
+        {abstract} +add(T): void
+        {abstract} +addAll(Collection<T>): void
+        {abstract} +update(T, EID): T
+        {abstract} +replace(T, EID): void
+        {abstract} +updateAll(Collection<T>): Collection<T>
+        {abstract} +delete(EID): void
+        {abstract} +deleteAll(Set<EID>): void
+        {abstract} +registerListener(WriteDaoListener): void
+        {abstract} +deregisterListener(WriteDaoListener): void
+    }
+
+@enduml

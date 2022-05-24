@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.interactive-instruments.de/etf/2.0"
+    targetNamespace="http://www.interactive-instruments.de/etf/2.0" elementFormDefault="qualified"
+    xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0" version="1.0">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en"> test.xsd. Created by Jon Herrmann, (c) 2016-2017
+            interactive instruments GmbH. This file is part of ETF which is licensed under the
+            Apache License Version 2.0 </xs:documentation>
+    </xs:annotation>
+    <!-- =============================================================== -->
+    <!-- ================== includes and imports ======================= -->
+    <!-- =============================================================== -->
+    <xs:include schemaLocation="../basic/basicTypes.xsd"/>
+    <!-- =============================================================== -->
+
+    <!-- =============================================================== -->
+    <xs:element name="ExecutableTestSuite">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="RepositoryItemGroup"/>
+                <xs:element ref="Properties" minOccurs="0"/>
+                <xs:element name="testDriver" type="RefType" minOccurs="0"/>
+                <xs:element name="translationTemplateBundle" type="RefType" minOccurs="0"/>
+                <xs:element ref="ParameterList" minOccurs="0"/>
+                <xs:element name="supportedTestObjectTypes">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <!--xs:element name="testObjectType">
+                                Error: The xsi:type is not validly derived from the declared type. The requested type loc is not validly derived from the declared type of element testObjectType
+                                <xs:complexType>
+                                    <xs:complexContent>
+                                        <xs:extension base="RefType">
+                                            <xs:attribute name="max" type="xs:positiveInteger">
+                                                <xs:annotation>
+                                                  <xs:documentation> Default: 1. The maximum number
+                                                  of Test Objects of this Test Object Type that can
+                                                  be processed in parallel by this Executable Test
+                                                  Suite. A Executable Test Suite for example, that
+                                                  can compare 2 or more Test Objects need to set a
+                                                  value greater than 1.</xs:documentation>
+                                                </xs:annotation>
+                                            </xs:attribute>
+                                        </xs:extension>
+                                    </xs:complexContent>
+                                </xs:complexType>
+                            </xs:element-->
+                            <xs:element name="testObjectType" type="RefType"/>
+                        </xs:sequence>
+                        <xs:attribute name="max" type="xs:positiveInteger">
+                            <xs:annotation>
+                                <xs:documentation> Default: 1. The maximum number of Test Objects
+                                    this Executable Test Suite can process in parallel. An
+                                    Executable Test Suite for example, that can compare 2 or more
+                                    Test Objects need to set a value greater than
+                                    1.</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="dependencies" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element name="executableTestSuite" type="RefType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="consumableResultObjectTypes" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>If the executable test suite depends on another executable
+                            test suite, it can consume test objects that are temporary, indirectly
+                            created through the other executable test suite during a test
+                            run</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element name="testObjectType" type="RefType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="parameterizedTestCases" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element ref="ParameterizedTestCase"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="testModules" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element ref="TestModule"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="GroupAndArtifactIdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestModule">
+        <xs:annotation>
+            <xs:documentation> Test Cases are ordered into a Test Module. There are different terms
+                for this concept in multiple Tools, TestNG for example uses the term "groups",
+                SoapUI uses "Test Suites". </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                <xs:group ref="MetaDataItemGroup"/>
+                <xs:element ref="Properties" minOccurs="0"/>
+                <xs:element name="testCases">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element ref="TestCase"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestCase">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="MetaDataItemGroup"/>
+                <xs:element ref="Properties" minOccurs="0"/>
+                <xs:element name="dependencies" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element name="testCase" type="RefType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="testSteps" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element ref="TestStep"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+            <xs:attribute name="deselectable" type="xs:boolean" default="true">
+                <xs:annotation>
+                    <xs:documentation> If set to "true" the Test Case can be deselected by the user
+                        and must be skipped by the test driver. Otherwise, it can't be deselected.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="ParameterizedTestCase">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="RepositoryItemGroup"/>
+                <xs:element ref="ParameterList"/>
+                <xs:element name="testSteps">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element ref="TestStep"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestItemType">
+        <xs:annotation>
+            <xs:appinfo>
+                <etfAppinfo:cacheStrategy>permanent</etfAppinfo:cacheStrategy>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="MetaDataItemGroup"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestStep">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="MetaDataItemGroup"/>
+                <xs:element ref="Properties" minOccurs="0"/>
+                <xs:element name="statementForExecution" type="stringWithTokens">
+                    <xs:annotation>
+                        <xs:documentation>Tokens are resolved with argumentsDto from test case or
+                            test project</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="testItemType" type="RefType">
+                    <xs:annotation>
+                        <xs:documentation>Test step type</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="testAssertions" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:choice>
+                                <xs:element name="testAssertionRef" type="RefType"/>
+                                <xs:element ref="TestAssertion"/>
+                            </xs:choice>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestAssertion">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="MetaDataItemGroup"/>
+                <xs:element ref="Properties" minOccurs="0"/>
+                <xs:element name="expectedResult" type="stringWithTokens">
+                    <xs:annotation>
+                        <xs:documentation>Tokens are resolved with argumentsDto from test case or
+                            test project</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="expression" type="stringWithTokens">
+                    <xs:annotation>
+                        <xs:documentation>Tokens are resolved with argumentsDto from test case or
+                            test project</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="testItemType" type="RefType">
+                    <xs:annotation>
+                        <xs:documentation>Assertion type</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="translationTemplates" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element name="translationTemplate" type="RefType">
+                                <xs:annotation>
+                                    <xs:documentation>References a LangTranslationTemplateCollection
+                                        by its name</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="ParameterizedTestAssertion">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="RepositoryItemGroup"/>
+                <xs:element ref="ParameterList" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Optional parameterSet used to resolve
+                            tokens</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="expectedResult" type="stringWithTokens">
+                    <xs:annotation>
+                        <xs:documentation>Tokens are resolved with argumentsDto from test case or
+                            test project</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="expression" type="stringWithTokens">
+                    <xs:annotation>
+                        <xs:documentation>Tokens are resolved with argumentsDto from test case or
+                            test project</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="testItemType" type="RefType">
+                    <xs:annotation>
+                        <xs:documentation>Assertion type</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="translationTemplates" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element name="translationTemplate" type="RefType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

@@ -1,0 +1,19 @@
+@startuml
+
+    class TestAssertionDto [[TestAssertionDto.html]] {
+        +TestAssertionDto()
+        +getExpectedResult(): String
+        +setExpectedResult(String): void
+        +getExpression(): String
+        +setExpression(String): void
+        +getType(): TestItemTypeDto
+        +setType(TestItemTypeDto): void
+        +getTranslationTemplates(): List<LangTranslationTemplateCollectionDto>
+        +setTranslationTemplates(List<LangTranslationTemplateCollectionDto>): void
+        +addTranslationTemplate(LangTranslationTemplateCollectionDto): void
+        +addTranslationTemplateWithName(String): void
+        +toString(): String
+        +createCopy(): TestAssertionDto
+    }
+
+@enduml

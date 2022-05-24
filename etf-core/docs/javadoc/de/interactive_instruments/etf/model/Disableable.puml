@@ -1,0 +1,8 @@
+@startuml
+
+    interface Disableable [[Disableable.html]] {
+        {abstract} +isDisabled(): boolean
+        {abstract} +setDisabled(boolean): void
+    }
+
+@enduml

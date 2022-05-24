@@ -1,0 +1,10 @@
+@startuml
+
+    interface TestTaskResultPersistor [[TestTaskResultPersistor.html]] {
+        {abstract} +getResultCollector(): TestResultCollector
+        {abstract} +streamResult(InputStream): void
+        {abstract} +setResult(TestTaskResultDto): void
+        {abstract} +resultPersisted(): boolean
+    }
+
+@enduml

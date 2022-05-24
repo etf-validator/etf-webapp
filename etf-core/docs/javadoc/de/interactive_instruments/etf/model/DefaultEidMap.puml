@@ -1,0 +1,24 @@
+@startuml
+
+    class DefaultEidMap<V> [[DefaultEidMap.html]] {
+        +DefaultEidMap()
+        +DefaultEidMap(Map<EID, V>)
+        +unmodifiable(): EidMap<V>
+        +createCopy(): EidMap<V>
+        +getAll(Collection<?>): EidMap<V>
+        +removeAll(Collection<?>): void
+        +size(): int
+        +isEmpty(): boolean
+        +_internalContainsKey(Object): boolean
+        +containsValue(Object): boolean
+        +put(EID, V): V
+        +_internalRemove(Object): V
+        +putAll(Map<?, ?>): void
+        +clear(): void
+        +keySet(): Set<EID>
+        +values(): Collection<V>
+        +entrySet(): Set<Map.Entry<EID, V>>
+        +_internalGet(Object): V
+    }
+
+@enduml

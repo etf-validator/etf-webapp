@@ -1,0 +1,25 @@
+@startuml
+
+    abstract class ResultModelItemDto [[ResultModelItemDto.html]] {
+        #resultStatus: String
+        #startTimestamp: Date
+        #duration: long
+        #resultedFrom: MetaDataItemDto
+        #children: EidMap<ResultModelItemDto>
+        #ResultModelItemDto()
+        #ResultModelItemDto(ResultModelItemDto)
+        +getResultStatus(): TestResultStatus
+        +setResultStatus(TestResultStatus): void
+        +getStartTimestamp(): Date
+        +setStartTimestamp(Date): void
+        +getDuration(): long
+        +setDuration(long): void
+        +getResultedFrom(): MetaDataItemDto
+        +setResultedFrom(MetaDataItemDto): void
+        +getChildren(): List<?>
+        +getChildrenAsMap(): EidMap<?>
+        +addChild(ResultModelItemDto): void
+        +setChildren(List<?>): void
+    }
+
+@enduml

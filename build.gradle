@@ -48,19 +48,13 @@ allprojects {
         }
     }
 
-	if (project.name.startsWith("etf-neotl")) {
-		// project.tasks.release.mustRunAfter(project.tasks.getByPath(':service-test-library'))
-		// project.tasks.release.mustRunAfter(project.tasks.getByPath(':test-driver'))
-		// project.tasks.release.mustRunAfter(project.tasks.getByPath(':test-lang'))
-	}else{
-		task preTagCommit(overwrite: true) {}
-		task createReleaseTag(overwrite: true) {}
-		task updateVersion(overwrite: true) {}
-		task commitNewVersion(overwrite: true) {}
-		task unSnapshotVersion(overwrite: true) {}
-		task updateVersion(overwrite: true) {}
-		task commitNewVersion(overwrite: true) {}
-	}
+    task preTagCommit(overwrite: true) {}
+    task createReleaseTag(overwrite: true) {}
+    task updateVersion(overwrite: true) {}
+    task commitNewVersion(overwrite: true) {}
+    task unSnapshotVersion(overwrite: true) {}
+    task updateVersion(overwrite: true) {}
+    task commitNewVersion(overwrite: true) {}
 }
 
 subprojects {
@@ -74,6 +68,7 @@ subprojects {
             implementation('javax.activation:activation:1.1')
             implementation('org.glassfish.jaxb:jaxb-runtime:2.3.6')
         }
+        
 		implementation group: 'de.interactive_instruments', name: 'ii-commons-util', version: '4.0.1' + project.snapshotSuffix
 
         testImplementation group: 'org.slf4j', name: 'slf4j-api', version: etf_slf4jApiVersion

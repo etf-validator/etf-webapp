@@ -1,0 +1,11 @@
+@startuml
+
+    abstract class ModelItemDto<T> [[ModelItemDto.html]] {
+        #parent: T
+        +ModelItemDto()
+        +ModelItemDto(ModelItemDto<T>)
+        +getParent(): T
+        +setParent(T): void
+    }
+
+@enduml

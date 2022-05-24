@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.interactive-instruments.de/etf/2.0"
+           targetNamespace="http://www.interactive-instruments.de/etf/2.0"
+           elementFormDefault="qualified"
+           version="1.0">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en"> report.xsd. Created by Jon Herrmann, (c) 2016-2017
+            interactive instruments GmbH. This file is part of ETF which is licensed under the
+            Apache License Version 2.0 </xs:documentation>
+    </xs:annotation>
+
+    <!-- =============================================================== -->
+    <!-- ================== includes and imports ======================= -->
+    <!-- =============================================================== -->
+    <xs:include schemaLocation="../basic/basicTypes.xsd"/>
+    <!-- =============================================================== -->
+
+    <!-- =============================================================== -->
+    <xs:element name="StatisticalReportTable">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="type" type="RefType"/>
+                <xs:element name="entries" minOccurs="1" maxOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element name="entry" type="ValueListType">
+                                <xs:annotation>
+                                    <xs:documentation>Values are seperated with a semicolon and an
+                                        additional whitespace!</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="ValueListType">
+        <xs:annotation>
+            <xs:documentation>Values are seperated with a semicolon and an additional
+                whitespace!</xs:documentation>
+        </xs:annotation>
+        <xs:list itemType="xs:string"/>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:element name="StatisticalReportTableType">
+        <xs:annotation>
+            <xs:documentation>Describes the structure of a praticular Statistical Report Table
+                type</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="RepositoryItemGroup"/>
+                <xs:element name="columnHeaderLabels" minOccurs="1" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation>Header labels for each column</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element name="label" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="rowExpressions" minOccurs="1" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation>Expressions that were used to collect data for each entry
+                            in a row</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element name="expression" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

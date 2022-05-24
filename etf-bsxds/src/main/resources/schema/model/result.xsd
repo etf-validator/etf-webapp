@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.interactive-instruments.de/etf/2.0"
+           targetNamespace="http://www.interactive-instruments.de/etf/2.0"
+           elementFormDefault="qualified"
+           version="1.0">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en"> result.xsd. Created by Jon Herrmann, (c) 2016-2017
+            interactive instruments GmbH. This file is part of ETF which is licensed under the
+            Apache License Version 2.0 </xs:documentation>
+    </xs:annotation>
+    <!-- =============================================================== -->
+    <!-- ================== includes and imports ======================= -->
+    <!-- =============================================================== -->
+    <xs:include schemaLocation="../basic/basicTypes.xsd"/>
+    <!-- =============================================================== -->
+
+    <!-- =============================================================== -->
+    <xs:group name="ResultModelItemGroup">
+        <xs:sequence>
+            <xs:group ref="ModelItemGroup"/>
+            <xs:element name="resultedFrom" type="RefType">
+                <xs:annotation>
+                    <xs:documentation>Test model item reference</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="startTimestamp" type="xs:dateTime"/>
+            <xs:element name="duration" type="xs:unsignedLong"/>
+            <xs:element name="status" type="TestResultStatusType"/>
+        </xs:sequence>
+    </xs:group>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestTaskResult">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="testObject" type="RefType"/>
+                <xs:element name="testModuleResults" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element ref="TestModuleResult"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="errorMessage" type="xs:string"  minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation> A low level error from which the test driver could not
+                            recover and which led to the termination of the tests. No result
+                            information could be gather and it is unknown whether the Test Object is
+                            valid or not.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="attachments">
+                    <xs:annotation>
+                        <xs:documentation>Contains at least one log file</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="Attachment" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:group ref="ResultModelItemGroup"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="Attachment">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="label" type="xs:string" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation> Optional label for this attachment </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="encoding" type="xs:string" default="UTF-8">
+                    <xs:annotation>
+                        <xs:documentation> Mandatory encoding, default: UTF-8 </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="mimeType" type="MimeType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation> Optional mimeType </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:choice>
+                    <xs:element name="referencedData">
+                        <xs:annotation>
+                            <xs:documentation> A reference to the stored data </xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                            <xs:attribute name="href" type="ExternalUriType" use="required"/>
+                            <xs:attribute name="size" type="xs:nonNegativeInteger">
+                                <xs:annotation>
+                                    <xs:documentation> Size in bytes </xs:documentation>
+                                </xs:annotation>
+                            </xs:attribute>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="embeddedData" type="xs:base64Binary">
+                        <xs:annotation>
+                            <xs:documentation> Embedded data, bas64 encoded </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string" use="optional">
+                <xs:annotation>
+                    <xs:documentation>Optional type to describe the kind of
+                        attachment</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestModuleResult">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="testCaseResults">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element ref="TestCaseResult"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:group ref="ResultModelItemGroup"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestCaseResult">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ArgumentList" minOccurs="0"/>
+                <xs:element name="testStepResults">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                            <xs:element ref="TestStepResult"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:group ref="ResultModelItemGroup"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestStepResult">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="invokedTests" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation> A Test Step may invoke other Test Steps and Test Cases at
+                            test runtime. The control flow depends on the Test Object and can not be
+                            reflected in the Executable Test Suite structure. </xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:choice>
+                            <xs:sequence>
+                                <xs:element ref="TestCaseResult" maxOccurs="unbounded"/>
+                                <xs:element ref="TestStepResult" minOccurs="0" maxOccurs="unbounded"
+                                />
+                            </xs:sequence>
+                            <xs:element ref="TestStepResult" minOccurs="1" maxOccurs="unbounded"/>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="testAssertionResults" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element ref="TestAssertionResult"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="messages" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element name="message" type="TranslationTemplateArgumentType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="attachments" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="attachment" type="RefType" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:group ref="ResultModelItemGroup"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestAssertionResult">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="ArgumentList" minOccurs="0"/>
+                <xs:element name="messages" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element name="message" type="TranslationTemplateArgumentType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:group ref="ResultModelItemGroup"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

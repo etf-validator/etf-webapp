@@ -1,0 +1,90 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.component.loaders {
+
+        interface ItemRegistry [[ItemRegistry.html]] {
+            {abstract} +register(Collection<?>): void
+            {abstract} +deregister(Collection<?>): void
+            {abstract} +update(Collection<?>): void
+            {abstract} +lookupDependency(Collection<EID>, ItemRegistry.DependencyChangeListener): EidHolderMap<?>
+            {abstract} +deregisterCallback(ItemRegistry.DependencyChangeListener): void
+            {abstract} +lookup(Collection<EID>): EidHolderMap<?>
+        }
+
+        interface de.interactive_instruments.etf.component.loaders.ItemRegistry.DependencyChangeListener [[ItemRegistry.DependencyChangeListener.html]] {
+            {abstract} +fireEventDependencyResolved(Dto): void
+            {abstract} +fireEventDependencyDeregistered(Class<?>, EID): void
+            {abstract} +fireEventDependencyUpdated(Dto): void
+        }
+
+        interface ItemFileObserverRegistry [[ItemFileObserverRegistry.html]] {
+            {abstract} +register(Path, List<?>): void
+            {abstract} +deregister(List<?>): void
+        }
+
+        interface LoadingContext [[LoadingContext.html]] {
+        }
+
+        class NullItemRegistry [[NullItemRegistry.html]] {
+            {static} +instance(): ItemRegistry
+            +register(Collection<?>): void
+            +deregister(Collection<?>): void
+            +deregisterCallback(ItemRegistry.DependencyChangeListener): void
+            +update(Collection<?>): void
+            +lookupDependency(Collection<EID>, ItemRegistry.DependencyChangeListener): EidHolderMap<?>
+            +lookup(Collection<EID>): EidHolderMap<?>
+        }
+
+        class NullItemFileObserverRegistry [[NullItemFileObserverRegistry.html]] {
+            {static} +instance(): NullItemFileObserverRegistry
+            +register(Path, List<?>): void
+            +deregister(List<?>): void
+        }
+
+        interface ItemFileLoaderFactory [[ItemFileLoaderFactory.html]] {
+            +getPriority(): int
+            {abstract} +couldHandle(Path): boolean
+            {abstract} +load(Path): ItemFileLoaderFactory.FileChangeListener
+        }
+
+        interface de.interactive_instruments.etf.component.loaders.ItemFileLoaderFactory.FileChangeListener [[ItemFileLoaderFactory.FileChangeListener.html]] {
+            {abstract} +eventFileCreated(): void
+            {abstract} +eventFileDeleted(): void
+            {abstract} +eventFileUpdated(): void
+        }
+
+        class NullLoadingContext [[NullLoadingContext.html]] {
+            {static} +instance(): NullLoadingContext
+        }
+
+        ItemRegistry +-- de.interactive_instruments.etf.component.loaders.ItemRegistry.DependencyChangeListener
+
+        ItemRegistry <|.. NullItemRegistry
+
+        ItemFileObserverRegistry <|.. NullItemFileObserverRegistry
+
+        interface de.interactive_instruments.Releasable {
+            {abstract} +release(): void
+        }
+        de.interactive_instruments.Releasable <|.. de.interactive_instruments.etf.component.loaders.ItemFileLoaderFactory.FileChangeListener
+
+        interface java.lang.Comparable<T> {
+            {abstract} +compareTo(T): int
+        }
+        java.lang.Comparable <|.. de.interactive_instruments.etf.component.loaders.ItemFileLoaderFactory.FileChangeListener
+
+        ItemFileLoaderFactory +-- de.interactive_instruments.etf.component.loaders.ItemFileLoaderFactory.FileChangeListener
+
+        LoadingContext <|.. NullLoadingContext
+
+        LoadingContext --> ItemRegistry: itemRegistry
+
+        LoadingContext --> ItemFileObserverRegistry: itemFileObserverRegistry
+
+        NullLoadingContext --> ItemRegistry: itemRegistry
+
+        NullLoadingContext --> ItemFileObserverRegistry: itemFileObserverRegistry
+
+    }
+
+@enduml

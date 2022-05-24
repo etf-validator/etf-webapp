@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etf:DsResultSet xmlns="http://www.interactive-instruments.de/etf/2.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:etf="http://www.interactive-instruments.de/etf/2.0"
+                 xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 http://resources.etf-validator.net/schema/v2/model/resultSet.xsd">
+    <etf:testObjects>
+        <etf:TestObject id="EID00000000000002279">
+            <etf:itemHash>69667370836969767567778270848886727868787785816876708268878771858878808176666770</etf:itemHash>
+            <remoteResource>http://notset</remoteResource>
+            <localPath>/auto</localPath>
+            <etf:label>TESTOBJECT.LABEL.1</etf:label>
+            <etf:description>TESTOBJECT.DESCRIPTION.1</etf:description>
+            <etf:reference>TESTOBJECT.REFERENCE.1</etf:reference>
+            <etf:version>1.0.0</etf:version>
+            <etf:author>TESTOBJECT.AUTHOR.1</etf:author>
+            <etf:creationDate>2017-02-18T14:17:06</etf:creationDate>
+            <etf:lastEditor>TESTOBJECT.LAST_EDITOR.1</etf:lastEditor>
+            <etf:lastUpdateDate>2017-02-06T14:17:06</etf:lastUpdateDate>
+            <etf:disabled>false</etf:disabled>
+            <etf:testObjectTypes>
+                <etf:testObjectType ref="EIDd700c137-5d0f-3444-bd74-4616f80c332a"/>
+                <etf:testObjectType ref="EIDded9bf42-be99-3cf0-892d-a735b0dcc6f9"/>
+            </etf:testObjectTypes>
+            <etf:ResourceCollection>
+                <resource name="Resource.00126" href="http://nowhere.com/00126"/>
+                <resource name="Resource.001267" href="http://nowhere.com/001267"/>
+            </etf:ResourceCollection>
+        </etf:TestObject>
+        <etf:TestObject id="EID0000000000000002282">
+            <etf:itemHash>69667370836969767567778270848886727868787785816876708268878771858878808176666770</etf:itemHash>
+            <remoteResource>http://notset</remoteResource>
+            <localPath>/auto</localPath>
+            <etf:label>TESTOBJECT.LABEL.2</etf:label>
+            <etf:description>TESTOBJECT.DESCRIPTION.2</etf:description>
+            <etf:reference>TESTOBJECT.REFERENCE.2</etf:reference>
+            <etf:replacedBy ref="EID0000000000000002283"/>
+            <etf:version>1.0.0</etf:version>
+            <etf:author>TESTOBJECT.AUTHOR.2</etf:author>
+            <etf:creationDate>2018-03-27T14:17:06</etf:creationDate>
+            <etf:lastEditor>TESTOBJECT.LAST_EDITOR.2</etf:lastEditor>
+            <etf:lastUpdateDate>2017-08-12T14:17:06</etf:lastUpdateDate>
+            <etf:disabled>false</etf:disabled>
+            <etf:testObjectTypes>
+                <etf:testObjectType ref="EIDd700c137-5d0f-3444-bd74-4616f80c332a"/>
+            </etf:testObjectTypes>
+            <etf:ResourceCollection>
+                <resource name="Resource.00126" href="http://nowhere.com/00126"/>
+            </etf:ResourceCollection>
+        </etf:TestObject>
+        <etf:TestObject id="EID0000000000000002283">
+            <etf:itemHash>69667370836969767567778270848886727868787785816876708268878771858878808176666770</etf:itemHash>
+            <remoteResource>http://notset</remoteResource>
+            <localPath>/auto</localPath>
+            <etf:label>TESTOBJECT.LABEL.2</etf:label>
+            <etf:description>TESTOBJECT.DESCRIPTION.2</etf:description>
+            <etf:reference>TESTOBJECT.REFERENCE.3</etf:reference>
+            <etf:version>1.0.1</etf:version>
+            <etf:author>TESTOBJECT.AUTHOR.3</etf:author>
+            <etf:creationDate>2018-03-27T14:17:06</etf:creationDate>
+            <etf:lastEditor>TESTOBJECT.LAST_EDITOR.2</etf:lastEditor>
+            <etf:lastUpdateDate>2017-08-12T14:17:06</etf:lastUpdateDate>
+            <etf:disabled>false</etf:disabled>
+            <etf:testObjectTypes>
+                <etf:testObjectType ref="EIDd700c137-5d0f-3444-bd74-4616f80c332a"/>
+            </etf:testObjectTypes>
+            <etf:ResourceCollection>
+                <resource name="Resource.00126" href="http://nowhere.com/00126"/>
+                <resource name="Resource.0012" href="http://nowhere.com/0012"/>
+                <resource name="Resource.001267" href="http://nowhere.com/001267"/>
+            </etf:ResourceCollection>
+        </etf:TestObject>
+    </etf:testObjects>
+    <etf:testObjectTypes>
+        <etf:TestObjectType id="EIDd700c137-5d0f-3444-bd74-4616f80c332a">
+            <label>TestObjectTypeDto.00001.label</label>
+            <description>TestObjectTypeDto.00001.description</description>
+        </etf:TestObjectType>
+        <etf:TestObjectType id="EIDded9bf42-be99-3cf0-892d-a735b0dcc6f9">
+            <label>TestObjectTypeDto.3.label</label>
+            <description>TestObjectTypeDto.3.description</description>
+        </etf:TestObjectType>
+    </etf:testObjectTypes>
+</etf:DsResultSet>

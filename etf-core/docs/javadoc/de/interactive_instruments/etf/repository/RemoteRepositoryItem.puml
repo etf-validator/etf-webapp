@@ -1,0 +1,10 @@
+@startuml
+
+    interface RemoteRepositoryItem [[RemoteRepositoryItem.html]] {
+        {abstract} +makeAvailable(Path): IFile
+        {abstract} +getLocal(): IFile
+        {abstract} +isAvailable(): boolean
+        {abstract} +remove(): void
+    }
+
+@enduml

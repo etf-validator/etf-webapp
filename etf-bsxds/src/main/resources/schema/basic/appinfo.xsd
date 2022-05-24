@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.interactive-instruments.de/etf/2.0"
+           targetNamespace="http://www.interactive-instruments.de/etf/appinfo/1.0"
+           elementFormDefault="qualified" version="1.0">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en"> appinfo.xsd. Created by Jon Herrmann, (c) 2016-2017
+            interactive instruments GmbH. This file is part of ETF which is licensed under the
+            Apache License Version 2.0 </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="cacheStrategy">
+        <xs:annotation>
+            <xs:documentation> 'permanent' indicates that an item is added to a cache during the
+                initialization phase and will not be automatically evicted from it until it is
+                updated by the managing object </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="evictable"/>
+                <xs:enumeration value="permanent"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+
+    <xs:element name="replaceableByExternalRef" type="xs:boolean">
+        <xs:annotation>
+            <xs:documentation> 'True' indicates that an item ID, which is not found in the result
+                set and not found in the cache, will be added as lazy reference object which queries
+                the object from the data storage on-demand </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+</xs:schema>

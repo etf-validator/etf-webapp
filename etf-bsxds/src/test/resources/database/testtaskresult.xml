@@ -1,0 +1,128 @@
+
+    <TestTaskResult id="a52a1ec0-b1d4-4f99-bbb2-1cae9f05b977" xmlns="http://www.interactive-instruments.de/etf/2.0" id="EID70a263c0-0ad7-42f2-9d4d-0d8a4ca71b52" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 schema/basic/basicTypes.xsd">
+        <parent ref="bebdea42-0229-4b31-aba4-7176051a2cd7"/>
+        <status>PASSED_MANUAL</status>
+        <startTimestamp>2016-08-24T01:01:38.033+02:00</startTimestamp>
+        <duration>0</duration>
+        <resultedFrom ref="EIDd0b58f38-98ae-43a8-a787-9a5084c60267"/>
+        <testObject ref="8d7730c8-eba2-4ae7-b089-ff1d45269754"/>
+        <attachements>
+            <Attachment type="LogFile">
+                <label>Log file</label>
+                <encoding>UTF-8</encoding>
+                <mimeType>text/plain</mimeType>
+                <referencedData href="file:///Users/herrmann/Projects/etf-local/env1/ds/attachments/7ad23de6-0910-489e-a730-91af1f089af6/tmp/a52a1ec0-b1d4-4f99-bbb2-1cae9f05b977-log.txt"/>
+            </Attachment>
+            <Attachment type="Query">
+                <label>XQuery executed against the dataset</label>
+                <encoding>UTF-8</encoding>
+                <mimeType>text/plain</mimeType>
+                <referencedData href="file:///Users/herrmann/Projects/etf-local/env1/ds/attachments/7ad23de6-0910-489e-a730-91af1f089af6/tmp/a52a1ec0-b1d4-4f99-bbb2-1cae9f05b977-query.xq"/>
+            </Attachment>
+        </attachements>
+        <testModuleResults>
+            <TestModuleResult id="803b9e3d-2fc0-4a5f-b1d4-527fa90f744d">
+                <parent ref="EIDd0b58f38-98ae-43a8-a787-9a5084c60267"/>
+                <status>PASSED_MANUAL</status>
+                <startTimestamp>2016-08-24T01:01:38.033+02:00</startTimestamp>
+                <duration>0</duration>
+                <resultedFrom ref="EIDfb360edf-6f61-4243-a839-9cc7e74015bb"/>
+                <testCaseResults>
+                    <TestCaseResult id="f3aae778-7a79-48b3-b137-c586fc4f3111">
+                        <parent ref="EIDfb360edf-6f61-4243-a839-9cc7e74015bb"/>
+                        <status>PASSED_MANUAL</status>
+                        <startTimestamp>2016-08-24T01:01:38.033+02:00</startTimestamp>
+                        <duration>0</duration>
+                        <resultedFrom ref="EIDee7a970a-be6c-4554-9693-1f86b0cf6a62"/>
+                        <testStepResults>
+                            <TestStepResult id="eb779a5c-c1cb-4c79-b570-5a06cf91ec48">
+                                <parent ref="EIDee7a970a-be6c-4554-9693-1f86b0cf6a62"/>
+                                <status>PASSED_MANUAL</status>
+                                <startTimestamp>2016-08-24T01:01:38.033+02:00</startTimestamp>
+                                <duration>0</duration>
+                                <resultedFrom ref="EID743cca00-3b22-41dc-9eb8-d9de0ebfa086"/>
+                                <testAssertionResults>
+                                    <TestAssertionResult id="ce089d74-9946-4ebd-8894-f81fffc1756d">
+                                        <parent ref="EID743cca00-3b22-41dc-9eb8-d9de0ebfa086"/>
+                                        <status>PASSED</status>
+                                        <startTimestamp>2016-08-24T01:01:38.033+02:00</startTimestamp>
+                                        <duration>0</duration>
+                                        <resultedFrom ref="EIDc5f0d761-678d-4d86-837e-c7819042bd11"/>
+                                        <messages/>
+                                    </TestAssertionResult>
+                                    <TestAssertionResult id="f180d1f1-e235-4180-8b8e-63a2dc5d696a">
+                                        <parent ref="EID743cca00-3b22-41dc-9eb8-d9de0ebfa086"/>
+                                        <status>PASSED_MANUAL</status>
+                                        <startTimestamp>2016-08-24T01:01:36.824+02:00</startTimestamp>
+                                        <duration>0</duration>
+                                        <resultedFrom ref="EIDeaa9832a-a372-484a-b25b-c67e1c808e0e"/>
+                                        <messages/>
+                                    </TestAssertionResult>
+                                </testAssertionResults>
+                            </TestStepResult>
+                        </testStepResults>
+                    </TestCaseResult>
+                    <TestCaseResult id="c570287a-2621-4bdd-9692-6e570513789a">
+                        <parent ref="EIDfb360edf-6f61-4243-a839-9cc7e74015bb"/>
+                        <status>PASSED_MANUAL</status>
+                        <startTimestamp>2016-08-24T01:01:38.033+02:00</startTimestamp>
+                        <duration>0</duration>
+                        <resultedFrom ref="EID622dc897-1bae-4f2e-9b4e-5264de015afe"/>
+                        <testStepResults>
+                            <TestStepResult id="1cf062b3-5076-4015-b4aa-f92f34754cd7">
+                                <parent ref="EID622dc897-1bae-4f2e-9b4e-5264de015afe"/>
+                                <status>PASSED_MANUAL</status>
+                                <startTimestamp>2016-08-24T01:01:38.033+02:00</startTimestamp>
+                                <duration>0</duration>
+                                <resultedFrom ref="EID4d44f8ec-e62f-400a-a151-21b6f5547b07"/>
+                                <testAssertionResults>
+                                    <TestAssertionResult id="6b06545d-48c7-4b69-b074-4b69f21af2ea">
+                                        <parent ref="EID4d44f8ec-e62f-400a-a151-21b6f5547b07"/>
+                                        <status>PASSED_MANUAL</status>
+                                        <startTimestamp>2016-08-24T01:01:36.824+02:00</startTimestamp>
+                                        <duration>0</duration>
+                                        <resultedFrom ref="EID0bdbce7b-9ed3-402b-8cff-612fd5e9325c"/>
+                                        <messages/>
+                                    </TestAssertionResult>
+                                </testAssertionResults>
+                            </TestStepResult>
+                        </testStepResults>
+                    </TestCaseResult>
+                    <TestCaseResult id="23b3e10e-ee75-4ba6-a528-333395ac0ff2">
+                        <parent ref="EIDfb360edf-6f61-4243-a839-9cc7e74015bb"/>
+                        <status>PASSED_MANUAL</status>
+                        <startTimestamp>2016-08-24T01:01:38.033+02:00</startTimestamp>
+                        <duration>0</duration>
+                        <resultedFrom ref="EID7064ef78-fbe6-4b6f-85ba-94f1e8bd058f"/>
+                        <testStepResults>
+                            <TestStepResult id="bd424417-1ec6-4e94-9a3d-f747899c3fb8">
+                                <parent ref="EID7064ef78-fbe6-4b6f-85ba-94f1e8bd058f"/>
+                                <status>PASSED_MANUAL</status>
+                                <startTimestamp>2016-08-24T01:01:38.033+02:00</startTimestamp>
+                                <duration>0</duration>
+                                <resultedFrom ref="EIDfed82929-a3b7-4e48-8e06-29f42e90ed62"/>
+                                <testAssertionResults>
+                                    <TestAssertionResult id="0ae8e730-8bad-400b-ad22-6855a4d6e5eb">
+                                        <parent ref="EIDfed82929-a3b7-4e48-8e06-29f42e90ed62"/>
+                                        <status>PASSED_MANUAL</status>
+                                        <startTimestamp>2016-08-24T01:01:36.824+02:00</startTimestamp>
+                                        <duration>0</duration>
+                                        <resultedFrom ref="EIDae6e3a80-d0cd-4502-88d4-8189058bec2f"/>
+                                        <messages/>
+                                    </TestAssertionResult>
+                                    <TestAssertionResult id="5508c2c1-bc91-4e7e-8498-9813c02c9452">
+                                        <parent ref="EIDfed82929-a3b7-4e48-8e06-29f42e90ed62"/>
+                                        <status>PASSED_MANUAL</status>
+                                        <startTimestamp>2016-08-24T01:01:36.824+02:00</startTimestamp>
+                                        <duration>0</duration>
+                                        <resultedFrom ref="EIDf961b9d1-423e-4e89-a59e-988a9604c52e"/>
+                                        <messages/>
+                                    </TestAssertionResult>
+                                </testAssertionResults>
+                            </TestStepResult>
+                        </testStepResults>
+                    </TestCaseResult>
+                </testCaseResults>
+            </TestModuleResult>
+        </testModuleResults>
+    </TestTaskResult>

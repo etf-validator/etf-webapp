@@ -1,0 +1,8 @@
+@startuml
+
+    class TestRunInitializationException [[TestRunInitializationException.html]] {
+        +TestRunInitializationException(Throwable)
+        +TestRunInitializationException(String, Throwable)
+    }
+
+@enduml

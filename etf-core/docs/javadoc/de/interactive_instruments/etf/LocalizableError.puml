@@ -1,0 +1,18 @@
+@startuml
+
+    abstract class LocalizableError [[LocalizableError.html]] {
+        #id: String
+        #arguments: Map<String, Object>
+        #LocalizableError(String)
+        #LocalizableError(String, Exception)
+        #LocalizableError(String, Exception, Object[])
+        #LocalizableError(String, Object[])
+        #LocalizableError(String, String[])
+        #LocalizableError(Exception)
+        +getId(): String
+        +getArgumentValueArr(): Object[]
+        +getArgumentValues(): Collection<Object>
+        +getArguments(): Map<String, Object>
+    }
+
+@enduml

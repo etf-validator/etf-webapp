@@ -1,0 +1,16 @@
+@startuml
+
+    class TaskPoolRegistry<R, T> [[TaskPoolRegistry.html]] {
+        +TaskPoolRegistry(int, int, int)
+        +getTaskById(EID): T
+        +contains(EID): boolean
+        +removeDone(): void
+        +getTasks(): Collection<T>
+        +submitTask(T): Future<R>
+        +release(EID): void
+        +cancelTask(EID): void
+        +killAll(): void
+        +getActiveCount(): int
+    }
+
+@enduml

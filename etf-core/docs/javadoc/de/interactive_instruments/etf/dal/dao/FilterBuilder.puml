@@ -1,0 +1,13 @@
+@startuml
+
+    interface FilterBuilder [[FilterBuilder.html]] {
+        {abstract} +offset(int): FilterBuilder
+        {abstract} +limit(int): FilterBuilder
+        {abstract} +levelOfDetail(Filter.LevelOfDetail): FilterBuilder
+        {abstract} +fields(String[]): FilterBuilder
+        {abstract} +where(FilterBuilder.PropertyExpression): FilterBuilder
+        {abstract} +orderBy(FilterBuilder.Order, String[]): FilterBuilder
+        {abstract} +build(): Filter
+    }
+
+@enduml

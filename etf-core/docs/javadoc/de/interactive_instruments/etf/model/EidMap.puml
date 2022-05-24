@@ -1,0 +1,17 @@
+@startuml
+
+    interface EidMap<V> [[EidMap.html]] {
+        +asCollection(): Collection
+        +asList(): List
+        +get(Object): V
+        +remove(Object): V
+        +containsKey(Object): boolean
+        {abstract} +unmodifiable(): EidMap<V>
+        {abstract} +getAll(Collection<?>): EidMap<V>
+        {abstract} +removeAll(Collection<?>): void
+        {abstract} +_internalGet(Object): V
+        {abstract} +_internalRemove(Object): V
+        {abstract} +_internalContainsKey(Object): boolean
+    }
+
+@enduml

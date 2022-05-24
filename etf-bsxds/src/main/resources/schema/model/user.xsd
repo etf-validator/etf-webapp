@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.interactive-instruments.de/etf/2.0"
+           targetNamespace="http://www.interactive-instruments.de/etf/2.0"
+           elementFormDefault="qualified" version="1.0">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en"> user.xsd. Created by Jon Herrmann, (c) 2016-2017
+            interactive instruments GmbH. This file is part of ETF which is licensed under the
+            Apache License Version 2.0 </xs:documentation>
+    </xs:annotation>
+
+    <!-- =============================================================== -->
+    <!-- ================== includes and imports ======================= -->
+    <!-- =============================================================== -->
+    <xs:include schemaLocation="../basic/basicTypes.xsd"/>
+    <xs:include schemaLocation="capabilities.xsd"/>
+    <!-- =============================================================== -->
+
+    <!-- =============================================================== -->
+    <xs:element name="User">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>Very simple in first version</xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:group ref="ModelItemGroup"/>
+                <xs:element name="name" type="xs:string"/>
+                <xs:element name="defaultLang" type="xs:language"/>
+                <xs:element ref="Credential"/>
+                <xs:any minOccurs="0" maxOccurs="unbounded" namespace="##any" processContents="skip">
+                    <xs:annotation>
+                        <xs:documentation> Extendable </xs:documentation>
+                    </xs:annotation>
+                </xs:any>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

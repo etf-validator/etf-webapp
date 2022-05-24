@@ -1,0 +1,132 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.dal.dto.test {
+
+        class TestStepDto [[TestStepDto.html]] {
+            +TestStepDto()
+            +getStatementForExecution(): String
+            +setStatementForExecution(String): void
+            +addTestAssertion(TestAssertionDto): void
+            +createCopy(): TestStepDto
+        }
+
+        class ExecutableTestSuiteDto [[ExecutableTestSuiteDto.html]] {
+            +ExecutableTestSuiteDto()
+            +getTestDriver(): ComponentDto
+            +setTestDriver(ComponentDto): void
+            +getTranslationTemplateBundle(): TranslationTemplateBundleDto
+            +setTranslationTemplateBundle(TranslationTemplateBundleDto): void
+            +getSupportedTestObjectTypes(): List<TestObjectTypeDto>
+            +setSupportedTestObjectTypes(List<TestObjectTypeDto>): void
+            +addSupportedTestObjectType(TestObjectTypeDto): void
+            +setDependencies(EidHolderMap<ExecutableTestSuiteDto>): void
+            +addDependency(ExecutableTestSuiteDto): void
+            +getConsumableResultTestObjectTypes(): List<TestObjectTypeDto>
+            +setConsumableResultTestObjectTypes(List<TestObjectTypeDto>): void
+            +getParameters(): ParameterSet
+            +setParameters(ParameterSet): void
+            +addTestModule(TestModuleDto): void
+            +getChildren(): List<?>
+            +getChildrenAsMap(): EidMap<?>
+            +addChild(TestModelItemDto): void
+            +setChildren(List<?>): void
+            +getLowestLevelItemSize(): long
+            +ensureBasicValidity(): void
+            +createCopy(): ExecutableTestSuiteDto
+        }
+
+        class TestCaseDto [[TestCaseDto.html]] {
+            +TestCaseDto()
+            +addTestStep(TestStepDto): void
+            +addDependency(TestCaseDto): void
+            +createCopy(): TestCaseDto
+        }
+
+        abstract class TestModelItemDto [[TestModelItemDto.html]] {
+            #children: EidMap<TestModelItemDto>
+            #TestModelItemDto()
+            #TestModelItemDto(TestModelItemDto)
+            +getChildren(): List<?>
+            +getChildrenAsMap(): EidMap<?>
+            +addChild(TestModelItemDto): void
+            +setChildren(List<?>): void
+            +toString(): String
+        }
+
+        class TestModuleDto [[TestModuleDto.html]] {
+            +TestModuleDto()
+            +addTestCase(TestCaseDto): void
+            +createCopy(): TestModuleDto
+        }
+
+        class TestAssertionDto [[TestAssertionDto.html]] {
+            +TestAssertionDto()
+            +getExpectedResult(): String
+            +setExpectedResult(String): void
+            +getExpression(): String
+            +setExpression(String): void
+            +getTranslationTemplates(): List<LangTranslationTemplateCollectionDto>
+            +setTranslationTemplates(List<LangTranslationTemplateCollectionDto>): void
+            +addTranslationTemplate(LangTranslationTemplateCollectionDto): void
+            +addTranslationTemplateWithName(String): void
+            +toString(): String
+            +createCopy(): TestAssertionDto
+        }
+
+        class TestItemTypeDto [[TestItemTypeDto.html]] {
+            +TestItemTypeDto()
+            +createCopy(): TestItemTypeDto
+        }
+
+        TestModelItemDto <|-- TestStepDto
+
+        abstract class de.interactive_instruments.etf.dal.dto.RepositoryItemDto
+        de.interactive_instruments.etf.dal.dto.RepositoryItemDto <|-- ExecutableTestSuiteDto
+
+        interface de.interactive_instruments.etf.dal.dto.ModelItemTreeNode<T> {
+            {abstract} +getChildren(): List<?>
+            {abstract} +getChildrenAsMap(): EidMap<?>
+            {abstract} +addChild(T): void
+            {abstract} +setChildren(List<?>): void
+        }
+        de.interactive_instruments.etf.dal.dto.ModelItemTreeNode <|.. ExecutableTestSuiteDto
+
+        interface de.interactive_instruments.etf.model.NestedDependencyHolder<T>
+        de.interactive_instruments.etf.model.NestedDependencyHolder <|.. ExecutableTestSuiteDto
+
+        TestModelItemDto <|-- TestCaseDto
+
+        de.interactive_instruments.etf.model.NestedDependencyHolder <|.. TestCaseDto
+
+        abstract class de.interactive_instruments.etf.dal.dto.MetaDataItemDto<T>
+        de.interactive_instruments.etf.dal.dto.MetaDataItemDto <|-- TestModelItemDto
+
+        de.interactive_instruments.etf.dal.dto.ModelItemTreeNode <|.. TestModelItemDto
+
+        TestModelItemDto <|-- TestModuleDto
+
+        TestModelItemDto <|-- TestAssertionDto
+
+        de.interactive_instruments.etf.dal.dto.MetaDataItemDto <|-- TestItemTypeDto
+
+        TestStepDto --> TestItemTypeDto: type
+
+        TestStepDto --> "*" TestAssertionDto: testAssertions
+
+        ExecutableTestSuiteDto --> "*" ExecutableTestSuiteDto: dependencies
+
+        ExecutableTestSuiteDto --> "*" TestCaseDto: parameterizedTestCases
+
+        ExecutableTestSuiteDto --> "*" TestModuleDto: testModules
+
+        TestCaseDto --> "*" TestStepDto: testSteps
+
+        TestCaseDto --> "*" TestCaseDto: dependencies
+
+        TestModuleDto --> "*" TestCaseDto: testCases
+
+        TestAssertionDto --> TestItemTypeDto: type
+
+    }
+
+@enduml

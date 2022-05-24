@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class>
+   <name>de.interactive_instruments.etf.dal.dto.test.TestItemTypeDto</name>
+   <modifier>1</modifier>
+   <superclass-handle>
+      <type-name>de.interactive_instruments.etf.dal.dto.MetaDataItemDto</type-name>
+   </superclass-handle>
+   <last-refresh-timestamp>2017-12-01T18:11:53.632+01:00</last-refresh-timestamp>
+   <methods>
+      <method>
+         <name>TestItemTypeDto</name>
+         <constructor>true</constructor>
+         <modifier>1</modifier>
+      </method>
+      <method>
+         <name>TestItemTypeDto</name>
+         <constructor>true</constructor>
+         <modifier>2</modifier>
+         <method-parameters>
+            <method-parameter>
+               <type-declaration>
+                  <type-handle>
+                     <type-name>de.interactive_instruments.etf.dal.dto.test.TestItemTypeDto</type-name>
+                  </type-handle>
+               </type-declaration>
+            </method-parameter>
+         </method-parameters>
+      </method>
+      <method>
+         <name>createCopy</name>
+         <modifier>1</modifier>
+         <return-type-declaration>
+            <type-handle>
+               <type-name>de.interactive_instruments.etf.dal.dto.test.TestItemTypeDto</type-name>
+            </type-handle>
+         </return-type-declaration>
+      </method>
+   </methods>
+</class>

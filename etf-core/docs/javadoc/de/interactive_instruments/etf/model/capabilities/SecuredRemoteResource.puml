@@ -1,0 +1,21 @@
+@startuml
+
+    class SecuredRemoteResource [[SecuredRemoteResource.html]] {
+        #uri: URI
+        +SecuredRemoteResource(String, Credentials, URI)
+        +SecuredRemoteResource(Resource)
+        +isModificationCheckInitialized(): boolean
+        +getName(): String
+        +getUri(): URI
+        +getContentLength(): long
+        +openStream(): InputStream
+        +openStream(int): InputStream
+        +getBytes(): byte[]
+        +getBytes(int): byte[]
+        +exists(): boolean
+        +getModificationCheck(): UriModificationCheck
+        +release(): void
+        +createCopy(): SecuredRemoteResource
+    }
+
+@enduml

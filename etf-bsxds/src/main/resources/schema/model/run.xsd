@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.interactive-instruments.de/etf/2.0"
+           targetNamespace="http://www.interactive-instruments.de/etf/2.0"
+           elementFormDefault="qualified"
+           version="1.0">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en"> run.xsd. Created by Jon Herrmann, (c) 2016-2017 interactive
+            instruments GmbH. This file is part of ETF which is licensed under the Apache License
+            Version 2.0 </xs:documentation>
+    </xs:annotation>
+
+    <!-- =============================================================== -->
+    <!-- ================== includes and imports ======================= -->
+    <!-- =============================================================== -->
+    <xs:include schemaLocation="../basic/basicTypes.xsd"/>
+    <xs:include schemaLocation="result.xsd"/>
+    <xs:include schemaLocation="test.xsd"/>
+    <!-- =============================================================== -->
+
+    <!-- =============================================================== -->
+    <xs:element name="TestRun">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation> The root object which composes the objects from each model branch
+                </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="label" type="xs:string"/>
+                <xs:element name="defaultLang" type="xs:language"/>
+                <xs:element name="startTimestamp" type="xs:dateTime"/>
+                <xs:element name="startedBy" type="RefType" minOccurs="0"/>
+                <xs:element name="testTasks">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:sequence>
+                                <xs:element ref="TestTask" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>      
+                <xs:element name="logPath" type="xs:anyURI">
+                    <xs:annotation>
+                        <xs:documentation>
+                            A path to the log file on the ETF instance
+                        </xs:documentation>
+                        <xs:documentation source="v3ModelChange">
+                            May be changed in v3:
+                            <xs:choice>
+                                <xs:annotation>
+                                    <xs:documentation>At least one local or one remote log file</xs:documentation>
+                                </xs:annotation>
+                                <xs:sequence>
+                                    <xs:element ref="LocalLog"/>
+                                    <xs:element ref="RemoteLog" minOccurs="0"/>
+                                </xs:sequence>
+                                <xs:element ref="RemoteLog" minOccurs="1"/>
+                            </xs:choice>
+                            where LocalLog and RemoteLog are:
+                            <xs:element name="LocalLog">
+                                <xs:complexType>
+                                    <xs:attribute name="href" type="ExternalUriType"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+            <xs:attribute name="status" type="TestResultStatusType" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:group name="TestTaskConfigurationGroup">
+        <xs:sequence>
+            <xs:group ref="ModelItemGroup"/>
+            <xs:element name="executableTestSuite" type="RefType" minOccurs="1"/>
+            <xs:element name="testObject" type="RefType" minOccurs="1"/>
+            <xs:element name="styleResultWith" type="RefType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Optional association with result style if results are styled
+                        with a non-default style</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="ArgumentList" minOccurs="0"/>
+        </xs:sequence>
+    </xs:group>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestTask">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>A single task which executes a ETS with user provided parameterSet
+                    againts a TestObject</xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:group ref="TestTaskConfigurationGroup"/>
+                <xs:element name="testTaskResult" type="RefType" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+
+</xs:schema>

@@ -1,0 +1,9 @@
+@startuml
+
+    class NullItemFileObserverRegistry [[NullItemFileObserverRegistry.html]] {
+        {static} +instance(): NullItemFileObserverRegistry
+        +register(Path, List<?>): void
+        +deregister(List<?>): void
+    }
+
+@enduml

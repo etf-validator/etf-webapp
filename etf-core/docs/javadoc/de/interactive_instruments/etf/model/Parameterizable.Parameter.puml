@@ -1,0 +1,13 @@
+@startuml
+
+    interface Parameterizable.Parameter [[Parameterizable.Parameter.html]] {
+        {abstract} +getName(): String
+        {abstract} +getDefaultValue(): String
+        {abstract} +getDescription(): String
+        {abstract} +getAllowedValues(): String
+        {abstract} +getType(): String
+        {abstract} +isRequired(): boolean
+        {abstract} +getExcludingParameter(): Set<String>
+    }
+
+@enduml

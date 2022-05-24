@@ -1,0 +1,10 @@
+@startuml
+
+    interface ModelItemTreeNode<T> [[ModelItemTreeNode.html]] {
+        {abstract} +getChildren(): List<?>
+        {abstract} +getChildrenAsMap(): EidMap<?>
+        {abstract} +addChild(T): void
+        {abstract} +setChildren(List<?>): void
+    }
+
+@enduml

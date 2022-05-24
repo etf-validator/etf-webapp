@@ -1,0 +1,12 @@
+@startuml
+
+    interface ItemRegistry [[ItemRegistry.html]] {
+        {abstract} +register(Collection<?>): void
+        {abstract} +deregister(Collection<?>): void
+        {abstract} +update(Collection<?>): void
+        {abstract} +lookupDependency(Collection<EID>, ItemRegistry.DependencyChangeListener): EidHolderMap<?>
+        {abstract} +deregisterCallback(ItemRegistry.DependencyChangeListener): void
+        {abstract} +lookup(Collection<EID>): EidHolderMap<?>
+    }
+
+@enduml

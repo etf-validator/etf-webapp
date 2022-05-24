@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<descriptor type="o-x">
+   <name>de.interactive_instruments.etf.model.ParameterSet$MutableParameter</name>
+   <class-handle>
+      <type-name>de.interactive_instruments.etf.model.ParameterSet$MutableParameter</type-name>
+   </class-handle>
+   <transactional-policy type="ox">
+      <descriptor-alias>ParameterSet$MutableParameter</descriptor-alias>
+      <refresh-cache-policy/>
+      <caching-policy/>
+      <query-manager type="ox"/>
+      <locking-policy type="ox"/>
+      <primary-key-policy>
+         <primary-keys>
+            <xml-field>@name</xml-field>
+         </primary-keys>
+      </primary-key-policy>
+   </transactional-policy>
+   <mappings>
+      <mapping type="xml-direct">
+         <name>allowedValues</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.model.ParameterSet$MutableParameter</attribute-declaring-type-name>
+            <attribute-name>allowedValues</attribute-name>
+         </attribute-handle>
+         <xml-field>allowedValues/text()</xml-field>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>defaultValue</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.model.ParameterSet$MutableParameter</attribute-declaring-type-name>
+            <attribute-name>defaultValue</attribute-name>
+         </attribute-handle>
+         <xml-field>defaultValue/text()</xml-field>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>description</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.model.ParameterSet$MutableParameter</attribute-declaring-type-name>
+            <attribute-name>description</attribute-name>
+         </attribute-handle>
+         <xml-field>description/@ref</xml-field>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>excludingParameters</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.model.ParameterSet$MutableParameter</attribute-declaring-type-name>
+            <attribute-name>excludingParameters</attribute-name>
+         </attribute-handle>
+         <xml-field>@excludesParameters</xml-field>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>immutable</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.model.ParameterSet$MutableParameter</attribute-declaring-type-name>
+            <attribute-name>immutable</attribute-name>
+         </attribute-handle>
+         <uses-method-accessing>true</uses-method-accessing>
+         <get-method-handle>
+            <method-declaring-type-name>de.interactive_instruments.etf.model.ParameterSet$MutableParameter</method-declaring-type-name>
+            <method-signature>isStatic()</method-signature>
+         </get-method-handle>
+         <set-method-handle>
+            <method-declaring-type-name>de.interactive_instruments.etf.model.ParameterSet$MutableParameter</method-declaring-type-name>
+            <method-signature>setStatic(boolean)</method-signature>
+         </set-method-handle>
+         <null-value-policy>
+            <null-value-type>
+               <type-handle>
+                  <type-name>java.lang.Boolean</type-name>
+               </type-handle>
+            </null-value-type>
+            <null-value>false</null-value>
+         </null-value-policy>
+         <xml-field>@static</xml-field>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>name</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.model.ParameterSet$MutableParameter</attribute-declaring-type-name>
+            <attribute-name>name</attribute-name>
+         </attribute-handle>
+         <xml-field>@name</xml-field>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>required</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.model.ParameterSet$MutableParameter</attribute-declaring-type-name>
+            <attribute-name>required</attribute-name>
+         </attribute-handle>
+         <xml-field>@required</xml-field>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>type</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.model.ParameterSet$MutableParameter</attribute-declaring-type-name>
+            <attribute-name>type</attribute-name>
+         </attribute-handle>
+         <xml-field>type/text()</xml-field>
+      </mapping>
+   </mappings>
+   <schema-context-handle>
+      <schema>Result Set</schema>
+      <qname-path>
+         <qname component-type="element" namespace-uri="http://www.interactive-instruments.de/etf/2.0" local-name="ParameterList"/>
+         <qname component-type="element" namespace-uri="http://www.interactive-instruments.de/etf/2.0" local-name="parameter"/>
+      </qname-path>
+   </schema-context-handle>
+   <default-root-element-handle>
+      <schema>Result Set</schema>
+      <qname-path>
+         <qname component-type="element" namespace-uri="http://www.interactive-instruments.de/etf/2.0" local-name="ParameterList"/>
+         <qname component-type="element" namespace-uri="http://www.interactive-instruments.de/etf/2.0" local-name="parameter"/>
+      </qname-path>
+   </default-root-element-handle>
+   <root-descriptor>false</root-descriptor>
+</descriptor>

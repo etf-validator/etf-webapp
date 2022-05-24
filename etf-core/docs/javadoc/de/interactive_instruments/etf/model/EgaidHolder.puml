@@ -1,0 +1,8 @@
+@startuml
+
+    interface EgaidHolder [[EgaidHolder.html]] {
+        +getEgaIdAsString(): String
+        {abstract} +getEgaId(): EGAID
+    }
+
+@enduml

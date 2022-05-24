@@ -1,0 +1,33 @@
+@startuml
+
+    class EtfConstants [[EtfConstants.html]] {
+        {static} +ETF_PK_PREFIX: String
+        {static} +ETF_TESTDOMAIN_PK: String
+        {static} +ETF_AUTHOR_PK: String
+        {static} +ETF_LAST_EDITOR_PK: String
+        {static} +ETF_CREATION_DATE_PK: String
+        {static} +ETF_LAST_UPDATE_DATE_PK: String
+        {static} +ETF_DESCRIPTION_PK: String
+        {static} +ETF_VERSION_PK: String
+        {static} +ETF_IMPL_STATUS_PK: String
+        {static} +ETF_REFERENCE_PK: String
+        {static} +ETF_SUPPORTED_TESTOBJECT_TYPE_IDS_PK: String
+        {static} +ETF_TRANSLATION_TEMPLATE_BUNDLE_ID_PK: String
+        {static} +ETF_DEPENDENCY_IDS_PK: String
+        {static} +ETF_IGNORE_PROPERTIES_PK: String
+        {static} +ETF_PROPERTY_KEYS: Set<String>
+        {static} +ETF_DIR_PREFIX: String
+        {static} +ETF_DATASOURCE_DIR: String
+        {static} +ETF_ATTACHMENT_DIR: String
+        {static} +ETF_TESTDRIVERS_DIR: String
+        {static} +ETF_PROJECTS_DIR: String
+        {static} +ETF_REPORTSTYLES_DIR: String
+        {static} +ETF_BACKUP_DIR: String
+        {static} +ETF_CURRENT_MODEL_VERSION: String
+        {static} +ETF_XMLNS: String
+        {static} +ETF_TESTPROJECT_PROPERTY_FILE_SUFFIX: String
+        {static} +ETF_DATA_STORAGE_NAME: String
+        {static} +ETF_ASCII: String
+    }
+
+@enduml

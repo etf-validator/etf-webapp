@@ -1,0 +1,780 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema documentation for </title>
+      <link rel="stylesheet" href="docHtml.css" type="text/css" /><script type="text/javascript">
+         <!--
+        
+      
+        var button_prefix = 'button_';
+        
+        /**
+        * Returns an element in the current HTML document.
+        *
+        * @param elementID Identifier of HTML element
+        * @return               HTML element object
+        */
+        function getElementObject(elementID) {
+            var elemObj = null;
+            if (document.getElementById) {
+                elemObj = document.getElementById(elementID);
+            }
+            return elemObj;
+        }
+        
+        /**
+        * Switches the state of a collapseable box, e.g.
+        * if it's opened, it'll be closed, and vice versa.
+        *
+        * @param boxID Identifier of box
+        */
+        function switchState(boxID) {
+            var boxObj = getElementObject(boxID);
+            var buttonObj = getElementObject(button_prefix + boxID);
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else if (boxObj.style.display == "none") {
+                // Box is closed, so open it
+                openBox(boxObj, buttonObj);
+            } else if (boxObj.style.display == "block") {
+                // Box is opened, so close it
+                closeBox(boxObj, buttonObj);
+            }
+        }
+        
+        /**
+        * Opens a collapseable box.
+        *
+        * @param boxObj       Collapseable box
+        * @param buttonObj Button controlling box
+        */
+        function openBox(boxObj, buttonObj) {
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else {
+                // Change 'display' CSS property of box
+                boxObj.style.display = "block";
+                
+                // Change text of button
+                if (boxObj.style.display == "block") {
+                    buttonObj.src = "img/btM.gif";
+                }
+            }
+        }
+        
+        /**
+        * Closes a collapseable box.
+        *
+        * @param boxObj       Collapseable box
+        * @param buttonObj Button controlling box
+        */
+        function closeBox(boxObj, buttonObj) {
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else {
+                // Change 'display' CSS property of box
+                boxObj.style.display = "none";
+                
+                // Change text of button
+                if (boxObj.style.display == "none") {
+                    buttonObj.src = "img/btP.gif";
+                }
+            }
+        }
+    
+       function switchStateForAll(buttonObj, boxList) {
+            if (buttonObj == null) {
+                // button not found
+            } else if (buttonObj.value == "+") {
+                // Expand all
+                expandAll(boxList);
+                buttonObj.value = "-";
+            } else if (buttonObj.value == "-") {
+                // Collapse all
+                collapseAll(boxList);
+                buttonObj.value = "+";
+            }
+        }
+        
+        /**
+        * Closes all boxes in a given list.
+        *
+        * @param boxList Array of box IDs
+        */
+        function collapseAll(boxList) {
+            var idx;
+            for (idx = 0; idx < boxList.length; idx++) {
+                var boxObj = getElementObject(boxList[idx]);
+                var buttonObj = getElementObject(button_prefix + boxList[idx]);
+                closeBox(boxObj, buttonObj);
+            }
+        }
+            
+        /**
+        * Open all boxes in a given list.
+        *
+        * @param boxList Array of box IDs
+        */
+        function expandAll(boxList) {
+            var idx;
+            for (idx = 0; idx < boxList.length; idx++) {
+                var boxObj = getElementObject(boxList[idx]);
+                var buttonObj = getElementObject(button_prefix + boxList[idx]);
+                openBox(boxObj, buttonObj);
+            }
+        }
+        
+        /**
+         * Update the message presented in the title of the html page.
+         * - If the documentation was splited by namespace we present something like: "Documentation for namespace 'ns'"
+         * - If the documentation was splited by location we present somehing like: "Documentation for 'Schema.xsd'"
+         * - If no split we always present: "Documentation for 'MainSchema.xsd'"
+         */
+        function updatePageTitle(message) {
+            top.document.title = message;
+        }
+        
+          
+                    
+         /**
+          * Finds an HTML element by its ID and makes it floatable over the normal content.
+          *
+          * @param x_displacement The difference in pixels to the right side of the window from 
+          *           the left side of the element.
+          * @param y_displacement The difference in pixels to the right side of the window from 
+          *           the top of the element.          
+          */
+         function findAndFloat(id, x_displacement, y_displacement){
+
+            var element = getElementObject(id);            
+            
+            window[id + "_obj"] = element;
+            
+            if(document.layers) {
+               element.style = element;
+            }
+            
+            element.current_y = y_displacement;      
+            element.first_time = true;
+         
+            element.floatElement = function(){
+               // It may be closed by an user action.
+                
+               // Target X and Y coordinates.
+               var x, y;
+               
+               var myWidth = 0, myHeight = 0;
+               if( typeof( window.innerWidth ) == 'number' ) {
+                  //Non-IE
+                  myWidth = window.innerWidth;
+                  myHeight = window.innerHeight;
+               } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+                  //IE 6+ in 'standards compliant mode'
+                  myWidth = document.documentElement.clientWidth;
+                  myHeight = document.documentElement.clientHeight;
+               } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+                  //IE 4 compatible
+                  myWidth = document.body.clientWidth;
+                  myHeight = document.body.clientHeight;
+               }
+               
+               
+               x = myWidth - x_displacement;
+               
+               var ns = (navigator.appName.indexOf("Netscape") != -1);               
+               y = ns ? pageYOffset : document.documentElement && document.documentElement.scrollTop ? 
+                  document.documentElement.scrollTop : document.body.scrollTop;               
+               y = y + y_displacement;               
+               
+               // The current y is the current coordinate of the floating element.
+               // This should be at the limit the y target coordinate.
+               this.current_y += (y - this.current_y)/1.25;
+               
+               // Add the pixels constant after the values
+               // and move the element.
+               var px = document.layers ? "" : "px";
+               this.style.left =  x + px;
+               this.style.top =  this.current_y + px;
+                              
+               setTimeout(this.id + "_obj.floatElement()", 100);
+            }
+            
+            element.floatElement();
+            return element;
+          }
+
+         /**
+          * Finds an HTML element by its ID and makes it floatable over the normal content.
+          *
+          * @param x_displacement The difference in pixels to the right side of the window from 
+          *           the left side of the element.
+          * @param y_displacement The difference in pixels to the right side of the window from 
+          *           the top of the element.          
+          */
+         function selectTOCGroupBy(id, isChunked, indexFileLocation, indexFileNamespace, indexFileComponent){
+
+            if (!isChunked) {
+             var selectIds = new Array('toc_group_by_namespace', 'toc_group_by_location', 'toc_group_by_component_type');
+             // Make all the tabs invisible.
+               for (i = 0; i < 3; i++){
+                  var tab = getElementObject(selectIds[i]);
+                  tab.style.display = 'none';
+               }
+               var selTab = getElementObject(id);
+               selTab.style.display = 'block';
+            } else {
+             if (id == 'toc_group_by_namespace') {
+               parent.indexFrame.location = indexFileNamespace;
+             } else  if (id == 'toc_group_by_location') {
+               parent.indexFrame.location = indexFileLocation;
+             } else  if (id == 'toc_group_by_component_type') {
+              parent.indexFrame.location = indexFileComponent;
+             }
+            }
+         }
+          
+
+    
+                        //--></script></head>
+   <body>
+      <h2><a id="INDEX">Table of Contents</a></h2>
+      <div class="toc">
+         <form action="none">
+            <div><span> Group by: <select id="selectTOC" onchange="selectTOCGroupBy(this.options[this.selectedIndex].value, true, 'service.indexList.html', 'service.indexListns.html', 'service.indexListcomp.html');">
+                     <option value="toc_group_by_namespace" selected="selected">Namespace</option>
+                     <option value="toc_group_by_location">Location</option>
+                     <option value="toc_group_by_component_type">Component Type</option></select></span></div>
+         </form>
+         <div class="level1" id="toc_group_by_namespace" style="display:block">
+            <div>
+               <div class="level2">
+                  <p><input id="button_boxIdNamespace1" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1');" class="control" /><span class="indexGroupTitle">http://www.interactive-instruments.de/etf/2.0</span></p>
+                  <div id="boxIdNamespace1" style="display:block">
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Main_schema" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Main_schema');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">s</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Main_schema" class="componentGroup" style="display:block">
+                                                <div><b><a href="service_xsd.html#service.xsd" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">service.xsd</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Redefined_schema" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Redefined_schema');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">s</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Redefined_schema" class="componentGroup" style="display:block">
+                                                <div><b><a href="basicTypes_xsd.html#basicTypes.xsd" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">basicTypes.xsd</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Included_schema" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Included_schema');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">s</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Included_schema" class="componentGroup" style="display:block">
+                                                <div><b><a href="capabilities_xsd.html#capabilities.xsd" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">capabilities.xsd</a></b></div>
+                                                <div><b><a href="items_xsd.html#items.xsd" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">items.xsd</a></b></div>
+                                                <div><b><a href="report_xsd.html#report.xsd" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for report.xsd')">report.xsd</a></b></div>
+                                                <div><b><a href="result_xsd.html#result.xsd" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for result.xsd')">result.xsd</a></b></div>
+                                                <div><b><a href="run_xsd.html#run.xsd" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">run.xsd</a></b></div>
+                                                <div><b><a href="specification_xsd.html#specification.xsd" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for specification.xsd')">specification.xsd</a></b></div>
+                                                <div><b><a href="test_xsd.html#test.xsd" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">test.xsd</a></b></div>
+                                                <div><b><a href="user_xsd.html#user.xsd" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for user.xsd')">user.xsd</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Element" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Element');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Elements</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Element" class="componentGroup" style="display:block">
+                                                <div><b><a href="specification_xsd.html#AbstractTestSuite" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for specification.xsd')">AbstractTestSuite</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#ArgumentList" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">ArgumentList</a></b></div>
+                                                <div><b><a href="result_xsd.html#Attachment" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for result.xsd')">Attachment</a></b></div>
+                                                <div><b><a href="capabilities_xsd.html#Component" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">Component</a></b></div>
+                                                <div><b><a href="specification_xsd.html#ConformanceClass" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for specification.xsd')">ConformanceClass</a></b></div>
+                                                <div><b><a href="capabilities_xsd.html#Credential" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">Credential</a></b></div>
+                                                <div><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b></div>
+                                                <div><b><a href="test_xsd.html#ExecutableTestSuite" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">ExecutableTestSuite</a></b></div>
+                                                <div><b><a href="capabilities_xsd.html#ExecutionEnvironment" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">ExecutionEnvironment</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#LangTranslationTemplateCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">LangTranslationTemplateCollection</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#ParameterList" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">ParameterList</a></b></div>
+                                                <div><b><a href="test_xsd.html#ParameterizedTestAssertion" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">ParameterizedTestAssertion</a></b></div>
+                                                <div><b><a href="test_xsd.html#ParameterizedTestCase" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">ParameterizedTestCase</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#Properties" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">Properties</a></b></div>
+                                                <div><b><a href="capabilities_xsd.html#ResourceCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">ResourceCollection</a></b></div>
+                                                <div><b><a href="capabilities_xsd.html#ResultStyle" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">ResultStyle</a></b></div>
+                                                <div><b><a href="report_xsd.html#StatisticalReportTable" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for report.xsd')">StatisticalReportTable</a></b></div>
+                                                <div><b><a href="report_xsd.html#StatisticalReportTableType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for report.xsd')">StatisticalReportTableType</a></b></div>
+                                                <div><b><a href="capabilities_xsd.html#Tag" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">Tag</a></b></div>
+                                                <div><b><a href="test_xsd.html#TestAssertion" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">TestAssertion</a></b></div>
+                                                <div><b><a href="result_xsd.html#TestAssertionResult" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for result.xsd')">TestAssertionResult</a></b></div>
+                                                <div><b><a href="test_xsd.html#TestCase" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">TestCase</a></b></div>
+                                                <div><b><a href="result_xsd.html#TestCaseResult" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for result.xsd')">TestCaseResult</a></b></div>
+                                                <div><b><a href="test_xsd.html#TestItemType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">TestItemType</a></b></div>
+                                                <div><b><a href="test_xsd.html#TestModule" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">TestModule</a></b></div>
+                                                <div><b><a href="result_xsd.html#TestModuleResult" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for result.xsd')">TestModuleResult</a></b></div>
+                                                <div><b><a href="capabilities_xsd.html#TestObject" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">TestObject</a></b></div>
+                                                <div><b><a href="capabilities_xsd.html#TestObjectType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">TestObjectType</a></b></div>
+                                                <div><b><a href="run_xsd.html#TestRun" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestRun</a></b></div>
+                                                <div><b><a href="capabilities_xsd.html#TestRunTemplate" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">TestRunTemplate</a></b></div>
+                                                <div><b><a href="test_xsd.html#TestStep" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">TestStep</a></b></div>
+                                                <div><b><a href="result_xsd.html#TestStepResult" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for result.xsd')">TestStepResult</a></b></div>
+                                                <div><b><a href="run_xsd.html#TestTask" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestTask</a></b></div>
+                                                <div><b><a href="result_xsd.html#TestTaskResult" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for result.xsd')">TestTaskResult</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#TranslationTemplateBundle" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">TranslationTemplateBundle</a></b></div>
+                                                <div><b><a href="user_xsd.html#User" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for user.xsd')">User</a></b></div>
+                                                <div><b><a href="items_xsd.html#abstractTestSuites" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">abstractTestSuites</a></b></div>
+                                                <div><b><a href="items_xsd.html#components" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">components</a></b></div>
+                                                <div><b><a href="items_xsd.html#credentials" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">credentials</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#description" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">description</a></b></div>
+                                                <div><b><a href="items_xsd.html#executableTestSuites" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">executableTestSuites</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#label" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">label</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#reference" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">reference</a></b></div>
+                                                <div><b><a href="items_xsd.html#resultStyles" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">resultStyles</a></b></div>
+                                                <div><b><a href="items_xsd.html#tags" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">tags</a></b></div>
+                                                <div><b><a href="items_xsd.html#testAssertions" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">testAssertions</a></b></div>
+                                                <div><b><a href="items_xsd.html#testCases" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">testCases</a></b></div>
+                                                <div><b><a href="items_xsd.html#testItemTypes" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">testItemTypes</a></b></div>
+                                                <div><b><a href="items_xsd.html#testObjectTypes" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">testObjectTypes</a></b></div>
+                                                <div><b><a href="items_xsd.html#testObjects" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">testObjects</a></b></div>
+                                                <div><b><a href="items_xsd.html#testRunTemplates" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">testRunTemplates</a></b></div>
+                                                <div><b><a href="items_xsd.html#testRuns" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">testRuns</a></b></div>
+                                                <div><b><a href="items_xsd.html#testTaskResults" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">testTaskResults</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#translatableDescription" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">translatableDescription</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#translatableLabel" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">translatableLabel</a></b></div>
+                                                <div><b><a href="items_xsd.html#translationTemplateBundles" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">translationTemplateBundles</a></b></div>
+                                                <div><b><a href="items_xsd.html#users" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">users</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Simple_Type" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Simple_Type');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Simple Types</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Simple_Type" class="componentGroup" style="display:block">
+                                                <div><b><a href="basicTypes_xsd.html#EGAIDRefType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">EGAIDRefType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#EGAIDType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">EGAIDType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#ExternalUriType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">ExternalUriType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#IdRefType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">IdRefType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#IdType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">IdType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#MimeType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">MimeType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#TestResultStatusType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">TestResultStatusType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#TranslationIdType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">TranslationIdType</a></b></div>
+                                                <div><b><a href="report_xsd.html#ValueListType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for report.xsd')">ValueListType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#VerbosityType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">VerbosityType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#VersionType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">VersionType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#httpUriType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">httpUriType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#stringWithTokens" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">stringWithTokens</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Complex_Type" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Complex_Type');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Complex Types</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Complex_Type" class="componentGroup" style="display:block">
+                                                <div><b><a href="capabilities_xsd.html#ExpressionType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">ExpressionType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#RefType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">RefType</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#TranslationTemplateArgumentType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">TranslationTemplateArgumentType</a></b></div>
+                                                <div><b><a href="service_xsd.html#egaref" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">egaref</a></b></div>
+                                                <div><b><a href="service_xsd.html#ext" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">ext</a></b></div>
+                                                <div><b><a href="service_xsd.html#loc" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">loc</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Attribute" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Attribute');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Attributes</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Attribute" class="componentGroup" style="display:block">
+                                                <div><b><a href="basicTypes_xsd.html#urnBase" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">@urnBase</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Element_Group" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Element_Group');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Element Groups</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Element_Group" class="componentGroup" style="display:block">
+                                                <div><b><a href="service_xsd.html#MetaDataItemGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">MetaDataItemGroup</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#http___www.interactive-instruments.de_etf_2.0_MetaDataItemGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">MetaDataItemGroup</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#ModelItemGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">ModelItemGroup</a></b></div>
+                                                <div><b><a href="service_xsd.html#RepositoryItemGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">RepositoryItemGroup</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#http___www.interactive-instruments.de_etf_2.0_RepositoryItemGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">RepositoryItemGroup</a></b></div>
+                                                <div><b><a href="result_xsd.html#ResultModelItemGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for result.xsd')">ResultModelItemGroup</a></b></div>
+                                                <div><b><a href="run_xsd.html#TestTaskConfigurationGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestTaskConfigurationGroup</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace1Attribute_Group" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace1Attribute_Group');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Attribute Groups</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace1Attribute_Group" class="componentGroup" style="display:block">
+                                                <div><b><a href="basicTypes_xsd.html#GroupAndArtifactIdentifierAttributeGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">GroupAndArtifactIdentifierAttributeGroup</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#IdentifierAttributeGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">IdentifierAttributeGroup</a></b></div>
+                                                <div><b><a href="basicTypes_xsd.html#TranslationTemplateRefAttributeGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">TranslationTemplateRefAttributeGroup</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div style="clear:left"></div>
+                  </div>
+               </div>
+               <div class="level2">
+                  <p><input id="button_boxIdNamespace2" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace2');" class="control" /><span class="indexGroupTitle">http://www.interactive-instruments.de/etf/appinfo/1.0</span></p>
+                  <div id="boxIdNamespace2" style="display:block">
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace2Imported_schema" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace2Imported_schema');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">s</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace2Imported_schema" class="componentGroup" style="display:block">
+                                                <div><b><a href="appinfo_xsd.html#appinfo.xsd" target="mainFrame" title="http://www.interactive-instruments.de/etf/appinfo/1.0" onclick="updatePageTitle('Schema documentation for appinfo.xsd')">appinfo.xsd</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="horizontalLayout">
+                        <table class="rt">
+                           <tr>
+                              <td class="rt_cornerTopLeft"></td>
+                              <td class="rt_lineTop"></td>
+                              <td class="rt_cornerTopRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_lineLeft"></td>
+                              <td class="rt_content">
+                                 <table class="componentGroup">
+                                    <tbody>
+                                       <tr>
+                                          <td class="componentGroup"><input id="button_boxIdNamespace2Element" type="image" value="-" src="img/btM.gif" onclick="switchState('boxIdNamespace2Element');" class="control" /></td>
+                                          <td class="componentGroup">
+                                             <div class="componentGroupTitle">Elements</div>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td class="componentGroup"></td>
+                                          <td class="componentGroup">
+                                             <div id="boxIdNamespace2Element" class="componentGroup" style="display:block">
+                                                <div><b><a href="appinfo_xsd.html#cacheStrategy" target="mainFrame" title="http://www.interactive-instruments.de/etf/appinfo/1.0" onclick="updatePageTitle('Schema documentation for appinfo.xsd')">cacheStrategy</a></b></div>
+                                                <div><b><a href="appinfo_xsd.html#replaceableByExternalRef" target="mainFrame" title="http://www.interactive-instruments.de/etf/appinfo/1.0" onclick="updatePageTitle('Schema documentation for appinfo.xsd')">replaceableByExternalRef</a></b></div>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                              <td class="rt_lineRight"></td>
+                           </tr>
+                           <tr>
+                              <td class="rt_cornerBottomLeft"></td>
+                              <td class="rt_lineBottom"></td>
+                              <td class="rt_cornerBottomRight"></td>
+                           </tr>
+                        </table>
+                     </div>
+                     <div style="clear:left"></div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="footer">
+         <hr />
+         <div align="center">XML Schema documentation generated by <a href="http://www.oxygenxml.com" target="_parent"><span class="oXygenLogo"><span class="redX">&lt;</span>o<span class="redX">X</span>ygen<span class="redX">/&gt;</span></span></a><sup>®</sup> XML Editor.
+         </div>
+      </div>
+   </body>
+</html>

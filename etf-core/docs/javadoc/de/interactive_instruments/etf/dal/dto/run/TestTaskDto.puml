@@ -1,0 +1,20 @@
+@startuml
+
+    class TestTaskDto [[TestTaskDto.html]] {
+        +TestTaskDto()
+        +getExecutableTestSuite(): ExecutableTestSuiteDto
+        +setExecutableTestSuite(ExecutableTestSuiteDto): void
+        +getTestObject(): TestObjectDto
+        +setTestObject(TestObjectDto): void
+        +getResultStyle(): ResultStyleDto
+        +setResultStyle(ResultStyleDto): void
+        +getTestTaskResult(): TestTaskResultDto
+        +setTestTaskResult(TestTaskResultDto): void
+        +getArguments(): Arguments
+        +setArguments(Arguments): void
+        +toString(): String
+        +ensureBasicValidity(): void
+        +createCopy(): TestTaskDto
+    }
+
+@enduml

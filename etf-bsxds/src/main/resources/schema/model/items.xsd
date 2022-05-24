@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.interactive-instruments.de/etf/2.0"
+           targetNamespace="http://www.interactive-instruments.de/etf/2.0"
+           elementFormDefault="qualified" version="1.0">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en"> items.xsd. Created by Jon Herrmann, (c) 2016-2017
+            interactive instruments GmbH. This file is part of ETF which is licensed under the
+            Apache License Version 2.0 </xs:documentation>
+    </xs:annotation>
+    
+    <!-- =============================================================== -->
+    <!-- ================== includes and imports ======================= -->
+    <!-- =============================================================== -->
+    <xs:include schemaLocation="capabilities.xsd"/>
+    <xs:include schemaLocation="report.xsd"/>
+    <xs:include schemaLocation="result.xsd"/>
+    <xs:include schemaLocation="run.xsd"/>
+    <xs:include schemaLocation="specification.xsd"/>
+    <xs:include schemaLocation="test.xsd"/>
+    <xs:include schemaLocation="user.xsd"/>
+    <!-- =============================================================== -->
+
+    <xs:element name="components">
+        <xs:annotation>
+            <xs:documentation>ETF Components: write/update | Client: read</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="Component"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="testCases">
+        <xs:annotation>
+            <xs:documentation>not implemented yet</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="ParameterizedTestCase"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="testAssertions">
+        <xs:annotation>
+            <xs:documentation>not implemented yet</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="ParameterizedTestAssertion"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="testItemTypes">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="TestItemType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="executableTestSuites">
+        <xs:annotation>
+            <xs:documentation>ETF Components: read/write/update (test drivers) | Client:
+                read</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="ExecutableTestSuite"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="testObjectTypes">
+        <xs:annotation>
+            <xs:documentation>ETF Components: read/write/update (test drivers) | Client:
+                read</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="TestObjectType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="testObjects">
+        <xs:annotation>
+            <xs:documentation>ETF Components: read/update (resource change) | Client:
+                read/write/update</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="TestObject"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="credentials">
+        <xs:annotation>
+            <xs:documentation>not implemented yet</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="Credential"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="users">
+        <xs:annotation>
+            <xs:documentation>not implemented yet</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="User"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="tags">
+        <xs:annotation>
+            <xs:documentation>ETF Components: read/write/update | Client: read</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="Tag"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="translationTemplateBundles">
+        <xs:annotation>
+            <xs:documentation>ETF Components: read/write | Client: read</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="TranslationTemplateBundle"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="resultStyles">
+        <xs:annotation>
+            <xs:documentation>ETF Components: read/write | Client: read</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="ResultStyle"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="abstractTestSuites">
+        <xs:annotation>
+            <xs:documentation>ETF Components: read/write/update (repository connector) | Client:
+                read</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="AbstractTestSuite"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="testRunTemplates">
+        <xs:annotation>
+            <xs:documentation>ETF Components: read | Client: read/write/update</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="TestRunTemplate"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="testRuns">
+        <xs:annotation>
+            <xs:documentation>ETF Components: update (status change) | Client:
+                read/write/update</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="TestRun"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="testTaskResults">
+        <xs:annotation>
+            <xs:documentation>ETF Components: write/update (results) | Client: traversed in
+                testRuns</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="TestTaskResult"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

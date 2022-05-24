@@ -1,0 +1,22 @@
+@startuml
+
+    abstract class MetaDataItemDto<T> [[MetaDataItemDto.html]] {
+        #label: String
+        #labelTranslationTemplate: LangTranslationTemplateCollectionDto
+        #description: String
+        #descriptionTranslationTemplate: LangTranslationTemplateCollectionDto
+        #reference: String
+        +MetaDataItemDto()
+        +MetaDataItemDto(MetaDataItemDto)
+        +getLabel(): String
+        +setLabel(String): void
+        +getDescription(): String
+        +setDescription(String): void
+        +getReference(): String
+        +setReference(String): void
+        +toString(): String
+        +getDescriptiveLabel(): String
+        +ensureBasicValidity(): void
+    }
+
+@enduml

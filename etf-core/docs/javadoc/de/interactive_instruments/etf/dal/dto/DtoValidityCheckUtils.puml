@@ -1,0 +1,11 @@
+@startuml
+
+    class DtoValidityCheckUtils [[DtoValidityCheckUtils.html]] {
+        {static} +ensureNotNullOrEmpty(String, Collection): void
+        {static} +ensureNotNullOrEmpty(String, Map): void
+        {static} +ensureNotNullOrEmpty(String, String): void
+        {static} +ensureNotNullAndHasId(String, Dto): void
+        {static} +ensureNotNull(String, Object): void
+    }
+
+@enduml

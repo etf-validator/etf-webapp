@@ -1,0 +1,27 @@
+{
+    "manifest_version": 2,
+    "name": "ETF",
+    "description": "ETF is an open source testing framework for validating spatial data, metadata and web services in Spatial Data Infrastructures",
+    "author": "interactive instruments",
+    "icons": [
+        {
+            "src": "/favicon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "/favicon-128x128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "/favicon-196x196.png",
+            "sizes": "196x196",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "orientation": "landscape"
+}

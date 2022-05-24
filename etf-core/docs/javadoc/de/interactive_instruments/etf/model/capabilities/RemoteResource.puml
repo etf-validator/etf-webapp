@@ -1,0 +1,11 @@
+@startuml
+
+    interface RemoteResource [[RemoteResource.html]] {
+        {abstract} +openStream(int): InputStream
+        {abstract} +getBytes(int): byte[]
+        {abstract} +getModificationCheck(): UriModificationCheck
+        {abstract} +isModificationCheckInitialized(): boolean
+        {abstract} +createCopy(): RemoteResource
+    }
+
+@enduml

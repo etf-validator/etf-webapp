@@ -1,0 +1,7 @@
+@startuml
+
+    interface ArgumentObjHolder [[ArgumentObjHolder.html]] {
+        {abstract} +getArgumentsDto(): ArgumentHolder
+    }
+
+@enduml

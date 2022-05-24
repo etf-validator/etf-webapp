@@ -1,0 +1,1976 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema documentation for run.xsd</title>
+      <link rel="stylesheet" href="docHtml.css" type="text/css" /><script type="text/javascript">
+         <!--
+        var propertiesBoxes= new Array('properties_run.xsd', 
+				'properties_TestTaskConfigurationGroup_executableTestSuite', 
+				'properties_TestTaskConfigurationGroup_testObject', 
+				'properties_TestTaskConfigurationGroup_styleResultWith', 
+				'properties_TestRun', 
+				'properties_TestRun_label', 
+				'properties_TestRun_defaultLang', 
+				'properties_TestRun_startTimestamp', 
+				'properties_TestRun_startedBy', 
+				'properties_TestRun_testTasks', 
+				'properties_TestTask', 
+				'properties_TestTask_testTaskResult', 
+				'properties_TestRun_logPath', 
+				'properties_TestRun_status');
+var facetsBoxes= new Array('facets_TestRun_status');
+var usedByBoxes= new Array('usedBy_TestRun', 
+				'usedBy_TestTask', 
+				'usedBy_TestRun_status', 
+				'usedBy_TestTaskConfigurationGroup');
+var sourceBoxes= new Array('source_TestTaskConfigurationGroup_executableTestSuite', 
+				'source_TestTaskConfigurationGroup_testObject', 
+				'source_TestTaskConfigurationGroup_styleResultWith', 
+				'source_TestRun', 
+				'source_TestRun_label', 
+				'source_TestRun_defaultLang', 
+				'source_TestRun_startTimestamp', 
+				'source_TestRun_startedBy', 
+				'source_TestRun_testTasks', 
+				'source_TestTask', 
+				'source_TestTask_testTaskResult', 
+				'source_TestRun_logPath', 
+				'source_TestRun_status', 
+				'source_TestTaskConfigurationGroup');
+var instanceBoxes= new Array('instance_TestRun', 
+				'instance_TestRun_testTasks', 
+				'instance_TestTask');
+var diagramBoxes= new Array('diagram_TestTaskConfigurationGroup_executableTestSuite', 
+				'diagram_TestTaskConfigurationGroup_testObject', 
+				'diagram_TestTaskConfigurationGroup_styleResultWith', 
+				'diagram_TestRun', 
+				'diagram_TestRun_label', 
+				'diagram_TestRun_defaultLang', 
+				'diagram_TestRun_startTimestamp', 
+				'diagram_TestRun_startedBy', 
+				'diagram_TestRun_testTasks', 
+				'diagram_TestTask', 
+				'diagram_TestTask_testTaskResult', 
+				'diagram_TestRun_logPath', 
+				'diagram_TestTaskConfigurationGroup');
+var annotationBoxes= new Array('annotations_run.xsd', 
+				'annotations_TestTaskConfigurationGroup_styleResultWith', 
+				'annotations_TestRun_logPath');
+var attributesBoxes= new Array('attributes_TestRun', 
+				'attributes_TestTask');
+var modelBoxes= new Array('model_TestRun', 
+				'model_TestRun_testTasks', 
+				'model_TestTask', 
+				'model_TestTaskConfigurationGroup');
+
+      
+        var button_prefix = 'button_';
+        
+        /**
+        * Returns an element in the current HTML document.
+        *
+        * @param elementID Identifier of HTML element
+        * @return               HTML element object
+        */
+        function getElementObject(elementID) {
+            var elemObj = null;
+            if (document.getElementById) {
+                elemObj = document.getElementById(elementID);
+            }
+            return elemObj;
+        }
+        
+        /**
+        * Switches the state of a collapseable box, e.g.
+        * if it's opened, it'll be closed, and vice versa.
+        *
+        * @param boxID Identifier of box
+        */
+        function switchState(boxID) {
+            var boxObj = getElementObject(boxID);
+            var buttonObj = getElementObject(button_prefix + boxID);
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else if (boxObj.style.display == "none") {
+                // Box is closed, so open it
+                openBox(boxObj, buttonObj);
+            } else if (boxObj.style.display == "block") {
+                // Box is opened, so close it
+                closeBox(boxObj, buttonObj);
+            }
+        }
+        
+        /**
+        * Opens a collapseable box.
+        *
+        * @param boxObj       Collapseable box
+        * @param buttonObj Button controlling box
+        */
+        function openBox(boxObj, buttonObj) {
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else {
+                // Change 'display' CSS property of box
+                boxObj.style.display = "block";
+                
+                // Change text of button
+                if (boxObj.style.display == "block") {
+                    buttonObj.src = "img/btM.gif";
+                }
+            }
+        }
+        
+        /**
+        * Closes a collapseable box.
+        *
+        * @param boxObj       Collapseable box
+        * @param buttonObj Button controlling box
+        */
+        function closeBox(boxObj, buttonObj) {
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else {
+                // Change 'display' CSS property of box
+                boxObj.style.display = "none";
+                
+                // Change text of button
+                if (boxObj.style.display == "none") {
+                    buttonObj.src = "img/btP.gif";
+                }
+            }
+        }
+    
+       function switchStateForAll(buttonObj, boxList) {
+            if (buttonObj == null) {
+                // button not found
+            } else if (buttonObj.value == "+") {
+                // Expand all
+                expandAll(boxList);
+                buttonObj.value = "-";
+            } else if (buttonObj.value == "-") {
+                // Collapse all
+                collapseAll(boxList);
+                buttonObj.value = "+";
+            }
+        }
+        
+        /**
+        * Closes all boxes in a given list.
+        *
+        * @param boxList Array of box IDs
+        */
+        function collapseAll(boxList) {
+            var idx;
+            for (idx = 0; idx < boxList.length; idx++) {
+                var boxObj = getElementObject(boxList[idx]);
+                var buttonObj = getElementObject(button_prefix + boxList[idx]);
+                closeBox(boxObj, buttonObj);
+            }
+        }
+            
+        /**
+        * Open all boxes in a given list.
+        *
+        * @param boxList Array of box IDs
+        */
+        function expandAll(boxList) {
+            var idx;
+            for (idx = 0; idx < boxList.length; idx++) {
+                var boxObj = getElementObject(boxList[idx]);
+                var buttonObj = getElementObject(button_prefix + boxList[idx]);
+                openBox(boxObj, buttonObj);
+            }
+        }
+        
+        /**
+         * Update the message presented in the title of the html page.
+         * - If the documentation was splited by namespace we present something like: "Documentation for namespace 'ns'"
+         * - If the documentation was splited by location we present somehing like: "Documentation for 'Schema.xsd'"
+         * - If no split we always present: "Documentation for 'MainSchema.xsd'"
+         */
+        function updatePageTitle(message) {
+            top.document.title = message;
+        }
+        
+          
+                    
+         /**
+          * Finds an HTML element by its ID and makes it floatable over the normal content.
+          *
+          * @param x_displacement The difference in pixels to the right side of the window from 
+          *           the left side of the element.
+          * @param y_displacement The difference in pixels to the right side of the window from 
+          *           the top of the element.          
+          */
+         function findAndFloat(id, x_displacement, y_displacement){
+
+            var element = getElementObject(id);            
+            
+            window[id + "_obj"] = element;
+            
+            if(document.layers) {
+               element.style = element;
+            }
+            
+            element.current_y = y_displacement;      
+            element.first_time = true;
+         
+            element.floatElement = function(){
+               // It may be closed by an user action.
+                
+               // Target X and Y coordinates.
+               var x, y;
+               
+               var myWidth = 0, myHeight = 0;
+               if( typeof( window.innerWidth ) == 'number' ) {
+                  //Non-IE
+                  myWidth = window.innerWidth;
+                  myHeight = window.innerHeight;
+               } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+                  //IE 6+ in 'standards compliant mode'
+                  myWidth = document.documentElement.clientWidth;
+                  myHeight = document.documentElement.clientHeight;
+               } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+                  //IE 4 compatible
+                  myWidth = document.body.clientWidth;
+                  myHeight = document.body.clientHeight;
+               }
+               
+               
+               x = myWidth - x_displacement;
+               
+               var ns = (navigator.appName.indexOf("Netscape") != -1);               
+               y = ns ? pageYOffset : document.documentElement && document.documentElement.scrollTop ? 
+                  document.documentElement.scrollTop : document.body.scrollTop;               
+               y = y + y_displacement;               
+               
+               // The current y is the current coordinate of the floating element.
+               // This should be at the limit the y target coordinate.
+               this.current_y += (y - this.current_y)/1.25;
+               
+               // Add the pixels constant after the values
+               // and move the element.
+               var px = document.layers ? "" : "px";
+               this.style.left =  x + px;
+               this.style.top =  this.current_y + px;
+                              
+               setTimeout(this.id + "_obj.floatElement()", 100);
+            }
+            
+            element.floatElement();
+            return element;
+          }
+
+         /**
+          * Finds an HTML element by its ID and makes it floatable over the normal content.
+          *
+          * @param x_displacement The difference in pixels to the right side of the window from 
+          *           the left side of the element.
+          * @param y_displacement The difference in pixels to the right side of the window from 
+          *           the top of the element.          
+          */
+         function selectTOCGroupBy(id, isChunked, indexFileLocation, indexFileNamespace, indexFileComponent){
+
+            if (!isChunked) {
+             var selectIds = new Array('toc_group_by_namespace', 'toc_group_by_location', 'toc_group_by_component_type');
+             // Make all the tabs invisible.
+               for (i = 0; i < 3; i++){
+                  var tab = getElementObject(selectIds[i]);
+                  tab.style.display = 'none';
+               }
+               var selTab = getElementObject(id);
+               selTab.style.display = 'block';
+            } else {
+             if (id == 'toc_group_by_namespace') {
+               parent.indexFrame.location = indexFileNamespace;
+             } else  if (id == 'toc_group_by_location') {
+               parent.indexFrame.location = indexFileLocation;
+             } else  if (id == 'toc_group_by_component_type') {
+              parent.indexFrame.location = indexFileComponent;
+             }
+            }
+         }
+          
+
+    
+                    //--></script></head>
+   <body>
+      <div id="global_controls" class="globalControls" style="position:absolute;right:0;">
+         <table class="rt">
+            <tr>
+               <td class="rt_cornerTopLeft"></td>
+               <td class="rt_lineTop"></td>
+               <td class="rt_cornerTopRight"></td>
+            </tr>
+            <tr>
+               <td class="rt_lineLeft"></td>
+               <td class="rt_content">
+                  <h3>Showing:</h3>
+                  <table>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, annotationBoxes);" class="control" /></span><span class="globalControlName">Annotations</span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, attributesBoxes);" class="control" /></span><span class="globalControlName">Attributes </span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, diagramBoxes);" class="control" /></span><span class="globalControlName">Diagrams</span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, facetsBoxes);" class="control" /></span><span class="globalControlName">Facets </span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, instanceBoxes);" class="control" /></span><span class="globalControlName">Instances</span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, modelBoxes);" class="control" /></span><span class="globalControlName">Model </span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, propertiesBoxes);" class="control" /></span><span class="globalControlName">Properties </span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, sourceBoxes);" class="control" /></span><span class="globalControlName">Source</span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, usedByBoxes);" class="control" /></span><span class="globalControlName">Used by </span></td>
+                     </tr>
+                  </table>
+                  <div align="right"><span><input type="button" onclick="getElementObject('global_controls').style.display = 'none';" value="Close" /></span></div>
+               </td>
+               <td class="rt_lineRight"></td>
+            </tr>
+            <tr>
+               <td class="rt_cornerBottomLeft"></td>
+               <td class="rt_lineBottom"></td>
+               <td class="rt_cornerBottomRight"></td>
+            </tr>
+         </table>
+      </div><a id="run.xsd"></a><div class="componentTitle">Included schema <span class="qname">run.xsd</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_run.xsd" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_run.xsd');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_run.xsd" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">run.xsd. Created by Jon Herrmann, (c) 2016-2017 interactive</span><span class="tI">
+</span><span class="tT">instruments GmbH. This file is part of ETF which is licensed under the Apache License</span><span class="tI">
+</span><span class="tT">Version 2.0</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_run.xsd" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_run.xsd');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_run.xsd" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">attribute form default</td>
+                                    <td><b>unqualified</b></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">element form default</td>
+                                    <td><b>qualified</b></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">version</td>
+                                    <td><b>1.0</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestTaskConfigurationGroup_executableTestSuite"></a><div class="componentTitle">Element <span class="qname"><b><a href="run_xsd.html#TestTaskConfigurationGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestTaskConfigurationGroup</a></b> / executableTestSuite</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestTaskConfigurationGroup_executableTestSuite" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestTaskConfigurationGroup_executableTestSuite');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestTaskConfigurationGroup_executableTestSuite" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_executableTestSuite.jpeg" usemap="#run_xsd_Element_executableTestSuite" /><map name="run_xsd_Element_executableTestSuite" id="run_xsd_Element_executableTestSuite"></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Type</b></td>
+                        <td><b><a href="basicTypes_xsd.html#RefType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">RefType</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestTaskConfigurationGroup_executableTestSuite" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestTaskConfigurationGroup_executableTestSuite');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestTaskConfigurationGroup_executableTestSuite" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">minOccurs</td>
+                                    <td><b>1</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestTaskConfigurationGroup_executableTestSuite" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestTaskConfigurationGroup_executableTestSuite');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestTaskConfigurationGroup_executableTestSuite" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"executableTestSuite"</span><span class="tAN"> type=</span><span class="tAV">"RefType"</span><span class="tAN"> minOccurs=</span><span class="tAV">"1"</span><span class="tEl">/&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestTaskConfigurationGroup_testObject"></a><div class="componentTitle">Element <span class="qname"><b><a href="run_xsd.html#TestTaskConfigurationGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestTaskConfigurationGroup</a></b> / testObject</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestTaskConfigurationGroup_testObject" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestTaskConfigurationGroup_testObject');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestTaskConfigurationGroup_testObject" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_testObject.jpeg" usemap="#run_xsd_Element_testObject" /><map name="run_xsd_Element_testObject" id="run_xsd_Element_testObject"></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Type</b></td>
+                        <td><b><a href="basicTypes_xsd.html#RefType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">RefType</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestTaskConfigurationGroup_testObject" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestTaskConfigurationGroup_testObject');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestTaskConfigurationGroup_testObject" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">minOccurs</td>
+                                    <td><b>1</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestTaskConfigurationGroup_testObject" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestTaskConfigurationGroup_testObject');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestTaskConfigurationGroup_testObject" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testObject"</span><span class="tAN"> type=</span><span class="tAV">"RefType"</span><span class="tAN"> minOccurs=</span><span class="tAV">"1"</span><span class="tEl">/&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestTaskConfigurationGroup_styleResultWith"></a><div class="componentTitle">Element <span class="qname"><b><a href="run_xsd.html#TestTaskConfigurationGroup" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestTaskConfigurationGroup</a></b> / styleResultWith</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_TestTaskConfigurationGroup_styleResultWith" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_TestTaskConfigurationGroup_styleResultWith');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_TestTaskConfigurationGroup_styleResultWith" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">Optional association with result style if results are styled</span><span class="tI">
+</span><span class="tT">with a non-default style</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestTaskConfigurationGroup_styleResultWith" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestTaskConfigurationGroup_styleResultWith');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestTaskConfigurationGroup_styleResultWith" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_styleResultWith.jpeg" usemap="#run_xsd_Element_styleResultWith" /><map name="run_xsd_Element_styleResultWith" id="run_xsd_Element_styleResultWith"></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Type</b></td>
+                        <td><b><a href="basicTypes_xsd.html#RefType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">RefType</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestTaskConfigurationGroup_styleResultWith" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestTaskConfigurationGroup_styleResultWith');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestTaskConfigurationGroup_styleResultWith" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">minOccurs</td>
+                                    <td><b>0</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestTaskConfigurationGroup_styleResultWith" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestTaskConfigurationGroup_styleResultWith');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestTaskConfigurationGroup_styleResultWith" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"styleResultWith"</span><span class="tAN"> type=</span><span class="tAV">"RefType"</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">Optional association with result style if results are styled with a non-default style</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestRun"></a><div class="componentTitle">Element <span class="qname">TestRun</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestRun" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestRun');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestRun" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_TestRun.jpeg" usemap="#run_xsd_Element_TestRun" /><map name="run_xsd_Element_TestRun" id="run_xsd_Element_TestRun">
+                                 <area alt="basicTypes_xsd.tmp#IdentifierAttributeGroup" href="basicTypes_xsd.html#IdentifierAttributeGroup" coords="120,43,305,69" />
+                                 <area alt="run_xsd.tmp#TestRun_status" href="run_xsd.html#TestRun_status" coords="117,84,198,108" />
+                                 <area alt="run_xsd.tmp#TestRun_label" href="run_xsd.html#TestRun_label" coords="174,125,230,149" />
+                                 <area alt="run_xsd.tmp#TestRun_defaultLang" href="run_xsd.html#TestRun_defaultLang" coords="174,159,268,183" />
+                                 <area alt="run_xsd.tmp#TestRun_startTimestamp" href="run_xsd.html#TestRun_startTimestamp" coords="174,193,289,217" />
+                                 <area alt="run_xsd.tmp#TestRun_startedBy" href="run_xsd.html#TestRun_startedBy" coords="174,227,255,251" />
+                                 <area alt="run_xsd.tmp#TestRun_testTasks" href="run_xsd.html#TestRun_testTasks" coords="174,261,256,285" />
+                                 <area alt="run_xsd.tmp#TestRun_logPath" href="run_xsd.html#TestRun_logPath" coords="174,295,245,319" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestRun" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestRun');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestRun" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_TestRun" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_TestRun');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_TestRun" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Element </td>
+                                    <td><b><a href="items_xsd.html#testRuns" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for items.xsd')">testRuns</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_TestRun" type="image" src="img/btM.gif" value="-" onclick="switchState('model_TestRun');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_TestRun" style="display:block"><b><a href="run_xsd.html#TestRun_label" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">label</a></b> , <b><a href="run_xsd.html#TestRun_defaultLang" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">defaultLang</a></b> , <b><a href="run_xsd.html#TestRun_startTimestamp" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">startTimestamp</a></b> , <b><a href="run_xsd.html#TestRun_startedBy" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">startedBy{0,1}</a></b> , <b><a href="run_xsd.html#TestRun_testTasks" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">testTasks</a></b> , <b><a href="run_xsd.html#TestRun_logPath" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">logPath</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="run_xsd.html#TestRun_defaultLang" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">defaultLang</a></b>, <b><a href="run_xsd.html#TestRun_label" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">label</a></b>, <b><a href="run_xsd.html#TestRun_logPath" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">logPath</a></b>, <b><a href="run_xsd.html#TestRun_startTimestamp" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">startTimestamp</a></b>, <b><a href="run_xsd.html#TestRun_startedBy" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">startedBy</a></b>, <b><a href="run_xsd.html#TestRun_testTasks" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">testTasks</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_TestRun" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_TestRun');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_TestRun" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;TestRun</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tT"> </span><span class="tAN">status=</span><span class="tAV">""</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;label</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/label&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;defaultLang</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/defaultLang&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;startTimestamp</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/startTimestamp&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;startedBy</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{0,1}</span><span class="tEl">&lt;/startedBy&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;testTasks</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/testTasks&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;logPath</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/logPath&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/TestRun&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Attributes</b></div>
+                           <div class="floatRight"><input id="button_attributes_TestRun" type="image" src="img/btM.gif" value="-" onclick="switchState('attributes_TestRun');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="attributes_TestRun" style="display:block">
+                              <table class="attributesTable">
+                                 <thead>
+                                    <tr>
+                                       <th>QName</th>
+                                       <th width="10%">Type</th>
+                                       <th width="5%">Use</th>
+                                       <th>Annotation</th>
+                                    </tr>
+                                 </thead>
+                                 <tr>
+                                    <td class="firstColumn"><b><a href="basicTypes_xsd.html#IdentifierAttributeGroup_id" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">id</a></b></td>
+                                    <td><b><a href="basicTypes_xsd.html#IdType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">IdType</a></b></td>
+                                    <td>required</td>
+                                    <td>
+                                       <div class="annotation">
+                                          <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                             <tr>
+                                                <td width="100%"><pre><span class="tT">An ETF model item instance possesses an unique ETF</span><span class="tI">
+</span><span class="tT">ID.</span></pre></td>
+                                             </tr>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn"><b><a href="run_xsd.html#TestRun_status" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for run.xsd')">status</a></b></td>
+                                    <td><b><a href="basicTypes_xsd.html#TestResultStatusType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">TestResultStatusType</a></b></td>
+                                    <td>optional</td>
+                                    <td>
+                                       <div class="annotation"></div>
+                                    </td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestRun" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestRun');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestRun" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"TestRun"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">The root object which composes the objects from each model branch</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"label"</span><span class="tAN"> type=</span><span class="tAV">"xs:string"</span><span class="tEl">/&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"defaultLang"</span><span class="tAN"> type=</span><span class="tAV">"xs:language"</span><span class="tEl">/&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"startTimestamp"</span><span class="tAN"> type=</span><span class="tAV">"xs:dateTime"</span><span class="tEl">/&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"startedBy"</span><span class="tAN"> type=</span><span class="tAV">"RefType"</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tEl">/&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testTasks"</span><span class="tEl">&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+          </span><span class="tEl">&lt;xs:sequence</span><span class="tEl">&gt;</span><span class="tI">
+            </span><span class="tEl">&lt;xs:sequence</span><span class="tEl">&gt;</span><span class="tI">
+              </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"TestTask"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">/&gt;</span><span class="tI">
+            </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+          </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;/xs:element&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"logPath"</span><span class="tAN"> type=</span><span class="tAV">"xs:anyURI"</span><span class="tEl">&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+          </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">A path to the log file on the ETF instance</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+          </span><span class="tEl">&lt;xs:documentation</span><span class="tAN"> source=</span><span class="tAV">"v3ModelChange"</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">May be changed in v3:</span><span class="tI">
+            </span><span class="tEl">&lt;xs:choice</span><span class="tEl">&gt;</span><span class="tI">
+              </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+                </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">At least one local or one remote log file</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+              </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+              </span><span class="tEl">&lt;xs:sequence</span><span class="tEl">&gt;</span><span class="tI">
+                </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"LocalLog"</span><span class="tEl">/&gt;</span><span class="tI">
+                </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"RemoteLog"</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tEl">/&gt;</span><span class="tI">
+              </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+              </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"RemoteLog"</span><span class="tAN"> minOccurs=</span><span class="tAV">"1"</span><span class="tEl">/&gt;</span><span class="tI">
+            </span><span class="tEl">&lt;/xs:choice&gt;</span><span class="tT" style="white-space:normal">where LocalLog and RemoteLog are:</span><span class="tI">
+            </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"LocalLog"</span><span class="tEl">&gt;</span><span class="tI">
+              </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+                </span><span class="tEl">&lt;xs:attribute</span><span class="tAN"> name=</span><span class="tAV">"href"</span><span class="tAN"> type=</span><span class="tAV">"ExternalUriType"</span><span class="tEl">/&gt;</span><span class="tI">
+              </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+            </span><span class="tEl">&lt;/xs:element&gt;</span><span class="tI">
+          </span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;/xs:element&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:attributeGroup</span><span class="tAN"> ref=</span><span class="tAV">"IdentifierAttributeGroup"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:attribute</span><span class="tAN"> name=</span><span class="tAV">"status"</span><span class="tAN"> type=</span><span class="tAV">"TestResultStatusType"</span><span class="tAN"> use=</span><span class="tAV">"optional"</span><span class="tEl">/&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestRun_label"></a><div class="componentTitle">Element <span class="qname"><b><a href="run_xsd.html#TestRun" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestRun</a></b> / label</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestRun_label" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestRun_label');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestRun_label" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_label.jpeg" /></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Type</b></td>
+                        <td><b>xs:string</b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestRun_label" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestRun_label');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestRun_label" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>simple</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestRun_label" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestRun_label');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestRun_label" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"label"</span><span class="tAN"> type=</span><span class="tAV">"xs:string"</span><span class="tEl">/&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestRun_defaultLang"></a><div class="componentTitle">Element <span class="qname"><b><a href="run_xsd.html#TestRun" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestRun</a></b> / defaultLang</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestRun_defaultLang" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestRun_defaultLang');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestRun_defaultLang" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_defaultLang.jpeg" /></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Type</b></td>
+                        <td><b>xs:language</b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestRun_defaultLang" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestRun_defaultLang');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestRun_defaultLang" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>simple</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestRun_defaultLang" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestRun_defaultLang');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestRun_defaultLang" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"defaultLang"</span><span class="tAN"> type=</span><span class="tAV">"xs:language"</span><span class="tEl">/&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestRun_startTimestamp"></a><div class="componentTitle">Element <span class="qname"><b><a href="run_xsd.html#TestRun" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestRun</a></b> / startTimestamp</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestRun_startTimestamp" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestRun_startTimestamp');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestRun_startTimestamp" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_startTimestamp.jpeg" /></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Type</b></td>
+                        <td><b>xs:dateTime</b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestRun_startTimestamp" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestRun_startTimestamp');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestRun_startTimestamp" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>simple</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestRun_startTimestamp" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestRun_startTimestamp');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestRun_startTimestamp" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"startTimestamp"</span><span class="tAN"> type=</span><span class="tAV">"xs:dateTime"</span><span class="tEl">/&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestRun_startedBy"></a><div class="componentTitle">Element <span class="qname"><b><a href="run_xsd.html#TestRun" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestRun</a></b> / startedBy</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestRun_startedBy" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestRun_startedBy');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestRun_startedBy" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_startedBy.jpeg" usemap="#run_xsd_Element_startedBy" /><map name="run_xsd_Element_startedBy" id="run_xsd_Element_startedBy"></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Type</b></td>
+                        <td><b><a href="basicTypes_xsd.html#RefType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">RefType</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestRun_startedBy" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestRun_startedBy');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestRun_startedBy" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">minOccurs</td>
+                                    <td><b>0</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestRun_startedBy" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestRun_startedBy');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestRun_startedBy" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"startedBy"</span><span class="tAN"> type=</span><span class="tAV">"RefType"</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tEl">/&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestRun_testTasks"></a><div class="componentTitle">Element <span class="qname"><b><a href="run_xsd.html#TestRun" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestRun</a></b> / testTasks</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestRun_testTasks" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestRun_testTasks');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestRun_testTasks" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_testTasks.jpeg" usemap="#run_xsd_Element_testTasks" /><map name="run_xsd_Element_testTasks" id="run_xsd_Element_testTasks">
+                                 <area alt="run_xsd.tmp#TestTask" href="run_xsd.html#TestTask" coords="273,6,352,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestRun_testTasks" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestRun_testTasks');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestRun_testTasks" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_TestRun_testTasks" type="image" src="img/btM.gif" value="-" onclick="switchState('model_TestRun_testTasks');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_TestRun_testTasks" style="display:block"><b><a href="run_xsd.html#TestTask" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestTask+</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="run_xsd.html#TestTask" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestTask</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_TestRun_testTasks" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_TestRun_testTasks');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_TestRun_testTasks" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;testTasks</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;TestTask</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,unbounded}</span><span class="tEl">&lt;/TestTask&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/testTasks&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestRun_testTasks" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestRun_testTasks');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestRun_testTasks" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testTasks"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:sequence</span><span class="tEl">&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"TestTask"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">/&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestTask"></a><div class="componentTitle">Element <span class="qname">TestTask</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestTask" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestTask');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestTask" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_TestTask.jpeg" usemap="#run_xsd_Element_TestTask" /><map name="run_xsd_Element_TestTask" id="run_xsd_Element_TestTask">
+                                 <area alt="basicTypes_xsd.tmp#IdentifierAttributeGroup" href="basicTypes_xsd.html#IdentifierAttributeGroup" coords="124,43,309,69" />
+                                 <area alt="run_xsd.tmp#TestTaskConfigurationGroup_executableTestSuite" href="run_xsd.html#TestTaskConfigurationGroup_executableTestSuite" coords="263,254,401,278" />
+                                 <area alt="run_xsd.tmp#TestTaskConfigurationGroup_testObject" href="run_xsd.html#TestTaskConfigurationGroup_testObject" coords="263,288,349,312" />
+                                 <area alt="run_xsd.tmp#TestTaskConfigurationGroup_styleResultWith" href="run_xsd.html#TestTaskConfigurationGroup_styleResultWith" coords="263,322,375,346" />
+                                 <area alt="basicTypes_xsd.tmp#ArgumentList" href="basicTypes_xsd.html#ArgumentList" coords="263,399,367,423" />
+                                 <area alt="run_xsd.tmp#TestTaskConfigurationGroup" href="run_xsd.html#TestTaskConfigurationGroup" coords="181,94,393,120" />
+                                 <area alt="run_xsd.tmp#TestTask_testTaskResult" href="run_xsd.html#TestTask_testTaskResult" coords="178,483,287,507" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestTask" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestTask');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestTask" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_TestTask" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_TestTask');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_TestTask" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Element </td>
+                                    <td><b><a href="run_xsd.html#TestRun_testTasks" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestRun/testTasks</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_TestTask" type="image" src="img/btM.gif" value="-" onclick="switchState('model_TestTask');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_TestTask" style="display:block"><b><a href="basicTypes_xsd.html#ModelItemGroup_parent" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">parent{0,1}</a></b> , <b><a href="run_xsd.html#TestTaskConfigurationGroup_executableTestSuite" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">executableTestSuite</a></b> , <b><a href="run_xsd.html#TestTaskConfigurationGroup_testObject" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">testObject</a></b> , <b><a href="run_xsd.html#TestTaskConfigurationGroup_styleResultWith" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">styleResultWith{0,1}</a></b> , <b><a href="basicTypes_xsd.html#ArgumentList" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">ArgumentList{0,1}</a></b> , <b><a href="run_xsd.html#TestTask_testTaskResult" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">testTaskResult{0,1}</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="basicTypes_xsd.html#ArgumentList" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">ArgumentList</a></b>, <b><a href="run_xsd.html#TestTaskConfigurationGroup_executableTestSuite" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">executableTestSuite</a></b>, <b><a href="basicTypes_xsd.html#ModelItemGroup_parent" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">parent</a></b>, <b><a href="run_xsd.html#TestTaskConfigurationGroup_styleResultWith" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">styleResultWith</a></b>, <b><a href="run_xsd.html#TestTaskConfigurationGroup_testObject" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">testObject</a></b>, <b><a href="run_xsd.html#TestTask_testTaskResult" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">testTaskResult</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_TestTask" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_TestTask');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_TestTask" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;TestTask</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;parent</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{0,1}</span><span class="tEl">&lt;/parent&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;executableTestSuite</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/executableTestSuite&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;testObject</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/testObject&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;styleResultWith</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{0,1}</span><span class="tEl">&lt;/styleResultWith&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;ArgumentList</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{0,1}</span><span class="tEl">&lt;/ArgumentList&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;testTaskResult</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{0,1}</span><span class="tEl">&lt;/testTaskResult&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/TestTask&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Attributes</b></div>
+                           <div class="floatRight"><input id="button_attributes_TestTask" type="image" src="img/btM.gif" value="-" onclick="switchState('attributes_TestTask');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="attributes_TestTask" style="display:block">
+                              <table class="attributesTable">
+                                 <thead>
+                                    <tr>
+                                       <th>QName</th>
+                                       <th width="10%">Type</th>
+                                       <th width="5%">Use</th>
+                                       <th>Annotation</th>
+                                    </tr>
+                                 </thead>
+                                 <tr>
+                                    <td class="firstColumn"><b><a href="basicTypes_xsd.html#IdentifierAttributeGroup_id" target="mainFrame" title="No namespace" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">id</a></b></td>
+                                    <td><b><a href="basicTypes_xsd.html#IdType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">IdType</a></b></td>
+                                    <td>required</td>
+                                    <td>
+                                       <div class="annotation">
+                                          <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                             <tr>
+                                                <td width="100%"><pre><span class="tT">An ETF model item instance possesses an unique ETF</span><span class="tI">
+</span><span class="tT">ID.</span></pre></td>
+                                             </tr>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestTask" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestTask');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestTask" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"TestTask"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">A single task which executes a ETS with user provided parameterSet againts a TestObject</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:group</span><span class="tAN"> ref=</span><span class="tAV">"TestTaskConfigurationGroup"</span><span class="tEl">/&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testTaskResult"</span><span class="tAN"> type=</span><span class="tAV">"RefType"</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:attributeGroup</span><span class="tAN"> ref=</span><span class="tAV">"IdentifierAttributeGroup"</span><span class="tEl">/&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestTask_testTaskResult"></a><div class="componentTitle">Element <span class="qname"><b><a href="run_xsd.html#TestTask" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestTask</a></b> / testTaskResult</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestTask_testTaskResult" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestTask_testTaskResult');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestTask_testTaskResult" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_testTaskResult.jpeg" usemap="#run_xsd_Element_testTaskResult" /><map name="run_xsd_Element_testTaskResult" id="run_xsd_Element_testTaskResult"></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Type</b></td>
+                        <td><b><a href="basicTypes_xsd.html#RefType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">RefType</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestTask_testTaskResult" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestTask_testTaskResult');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestTask_testTaskResult" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">minOccurs</td>
+                                    <td><b>0</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestTask_testTaskResult" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestTask_testTaskResult');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestTask_testTaskResult" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testTaskResult"</span><span class="tAN"> type=</span><span class="tAV">"RefType"</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tEl">/&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestRun_logPath"></a><div class="componentTitle">Element <span class="qname"><b><a href="run_xsd.html#TestRun" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestRun</a></b> / logPath</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_TestRun_logPath" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_TestRun_logPath');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_TestRun_logPath" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">A path to the log file on the ETF instance</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                              <div class="annotation">
+                                 <p><a href="v3ModelChange">v3ModelChange</a></p>
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">May be changed in v3: </span><span class="tEl">&lt;xs:choice</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">At least one local or one remote log file</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:sequence</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"LocalLog"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"RemoteLog"</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tEl">/&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"RemoteLog"</span><span class="tAN"> minOccurs=</span><span class="tAV">"1"</span><span class="tEl">/&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:choice&gt;</span><span class="tT"> where LocalLog and RemoteLog are: </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"LocalLog"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:attribute</span><span class="tAN"> name=</span><span class="tAV">"href"</span><span class="tAN"> type=</span><span class="tAV">"ExternalUriType"</span><span class="tEl">/&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span><span class="tI">
+</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestRun_logPath" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestRun_logPath');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestRun_logPath" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_logPath.jpeg" /></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Type</b></td>
+                        <td><b>xs:anyURI</b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestRun_logPath" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestRun_logPath');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestRun_logPath" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>simple</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestRun_logPath" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestRun_logPath');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestRun_logPath" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"logPath"</span><span class="tAN"> type=</span><span class="tAV">"xs:anyURI"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">A path to the log file on the ETF instance</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tAN"> source=</span><span class="tAV">"v3ModelChange"</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">May be changed in v3:</span><span class="tI">
+      </span><span class="tEl">&lt;xs:choice</span><span class="tEl">&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+          </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">At least one local or one remote log file</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;xs:sequence</span><span class="tEl">&gt;</span><span class="tI">
+          </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"LocalLog"</span><span class="tEl">/&gt;</span><span class="tI">
+          </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"RemoteLog"</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tEl">/&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"RemoteLog"</span><span class="tAN"> minOccurs=</span><span class="tAV">"1"</span><span class="tEl">/&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;/xs:choice&gt;</span><span class="tT" style="white-space:normal">where LocalLog and RemoteLog are:</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"LocalLog"</span><span class="tEl">&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+          </span><span class="tEl">&lt;xs:attribute</span><span class="tAN"> name=</span><span class="tAV">"href"</span><span class="tAN"> type=</span><span class="tAV">"ExternalUriType"</span><span class="tEl">/&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;/xs:element&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestRun_status"></a><div class="componentTitle">Attribute <span class="qname"><b><a href="run_xsd.html#TestRun" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestRun</a></b> / @status</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>No namespace</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Type</b></td>
+                        <td><b><a href="basicTypes_xsd.html#TestResultStatusType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">TestResultStatusType</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_TestRun_status" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_TestRun_status');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_TestRun_status" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">use</td>
+                                    <td><b>optional</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Facets</b></div>
+                           <div class="floatRight"><input id="button_facets_TestRun_status" type="image" src="img/btM.gif" value="-" onclick="switchState('facets_TestRun_status');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="facets_TestRun_status" style="display:block">
+                              <table class="facetsTable">
+                                 <tr>
+                                    <td class="firstColumn">enumeration</td>
+                                    <td width="30%"><b>PASSED</b></td>
+                                    <td>
+                                       <div class="annotation">
+                                          <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                             <tr>
+                                                <td width="100%"><pre><span class="tT">PASSED, if all status values are PASSED</span></pre></td>
+                                             </tr>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn">enumeration</td>
+                                    <td width="30%"><b>FAILED</b></td>
+                                    <td>
+                                       <div class="annotation">
+                                          <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                             <tr>
+                                                <td width="100%"><pre><span class="tT">FAILED, if at least one status value is FAILED</span></pre></td>
+                                             </tr>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn">enumeration</td>
+                                    <td width="30%"><b>SKIPPED</b></td>
+                                    <td>
+                                       <div class="annotation">
+                                          <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                             <tr>
+                                                <td width="100%"><pre><span class="tT">SKIPPED, if at least one status value is SKIPPED because a</span><span class="tI">
+</span><span class="tT">test case depends on another test case which has the status FAILED</span></pre></td>
+                                             </tr>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn">enumeration</td>
+                                    <td width="30%"><b>NOT_APPLICABLE</b></td>
+                                    <td>
+                                       <div class="annotation">
+                                          <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                             <tr>
+                                                <td width="100%"><pre><span class="tT">NOT_APPLICABLE if at least one status value is NOT_APPLICABLE,</span><span class="tI">
+</span><span class="tT">in the case the test is skipped for instance because the test object does</span><span class="tI">
+</span><span class="tT">not provide the capabilities for executing the test</span></pre></td>
+                                             </tr>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn">enumeration</td>
+                                    <td width="30%"><b>INFO</b></td>
+                                    <td>
+                                       <div class="annotation">
+                                          <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                             <tr>
+                                                <td width="100%"><pre><span class="tT">INFO, if at least one status value is INFO</span></pre></td>
+                                             </tr>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn">enumeration</td>
+                                    <td width="30%"><b>WARNING</b></td>
+                                    <td>
+                                       <div class="annotation">
+                                          <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                             <tr>
+                                                <td width="100%"><pre><span class="tT">WARNING, if at least one status value is</span><span class="tI">
+</span><span class="tT">WARNING</span></pre></td>
+                                             </tr>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn">enumeration</td>
+                                    <td width="30%"><b>UNDEFINED</b></td>
+                                    <td>
+                                       <div class="annotation">
+                                          <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                             <tr>
+                                                <td width="100%"><pre><span class="tT">UNDEFINED, in all other cases</span></pre></td>
+                                             </tr>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn">enumeration</td>
+                                    <td width="30%"><b>PASSED_MANUAL</b></td>
+                                    <td>
+                                       <div class="annotation">
+                                          <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                             <tr>
+                                                <td width="100%"><pre><span class="tT">PASSED_MANUAL, if at least one status value is PASSED_MANUAL</span><span class="tI">
+</span><span class="tT">(if the test is not automated and the user has to validate results manually</span><span class="tI">
+</span><span class="tT">based on instructions in the report) and all others are values are</span><span class="tI">
+</span><span class="tT">PASSED</span></pre></td>
+                                             </tr>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn">enumeration</td>
+                                    <td width="30%"><b>INTERNAL_ERROR</b></td>
+                                    <td>
+                                       <div class="annotation">
+                                          <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                             <tr>
+                                                <td width="100%"><pre><span class="tT">INTERNAL_ERROR, if at least one status value is INTERNAL_ERROR</span><span class="tI">
+</span><span class="tT">in the case the test engine throws an unexpected error that forces the test</span><span class="tI">
+</span><span class="tT">run to stop</span></pre></td>
+                                             </tr>
+                                          </table>
+                                       </div>
+                                    </td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_TestRun_status" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_TestRun_status');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_TestRun_status" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Element </td>
+                                    <td><b><a href="run_xsd.html#TestRun" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestRun</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestRun_status" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestRun_status');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestRun_status" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:attribute</span><span class="tAN"> name=</span><span class="tAV">"status"</span><span class="tAN"> type=</span><span class="tAV">"TestResultStatusType"</span><span class="tAN"> use=</span><span class="tAV">"optional"</span><span class="tEl">/&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="TestTaskConfigurationGroup"></a><div class="componentTitle">Element Group <span class="qname">TestTaskConfigurationGroup</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_TestTaskConfigurationGroup" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_TestTaskConfigurationGroup');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_TestTaskConfigurationGroup" style="display:block"><img alt="Diagram" border="0" src="img/run_xsd_Element_Group_TestTaskConfigurationGroup.jpeg" usemap="#run_xsd_Element_Group_TestTaskConfigurationGroup" /><map name="run_xsd_Element_Group_TestTaskConfigurationGroup" id="run_xsd_Element_Group_TestTaskConfigurationGroup">
+                                 <area alt="run_xsd.tmp#TestTaskConfigurationGroup_executableTestSuite" href="run_xsd.html#TestTaskConfigurationGroup_executableTestSuite" coords="311,119,449,143" />
+                                 <area alt="run_xsd.tmp#TestTaskConfigurationGroup_testObject" href="run_xsd.html#TestTaskConfigurationGroup_testObject" coords="311,153,397,177" />
+                                 <area alt="run_xsd.tmp#TestTaskConfigurationGroup_styleResultWith" href="run_xsd.html#TestTaskConfigurationGroup_styleResultWith" coords="311,187,423,211" />
+                                 <area alt="basicTypes_xsd.tmp#ArgumentList" href="basicTypes_xsd.html#ArgumentList" coords="311,264,415,288" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_TestTaskConfigurationGroup" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_TestTaskConfigurationGroup');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_TestTaskConfigurationGroup" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="capabilities_xsd.html#TestRunTemplate_TestRunTemplate_testTasks_TestTask" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">TestRunTemplate/testTasks/TestTask</a></b>, <b><a href="run_xsd.html#TestTask" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestTask</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_TestTaskConfigurationGroup" type="image" src="img/btM.gif" value="-" onclick="switchState('model_TestTaskConfigurationGroup');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_TestTaskConfigurationGroup" style="display:block"><b><a href="basicTypes_xsd.html#ModelItemGroup_parent" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">parent{0,1}</a></b> , <b><a href="run_xsd.html#TestTaskConfigurationGroup_executableTestSuite" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">executableTestSuite</a></b> , <b><a href="run_xsd.html#TestTaskConfigurationGroup_testObject" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">testObject</a></b> , <b><a href="run_xsd.html#TestTaskConfigurationGroup_styleResultWith" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">styleResultWith{0,1}</a></b> , <b><a href="basicTypes_xsd.html#ArgumentList" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">ArgumentList{0,1}</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="basicTypes_xsd.html#ArgumentList" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">ArgumentList</a></b>, <b><a href="run_xsd.html#TestTaskConfigurationGroup_executableTestSuite" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">executableTestSuite</a></b>, <b><a href="basicTypes_xsd.html#ModelItemGroup_parent" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">parent</a></b>, <b><a href="run_xsd.html#TestTaskConfigurationGroup_styleResultWith" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">styleResultWith</a></b>, <b><a href="run_xsd.html#TestTaskConfigurationGroup_testObject" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">testObject</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_TestTaskConfigurationGroup" type="image" src="img/btM.gif" value="-" onclick="switchState('source_TestTaskConfigurationGroup');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_TestTaskConfigurationGroup" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:group</span><span class="tAN"> name=</span><span class="tAV">"TestTaskConfigurationGroup"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:sequence</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:group</span><span class="tAN"> ref=</span><span class="tAV">"ModelItemGroup"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"executableTestSuite"</span><span class="tAN"> type=</span><span class="tAV">"RefType"</span><span class="tAN"> minOccurs=</span><span class="tAV">"1"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testObject"</span><span class="tAN"> type=</span><span class="tAV">"RefType"</span><span class="tAN"> minOccurs=</span><span class="tAV">"1"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"styleResultWith"</span><span class="tAN"> type=</span><span class="tAV">"RefType"</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+        </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">Optional association with result style if results are styled with a non-default style</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:element&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"ArgumentList"</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tEl">/&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:group&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table>
+      <div class="footer">
+         <hr />
+         <div align="center">XML Schema documentation generated by <a href="http://www.oxygenxml.com" target="_parent"><span class="oXygenLogo"><span class="redX">&lt;</span>o<span class="redX">X</span>ygen<span class="redX">/&gt;</span></span></a><sup>®</sup> XML Editor.
+         </div>
+      </div><script type="text/javascript">
+         <!--
+                     // The namespace is the selected option in the TOC combo.
+                    
+                     // Floats the toolbar.
+                     var globalControls = getElementObject("global_controls"); 
+                     
+                     if(globalControls != null){
+	                     var browser=navigator.appName;
+						 var version = parseFloat(navigator.appVersion.split('MSIE')[1]);
+						 
+						 var IE6 = false;
+						 if ((browser=="Microsoft Internet Explorer") && (version < 7)){
+						 	IE6 = true;
+						 }
+	
+	                     //alert (IE6 + " |V| " + version);
+	                     
+	                     if(IE6){
+	                     	// On IE 6 the 'fixed' property is not supported. We must use javascript. 
+	                         globalControls.style.position='absolute';                         
+	                         // The global controls will do not exist in the TOC frame, when chunking.
+	                         findAndFloat("global_controls", 225, 30);    
+	                     } else {
+	                      	  globalControls.style.position='fixed';                     	
+	                     }
+	                     
+	                     globalControls.style.right='0';                       
+                     }
+                //--></script></body>
+</html>

@@ -1,0 +1,7 @@
+@startuml
+
+    interface TestTaskEndListener [[TestTaskEndListener.html]] {
+        {abstract} +testTaskFinished(TestTaskResultDto): void
+    }
+
+@enduml

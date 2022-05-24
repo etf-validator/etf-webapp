@@ -1,0 +1,10 @@
+@startuml
+
+    interface Filter [[Filter.html]] {
+        +levelOfDetail(): Filter.LevelOfDetail
+        +fields(): String
+        {abstract} +offset(): int
+        {abstract} +limit(): int
+    }
+
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+
+    interface ResultStyle [[ResultStyle.html]] {
+        {abstract} +getPriority(): int
+        {abstract} +getResource(): URI
+    }
+
+@enduml

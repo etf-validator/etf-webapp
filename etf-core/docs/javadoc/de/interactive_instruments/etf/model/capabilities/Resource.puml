@@ -1,0 +1,20 @@
+@startuml
+
+    interface Resource [[Resource.html]] {
+        {static} +create(String, URI, Credentials): Resource
+        {static} +create(String, URI): Resource
+        {static} +toCached(Resource): CachedResource
+        {static} +toCached(RemoteResource): CachedRemoteResource
+        {static} +toCached(MutableRemoteResource): MutableCachedRemoteResource
+        {static} +toCached(LocalResource): CachedLocalResource
+        {static} +toMutable(RemoteResource): MutableRemoteResource
+        {static} +toImmutable(Resource): Resource
+        {abstract} +getName(): String
+        {abstract} +getUri(): URI
+        {abstract} +getContentLength(): long
+        {abstract} +openStream(): InputStream
+        {abstract} +getBytes(): byte[]
+        {abstract} +exists(): boolean
+    }
+
+@enduml

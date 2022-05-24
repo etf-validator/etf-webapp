@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<descriptor type="o-x">
+   <name>de.interactive_instruments.etf.dal.dto.result.AttachmentDto</name>
+   <class-handle>
+      <type-name>de.interactive_instruments.etf.dal.dto.result.AttachmentDto</type-name>
+   </class-handle>
+   <transactional-policy type="ox">
+      <descriptor-alias>AttachmentDto</descriptor-alias>
+      <refresh-cache-policy/>
+      <caching-policy/>
+      <query-manager type="ox"/>
+      <locking-policy type="ox"/>
+      <primary-key-policy>
+         <primary-keys>
+            <xml-field>@id</xml-field>
+         </primary-keys>
+      </primary-key-policy>
+   </transactional-policy>
+   <mappings>
+      <mapping type="xml-direct">
+         <name>embeddedData</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.AttachmentDto</attribute-declaring-type-name>
+            <attribute-name>embeddedData</attribute-name>
+         </attribute-handle>
+         <xml-field>embeddedData/text()</xml-field>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>encoding</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.AttachmentDto</attribute-declaring-type-name>
+            <attribute-name>encoding</attribute-name>
+         </attribute-handle>
+         <xml-field>encoding/text()</xml-field>
+      </mapping>
+      <mapping type="xml-transformation">
+         <name>id</name>
+         <inherited>true</inherited>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.Dto</attribute-declaring-type-name>
+            <attribute-name>id</attribute-name>
+         </attribute-handle>
+         <attribute-transformer type="class-based">
+            <transformer-class-handle>
+               <type-name>de.interactive_instruments.etf.dal.dao.basex.transformers.EidAttributeTransformer</type-name>
+            </transformer-class-handle>
+         </attribute-transformer>
+         <field-transformer-associations type="xml">
+            <field-transformer type="class-based">
+               <transformer-class-handle>
+                  <type-name>de.interactive_instruments.etf.dal.dao.basex.transformers.EidFieldTransformer</type-name>
+               </transformer-class-handle>
+            </field-transformer>
+            <xml-field>@id</xml-field>
+         </field-transformer-associations>
+         <mutable>true</mutable>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>label</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.AttachmentDto</attribute-declaring-type-name>
+            <attribute-name>label</attribute-name>
+         </attribute-handle>
+         <xml-field>label/text()</xml-field>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>mimeType</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.AttachmentDto</attribute-declaring-type-name>
+            <attribute-name>mimeType</attribute-name>
+         </attribute-handle>
+         <xml-field>mimeType/text()</xml-field>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>referencedData</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.AttachmentDto</attribute-declaring-type-name>
+            <attribute-name>referencedData</attribute-name>
+         </attribute-handle>
+         <xml-field>referencedData/@href</xml-field>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>type</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.result.AttachmentDto</attribute-declaring-type-name>
+            <attribute-name>type</attribute-name>
+         </attribute-handle>
+         <xml-field>@type</xml-field>
+      </mapping>
+   </mappings>
+   <inherited-attribute-handles>
+      <attribute-handle>
+         <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.Dto</attribute-declaring-type-name>
+         <attribute-name>id</attribute-name>
+      </attribute-handle>
+   </inherited-attribute-handles>
+   <schema-context-handle>
+      <schema>Result Set</schema>
+      <qname-path>
+         <qname component-type="element" namespace-uri="http://www.interactive-instruments.de/etf/2.0" local-name="Attachment"/>
+      </qname-path>
+   </schema-context-handle>
+   <default-root-element-handle>
+      <schema>Result Set</schema>
+      <qname-path>
+         <qname component-type="element" namespace-uri="http://www.interactive-instruments.de/etf/2.0" local-name="Attachment"/>
+      </qname-path>
+   </default-root-element-handle>
+   <root-descriptor>true</root-descriptor>
+</descriptor>

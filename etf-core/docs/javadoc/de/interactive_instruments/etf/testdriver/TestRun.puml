@@ -1,0 +1,11 @@
+@startuml
+
+    interface TestRun [[TestRun.html]] {
+        {abstract} +getLabel(): String
+        {abstract} +getTestTasks(): List<TestTask>
+        {abstract} +start(): void
+        {abstract} +addTestRunEventListener(TestRunEventListener): void
+        {abstract} +getProgress(): TaskProgress
+    }
+
+@enduml

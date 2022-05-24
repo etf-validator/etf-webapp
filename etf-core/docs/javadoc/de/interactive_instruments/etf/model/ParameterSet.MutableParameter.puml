@@ -1,0 +1,23 @@
+@startuml
+
+    class ParameterSet.MutableParameter [[ParameterSet.MutableParameter.html]] {
+        +MutableParameter()
+        +MutableParameter(Parameterizable.Parameter)
+        +MutableParameter(String, String)
+        +setName(String): void
+        +setDefaultValue(String): void
+        +setDescription(String): void
+        +setAllowedValues(String): void
+        +setType(String): void
+        +setRequired(boolean): void
+        +setExcludingParameter(Set<String>): void
+        +getName(): String
+        +getDefaultValue(): String
+        +getDescription(): String
+        +getAllowedValues(): String
+        +getType(): String
+        +isRequired(): boolean
+        +getExcludingParameter(): Set<String>
+    }
+
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+
+    class Arguments.Argument [[Arguments.Argument.html]] {
+        +Argument()
+        +Argument(String, String)
+        +getName(): String
+        +getValue(): String
+    }
+
+@enduml

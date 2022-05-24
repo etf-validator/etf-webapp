@@ -1,0 +1,9 @@
+@startuml
+
+    class ExecutableTestSuiteUnavailable [[ExecutableTestSuiteUnavailable.html]] {
+        +ExecutableTestSuiteUnavailable(ExecutableTestSuiteDto)
+        +ExecutableTestSuiteUnavailable(ExecutableTestSuiteDto, Throwable)
+        +ExecutableTestSuiteUnavailable(String)
+    }
+
+@enduml

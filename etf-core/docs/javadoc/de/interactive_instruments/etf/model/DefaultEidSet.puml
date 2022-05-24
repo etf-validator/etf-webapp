@@ -1,0 +1,26 @@
+@startuml
+
+    class DefaultEidSet<V> [[DefaultEidSet.html]] {
+        +DefaultEidSet()
+        +DefaultEidSet(Map<EID, V>)
+        +DefaultEidSet(Collection<V>)
+        +createCopy(): DefaultEidSet<V>
+        +unmodifiable(): EidSet<V>
+        +toMap(): EidMap<V>
+        +toList(): List<V>
+        +internalContains(Object): boolean
+        +internalRemove(Object): boolean
+        +internalContainsAll(Collection<?>): boolean
+        +internalRetainAll(Collection<?>): boolean
+        +internalRemoveAll(Collection<?>): boolean
+        +size(): int
+        +isEmpty(): boolean
+        +iterator(): Iterator<V>
+        +toArray(): Object[]
+        +toArray(T[]): T[]
+        +add(V): boolean
+        +addAll(Collection<?>): boolean
+        +clear(): void
+    }
+
+@enduml

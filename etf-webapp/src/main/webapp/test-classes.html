@@ -1,0 +1,131 @@
+<!--
+  ~ Copyright 2010-2019 interactive instruments GmbH
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <title>test-classes.html (development view)</title>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.min.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.rep.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.wi.css" />
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" />
+    <script data-main="js/main-local-dev" src="//cdn.jsdelivr.net/requirejs/2.1.8/require.min.js"></script>
+
+</head>
+<body>
+
+<div tiles:fragment="test-classes-page" id="test-classes-page" data-role="page" data-title="Start Tests">
+    <div tiles:replace="header">
+        <!-- Header -->
+    </div>
+
+    <div role="main" class="ui-content">
+        <!-- Main -->
+
+        <div id="test-classes-content">
+            <div style="float: right">
+                <div data-role="none" data-enhance="false" class="fileinput-button ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all ui-mini">
+                    <div data-role="none" data-enhance="false" th:text="#{l.Use.local.Test.Class}">[[#{l.Use.local.Test.Class}]]</div>
+                    <input id="temp-test-class-file-upload" data-role="none" data-enhance="false" type="file" name="file" accept=".etcd" />
+                </div><br/>
+                <a th:if="${T(de.interactive_instruments.etf.webapp.helpers.View).tconfPageURL} != 'false'" data-role="button" data-inline="true" data-mini="true" target="_tc_configurator" th:href="${T(de.interactive_instruments.etf.webapp.helpers.View).tconfPageURL}">Zum Testklassenkonfigurator</a>
+            </div>
+            <h2><span th:text="#{l.Testclasses}">Test Classes</span></h2>
+            <p style="padding-right: 260px" th:text="#{l.Testclasses.help}">Help text</p>
+
+            <div id="test-class-container">
+                <!-- Container for template -->
+            </div>
+        </div>
+    </div>
+
+    <div tiles:replace="footer">
+        <!-- Footer -->
+    </div>
+</div>
+
+
+<!-- Underscore Template -->
+<script tiles:fragment="test-classes-page" id="test-classe-items-template" type="text/template" th:inline="text">
+    <![CDATA[
+    <!-- guard comment -->
+
+    <% if (_.isEmpty(collection) && !_.isEmpty(testObjectId)) { %>
+    <p>Es ist keine Testklasse verf&uuml;gbar, die mit dem Test Objekt <a href="#test-objects?id=<%= testObjectId %>" target="_new-etf-tab"><%= testObjectLabel %></a> kompatibel ist. Bitte pr&uuml;fen Sie die Testdaten und den Typ des Test Objekts. <a href="#test-classes" th:text="#{l.Clear.selection}">[[#{l.Clear.selection}]]</a>.</p>
+    <% }else{ %>
+
+    <% if (!_.isEmpty(testObjectId)) { %>
+    <p>Es werden nur Testklassen angezeigt, die mit dem Test Objekt <a href="#test-objects?id=<%= testObjectId %>" target="_new-etf-tab"><%= testObjectLabel %></a> kompatibel sind. <a href="#test-classes" th:text="#{l.Clear.selection}">[[#{l.Clear.selection}]]</a>.</p>
+    <% }else{ %>
+    <br/>
+    <% } %>
+
+    <ul id="test-class-listview" data-role="listview"
+        data-inset="true" class="ui-listview-outer" data-filter="true" data-filter-placeholder="[[#{l.Filter.Test.Classes}]]" th:attr="data-filter-placeholder=#{l.Filter.Test.Classes}">
+    <% v2.each( collection, function( testclass ) { %>
+    <li class="ii-collapsible-li" data-role="collapsible" data-iconpos="left" data-shadow="false" data-corners="false">
+        <h2>
+            <%= testclass.label %>
+        </h2>
+
+        <% if (!_.isUndefined(testclass.description)) { %>
+        <h3><span th:text="#{l.Description}">[[#{l.Description}]]</span>:</h3>
+        <span><%= testclass.description %></span>
+        <% } %>
+
+        <div>
+            <h3><span>[[#{l.Applicable.to.Test.Object.Types}]]</span>: </h3>
+            <ul>
+                <% v2.each( testclass.supportedTestObjectTypes, function( testObjectType ) { %>
+                    <li><%= testObjectType.label %></li>
+                <% }); %>
+            </ul>
+        </div>
+
+        <div>
+            <h3><span>[[#{l.General}]]</span>: </h3>
+            <ul>
+                <li>[[#{l.Author}]]<span>: </span><%= testclass.author %></li>
+                <li>[[#{l.Date.created}]]<span>: </span><%= moment(testclass.creationDate).format('DD.MM.YYYY') %></li>
+                <li>[[#{l.Version}]]<span>: </span><%= testclass.version %></li>
+                <% v2.jeachSafe( testclass.Properties, function( p ) { %>
+                    <li><%= v2.beautifyNerdyStr(p.property.name) %><span>: </span><%= p.property.$ %></li>
+                <% }); %>
+            </ul>
+        </div>
+
+        <a href="#configure-run-with-test-class?id=<%= testclass.id + testObjectUrlParameter %>" class="action-button-tr" data-icon="action" data-role="button" data-inline="true" data-mini="true" th:text="#{l.Start}">[[#{l.Start}]]</a>
+    </li>
+    <% }); %>
+    </ul>
+    <% } %>
+
+    <!-- ]]> -->
+</script>
+
+</body>
+</html>
+

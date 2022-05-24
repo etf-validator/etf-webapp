@@ -1,0 +1,8 @@
+@startuml
+
+    enum ExecutableTestSuiteLifeCycleListener.EventType [[ExecutableTestSuiteLifeCycleListener.EventType.html]] {
+        {static} +CREATED
+        {static} +REMOVED
+    }
+
+@enduml

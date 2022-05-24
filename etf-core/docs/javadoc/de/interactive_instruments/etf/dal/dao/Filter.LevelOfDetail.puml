@@ -1,0 +1,9 @@
+@startuml
+
+    enum Filter.LevelOfDetail [[Filter.LevelOfDetail.html]] {
+        {static} +SIMPLE
+        {static} +HISTORY
+        {static} +DETAILED_WITHOUT_HISTORY
+    }
+
+@enduml

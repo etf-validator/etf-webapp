@@ -1,0 +1,8 @@
+@startuml
+
+    interface ExecutableTestSuiteLifeCycleListenerMediator [[ExecutableTestSuiteLifeCycleListenerMediator.html]] {
+        {abstract} +registerListener(ExecutableTestSuiteLifeCycleListener): void
+        {abstract} +deregisterListener(ExecutableTestSuiteLifeCycleListener): void
+    }
+
+@enduml

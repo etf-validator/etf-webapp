@@ -1,0 +1,2681 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema documentation for items.xsd</title>
+      <link rel="stylesheet" href="docHtml.css" type="text/css" /><script type="text/javascript">
+         <!--
+        var propertiesBoxes= new Array('properties_items.xsd', 
+				'properties_components', 
+				'properties_testCases', 
+				'properties_testAssertions', 
+				'properties_testItemTypes', 
+				'properties_executableTestSuites', 
+				'properties_testObjects', 
+				'properties_testObjectTypes', 
+				'properties_credentials', 
+				'properties_users', 
+				'properties_tags', 
+				'properties_translationTemplateBundles', 
+				'properties_resultStyles', 
+				'properties_abstractTestSuites', 
+				'properties_testRunTemplates', 
+				'properties_testRuns', 
+				'properties_testTaskResults');
+var usedByBoxes= new Array('usedBy_components', 
+				'usedBy_testCases', 
+				'usedBy_testAssertions', 
+				'usedBy_testItemTypes', 
+				'usedBy_executableTestSuites', 
+				'usedBy_testObjects', 
+				'usedBy_testObjectTypes', 
+				'usedBy_credentials', 
+				'usedBy_users', 
+				'usedBy_tags', 
+				'usedBy_translationTemplateBundles', 
+				'usedBy_resultStyles', 
+				'usedBy_abstractTestSuites', 
+				'usedBy_testRunTemplates', 
+				'usedBy_testRuns', 
+				'usedBy_testTaskResults');
+var sourceBoxes= new Array('source_components', 
+				'source_testCases', 
+				'source_testAssertions', 
+				'source_testItemTypes', 
+				'source_executableTestSuites', 
+				'source_testObjects', 
+				'source_testObjectTypes', 
+				'source_credentials', 
+				'source_users', 
+				'source_tags', 
+				'source_translationTemplateBundles', 
+				'source_resultStyles', 
+				'source_abstractTestSuites', 
+				'source_testRunTemplates', 
+				'source_testRuns', 
+				'source_testTaskResults');
+var instanceBoxes= new Array('instance_components', 
+				'instance_testCases', 
+				'instance_testAssertions', 
+				'instance_testItemTypes', 
+				'instance_executableTestSuites', 
+				'instance_testObjects', 
+				'instance_testObjectTypes', 
+				'instance_credentials', 
+				'instance_users', 
+				'instance_tags', 
+				'instance_translationTemplateBundles', 
+				'instance_resultStyles', 
+				'instance_abstractTestSuites', 
+				'instance_testRunTemplates', 
+				'instance_testRuns', 
+				'instance_testTaskResults');
+var diagramBoxes= new Array('diagram_components', 
+				'diagram_testCases', 
+				'diagram_testAssertions', 
+				'diagram_testItemTypes', 
+				'diagram_executableTestSuites', 
+				'diagram_testObjects', 
+				'diagram_testObjectTypes', 
+				'diagram_credentials', 
+				'diagram_users', 
+				'diagram_tags', 
+				'diagram_translationTemplateBundles', 
+				'diagram_resultStyles', 
+				'diagram_abstractTestSuites', 
+				'diagram_testRunTemplates', 
+				'diagram_testRuns', 
+				'diagram_testTaskResults');
+var annotationBoxes= new Array('annotations_items.xsd', 
+				'annotations_components', 
+				'annotations_testCases', 
+				'annotations_testAssertions', 
+				'annotations_executableTestSuites', 
+				'annotations_testObjects', 
+				'annotations_testObjectTypes', 
+				'annotations_credentials', 
+				'annotations_users', 
+				'annotations_tags', 
+				'annotations_translationTemplateBundles', 
+				'annotations_resultStyles', 
+				'annotations_abstractTestSuites', 
+				'annotations_testRunTemplates', 
+				'annotations_testRuns', 
+				'annotations_testTaskResults');
+var modelBoxes= new Array('model_components', 
+				'model_testCases', 
+				'model_testAssertions', 
+				'model_testItemTypes', 
+				'model_executableTestSuites', 
+				'model_testObjects', 
+				'model_testObjectTypes', 
+				'model_credentials', 
+				'model_users', 
+				'model_tags', 
+				'model_translationTemplateBundles', 
+				'model_resultStyles', 
+				'model_abstractTestSuites', 
+				'model_testRunTemplates', 
+				'model_testRuns', 
+				'model_testTaskResults');
+
+      
+        var button_prefix = 'button_';
+        
+        /**
+        * Returns an element in the current HTML document.
+        *
+        * @param elementID Identifier of HTML element
+        * @return               HTML element object
+        */
+        function getElementObject(elementID) {
+            var elemObj = null;
+            if (document.getElementById) {
+                elemObj = document.getElementById(elementID);
+            }
+            return elemObj;
+        }
+        
+        /**
+        * Switches the state of a collapseable box, e.g.
+        * if it's opened, it'll be closed, and vice versa.
+        *
+        * @param boxID Identifier of box
+        */
+        function switchState(boxID) {
+            var boxObj = getElementObject(boxID);
+            var buttonObj = getElementObject(button_prefix + boxID);
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else if (boxObj.style.display == "none") {
+                // Box is closed, so open it
+                openBox(boxObj, buttonObj);
+            } else if (boxObj.style.display == "block") {
+                // Box is opened, so close it
+                closeBox(boxObj, buttonObj);
+            }
+        }
+        
+        /**
+        * Opens a collapseable box.
+        *
+        * @param boxObj       Collapseable box
+        * @param buttonObj Button controlling box
+        */
+        function openBox(boxObj, buttonObj) {
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else {
+                // Change 'display' CSS property of box
+                boxObj.style.display = "block";
+                
+                // Change text of button
+                if (boxObj.style.display == "block") {
+                    buttonObj.src = "img/btM.gif";
+                }
+            }
+        }
+        
+        /**
+        * Closes a collapseable box.
+        *
+        * @param boxObj       Collapseable box
+        * @param buttonObj Button controlling box
+        */
+        function closeBox(boxObj, buttonObj) {
+            if (boxObj == null || buttonObj == null) {
+                // Box or button not found
+            } else {
+                // Change 'display' CSS property of box
+                boxObj.style.display = "none";
+                
+                // Change text of button
+                if (boxObj.style.display == "none") {
+                    buttonObj.src = "img/btP.gif";
+                }
+            }
+        }
+    
+       function switchStateForAll(buttonObj, boxList) {
+            if (buttonObj == null) {
+                // button not found
+            } else if (buttonObj.value == "+") {
+                // Expand all
+                expandAll(boxList);
+                buttonObj.value = "-";
+            } else if (buttonObj.value == "-") {
+                // Collapse all
+                collapseAll(boxList);
+                buttonObj.value = "+";
+            }
+        }
+        
+        /**
+        * Closes all boxes in a given list.
+        *
+        * @param boxList Array of box IDs
+        */
+        function collapseAll(boxList) {
+            var idx;
+            for (idx = 0; idx < boxList.length; idx++) {
+                var boxObj = getElementObject(boxList[idx]);
+                var buttonObj = getElementObject(button_prefix + boxList[idx]);
+                closeBox(boxObj, buttonObj);
+            }
+        }
+            
+        /**
+        * Open all boxes in a given list.
+        *
+        * @param boxList Array of box IDs
+        */
+        function expandAll(boxList) {
+            var idx;
+            for (idx = 0; idx < boxList.length; idx++) {
+                var boxObj = getElementObject(boxList[idx]);
+                var buttonObj = getElementObject(button_prefix + boxList[idx]);
+                openBox(boxObj, buttonObj);
+            }
+        }
+        
+        /**
+         * Update the message presented in the title of the html page.
+         * - If the documentation was splited by namespace we present something like: "Documentation for namespace 'ns'"
+         * - If the documentation was splited by location we present somehing like: "Documentation for 'Schema.xsd'"
+         * - If no split we always present: "Documentation for 'MainSchema.xsd'"
+         */
+        function updatePageTitle(message) {
+            top.document.title = message;
+        }
+        
+          
+                    
+         /**
+          * Finds an HTML element by its ID and makes it floatable over the normal content.
+          *
+          * @param x_displacement The difference in pixels to the right side of the window from 
+          *           the left side of the element.
+          * @param y_displacement The difference in pixels to the right side of the window from 
+          *           the top of the element.          
+          */
+         function findAndFloat(id, x_displacement, y_displacement){
+
+            var element = getElementObject(id);            
+            
+            window[id + "_obj"] = element;
+            
+            if(document.layers) {
+               element.style = element;
+            }
+            
+            element.current_y = y_displacement;      
+            element.first_time = true;
+         
+            element.floatElement = function(){
+               // It may be closed by an user action.
+                
+               // Target X and Y coordinates.
+               var x, y;
+               
+               var myWidth = 0, myHeight = 0;
+               if( typeof( window.innerWidth ) == 'number' ) {
+                  //Non-IE
+                  myWidth = window.innerWidth;
+                  myHeight = window.innerHeight;
+               } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+                  //IE 6+ in 'standards compliant mode'
+                  myWidth = document.documentElement.clientWidth;
+                  myHeight = document.documentElement.clientHeight;
+               } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+                  //IE 4 compatible
+                  myWidth = document.body.clientWidth;
+                  myHeight = document.body.clientHeight;
+               }
+               
+               
+               x = myWidth - x_displacement;
+               
+               var ns = (navigator.appName.indexOf("Netscape") != -1);               
+               y = ns ? pageYOffset : document.documentElement && document.documentElement.scrollTop ? 
+                  document.documentElement.scrollTop : document.body.scrollTop;               
+               y = y + y_displacement;               
+               
+               // The current y is the current coordinate of the floating element.
+               // This should be at the limit the y target coordinate.
+               this.current_y += (y - this.current_y)/1.25;
+               
+               // Add the pixels constant after the values
+               // and move the element.
+               var px = document.layers ? "" : "px";
+               this.style.left =  x + px;
+               this.style.top =  this.current_y + px;
+                              
+               setTimeout(this.id + "_obj.floatElement()", 100);
+            }
+            
+            element.floatElement();
+            return element;
+          }
+
+         /**
+          * Finds an HTML element by its ID and makes it floatable over the normal content.
+          *
+          * @param x_displacement The difference in pixels to the right side of the window from 
+          *           the left side of the element.
+          * @param y_displacement The difference in pixels to the right side of the window from 
+          *           the top of the element.          
+          */
+         function selectTOCGroupBy(id, isChunked, indexFileLocation, indexFileNamespace, indexFileComponent){
+
+            if (!isChunked) {
+             var selectIds = new Array('toc_group_by_namespace', 'toc_group_by_location', 'toc_group_by_component_type');
+             // Make all the tabs invisible.
+               for (i = 0; i < 3; i++){
+                  var tab = getElementObject(selectIds[i]);
+                  tab.style.display = 'none';
+               }
+               var selTab = getElementObject(id);
+               selTab.style.display = 'block';
+            } else {
+             if (id == 'toc_group_by_namespace') {
+               parent.indexFrame.location = indexFileNamespace;
+             } else  if (id == 'toc_group_by_location') {
+               parent.indexFrame.location = indexFileLocation;
+             } else  if (id == 'toc_group_by_component_type') {
+              parent.indexFrame.location = indexFileComponent;
+             }
+            }
+         }
+          
+
+    
+                    //--></script></head>
+   <body>
+      <div id="global_controls" class="globalControls" style="position:absolute;right:0;">
+         <table class="rt">
+            <tr>
+               <td class="rt_cornerTopLeft"></td>
+               <td class="rt_lineTop"></td>
+               <td class="rt_cornerTopRight"></td>
+            </tr>
+            <tr>
+               <td class="rt_lineLeft"></td>
+               <td class="rt_content">
+                  <h3>Showing:</h3>
+                  <table>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, annotationBoxes);" class="control" /></span><span class="globalControlName">Annotations</span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, diagramBoxes);" class="control" /></span><span class="globalControlName">Diagrams</span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, instanceBoxes);" class="control" /></span><span class="globalControlName">Instances</span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, modelBoxes);" class="control" /></span><span class="globalControlName">Model </span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, propertiesBoxes);" class="control" /></span><span class="globalControlName">Properties </span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, sourceBoxes);" class="control" /></span><span class="globalControlName">Source</span></td>
+                     </tr>
+                     <tr>
+                        <td><span><input type="checkbox" value="-" checked="checked" onclick="switchStateForAll(this, usedByBoxes);" class="control" /></span><span class="globalControlName">Used by </span></td>
+                     </tr>
+                  </table>
+                  <div align="right"><span><input type="button" onclick="getElementObject('global_controls').style.display = 'none';" value="Close" /></span></div>
+               </td>
+               <td class="rt_lineRight"></td>
+            </tr>
+            <tr>
+               <td class="rt_cornerBottomLeft"></td>
+               <td class="rt_lineBottom"></td>
+               <td class="rt_cornerBottomRight"></td>
+            </tr>
+         </table>
+      </div><a id="items.xsd"></a><div class="componentTitle">Included schema <span class="qname">items.xsd</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_items.xsd" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_items.xsd');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_items.xsd" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">items.xsd. Created by Jon Herrmann, (c) 2016-2017</span><span class="tI">
+</span><span class="tT">interactive instruments GmbH. This file is part of ETF which is licensed under the</span><span class="tI">
+</span><span class="tT">Apache License Version 2.0</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_items.xsd" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_items.xsd');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_items.xsd" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">attribute form default</td>
+                                    <td><b>unqualified</b></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">element form default</td>
+                                    <td><b>qualified</b></td>
+                                 </tr>
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">version</td>
+                                    <td><b>1.0</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="components"></a><div class="componentTitle">Element <span class="qname">components</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_components" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_components');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_components" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">ETF Components: write/update | Client: read</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_components" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_components');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_components" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_components.jpeg" usemap="#items_xsd_Element_components" /><map name="items_xsd_Element_components" id="items_xsd_Element_components">
+                                 <area alt="capabilities_xsd.tmp#Component" href="capabilities_xsd.html#Component" coords="238,6,332,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_components" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_components');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_components" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_components" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_components');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_components" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_components" type="image" src="img/btM.gif" value="-" onclick="switchState('model_components');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_components" style="display:block"><b><a href="capabilities_xsd.html#Component" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">Component</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="capabilities_xsd.html#Component" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">Component</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_components" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_components');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_components" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;components</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;Component</span><span class="tT"> </span><span class="tAN">egaid=</span><span class="tAV">""</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/Component&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/components&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_components" type="image" src="img/btM.gif" value="-" onclick="switchState('source_components');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_components" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"components"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">ETF Components: write/update | Client: read</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"Component"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="testCases"></a><div class="componentTitle">Element <span class="qname">testCases</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_testCases" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_testCases');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_testCases" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">not implemented yet</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_testCases" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_testCases');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_testCases" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_testCases.jpeg" usemap="#items_xsd_Element_testCases" /><map name="items_xsd_Element_testCases" id="items_xsd_Element_testCases">
+                                 <area alt="test_xsd.tmp#ParameterizedTestCase" href="test_xsd.html#ParameterizedTestCase" coords="223,6,379,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_testCases" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_testCases');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_testCases" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_testCases" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_testCases');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_testCases" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_testCases" type="image" src="img/btM.gif" value="-" onclick="switchState('model_testCases');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_testCases" style="display:block"><b><a href="test_xsd.html#ParameterizedTestCase" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">ParameterizedTestCase</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="test_xsd.html#ParameterizedTestCase" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">ParameterizedTestCase</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_testCases" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_testCases');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_testCases" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;testCases</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;ParameterizedTestCase</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/ParameterizedTestCase&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/testCases&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_testCases" type="image" src="img/btM.gif" value="-" onclick="switchState('source_testCases');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_testCases" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testCases"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">not implemented yet</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"ParameterizedTestCase"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="testAssertions"></a><div class="componentTitle">Element <span class="qname">testAssertions</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_testAssertions" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_testAssertions');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_testAssertions" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">not implemented yet</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_testAssertions" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_testAssertions');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_testAssertions" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_testAssertions.jpeg" usemap="#items_xsd_Element_testAssertions" /><map name="items_xsd_Element_testAssertions" id="items_xsd_Element_testAssertions">
+                                 <area alt="test_xsd.tmp#ParameterizedTestAssertion" href="test_xsd.html#ParameterizedTestAssertion" coords="249,6,431,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_testAssertions" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_testAssertions');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_testAssertions" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_testAssertions" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_testAssertions');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_testAssertions" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_testAssertions" type="image" src="img/btM.gif" value="-" onclick="switchState('model_testAssertions');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_testAssertions" style="display:block"><b><a href="test_xsd.html#ParameterizedTestAssertion" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">ParameterizedTestAssertion</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="test_xsd.html#ParameterizedTestAssertion" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">ParameterizedTestAssertion</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_testAssertions" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_testAssertions');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_testAssertions" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;testAssertions</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;ParameterizedTestAssertion</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/ParameterizedTestAssertion&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/testAssertions&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_testAssertions" type="image" src="img/btM.gif" value="-" onclick="switchState('source_testAssertions');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_testAssertions" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testAssertions"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">not implemented yet</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"ParameterizedTestAssertion"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="testItemTypes"></a><div class="componentTitle">Element <span class="qname">testItemTypes</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_testItemTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_testItemTypes');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_testItemTypes" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_testItemTypes.jpeg" usemap="#items_xsd_Element_testItemTypes" /><map name="items_xsd_Element_testItemTypes" id="items_xsd_Element_testItemTypes">
+                                 <area alt="test_xsd.tmp#TestItemType" href="test_xsd.html#TestItemType" coords="226,6,329,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_testItemTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_testItemTypes');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_testItemTypes" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_testItemTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_testItemTypes');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_testItemTypes" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_testItemTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('model_testItemTypes');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_testItemTypes" style="display:block"><b><a href="test_xsd.html#TestItemType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">TestItemType</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="test_xsd.html#TestItemType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">TestItemType</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_testItemTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_testItemTypes');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_testItemTypes" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;testItemTypes</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;TestItemType</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/TestItemType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/testItemTypes&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_testItemTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('source_testItemTypes');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_testItemTypes" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testItemTypes"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"TestItemType"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="executableTestSuites"></a><div class="componentTitle">Element <span class="qname">executableTestSuites</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_executableTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_executableTestSuites');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_executableTestSuites" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">ETF Components: read/write/update (test drivers) | Client:</span><span class="tI">
+</span><span class="tT">read</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_executableTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_executableTestSuites');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_executableTestSuites" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_executableTestSuites.jpeg" usemap="#items_xsd_Element_executableTestSuites" /><map name="items_xsd_Element_executableTestSuites" id="items_xsd_Element_executableTestSuites">
+                                 <area alt="test_xsd.tmp#ExecutableTestSuite" href="test_xsd.html#ExecutableTestSuite" coords="284,6,422,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_executableTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_executableTestSuites');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_executableTestSuites" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_executableTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_executableTestSuites');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_executableTestSuites" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_executableTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('model_executableTestSuites');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_executableTestSuites" style="display:block"><b><a href="test_xsd.html#ExecutableTestSuite" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">ExecutableTestSuite</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="test_xsd.html#ExecutableTestSuite" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for test.xsd')">ExecutableTestSuite</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_executableTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_executableTestSuites');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_executableTestSuites" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;executableTestSuites</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;ExecutableTestSuite</span><span class="tT"> </span><span class="tAN">egaid=</span><span class="tAV">""</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/ExecutableTestSuite&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/executableTestSuites&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_executableTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('source_executableTestSuites');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_executableTestSuites" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"executableTestSuites"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">ETF Components: read/write/update (test drivers) | Client: read</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"ExecutableTestSuite"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="testObjects"></a><div class="componentTitle">Element <span class="qname">testObjects</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_testObjects" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_testObjects');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_testObjects" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">ETF Components: read/update (resource change) | Client:</span><span class="tI">
+</span><span class="tT">read/write/update</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_testObjects" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_testObjects');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_testObjects" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_testObjects.jpeg" usemap="#items_xsd_Element_testObjects" /><map name="items_xsd_Element_testObjects" id="items_xsd_Element_testObjects">
+                                 <area alt="capabilities_xsd.tmp#TestObject" href="capabilities_xsd.html#TestObject" coords="232,6,321,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_testObjects" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_testObjects');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_testObjects" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_testObjects" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_testObjects');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_testObjects" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_testObjects" type="image" src="img/btM.gif" value="-" onclick="switchState('model_testObjects');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_testObjects" style="display:block"><b><a href="capabilities_xsd.html#TestObject" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">TestObject</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="capabilities_xsd.html#TestObject" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">TestObject</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_testObjects" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_testObjects');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_testObjects" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;testObjects</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;TestObject</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/TestObject&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/testObjects&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_testObjects" type="image" src="img/btM.gif" value="-" onclick="switchState('source_testObjects');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_testObjects" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testObjects"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">ETF Components: read/update (resource change) | Client: read/write/update</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"TestObject"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="testObjectTypes"></a><div class="componentTitle">Element <span class="qname">testObjectTypes</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_testObjectTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_testObjectTypes');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_testObjectTypes" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">ETF Components: read/write/update (test drivers) | Client:</span><span class="tI">
+</span><span class="tT">read</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_testObjectTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_testObjectTypes');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_testObjectTypes" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_testObjectTypes.jpeg" usemap="#items_xsd_Element_testObjectTypes" /><map name="items_xsd_Element_testObjectTypes" id="items_xsd_Element_testObjectTypes">
+                                 <area alt="capabilities_xsd.tmp#TestObjectType" href="capabilities_xsd.html#TestObjectType" coords="258,6,373,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_testObjectTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_testObjectTypes');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_testObjectTypes" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_testObjectTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_testObjectTypes');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_testObjectTypes" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_testObjectTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('model_testObjectTypes');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_testObjectTypes" style="display:block"><b><a href="capabilities_xsd.html#TestObjectType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">TestObjectType</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="capabilities_xsd.html#TestObjectType" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">TestObjectType</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_testObjectTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_testObjectTypes');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_testObjectTypes" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;testObjectTypes</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;TestObjectType</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/TestObjectType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/testObjectTypes&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_testObjectTypes" type="image" src="img/btM.gif" value="-" onclick="switchState('source_testObjectTypes');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_testObjectTypes" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testObjectTypes"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">ETF Components: read/write/update (test drivers) | Client: read</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"TestObjectType"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="credentials"></a><div class="componentTitle">Element <span class="qname">credentials</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_credentials" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_credentials');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_credentials" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">not implemented yet</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_credentials" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_credentials');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_credentials" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_credentials.jpeg" usemap="#items_xsd_Element_credentials" /><map name="items_xsd_Element_credentials" id="items_xsd_Element_credentials">
+                                 <area alt="capabilities_xsd.tmp#Credential" href="capabilities_xsd.html#Credential" coords="230,6,316,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_credentials" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_credentials');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_credentials" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_credentials" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_credentials');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_credentials" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_credentials" type="image" src="img/btM.gif" value="-" onclick="switchState('model_credentials');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_credentials" style="display:block"><b><a href="capabilities_xsd.html#Credential" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">Credential</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="capabilities_xsd.html#Credential" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">Credential</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_credentials" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_credentials');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_credentials" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;credentials</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;Credential</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/Credential&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/credentials&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_credentials" type="image" src="img/btM.gif" value="-" onclick="switchState('source_credentials');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_credentials" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"credentials"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">not implemented yet</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"Credential"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="users"></a><div class="componentTitle">Element <span class="qname">users</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_users" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_users');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_users" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">not implemented yet</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_users" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_users');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_users" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_users.jpeg" usemap="#items_xsd_Element_users" /><map name="items_xsd_Element_users" id="items_xsd_Element_users">
+                                 <area alt="user_xsd.tmp#User" href="user_xsd.html#User" coords="201,6,257,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_users" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_users');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_users" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_users" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_users');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_users" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_users" type="image" src="img/btM.gif" value="-" onclick="switchState('model_users');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_users" style="display:block"><b><a href="user_xsd.html#User" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for user.xsd')">User</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="user_xsd.html#User" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for user.xsd')">User</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_users" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_users');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_users" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;users</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;User</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/User&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/users&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_users" type="image" src="img/btM.gif" value="-" onclick="switchState('source_users');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_users" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"users"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">not implemented yet</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"User"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="tags"></a><div class="componentTitle">Element <span class="qname">tags</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_tags" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_tags');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_tags" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">ETF Components: read/write/update | Client: read</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_tags" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_tags');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_tags" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_tags.jpeg" usemap="#items_xsd_Element_tags" /><map name="items_xsd_Element_tags" id="items_xsd_Element_tags">
+                                 <area alt="capabilities_xsd.tmp#Tag" href="capabilities_xsd.html#Tag" coords="194,6,245,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_tags" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_tags');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_tags" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_tags" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_tags');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_tags" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_tags" type="image" src="img/btM.gif" value="-" onclick="switchState('model_tags');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_tags" style="display:block"><b><a href="capabilities_xsd.html#Tag" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">Tag</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="capabilities_xsd.html#Tag" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">Tag</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_tags" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_tags');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_tags" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;tags</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;Tag</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/Tag&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/tags&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_tags" type="image" src="img/btM.gif" value="-" onclick="switchState('source_tags');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_tags" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"tags"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">ETF Components: read/write/update | Client: read</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"Tag"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="translationTemplateBundles"></a><div class="componentTitle">Element <span class="qname">translationTemplateBundles</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_translationTemplateBundles" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_translationTemplateBundles');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_translationTemplateBundles" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">ETF Components: read/write | Client: read</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_translationTemplateBundles" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_translationTemplateBundles');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_translationTemplateBundles" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_translationTemplateBundles.jpeg" usemap="#items_xsd_Element_translationTemplateBundles" /><map name="items_xsd_Element_translationTemplateBundles" id="items_xsd_Element_translationTemplateBundles">
+                                 <area alt="basicTypes_xsd.tmp#TranslationTemplateBundle" href="basicTypes_xsd.html#TranslationTemplateBundle" coords="320,6,497,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_translationTemplateBundles" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_translationTemplateBundles');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_translationTemplateBundles" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_translationTemplateBundles" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_translationTemplateBundles');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_translationTemplateBundles" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_translationTemplateBundles" type="image" src="img/btM.gif" value="-" onclick="switchState('model_translationTemplateBundles');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_translationTemplateBundles" style="display:block"><b><a href="basicTypes_xsd.html#TranslationTemplateBundle" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">TranslationTemplateBundle</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="basicTypes_xsd.html#TranslationTemplateBundle" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for basicTypes.xsd')">TranslationTemplateBundle</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_translationTemplateBundles" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_translationTemplateBundles');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_translationTemplateBundles" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;translationTemplateBundles</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;TranslationTemplateBundle</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tT"> </span><span class="tAN">source=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/TranslationTemplateBundle&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/translationTemplateBundles&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_translationTemplateBundles" type="image" src="img/btM.gif" value="-" onclick="switchState('source_translationTemplateBundles');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_translationTemplateBundles" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"translationTemplateBundles"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">ETF Components: read/write | Client: read</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"TranslationTemplateBundle"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="resultStyles"></a><div class="componentTitle">Element <span class="qname">resultStyles</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_resultStyles" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_resultStyles');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_resultStyles" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">ETF Components: read/write | Client: read</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_resultStyles" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_resultStyles');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_resultStyles" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_resultStyles.jpeg" usemap="#items_xsd_Element_resultStyles" /><map name="items_xsd_Element_resultStyles" id="items_xsd_Element_resultStyles">
+                                 <area alt="capabilities_xsd.tmp#ResultStyle" href="capabilities_xsd.html#ResultStyle" coords="233,6,322,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_resultStyles" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_resultStyles');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_resultStyles" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_resultStyles" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_resultStyles');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_resultStyles" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_resultStyles" type="image" src="img/btM.gif" value="-" onclick="switchState('model_resultStyles');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_resultStyles" style="display:block"><b><a href="capabilities_xsd.html#ResultStyle" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">ResultStyle</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="capabilities_xsd.html#ResultStyle" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">ResultStyle</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_resultStyles" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_resultStyles');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_resultStyles" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;resultStyles</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;ResultStyle</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/ResultStyle&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/resultStyles&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_resultStyles" type="image" src="img/btM.gif" value="-" onclick="switchState('source_resultStyles');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_resultStyles" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"resultStyles"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">ETF Components: read/write | Client: read</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"ResultStyle"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="abstractTestSuites"></a><div class="componentTitle">Element <span class="qname">abstractTestSuites</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_abstractTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_abstractTestSuites');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_abstractTestSuites" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">ETF Components: read/write/update (repository connector) | Client:</span><span class="tI">
+</span><span class="tT">read</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_abstractTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_abstractTestSuites');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_abstractTestSuites" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_abstractTestSuites.jpeg" usemap="#items_xsd_Element_abstractTestSuites" /><map name="items_xsd_Element_abstractTestSuites" id="items_xsd_Element_abstractTestSuites">
+                                 <area alt="specification_xsd.tmp#AbstractTestSuite" href="specification_xsd.html#AbstractTestSuite" coords="270,6,396,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_abstractTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_abstractTestSuites');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_abstractTestSuites" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_abstractTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_abstractTestSuites');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_abstractTestSuites" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_abstractTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('model_abstractTestSuites');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_abstractTestSuites" style="display:block"><b><a href="specification_xsd.html#AbstractTestSuite" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for specification.xsd')">AbstractTestSuite</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="specification_xsd.html#AbstractTestSuite" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for specification.xsd')">AbstractTestSuite</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_abstractTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_abstractTestSuites');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_abstractTestSuites" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;abstractTestSuites</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;AbstractTestSuite</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/AbstractTestSuite&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/abstractTestSuites&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_abstractTestSuites" type="image" src="img/btM.gif" value="-" onclick="switchState('source_abstractTestSuites');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_abstractTestSuites" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"abstractTestSuites"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">ETF Components: read/write/update (repository connector) | Client: read</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"AbstractTestSuite"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="testRunTemplates"></a><div class="componentTitle">Element <span class="qname">testRunTemplates</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_testRunTemplates" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_testRunTemplates');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_testRunTemplates" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">ETF Components: read | Client: read/write/update</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_testRunTemplates" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_testRunTemplates');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_testRunTemplates" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_testRunTemplates.jpeg" usemap="#items_xsd_Element_testRunTemplates" /><map name="items_xsd_Element_testRunTemplates" id="items_xsd_Element_testRunTemplates">
+                                 <area alt="capabilities_xsd.tmp#TestRunTemplate" href="capabilities_xsd.html#TestRunTemplate" coords="267,6,391,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_testRunTemplates" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_testRunTemplates');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_testRunTemplates" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_testRunTemplates" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_testRunTemplates');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_testRunTemplates" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_testRunTemplates" type="image" src="img/btM.gif" value="-" onclick="switchState('model_testRunTemplates');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_testRunTemplates" style="display:block"><b><a href="capabilities_xsd.html#TestRunTemplate" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">TestRunTemplate</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="capabilities_xsd.html#TestRunTemplate" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for capabilities.xsd')">TestRunTemplate</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_testRunTemplates" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_testRunTemplates');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_testRunTemplates" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;testRunTemplates</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;TestRunTemplate</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/TestRunTemplate&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/testRunTemplates&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_testRunTemplates" type="image" src="img/btM.gif" value="-" onclick="switchState('source_testRunTemplates');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_testRunTemplates" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testRunTemplates"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">ETF Components: read | Client: read/write/update</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"TestRunTemplate"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="testRuns"></a><div class="componentTitle">Element <span class="qname">testRuns</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_testRuns" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_testRuns');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_testRuns" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">ETF Components: update (status change) | Client:</span><span class="tI">
+</span><span class="tT">read/write/update</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_testRuns" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_testRuns');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_testRuns" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_testRuns.jpeg" usemap="#items_xsd_Element_testRuns" /><map name="items_xsd_Element_testRuns" id="items_xsd_Element_testRuns">
+                                 <area alt="run_xsd.tmp#TestRun" href="run_xsd.html#TestRun" coords="218,6,293,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_testRuns" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_testRuns');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_testRuns" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_testRuns" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_testRuns');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_testRuns" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_testRuns" type="image" src="img/btM.gif" value="-" onclick="switchState('model_testRuns');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_testRuns" style="display:block"><b><a href="run_xsd.html#TestRun" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestRun</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="run_xsd.html#TestRun" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for run.xsd')">TestRun</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_testRuns" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_testRuns');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_testRuns" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;testRuns</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;TestRun</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tT"> </span><span class="tAN">status=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/TestRun&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/testRuns&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_testRuns" type="image" src="img/btM.gif" value="-" onclick="switchState('source_testRuns');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_testRuns" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testRuns"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">ETF Components: update (status change) | Client: read/write/update</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"TestRun"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table><a id="testTaskResults"></a><div class="componentTitle">Element <span class="qname">testTaskResults</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cornerTopLeft"></td>
+            <td class="rt_lineTop"></td>
+            <td class="rt_cornerTopRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_lineLeft"></td>
+            <td class="rt_content">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="firstColumn"><b>Namespace</b></td>
+                        <td>http://www.interactive-instruments.de/etf/2.0</td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Annotations</b></div>
+                           <div class="floatRight"><input id="button_annotations_testTaskResults" type="image" src="img/btM.gif" value="-" onclick="switchState('annotations_testTaskResults');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="annotations_testTaskResults" style="display:block">
+                              <div class="annotation">
+                                 <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                    <tr>
+                                       <td width="100%"><pre><span class="tT">ETF Components: write/update (results) | Client: traversed in</span><span class="tI">
+</span><span class="tT">testRuns</span></pre></td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Diagram</b></div>
+                           <div class="floatRight"><input id="button_diagram_testTaskResults" type="image" src="img/btM.gif" value="-" onclick="switchState('diagram_testTaskResults');" class="control" /></div>
+                        </td>
+                        <td class="diagram">
+                           <div id="diagram_testTaskResults" style="display:block"><img alt="Diagram" border="0" src="img/items_xsd_Element_testTaskResults.jpeg" usemap="#items_xsd_Element_testTaskResults" /><map name="items_xsd_Element_testTaskResults" id="items_xsd_Element_testTaskResults">
+                                 <area alt="result_xsd.tmp#TestTaskResult" href="result_xsd.html#TestTaskResult" coords="255,6,367,30" /></map></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Properties</b></div>
+                           <div class="floatRight"><input id="button_properties_testTaskResults" type="image" src="img/btM.gif" value="-" onclick="switchState('properties_testTaskResults');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="properties_testTaskResults" style="display:block">
+                              <table class="propertiesTable">
+                                 <tr>
+                                    <td class="firstColumn" style="white-space: nowrap;">content</td>
+                                    <td><b>complex</b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Used by</b></div>
+                           <div class="floatRight"><input id="button_usedBy_testTaskResults" type="image" src="img/btM.gif" value="-" onclick="switchState('usedBy_testTaskResults');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="usedBy_testTaskResults" style="display:block">
+                              <table class="usedByTable">
+                                 <tr>
+                                    <td class="firstColumn">Elements </td>
+                                    <td><b><a href="service_xsd.html#EtfItemCollection" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection</a></b>, <b><a href="service_xsd.html#EtfItemCollection_referencedItems" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for service.xsd')">EtfItemCollection/referencedItems</a></b></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Model</b><div class="floatRight"><input id="button_model_testTaskResults" type="image" src="img/btM.gif" value="-" onclick="switchState('model_testTaskResults');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="model_testTaskResults" style="display:block"><b><a href="result_xsd.html#TestTaskResult" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for result.xsd')">TestTaskResult</a></b></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn"><b>Children</b></td>
+                        <td><b><a href="result_xsd.html#TestTaskResult" target="mainFrame" title="http://www.interactive-instruments.de/etf/2.0" onclick="updatePageTitle('Schema documentation for result.xsd')">TestTaskResult</a></b></td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Instance</b></div>
+                           <div class="floatRight"><input id="button_instance_testTaskResults" type="image" src="img/btM.gif" value="-" onclick="switchState('instance_testTaskResults');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="instance_testTaskResults" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;testTaskResults</span><span class="tT"> </span><span class="tAN">xmlns=</span><span class="tAV">"http://www.interactive-instruments.de/etf/2.0"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;TestTaskResult</span><span class="tT"> </span><span class="tAN">id=</span><span class="tAV">""</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">{1,1}</span><span class="tEl">&lt;/TestTaskResult&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/testTaskResults&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="firstColumn">
+                           <div class="floatLeft"><b>Source</b></div>
+                           <div class="floatRight"><input id="button_source_testTaskResults" type="image" src="img/btM.gif" value="-" onclick="switchState('source_testTaskResults');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="source_testTaskResults" style="display:block">
+                              <table style="table-layout:fixed;white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;_white-space:pre;" class="preWrapContainer">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tEl">&lt;xs:element</span><span class="tAN"> name=</span><span class="tAV">"testTaskResults"</span><span class="tEl">&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:annotation</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:documentation</span><span class="tEl">&gt;</span><span class="tT" style="white-space:normal">ETF Components: write/update (results) | Client: traversed in testRuns</span><span class="tEl">&lt;/xs:documentation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:annotation&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;xs:complexType</span><span class="tEl">&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;xs:sequence</span><span class="tAN"> minOccurs=</span><span class="tAV">"0"</span><span class="tAN"> maxOccurs=</span><span class="tAV">"unbounded"</span><span class="tEl">&gt;</span><span class="tI">
+      </span><span class="tEl">&lt;xs:element</span><span class="tAN"> ref=</span><span class="tAV">"TestTaskResult"</span><span class="tEl">/&gt;</span><span class="tI">
+    </span><span class="tEl">&lt;/xs:sequence&gt;</span><span class="tI">
+  </span><span class="tEl">&lt;/xs:complexType&gt;</span><span class="tI">
+</span><span class="tEl">&lt;/xs:element&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lineRight"></td>
+         </tr>
+         <tr>
+            <td class="rt_cornerBottomLeft"></td>
+            <td class="rt_lineBottom"></td>
+            <td class="rt_cornerBottomRight"></td>
+         </tr>
+      </table>
+      <div class="footer">
+         <hr />
+         <div align="center">XML Schema documentation generated by <a href="http://www.oxygenxml.com" target="_parent"><span class="oXygenLogo"><span class="redX">&lt;</span>o<span class="redX">X</span>ygen<span class="redX">/&gt;</span></span></a><sup>®</sup> XML Editor.
+         </div>
+      </div><script type="text/javascript">
+         <!--
+                     // The namespace is the selected option in the TOC combo.
+                    
+                     // Floats the toolbar.
+                     var globalControls = getElementObject("global_controls"); 
+                     
+                     if(globalControls != null){
+	                     var browser=navigator.appName;
+						 var version = parseFloat(navigator.appVersion.split('MSIE')[1]);
+						 
+						 var IE6 = false;
+						 if ((browser=="Microsoft Internet Explorer") && (version < 7)){
+						 	IE6 = true;
+						 }
+	
+	                     //alert (IE6 + " |V| " + version);
+	                     
+	                     if(IE6){
+	                     	// On IE 6 the 'fixed' property is not supported. We must use javascript. 
+	                         globalControls.style.position='absolute';                         
+	                         // The global controls will do not exist in the TOC frame, when chunking.
+	                         findAndFloat("global_controls", 225, 30);    
+	                     } else {
+	                      	  globalControls.style.position='fixed';                     	
+	                     }
+	                     
+	                     globalControls.style.right='0';                       
+                     }
+                //--></script></body>
+</html>

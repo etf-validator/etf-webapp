@@ -1,0 +1,18 @@
+@startuml
+
+    class ResourceDto [[ResourceDto.html]] {
+        +ResourceDto()
+        +ResourceDto(String, String)
+        +ResourceDto(String, URI)
+        +ResourceDto(String, String, CredentialDto)
+        +ResourceDto(String, URI, CredentialDto)
+        +getCredential(): CredentialDto
+        +setCredential(CredentialDto): void
+        +getName(): String
+        +setName(String): void
+        +getUri(): URI
+        +setUri(URI): void
+        +setUri(String): void
+    }
+
+@enduml

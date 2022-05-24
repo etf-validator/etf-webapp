@@ -1,0 +1,9 @@
+@startuml
+
+    interface ItemFileLoaderFactory.FileChangeListener [[ItemFileLoaderFactory.FileChangeListener.html]] {
+        {abstract} +eventFileCreated(): void
+        {abstract} +eventFileDeleted(): void
+        {abstract} +eventFileUpdated(): void
+    }
+
+@enduml

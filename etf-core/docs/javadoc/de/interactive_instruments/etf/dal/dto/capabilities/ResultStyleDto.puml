@@ -1,0 +1,11 @@
+@startuml
+
+    class ResultStyleDto [[ResultStyleDto.html]] {
+        #resource: URI
+        +ResultStyleDto()
+        +getResource(): URI
+        +setResource(URI): void
+        +createCopy(): ResultStyleDto
+    }
+
+@enduml

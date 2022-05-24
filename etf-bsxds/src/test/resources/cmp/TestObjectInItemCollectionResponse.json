@@ -1,0 +1,26 @@
+{"EtfItemCollection": {
+  "version": 2.0,
+  "returnedItems": 1,
+  "ref": "http://localhost/etf-webapp/v2/TestObjects/65899225-31c4-37b3-bce9-31532d45be84.json",
+  "testObjects": {"TestObject": {
+    "id": "EID65899225-31c4-37b3-bce9-31532d45be84",
+    "label": "TestObjectDto.00001.label",
+    "description": "TestObjectDto.00001.description",
+    "version": "1.0.0",
+    "author": "TestObjectDto.00001.author",
+    "creationDate": "1970-01-01T01:00:00+01:00",
+    "disabled": false,
+    "tags": {"tag": {"href": "http://localhost/etf-webapp/v2/Tags/d037af85-a2f8-38d5-abf5-e306477ba95f.json"}},
+    "testObjectTypes": {"testObjectType": {"ref": "EIDd700c137-5d0f-3444-bd74-4616f80c332a"}},
+    "ResourceCollection": {"resource": {
+      "name": "Resource.1",
+      "href": "http://nowhere.com"
+    }},
+    "Properties": null
+  }},
+  "referencedItems": {"testObjectTypes": {"TestObjectType": {
+    "id": "EIDd700c137-5d0f-3444-bd74-4616f80c332a",
+    "label": "TestObjectTypeDto.00001.label",
+    "description": "TestObjectTypeDto.00001.description"
+  }}}
+}}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<descriptor type="o-x">
+   <name>de.interactive_instruments.etf.dal.dto.RepositoryItemDto</name>
+   <active>false</active>
+   <class-handle>
+      <type-name>de.interactive_instruments.etf.dal.dto.RepositoryItemDto</type-name>
+   </class-handle>
+   <transactional-policy type="ox">
+      <descriptor-alias>RepositoryItemDto</descriptor-alias>
+      <refresh-cache-policy/>
+      <caching-policy/>
+      <query-manager type="ox"/>
+      <locking-policy type="ox"/>
+      <primary-key-policy/>
+   </transactional-policy>
+   <schema-context-handle>
+      <schema>Result Set</schema>
+      <qname-path>
+         <qname component-type="group" namespace-uri="http://www.interactive-instruments.de/etf/2.0" local-name="RepositoryItemGroup"/>
+      </qname-path>
+   </schema-context-handle>
+   <root-descriptor>false</root-descriptor>
+</descriptor>

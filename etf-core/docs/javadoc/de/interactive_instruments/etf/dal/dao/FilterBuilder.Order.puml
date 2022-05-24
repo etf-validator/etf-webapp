@@ -1,0 +1,8 @@
+@startuml
+
+    enum FilterBuilder.Order [[FilterBuilder.Order.html]] {
+        {static} +ASCENDING
+        {static} +DESCENDING
+    }
+
+@enduml

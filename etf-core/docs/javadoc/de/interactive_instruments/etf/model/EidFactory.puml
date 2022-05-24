@@ -1,0 +1,12 @@
+@startuml
+
+    interface EidFactory [[EidFactory.html]] {
+        {static} +getDefault(): EidFactory
+        {abstract} +createRandomId(): EID
+        {abstract} +createAndPreserveStr(String): EID
+        {abstract} +createUUID(String): EID
+        {abstract} +createAndPreserveUUID(UUID): EID
+        {abstract} +getPattern(): Pattern
+    }
+
+@enduml

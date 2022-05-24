@@ -1,0 +1,30 @@
+@startuml
+
+    class TestRunDto [[TestRunDto.html]] {
+        +TestRunDto()
+        +getLabel(): String
+        +setLabel(String): void
+        +getDefaultLang(): String
+        +setDefaultLang(String): void
+        +getStartTimestamp(): Date
+        +setStartTimestamp(Date): void
+        +getStartedBy(): String
+        +setStartedBy(String): void
+        +getLogPath(): String
+        +setLogPath(String): void
+        +getTestTasks(): List<TestTaskDto>
+        +setTestTasks(List<TestTaskDto>): void
+        +addTestTask(TestTaskDto): void
+        +getTestObjects(): List<TestObjectDto>
+        +getExecutableTestSuites(): List<ExecutableTestSuiteDto>
+        +getTestTaskResults(): List<TestTaskResultDto>
+        +getTestResultStatus(): String
+        +setTestResultStatus(TestResultStatus): void
+        +setTestResultStatus(String): void
+        +toString(): String
+        +getDescriptiveLabel(): String
+        +ensureBasicValidity(): void
+        +createCopy(): TestRunDto
+    }
+
+@enduml

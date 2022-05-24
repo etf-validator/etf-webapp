@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="222px" preserveAspectRatio="none" style="width:278px;height:222px;" version="1.1" viewBox="0 0 278 222" width="278px" zoomAndPan="magnify"><defs><filter height="300%" id="f1xtx34qz5m7m" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--class LocalizableError--><a target="_top" xlink:actuate="onRequest" xlink:href="LocalizableError.html" xlink:show="new" xlink:title="LocalizableError.html" xlink:type="simple"><rect fill="#FEFECE" filter="url(#f1xtx34qz5m7m)" height="203.4609" id="LocalizableError" style="stroke: #A80036; stroke-width: 1.5;" width="261" x="6" y="8"/><ellipse cx="85.75" cy="24" fill="#A9DCDF" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M85.8633,19.5981 L84.7095,24.6699 L87.0254,24.6699 Z M84.3691,17.3569 L87.3657,17.3569 L90.7109,29.75 L88.2622,29.75 L87.4985,26.687 L84.2197,26.687 L83.4727,29.75 L81.0239,29.75 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="93" x="106.25" y="28.5352">LocalizableError</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="266" y1="40" y2="40"/><polygon fill="none" points="17,46.9775,21,50.9775,17,54.9775,13,50.9775" style="stroke: #B38D22; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="48" x="26" y="54.6348">id: String</text><polygon fill="none" points="17,59.9326,21,63.9326,17,67.9326,13,63.9326" style="stroke: #B38D22; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="177" x="26" y="67.5898">arguments: Map&lt;String, Object&gt;</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="266" y1="73.9102" y2="73.9102"/><polygon fill="#FFFF44" points="17,80.8877,21,84.8877,17,88.8877,13,84.8877" style="stroke: #B38D22; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="127" x="26" y="88.5449">LocalizableError(String)</text><polygon fill="#FFFF44" points="17,93.8428,21,97.8428,17,101.8428,13,97.8428" style="stroke: #B38D22; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="186" x="26" y="101.5">LocalizableError(String, Exception)</text><polygon fill="#FFFF44" points="17,106.7979,21,110.7979,17,114.7979,13,110.7979" style="stroke: #B38D22; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="235" x="26" y="114.4551">LocalizableError(String, Exception, Object[])</text><polygon fill="#FFFF44" points="17,119.7529,21,123.7529,17,127.7529,13,123.7529" style="stroke: #B38D22; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="176" x="26" y="127.4102">LocalizableError(String, Object[])</text><polygon fill="#FFFF44" points="17,132.708,21,136.708,17,140.708,13,136.708" style="stroke: #B38D22; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="173" x="26" y="140.3652">LocalizableError(String, String[])</text><polygon fill="#FFFF44" points="17,145.6631,21,149.6631,17,153.6631,13,149.6631" style="stroke: #B38D22; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="148" x="26" y="153.3203">LocalizableError(Exception)</text><ellipse cx="17" cy="163.6182" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="73" x="26" y="166.2754">getId(): String</text><ellipse cx="17" cy="176.5732" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="175" x="26" y="179.2305">getArgumentValueArr(): Object[]</text><ellipse cx="17" cy="189.5283" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="227" x="26" y="192.1855">getArgumentValues(): Collection&lt;Object&gt;</text><ellipse cx="17" cy="202.4834" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="204" x="26" y="205.1406">getArguments(): Map&lt;String, Object&gt;</text></a><!--
+@startuml
+
+    abstract class LocalizableError [[LocalizableError.html]] {
+        #id: String
+        #arguments: Map<String, Object>
+        #LocalizableError(String)
+        #LocalizableError(String, Exception)
+        #LocalizableError(String, Exception, Object[])
+        #LocalizableError(String, Object[])
+        #LocalizableError(String, String[])
+        #LocalizableError(Exception)
+        +getId(): String
+        +getArgumentValueArr(): Object[]
+        +getArgumentValues(): Collection<Object>
+        +getArguments(): Map<String, Object>
+    }
+
+@enduml
+
+PlantUML version 1.2018.08(Sun Jun 24 14:31:00 CEST 2018)
+(APACHE source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.8.0_151-b12
+Operating System: Mac OS X
+OS Version: 10.14.2
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

@@ -1,0 +1,357 @@
+<TranslationTemplateBundle xmlns="http://www.interactive-instruments.de/etf/2.0"
+						   id="EID70a263c0-0ad7-42f2-9d4d-0d8a4ca71b52"
+						   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+						   xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 http://resources.etf-validator.net/schema/v2/service/service.xsd">
+	<translationTemplateCollections>
+		<LangTranslationTemplateCollection name="TR.blankLine">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.blankLine"/>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.filesToTest">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.filesToTest">A regular expression. All
+					files in the test object where the file name matches the regular expression will
+					be check in the test, all other will be excluded. The default value '.*' matches
+					all files.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.testsToExecute">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.testsToExecute">A regular expression.
+					All test assertions in the executable test suite where the label matches the
+					regular expression will be used in the test run, all other will be skipped. The
+					default value '.*' matches all test assertions.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.limitMessages">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.limitMessages">The maximum number of
+					errors to report for each test assertion. If more errors are found, only the
+					selected number of messages will be reported including an information about the
+					total number of errors found.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.filename">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.filename">Filename</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.featureType">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.featureType">Feature
+					Type</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.featureCount">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.featureCount">Feature
+					Count</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.preCondition">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.preCondition">In cases where the
+					referenced test case fails, the test object is not in a condition that this test
+					case could reliably be evaluated.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.systemError">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.systemError">System error in the
+					Executable Test Suite. Please contact a system administrator. Error information:
+					{text}</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.validationError">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.validationError">Error loading a
+					document. Error information: {text}</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.tooManyErrors">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.tooManyErrors">There are too many errors
+					to determine all errors. Only the first {count} errors in the system under test
+					are analysed.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.filesWithErrors">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.filesWithErrors">The dataset has {count}
+					file(s) with errors for this assertion.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.featuresWithErrors">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.featuresWithErrors">The dataset has
+					{count} feature(s) with errors for this assertion.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.errorInFile">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.errorInFile">XML document '{filename}':
+					The file has {count} error(s).</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.errorInFeature">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.errorInFeature">XML document
+					'{filename}', {featureType} '{gmlid}': The feature has {count}
+					error(s).</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.incorrectRoot">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.incorrectRoot">XML document
+					'{filename}': The root element is not a GML feature and not one of the
+					recognised feature collections: wfs:FeatureCollection (WFS 2.0),
+					gml:FeatureCollection (GML 3.2) or base:SpatialDataSet (INSPIRE Base schema 3.2
+					or 3.3). The name of the root element is '{elementName}' in namespace
+					'{namespace}'. It is recommended to use the WFS 2.0 feature collection element
+					in INSPIRE.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.notUTF8">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.notUTF8">XML document '{filename}':
+					UTF-8 encoding expected. The XML declaration of the document states that
+					'{encoding}' is used as the character encoding.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.noSchemaLocation">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.noSchemaLocation">XML document
+					'{filename}': The root element does not have an xsi:schemaLocation attribute.
+					The document cannot be validated.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.invalidSchema">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.invalidSchema">XML document
+					'{filename}': The file has {count} schema validation
+					error(s).</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.xmlSchemaError">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.xmlSchemaError">XML document
+					'{filename}': {error}</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.emptyValue">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.emptyValue">XML document '{filename}',
+					{featureType} '{gmlid}': The following properties of the feature have an empty
+					value: {propertyNames}. While this is valid against the XML schema, this is not
+					valid according to the GML model. Please correct the process that generates the
+					GML documents.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.nilMissing">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.nilMissing">XML document '{filename}',
+					{featureType} '{gmlid}': The following properties of the feature have a
+					nilReason attribute, but xsi:nil is not set to 'true': {propertyNames}. This is
+					an error in the GML encoding. Please correct the process that generates the GML
+					documents. Typically it was forgotten to add xsi:nil='true' to the property
+					element.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.incorrectReason">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.incorrectReason">XML document
+					'{filename}', {featureType} '{gmlid}': The following properties of the feature
+					have a nil value with an unexpected reason value: {propertyNames}. The nilReason
+					values are: {values}. The nilReason values should either be a URI from the
+					INSPIRE registry (see http://inspire.ec.europa.eu/codelist/VoidReasonValue) or
+					from the pre-defined GML values ('unknown', 'other:unpopulated', or 'withheld').
+					This is an error in the process that writes the INSPIRE GML
+					documents.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.spatialTopologyTypeFound">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.spatialTopologyTypeFound">XML document
+					'{filename}', {featureType} '{gmlid}': A spatial topology element
+					'{elementName}' was found. Spatial properties are limited to the set of
+					geometric types consisting of point, curve with linear interpolation, planar
+					surface, or aggregates thereof. Spatial topology is
+					excluded.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.invalidInterpolationFound">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.invalidInterpolationFound">XML document
+					'{filename}', {featureType} '{gmlid}': A curve geometry with an invalid curve
+					segment '$elementName' was found. Curves (standalone or within surfaces) must
+					have linear interpolation (LineString, Curve with LineStringSegment
+					segments).</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.invalidSurfaceElementFound">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.invalidSurfaceElementFound">XML document
+					'{filename}', {featureType} '{gmlid}': A surface geometry with an invalid GML
+					object element '$elementName' was found. Planar surface types are restricted to
+					Polygon or Surface elements.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.invalidSurfacePatchElementFound">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.invalidSurfacePatchElementFound">XML
+					document '{filename}', {featureType} '{gmlid}': A surface geometry with an
+					invalid GML object element '$elementName' for surface patches was found. Surface
+					patches are restricted to gml:PolygonPatch elements.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.invalidGeometryElementFound">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.invalidGeometryElementFound">XML
+					document '{filename}', {featureType} '{gmlid}': A geometry with an invalid GML
+					object element '{elementName}' was found. Supported geometry types are
+					restricted to point, curve with linear interpolation, planar surface, or
+					aggregates thereof.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.invalidPositionElementFound">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.invalidPositionElementFound">XML
+					document '{filename}', {featureType} '{gmlid}': A {geometryType} geometry with
+					an invalid GML object element for coordinates '{elementName}' was found. Only
+					{posElementName} is allowed.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.arrayElementFound">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.arrayElementFound">XML document
+					'{filename}', {featureType} '{gmlid}': A geometric aggregate using the array
+					property '{elementName}' was found. Only the standard properties
+					(gml:pointMember for gml:MultiPoint, gml:curveMember for gml:MultiCurve,
+					gml:surfaceMember for gml:MultiSurface, and gml:geometryMember for
+					gml:MultiGeometry) are allowed.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.tooManyDimensions">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.tooManyDimensions">XML document
+					'{filename}', {featureType} '{gmlid}': Coordinates with a dimension
+					'{dimension}' were found. Only coordinate reference systems with 1, 2 or 3
+					dimensions are allowed.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.invalidGeometry">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.invalidGeometry">XML document
+					'{filename}', {featureType} '{gmlid}': The feature geometry is not a valid GML
+					geometry.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.endTooEarly">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.endTooEarly">XML document '{filename}',
+					{featureType} '{gmlid}': The lifespan of the feature ends before it begins
+					(property '{propertyEnd}': '{end}', property '{propertyBegin}': '{begin}'). This
+					is logically incorrect.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.brokenLinkCRS">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.brokenLinkCRS">XML document
+					'{filename}', {featureType} '{gmlid}': A spatial or temporal geometry uses an
+					unexpected coordinate reference system with identifier '{rsid}' that cannot be
+					retrieved. Every URI must be a HTTP URI in a CRS register that when retrieved
+					with HTTP GET returns a definition of the reference
+					system.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.brokenLinkCL">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.brokenLinkCL">XML document '{filename}',
+					{featureType} '{gmlid}': The property '{propertyName}' has a value '{value}'
+					that cannot be retrieved using HTTP. Every code list value must be made
+					available in an online registry.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.unknownCRS1">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.unknownCRS1">XML document '{filename}',
+					{featureType} '{gmlid}': A spatial geometry uses an unexpected coordinate
+					reference system '{crs}'. Please refer to table 2 of the data specification for
+					the list of expected coordinate reference systems.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.unknownCRS2">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.unknownCRS2">XML document '{filename}':
+					The default coordinate reference system stated in the bounding box of the
+					feature collection has an unexpected value '{crs}'. Please refer to table 2 of
+					the data specification for the list of expected coordinate reference
+					systems.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.unknownTRS">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.unknownTRS">XML document '{filename}',
+					{featureType} '{gmlid}': A temporal geometry uses an unexpected coordinate
+					reference system '{crs}'. Only 'http://www.opengis.net/def/trs/ISO-8601/' is
+					allowed.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.template">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.template">The XML documents representing
+					the spatial data set do not contain a feature of any of the spatial object types
+					in the application schemas of the data theme '{theme}'. Therefore, the spatial
+					data set cannot conform to this conformance class. If you have expected to find
+					spatial objects from the application schemas in the data set, please consult the
+					statistics information to see the spatial object types that have been
+					found.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.notWithin">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.notWithin">XML document '{filename}',
+					{featureType} '{gmlid}': The geometry is not within a single SurfaceWater
+					feature from the Physical Waters application schema.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.unknownUoM">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.unknownUoM">XML document '{filename}',
+					{featureType} '{gmlid}': A measurement value in property '{property}' has an
+					unexpected unit '{uom}'. The allowed values are:
+					{allowedUoM}.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.disallowedCodeListValue">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.disallowedCodeListValue">XML document
+					'{filename}', {featureType} '{gmlid}': The property '{property}' has a value
+					'{value}' that is not one of the allowed values listed at
+					{codelist}.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.freeNode">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.freeNode">XML document '{filename}',
+					{featureType} '{gmlid}': The node is not located at the start or end of any
+					WatercourseLink feature in the data set.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.constraintViolation">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.constraintViolation">XML document
+					'{filename}', {featureType} '{gmlid}': The constraint '{constraint}' is
+					violated. {addtionalInfo}</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.brokenLink">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.brokenLink">XML document '{filename}',
+					{featureType} '{gmlid}': The property '{property}' has a value '{value}' that
+					cannot be retrieved using HTTP.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+	</translationTemplateCollections>
+</TranslationTemplateBundle>

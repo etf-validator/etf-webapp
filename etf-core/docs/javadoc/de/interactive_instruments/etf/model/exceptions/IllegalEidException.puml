@@ -1,0 +1,7 @@
+@startuml
+
+    class IllegalEidException [[IllegalEidException.html]] {
+        +IllegalEidException(String)
+    }
+
+@enduml

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright ${year} interactive instruments GmbH
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <title>executable-test-suites.html (development view)</title>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.min.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.rep.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.wi.css" />
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" />
+    <script data-main="js/main-local-dev" src="//cdn.jsdelivr.net/requirejs/2.1.8/require.min.js"></script>
+
+</head>
+<body>
+
+
+<!-- Underscore Template -->
+<script tiles:fragment="test-run-configuration-page" id="start-tests-configuration-template" type="text/template" th:inline="text">
+    <![CDATA[
+    <!-- guard comment -->
+
+    <div class="ui-field-contain">
+        <label for="testRunLabel">
+            [[#{l.Label}]]:
+            <span class="question" help="[[#{l.help.Label}]]"> ?</span>
+        </label>
+        <input data-inline="true" id="testRunLabel" type="text" title="[[#{l.help.Label}]]" value="<%= defaultLabel %>" required/>
+    </div>
+
+
+    <% if( serviceTest) { %>
+    <div class="ui-field-contain">
+        <% if ( _.isNil(testObject)) { %>
+        <label><span th:text="#{l.Service.Url}" for="serviceEndpoint">[[#{l.Service.Url}]] </span> <span class="question" help="[[#{l.Service.Url.help}]]"> ?</span></label>
+        <input class="testObjectResourceInput" data-validation="url" type="url" id="serviceEndpoint" value="http://" required/>
+        <% } else { %>
+        <label><span th:text="#{l.Service}" for="selectedTestObject">[[#{l.Service}]] </span></label>
+        <p id="selectedTestObject" ><%= testObject.label %></p>
+        <div style="display: none">
+            <select name="dataSourceSelection" id="dataSourceSelection">
+                <option value="testObject"><span th:text="#{l.Testobject}">[[#{l.Testobject}]]</span>  <%= testObject.label %></option>
+            </select>
+        </div>
+        <% } %>
+    </div>
+    <% } else { %>
+    <div id="uploadTestObj" data-role="fieldcontain">
+        <div id="dataSourceSelectionContainer">
+            <div class="ui-field-contain">
+                <label for="dataSourceSelection" class="select" th:text="#{l.Data.source}">[[#{l.Data.source}]]:</label>
+                <select data-inline="true" name="dataSourceSelection" id="dataSourceSelection">
+                    <% if ( !_.isNil(testObject)) { %>
+                    <option value="testObject"><span th:text="#{l.Testobject}">[[#{l.Testobject}]]</span>  <%= testObject.label %></option>
+                    <% } %>
+                    <option value="fileUpload" th:text="#{l.File.upload}">[[#{l.File.upload}]]</option>
+                    <option value="remoteUrl" th:text="#{l.Remote.file.Url}">[[#{l.Remote.file.Url}]]</option>
+                </select>
+            </div>
+            <% if( !_.isUndefined(testObject)) { %>
+            <div id="source-test-object-selection" style="display: none" class="ui-field-contain">
+
+            </div>
+            <% } %>
+            <div id="test-object-file-upload-selection" class="ui-field-contain" style="<%= !_.isNil(testObject) ? 'display: none' : '' %>" >
+                <label><span th:text="#{l.LocalGeoSpatialFile}" for="test-object-fileupload">[[#{l.LocalGeoSpatialFile}]] </span> <span class="question"
+                                                                                                                            help="[[#{l.help.upload.test.data( ${maxUploadSizeHr} )}]]"> ?</span></label>
+                <input class="testObjectResourceInput" id="test-object-fileupload" type="file" accept="application/zip,text/xml,text/csv,application/xml+gml,.gml,.shp" name="files[]" multiple>
+            </div>
+            <div id="remoteUrlSelection" style="display: none" class="ui-field-contain">
+                <label><span th:text="#{l.Remote.file.Url}" for="testObjFile">[[#{l.Remote.file.Url}]] </span> <span class="question" help="[[#{l.Remote.file.Url.help}]]"> ?</span></label>
+                <input class="testObjectResourceInput" type="url" id="test-object-download-url" name="testObjUrl" placeholder="http(s)://"/>
+            </div>
+        </div>
+    </div>
+    <% } %>
+
+
+    <div id="start-tests-credentials" style="display: none">
+        <h4 th:text="#{l.Credentials}">Credentials</h4>
+        <div class="ui-field-contain">
+            <label for="start-tests-username" th:text="#{l.Username}">Username</label>
+            <input type="text" id="start-tests-username" />
+        </div>
+        <div class="ui-field-contain">
+            <label for="start-tests-password" th:text="#{l.Password}">Password</label>
+            <input type="password" id="start-tests-password" />
+        </div>
+    </div>
+
+    <div>
+        <% if( !_.isEmpty(requiredParameters) ) { %>
+        <h4>[[#{l.Test.Suite.Parameters}]]</h4>
+        <div class="required-parameter">
+            <% _.each( requiredParameters, function( p ) { %>
+            <div class="ui-field-contain">
+                <label for="ets-parameter-<%= p.name %>">
+                    <%=!_.isUndefined(p.label) ? p.label : v2.beautifyNerdyStr(p.name) %>
+                    <% if(p.static==true) { %>
+                    <span class="question" help="[[#{l.Fixed.by.Test.Class}]]. <%= p.description %>" > ?</span>
+                    <% } else { %>
+                    <span class="question" help="[[#{l.Mandatory.Parameter}]]. <%= p.description %>" > ?</span>
+                    <% } %>
+                </label>
+                <% if(p.type=='boolean') { %>
+                <fieldset style="padding-left: calc(0vw);" data-role="controlgroup" id="ets-parameter-<%= p.name %>" data-type="horizontal" >
+                    <input value="true" data-mini="true" class="ets-parameter-options" type="radio" name="<%= p.name %>" id="ets-parameter-false-<%= p.name %>" <%= p.overridden==true || p.static==true ? 'disabled' :  '' %> <%= p.defaultValue === true || _.isNil(p.defaultValue) ? 'checked=checked' :  '' %> >
+                    <label for="ets-parameter-false-<%= p.name %>">[[#{l.true}]]</label>
+                    <input value="false" data-mini="true" class="ets-parameter-options" type="radio" name="<%= p.name %>" id="ets-parameter-true-<%= p.name %>" <%= p.overridden==true || p.static==true ? 'disabled' :  '' %> <%= p.defaultValue === false ? 'checked=checked' :  '' %> >
+                    <label for="ets-parameter-true-<%= p.name %>">[[#{l.false}]]</label>
+                </fieldset>
+                <% } else if(( p.type=='choice' )&& p.allowedValues) { %>
+                <fieldset style="padding-left: calc(0vw);" data-role="controlgroup" id="ets-parameter-<%= p.name %>" data-type="horizontal" >
+                    <% _.each( p.allowedValues, function( v, i ) { %>
+                        <input value="<%= v %>" data-mini="true" class="ets-parameter-options" type="radio" name="<%= p.name %>" id="ets-parameter-<%= p.name %>-<%= v %>" <%= p.overridden==true || p.static==true ? 'disabled' :  '' %> <%= v2.ensureArr(p.defaultValues).indexOf(v)>-1 || (p.defaultValues == "" && i===0) ? 'checked=checked' :  '' %> >
+                        <label for="ets-parameter-<%= p.name %>-<%= v %>"><%= v %></label>
+                    <% }); %>
+                </fieldset>
+                <% } else if(( p.type=='multichoice' )&& p.allowedValues) { %>
+                <fieldset style="padding-left: calc(0vw);" class="ets-parameter-type-multichoice" id="ets-parameter-<%= p.name %>" data-role="controlgroup" >
+                    <% _.each( p.allowedValues, function( v ) { %>
+                        <input value="<%= v %>" data-inline="true" data-mini="true" class="ets-parameter-options" type="checkbox" name="<%= p.name %>" id="ets-parameter-<%= v %>" <%= p.overridden==true || p.static==true ? 'disabled' :  '' %> <%= v2.ensureArr(p.defaultValues).indexOf(v)>-1 || p.defaultValues == "" ? 'checked=checked' :  '' %> >
+                        <label for="ets-parameter-<%= v %>"><%= v %></label>
+                    <% }); %>
+                </fieldset>
+                <% } else if(( p.type === 'integer' || p.type === 'double' || p.type === 'number')) { %>
+                <input type="number" class="ets-parameter" id="ets-parameter-<%= p.name %>" name="<%= p.name %>"
+                       title="[[#{l.Mandatory.Parameter}]]. <%= p.description %>"
+                        <%= _.isEmpty(p.allowedValues) ? '' :  'pattern='+p.allowedValues %>
+                       required
+                        <%= p.overridden==true || p.static==true ? 'disabled' :  '' %>
+                        value="<%= p.defaultValue %>"/>
+                <% } else { %>
+                <input type="text" class="ets-parameter" id="ets-parameter-<%= p.name %>" name="<%= p.name %>"
+                       title="[[#{l.Mandatory.Parameter}]]. <%= p.description %>"
+                        <%= _.isEmpty(p.allowedValues) ? '' :  'pattern='+p.allowedValues %>
+                        required
+                        <%= p.overridden==true || p.static==true ? 'disabled' :  '' %>
+                       value="<%= p.defaultValue %>"/>
+                <% } %>
+            </div>
+            <% }); %>
+        </div>
+        <% } else { %>
+        <h4 class="optional-parameter" style="display: none">[[#{l.Test.Suite.Parameters}]]</h4>
+        <% } %>
+        <div class="optional-parameter" style="display: none">
+            <% _.each( optionalParameters, function( p ) { %>
+            <div class="ui-field-contain">
+                <label for="ets-parameter-<%= p.name %>">
+                    <%=!_.isUndefined(p.label) ? p.label : v2.beautifyNerdyStr(p.name) %>
+                    <% if(p.static==true) { %>
+                    <span class="question" help="[[#{l.Fixed.by.Test.Class}]]. <%= p.description %>" > ?</span>
+                    <% } else { %>
+                    <span class="question" help="[[#{l.Optional.Parameter}]]. <%= p.description %>" > ?</span>
+                    <% } %>
+                </label>
+                <% if(p.type=='boolean') { %>
+                <fieldset style="padding-left: calc(0vw);" data-role="controlgroup" id="ets-parameter-<%= p.name %>" data-type="horizontal" >
+                    <input value="false" data-mini="true" class="ets-parameter-options" type="radio" name="<%= p.name %>" id="ets-parameter-false-<%= p.name %>" <%= p.overridden==true || p.static==true ? 'disabled' :  '' %> <%= p.defaultValue === true ? 'checked' :  '' %> >
+                    <label for="ets-parameter-false-<%= p.name %>">[[#{l.false}]]</label>
+                    <input value="true" data-mini="true" class="ets-parameter-options" type="radio" name="<%= p.name %>" id="ets-parameter-true-<%= p.name %>" <%= p.overridden==true || p.static==true ? 'disabled' :  '' %> <%= p.defaultValue === false ? 'checked' :  '' %> >
+                    <label for="ets-parameter-true-<%= p.name %>">[[#{l.true}]]</label>
+                </fieldset>
+                <% } else if(( p.type=='choice' )&& p.allowedValues) { %>
+                <fieldset style="padding-left: calc(0vw);" data-role="controlgroup" id="ets-parameter-<%= p.name %>" data-type="horizontal" >
+                    <% _.each( p.allowedValues, function( v ) { %>
+                        <input value="<%= v %>" data-mini="true" class="ets-parameter-options" type="radio" name="<%= p.name %>" id="ets-parameter-<%= p.name %>-<%= v %>" <%= p.overridden==true || p.static==true ? 'disabled' :  '' %> <%= v2.ensureArr(p.defaultValues).indexOf(v)>-1 ? 'checked' :  '' %> >
+                        <label for="ets-parameter-<%= p.name %>-<%= v %>"><%= v %></label>
+                    <% }); %>
+                </fieldset>
+                <% } else if(( p.type=='multichoice' )&& p.allowedValues) { %>
+                <fieldset style="padding-left: calc(0vw);" class="ets-parameter-type-multichoice" id="ets-parameter-<%= p.name %>" data-role="controlgroup" >
+                    <% _.each( p.allowedValues, function( v ) { %>
+                        <input value="<%= v %>" data-inline="true" data-mini="true" class="ets-parameter-options" type="checkbox" name="<%= p.name %>" id="ets-parameter-<%= v %>" <%= p.overridden==true || p.static==true ? 'disabled' :  '' %> <%= v2.ensureArr(p.defaultValues).indexOf(v)>-1 ? 'selected' :  '' %> >
+                        <label for="ets-parameter-<%= v %>"><%= v %></label>
+                    <% }); %>
+                </fieldset>
+                <% } else if(( p.type === 'integer' || p.type === 'double' || p.type === 'number')) { %>
+                <input type="number" class="ets-parameter" id="ets-parameter-<%= p.name %>" name="<%= p.name %>"
+                       title="[[#{l.Optional.Parameter}]]. <%= p.description %>"
+                        <%= _.isEmpty(p.allowedValues) ? '' :  'pattern='+p.allowedValues %>
+                    <%= p.overridden==true || p.static==true ? 'disabled' :  '' %>
+                    value="<%= p.defaultValue %>"/>
+                <% } else { %>
+                <input type="text" class="ets-parameter" id="ets-parameter-<%= p.name %>" name="<%= p.name %>"
+                       title="[[#{l.Optional.Parameter}]]. <%= p.description %>"
+                        <%= _.isEmpty(p.allowedValues) ? '' :  'pattern='+p.allowedValues %>
+                    <%= p.overridden==true || p.static==true ? 'disabled' :  '' %>
+                    value="<%= p.defaultValue %>"/>
+                <% } %>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+
+
+    <div id="selected-executable-test-suites" style="display: none">
+        <h4>[[#{l.Selected.Test.Suites}]]</h4>
+        <ul>
+            <% v2.each( selectedExecutableTestSuites, function( executableTestSuite ) { %>
+            <li> <%= executableTestSuite.label %> (Version <%= executableTestSuite.version %>) </li>
+            <% }); %>
+        </ul>
+        <% if( !_.isEmpty(etsDependencies) ) { %>
+        <h4>[[#{l.Direct.dependencies}]]</h4>
+        <ul>
+            <% v2.each( etsDependencies, function( dependency ) { %>
+            <li> <%= dependency.label %> (Version <%= dependency.version %>) </li>
+            <% }); %>
+        </ul>
+        <% } %>
+    </div>
+
+    <!-- ]]> -->
+</script>
+
+
+</body>
+</html>

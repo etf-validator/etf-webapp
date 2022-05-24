@@ -1,0 +1,8 @@
+@startuml
+
+    interface ItemFileObserverRegistry [[ItemFileObserverRegistry.html]] {
+        {abstract} +register(Path, List<?>): void
+        {abstract} +deregister(List<?>): void
+    }
+
+@enduml

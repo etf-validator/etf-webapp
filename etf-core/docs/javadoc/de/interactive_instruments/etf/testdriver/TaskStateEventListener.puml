@@ -1,0 +1,7 @@
+@startuml
+
+    interface TaskStateEventListener [[TaskStateEventListener.html]] {
+        {abstract} +taskStateChangedEvent(TestTask, TaskState.STATE, TaskState.STATE): void
+    }
+
+@enduml

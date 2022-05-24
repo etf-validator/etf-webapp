@@ -1,0 +1,14 @@
+@startuml
+
+    class StatisticalReportTableDto [[StatisticalReportTableDto.html]] {
+        #type: StatisticalReportTableTypeDto
+        #entries: List<StatisticalReportTableDto.Entry>
+        +StatisticalReportTableDto()
+        +getType(): StatisticalReportTableTypeDto
+        +setType(StatisticalReportTableTypeDto): void
+        +getEntries(): List<StatisticalReportTableDto.Entry>
+        +setEntries(List<StatisticalReportTableDto.Entry>): void
+        +createCopy(): StatisticalReportTableDto
+    }
+
+@enduml

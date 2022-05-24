@@ -1,0 +1,8 @@
+@startuml
+
+    class TestObjectTypeNotDetected [[TestObjectTypeNotDetected.html]] {
+        +TestObjectTypeNotDetected(TestObjectType)
+        +TestObjectTypeNotDetected()
+    }
+
+@enduml
