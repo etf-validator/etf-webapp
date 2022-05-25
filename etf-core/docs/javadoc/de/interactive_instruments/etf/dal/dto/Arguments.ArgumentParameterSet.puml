@@ -1,0 +1,8 @@
+@startuml
+
+    class Arguments.ArgumentParameterSet [[Arguments.ArgumentParameterSet.html]] {
+        +value(String): String
+        +values(): Map<String, String>
+    }
+
+@enduml

@@ -1,0 +1,334 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.testdriver {
+
+        interface TestDriver [[TestDriver.html]] {
+            {abstract} +getInfo(): ComponentInfo
+            {abstract} +setLoadingContext(LoadingContext): void
+            {abstract} +getExecutableTestSuites(): Collection<ExecutableTestSuiteDto>
+            {abstract} +getTestObjectTypes(): Collection<TestObjectTypeDto>
+            {abstract} +createTestTask(TestTaskDto): TestTask
+        }
+
+        annotation ComponentInitializer
+
+        class ExecutableTestSuiteUnavailable [[ExecutableTestSuiteUnavailable.html]] {
+            +ExecutableTestSuiteUnavailable(ExecutableTestSuiteDto)
+            +ExecutableTestSuiteUnavailable(ExecutableTestSuiteDto, Throwable)
+            +ExecutableTestSuiteUnavailable(String)
+        }
+
+        class TestTaskInitializationException [[TestTaskInitializationException.html]] {
+            +TestTaskInitializationException(Throwable)
+            +TestTaskInitializationException(String, Throwable)
+        }
+
+        interface TestResultCollectorFactory [[TestResultCollectorFactory.html]] {
+            {static} +getDefault(): TestResultCollectorFactory
+            {abstract} +createTestResultCollector(TestRunLogger, TestTaskDto): TestResultCollector
+        }
+
+        interface TestRunLogReader [[TestRunLogReader.html]] {
+            {abstract} +getLogFile(): File
+            {abstract} +getLogMessages(long): List<String>
+            {abstract} +streamLogMessagesTo(long, OutputStream): void
+        }
+
+        interface Task<T> [[Task.html]] {
+            {abstract} +getId(): EID
+            {abstract} +getResult(): T
+            {abstract} +setFuture(Future<T>): void
+            {abstract} +waitForResult(): T
+        }
+
+        interface TestTask [[TestTask.html]] {
+            {abstract} +run(): void
+        }
+
+        class TestRunInitializationException [[TestRunInitializationException.html]] {
+            +TestRunInitializationException(Throwable)
+            +TestRunInitializationException(String, Throwable)
+        }
+
+        interface TaskStateEventListener [[TaskStateEventListener.html]] {
+            {abstract} +taskStateChangedEvent(TestTask, TaskState.STATE, TaskState.STATE): void
+        }
+
+        interface BasicTestResultCollector [[BasicTestResultCollector.html]] {
+            {abstract} +startTestTask(String, long): String
+            {abstract} +startTestModule(String, long): String
+            {abstract} +startTestCase(String, long): String
+            {abstract} +startTestStep(String, long): String
+            {abstract} +startTestAssertion(String, long): String
+            {abstract} +end(String, int, long): String
+            {abstract} +end(String, long): String
+            {abstract} +addMessage(String): void
+            {abstract} +addMessage(String, Map<String, String>): void
+            {abstract} +addMessage(String, String[]): void
+            {abstract} +currentModelType(): int
+            {abstract} +registerTestTaskEndListener(TestTaskEndListener): void
+        }
+
+        interface TestTaskResultPersistor [[TestTaskResultPersistor.html]] {
+            {abstract} +streamResult(InputStream): void
+            {abstract} +setResult(TestTaskResultDto): void
+            {abstract} +resultPersisted(): boolean
+        }
+
+        interface TestResultCollector [[TestResultCollector.html]] {
+            +startTestTask(String): String
+            +startTestModule(String): String
+            +startTestCase(String): String
+            +startTestStep(String): String
+            +startTestAssertion(String): String
+            +end(String, int): String
+            +end(String): String
+            +markAttachment(String, String, String, String): String
+            +info(String): void
+            +error(String): void
+            +debug(String): void
+            {abstract} +getTestTaskResultId(): String
+            {abstract} +endWithSkippedIfTestCasesFailed(String[]): boolean
+            {abstract} +status(String): TestResultStatus
+            {abstract} +statusEqualsAny(String, String[]): boolean
+            {abstract} +isErrorLimitExceeded(): boolean
+            {abstract} +markAttachment(String, String, String, String, String): String
+            {abstract} +saveAttachment(Reader, String, String, String): String
+            {abstract} +saveAttachment(InputStream, String, String, String): String
+            {abstract} +saveAttachment(String, String, String, String): String
+            {abstract} +getTempDir(): File
+            {abstract} +internalError(String, Map<String, String>, Throwable): void
+            {abstract} +internalError(Throwable): void
+            {abstract} +internalError(String, byte[], String): String
+        }
+
+        interface TestTaskEndListener [[TestTaskEndListener.html]] {
+            {abstract} +testTaskFinished(TestTaskResultDto): void
+        }
+
+        class TaskPoolRegistry<R, T> [[TaskPoolRegistry.html]] {
+            +TaskPoolRegistry(int, int, int)
+            +getTaskById(EID): T
+            +contains(EID): boolean
+            +removeDone(): void
+            +getTasks(): Collection<T>
+            +submitTask(T): Future<R>
+            +release(EID): void
+            +cancelTask(EID): void
+            +killAll(): void
+            +getActiveCount(): int
+        }
+
+        interface TestResultCollectorInjector [[TestResultCollectorInjector.html]] {
+        }
+
+        class ExecutableTestSuiteLoadingException [[ExecutableTestSuiteLoadingException.html]] {
+            +ExecutableTestSuiteLoadingException(String)
+            +ExecutableTestSuiteLoadingException(ExecutableTestSuiteDto)
+            +ExecutableTestSuiteLoadingException(ExecutableTestSuiteDto, Throwable)
+        }
+
+        interface TestRunEventListener [[TestRunEventListener.html]] {
+            {abstract} +taskStateChangedEvent(TestTask, TaskState.STATE, TaskState.STATE): void
+            {abstract} +taskRunChangedEvent(TestRun, TaskState.STATE, TaskState.STATE): void
+        }
+
+        interface TestDriverManager [[TestDriverManager.html]] {
+            +createTestRun(TestRunDto): TestRun
+            {static} +getDefault(): TestDriverManager
+            {abstract} +createTestRun(TestRunDto, TestResultCollectorFactory): TestRun
+            {abstract} +setLoadingContext(LoadingContext): void
+            {abstract} +getTestDriverInfo(): List<ComponentInfo>
+            {abstract} +loadAll(): void
+            {abstract} +load(EID): void
+            {abstract} +unload(EID): void
+            {abstract} +reload(EID): void
+        }
+
+        interface TaskState [[TaskState.html]] {
+        }
+
+        enum de.interactive_instruments.etf.testdriver.TaskState.STATE [[TaskState.STATE.html]] {
+            {static} +CREATED
+            {static} +INITIALIZING
+            {static} +INITIALIZED
+            {static} +RUNNING
+            {static} +COMPLETED
+            {static} +FINALIZING
+            {static} +FAILED
+            {static} +CANCELING
+            {static} +CANCELED
+            +isRunning(): boolean
+            +isCompleted(): boolean
+            +isFailed(): boolean
+            +isCanceling(): boolean
+            +isCanceled(): boolean
+            +isRunningOrInitializing(): boolean
+            +isAtLeastInitialized(): boolean
+            +isFinalizing(): boolean
+            +isCompletedFailedOrCanceled(): boolean
+            +isCompletedFailedCanceledOrFinalizing(): boolean
+        }
+
+        interface TaskProgress [[TaskProgress.html]] {
+            +getPercentStepsCompleted(): double
+            {abstract} +getMaxSteps(): long
+            {abstract} +getCurrentStepsCompleted(): long
+            {abstract} +getStartTimestamp(): Date
+        }
+
+        interface TestRun [[TestRun.html]] {
+            {abstract} +getLabel(): String
+            {abstract} +start(): void
+            {abstract} +addTestRunEventListener(TestRunEventListener): void
+        }
+
+        interface TestRunLogger [[TestRunLogger.html]] {
+        }
+
+        interface de.interactive_instruments.Configurable {
+            {abstract} +getConfigurationProperties(): ConfigPropertyHolder
+        }
+        de.interactive_instruments.Configurable <|.. TestDriver
+
+        interface de.interactive_instruments.Releasable {
+            {abstract} +release(): void
+        }
+        de.interactive_instruments.Releasable <|.. TestDriver
+
+        class de.interactive_instruments.exceptions.InitializationException
+        de.interactive_instruments.exceptions.InitializationException <|-- ExecutableTestSuiteUnavailable
+
+        class java.lang.Exception
+        java.lang.Exception <|-- TestTaskInitializationException
+
+        interface java.util.concurrent.Callable<V> {
+            {abstract} +call(): V
+        }
+        java.util.concurrent.Callable <|.. Task
+
+        TaskState <|.. Task
+
+        de.interactive_instruments.Releasable <|.. Task
+
+        interface de.interactive_instruments.Cancelable {
+            {abstract} +cancel(): void
+        }
+        de.interactive_instruments.Cancelable <|.. Task
+
+        interface de.interactive_instruments.Initializable {
+            {abstract} +init(): void
+            {abstract} +isInitialized(): boolean
+        }
+        de.interactive_instruments.Initializable <|.. Task
+
+        Task <|.. TestTask
+
+        java.lang.Exception <|-- TestRunInitializationException
+
+        de.interactive_instruments.Releasable <|.. BasicTestResultCollector
+
+        BasicTestResultCollector <|.. TestResultCollector
+
+        de.interactive_instruments.exceptions.InitializationException <|-- ExecutableTestSuiteLoadingException
+
+        de.interactive_instruments.Configurable <|.. TestDriverManager
+
+        de.interactive_instruments.Releasable <|.. TestDriverManager
+
+        TaskState +-- de.interactive_instruments.etf.testdriver.TaskState.STATE
+
+        TaskState <|.. TaskProgress
+
+        Task <|.. TestRun
+
+        TestRunLogReader <|.. TestRunLogger
+
+        interface org.slf4j.Logger {
+            {abstract} +getName(): String
+            {abstract} +isTraceEnabled(): boolean
+            {abstract} +trace(String): void
+            {abstract} +trace(String, Object): void
+            {abstract} +trace(String, Object, Object): void
+            {abstract} +trace(String, Object[]): void
+            {abstract} +trace(String, Throwable): void
+            {abstract} +isTraceEnabled(Marker): boolean
+            {abstract} +trace(Marker, String): void
+            {abstract} +trace(Marker, String, Object): void
+            {abstract} +trace(Marker, String, Object, Object): void
+            {abstract} +trace(Marker, String, Object[]): void
+            {abstract} +trace(Marker, String, Throwable): void
+            {abstract} +isDebugEnabled(): boolean
+            {abstract} +debug(String): void
+            {abstract} +debug(String, Object): void
+            {abstract} +debug(String, Object, Object): void
+            {abstract} +debug(String, Object[]): void
+            {abstract} +debug(String, Throwable): void
+            {abstract} +isDebugEnabled(Marker): boolean
+            {abstract} +debug(Marker, String): void
+            {abstract} +debug(Marker, String, Object): void
+            {abstract} +debug(Marker, String, Object, Object): void
+            {abstract} +debug(Marker, String, Object[]): void
+            {abstract} +debug(Marker, String, Throwable): void
+            {abstract} +isInfoEnabled(): boolean
+            {abstract} +info(String): void
+            {abstract} +info(String, Object): void
+            {abstract} +info(String, Object, Object): void
+            {abstract} +info(String, Object[]): void
+            {abstract} +info(String, Throwable): void
+            {abstract} +isInfoEnabled(Marker): boolean
+            {abstract} +info(Marker, String): void
+            {abstract} +info(Marker, String, Object): void
+            {abstract} +info(Marker, String, Object, Object): void
+            {abstract} +info(Marker, String, Object[]): void
+            {abstract} +info(Marker, String, Throwable): void
+            {abstract} +isWarnEnabled(): boolean
+            {abstract} +warn(String): void
+            {abstract} +warn(String, Object): void
+            {abstract} +warn(String, Object[]): void
+            {abstract} +warn(String, Object, Object): void
+            {abstract} +warn(String, Throwable): void
+            {abstract} +isWarnEnabled(Marker): boolean
+            {abstract} +warn(Marker, String): void
+            {abstract} +warn(Marker, String, Object): void
+            {abstract} +warn(Marker, String, Object, Object): void
+            {abstract} +warn(Marker, String, Object[]): void
+            {abstract} +warn(Marker, String, Throwable): void
+            {abstract} +isErrorEnabled(): boolean
+            {abstract} +error(String): void
+            {abstract} +error(String, Object): void
+            {abstract} +error(String, Object, Object): void
+            {abstract} +error(String, Object[]): void
+            {abstract} +error(String, Throwable): void
+            {abstract} +isErrorEnabled(Marker): boolean
+            {abstract} +error(Marker, String): void
+            {abstract} +error(Marker, String, Object): void
+            {abstract} +error(Marker, String, Object, Object): void
+            {abstract} +error(Marker, String, Object[]): void
+            {abstract} +error(Marker, String, Throwable): void
+        }
+        org.slf4j.Logger <|.. TestRunLogger
+
+        TestTask --> TestTaskResultPersistor: resulPersistor
+
+        TestTask --> TaskProgress: progress
+
+        TestTask --> TestRunLogger: logger
+
+        TestTaskResultPersistor --> TestResultCollector: resultCollector
+
+        TestResultCollector --> TestRunLogger: logger
+
+        TestResultCollectorInjector --> TestResultCollector: testResultCollector
+
+        TaskState --> de.interactive_instruments.etf.testdriver.TaskState.STATE: state
+
+        TaskProgress --> TestRunLogReader: logReader
+
+        TestRun --> "*" TestTask: testTasks
+
+        TestRun --> TaskProgress: progress
+
+    }
+
+@enduml

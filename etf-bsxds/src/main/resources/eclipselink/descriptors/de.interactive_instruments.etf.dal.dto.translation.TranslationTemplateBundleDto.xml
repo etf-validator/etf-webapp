@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<descriptor type="o-x">
+   <name>de.interactive_instruments.etf.dal.dto.translation.TranslationTemplateBundleDto</name>
+   <class-handle>
+      <type-name>de.interactive_instruments.etf.dal.dto.translation.TranslationTemplateBundleDto</type-name>
+   </class-handle>
+   <transactional-policy type="ox">
+      <descriptor-alias>TranslationTemplateBundleDto</descriptor-alias>
+      <refresh-cache-policy/>
+      <caching-policy/>
+      <query-manager type="ox"/>
+      <locking-policy type="ox"/>
+      <primary-key-policy>
+         <primary-keys>
+            <xml-field>@id</xml-field>
+         </primary-keys>
+      </primary-key-policy>
+   </transactional-policy>
+   <mappings>
+      <mapping type="xml-transformation">
+         <name>id</name>
+         <inherited>true</inherited>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.Dto</attribute-declaring-type-name>
+            <attribute-name>id</attribute-name>
+         </attribute-handle>
+         <attribute-transformer type="class-based">
+            <transformer-class-handle>
+               <type-name>de.interactive_instruments.etf.dal.dao.basex.transformers.EidAttributeTransformer</type-name>
+            </transformer-class-handle>
+         </attribute-transformer>
+         <field-transformer-associations type="xml">
+            <field-transformer type="class-based">
+               <transformer-class-handle>
+                  <type-name>de.interactive_instruments.etf.dal.dao.basex.transformers.EidFieldTransformer</type-name>
+               </transformer-class-handle>
+            </field-transformer>
+            <xml-field>@id</xml-field>
+         </field-transformer-associations>
+         <mutable>true</mutable>
+      </mapping>
+      <mapping type="xml-object-reference">
+         <name>parent</name>
+         <inherited>true</inherited>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.ModelItemDto</attribute-declaring-type-name>
+            <attribute-name>parent</attribute-name>
+         </attribute-handle>
+         <reference-descriptor-handle>
+            <descriptor-name>de.interactive_instruments.etf.dal.dto.translation.TranslationTemplateBundleDto</descriptor-name>
+         </reference-descriptor-handle>
+         <xml-field-pairs>
+            <field-pair>
+               <source-xml-field>parent/@ref</source-xml-field>
+               <target-xml-field>@id</target-xml-field>
+            </field-pair>
+         </xml-field-pairs>
+      </mapping>
+      <mapping type="composite-collection">
+         <name>langTranslationTemplates</name>
+         <comment>Maps name to LangTranslationTemplate</comment>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.translation.TranslationTemplateBundleDto</attribute-declaring-type-name>
+            <attribute-name>langTranslationTemplates</attribute-name>
+         </attribute-handle>
+         <uses-container-accessor>false</uses-container-accessor>
+         <reference-descriptor-handle>
+            <descriptor-name>de.interactive_instruments.etf.dal.dto.translation.LangTranslationTemplateCollectionDto</descriptor-name>
+         </reference-descriptor-handle>
+         <xpath>translationTemplateCollections/LangTranslationTemplateCollection</xpath>
+         <container-policy type="map">
+            <key-method-handle>
+               <method-declaring-type-name>de.interactive_instruments.etf.dal.dto.translation.LangTranslationTemplateCollectionDto</method-declaring-type-name>
+               <method-signature>getName()</method-signature>
+            </key-method-handle>
+            <container-class>
+               <uses-default-container-class>true</uses-default-container-class>
+            </container-class>
+         </container-policy>
+      </mapping>
+      <mapping type="xml-direct">
+         <name>source</name>
+         <attribute-handle>
+            <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.translation.TranslationTemplateBundleDto</attribute-declaring-type-name>
+            <attribute-name>source</attribute-name>
+         </attribute-handle>
+         <xml-field>@source</xml-field>
+      </mapping>
+   </mappings>
+   <inherited-attribute-handles>
+      <attribute-handle>
+         <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.Dto</attribute-declaring-type-name>
+         <attribute-name>id</attribute-name>
+      </attribute-handle>
+      <attribute-handle>
+         <attribute-declaring-type-name>de.interactive_instruments.etf.dal.dto.ModelItemDto</attribute-declaring-type-name>
+         <attribute-name>parent</attribute-name>
+      </attribute-handle>
+   </inherited-attribute-handles>
+   <schema-context-handle>
+      <schema>Result Set</schema>
+      <qname-path>
+         <qname component-type="element" namespace-uri="http://www.interactive-instruments.de/etf/2.0" local-name="TranslationTemplateBundle"/>
+      </qname-path>
+   </schema-context-handle>
+   <default-root-element-handle>
+      <schema>Result Set</schema>
+      <qname-path>
+         <qname component-type="element" namespace-uri="http://www.interactive-instruments.de/etf/2.0" local-name="TranslationTemplateBundle"/>
+      </qname-path>
+   </default-root-element-handle>
+   <root-descriptor>true</root-descriptor>
+</descriptor>

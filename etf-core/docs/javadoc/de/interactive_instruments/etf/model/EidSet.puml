@@ -1,0 +1,19 @@
+@startuml
+
+    interface EidSet<V> [[EidSet.html]] {
+        +contains(Object): boolean
+        +remove(Object): boolean
+        +containsAll(Collection<?>): boolean
+        +retainAll(Collection<?>): boolean
+        +removeAll(Collection<?>): boolean
+        {abstract} +unmodifiable(): EidSet<V>
+        {abstract} +toMap(): EidMap<V>
+        {abstract} +toList(): List<V>
+        {abstract} +internalContains(Object): boolean
+        {abstract} +internalRemove(Object): boolean
+        {abstract} +internalContainsAll(Collection<?>): boolean
+        {abstract} +internalRetainAll(Collection<?>): boolean
+        {abstract} +internalRemoveAll(Collection<?>): boolean
+    }
+
+@enduml

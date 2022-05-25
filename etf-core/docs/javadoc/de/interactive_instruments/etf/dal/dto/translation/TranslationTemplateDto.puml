@@ -1,0 +1,10 @@
+@startuml
+
+    class TranslationTemplateDto [[TranslationTemplateDto.html]] {
+        +TranslationTemplateDto(String, String, String)
+        +getName(): String
+        +getLanguage(): String
+        +getStrWithTokens(): String
+    }
+
+@enduml

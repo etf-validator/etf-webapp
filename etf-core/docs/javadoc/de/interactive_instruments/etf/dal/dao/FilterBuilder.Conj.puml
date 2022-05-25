@@ -1,0 +1,8 @@
+@startuml
+
+    interface FilterBuilder.Conj [[FilterBuilder.Conj.html]] {
+        {abstract} +and(): FilterBuilder.PropertyExpression
+        {abstract} +or(): FilterBuilder.PropertyExpression
+    }
+
+@enduml

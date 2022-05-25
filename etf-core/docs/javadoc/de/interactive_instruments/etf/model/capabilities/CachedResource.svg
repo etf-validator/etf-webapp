@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="118px" preserveAspectRatio="none" style="width:208px;height:118px;" version="1.1" viewBox="0 0 208 118" width="208px" zoomAndPan="magnify"><defs><filter height="300%" id="f1uyi1euyvy6z" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--class CachedResource--><a target="_top" xlink:actuate="onRequest" xlink:href="CachedResource.html" xlink:show="new" xlink:title="CachedResource.html" xlink:type="simple"><rect fill="#FEFECE" filter="url(#f1uyi1euyvy6z)" height="99.8203" id="CachedResource" style="stroke: #A80036; stroke-width: 1.5;" width="191" x="6" y="8"/><ellipse cx="49.35" cy="24" fill="#B4A7E5" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M45.7777,20.2651 L45.7777,18.1069 L53.1571,18.1069 L53.1571,20.2651 L50.6918,20.2651 L50.6918,28.3418 L53.1571,28.3418 L53.1571,30.5 L45.7777,30.5 L45.7777,28.3418 L48.2431,28.3418 L48.2431,20.2651 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="96" x="69.65" y="28.5352">CachedResource</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="196" y1="40" y2="40"/><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="196" y1="48" y2="48"/><ellipse cx="17" cy="59.9775" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="123" x="26" y="62.6348">getFromCache(): byte[]</text><ellipse cx="17" cy="72.9326" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="87" x="26" y="75.5898">recache(): byte[]</text><ellipse cx="17" cy="85.8877" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="152" x="26" y="88.5449">recacheIfModified(): boolean</text><ellipse cx="17" cy="98.8428" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="165" x="26" y="101.5">createCopy(): CachedResource</text></a><!--
+@startuml
+
+    interface CachedResource [[CachedResource.html]] {
+        {abstract} +getFromCache(): byte[]
+        {abstract} +recache(): byte[]
+        {abstract} +recacheIfModified(): boolean
+        {abstract} +createCopy(): CachedResource
+    }
+
+@enduml
+
+PlantUML version 1.2018.08(Sun Jun 24 14:31:00 CEST 2018)
+(APACHE source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.8.0_151-b12
+Operating System: Mac OS X
+OS Version: 10.14.2
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

@@ -1,0 +1,11 @@
+@startuml
+
+    interface ComponentInfo [[ComponentInfo.html]] {
+        {abstract} +getId(): EID
+        {abstract} +getName(): String
+        {abstract} +getVersion(): String
+        {abstract} +getVendor(): String
+        {abstract} +getDescription(): String
+    }
+
+@enduml

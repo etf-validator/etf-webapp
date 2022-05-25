@@ -1,0 +1,33 @@
+<jxb:bindings version="2.1" xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <jxb:globalBindings>
+    <xjc:superClass name="de.interactive_instruments.dal.dto.Dto"/>
+    <jxb:javaType name="java.time.Instant" xmlType="xs:dateTime" />
+  </jxb:globalBindings>
+
+  <jxb:bindings schemaLocation="basicTypes.xsd" node="/xs:schema">
+    <jxb:bindings node="//xs:complexType[@name='RefType']">
+      <jxb:class ref="de.interactive_instruments.dal.dto.Reference"/>
+    </jxb:bindings>
+  </jxb:bindings>
+
+  <jxb:bindings schemaLocation="test.xsd" node="/xs:schema">
+    <jxb:bindings node="//xs:complexType[@name='MessageTemplateType']">
+      <jxb:class ref="de.interactive_instruments.dal.dto.Reference"/>
+    </jxb:bindings>
+  </jxb:bindings>
+
+  <jxb:bindings schemaLocation="test.xsd" node="/xs:schema">
+    <jxb:bindings node="//xs:complexType[@name='MessageTemplateType']">
+      <jxb:class ref="de.interactive_instruments.dal.dto.Reference"/>
+    </jxb:bindings>
+  </jxb:bindings>
+
+  <jxb:bindings schemaLocation="result.xsd" node="/xs:schema">
+    <jxb:bindings node="//xs:complexType[@name='MesgTmplExtRefType']">
+      <jxb:class ref="de.interactive_instruments.dal.dto.Reference"/>
+    </jxb:bindings>
+  </jxb:bindings>
+
+</jxb:bindings>

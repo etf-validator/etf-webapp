@@ -1,0 +1,9 @@
+@startuml
+
+    interface ItemRegistry.DependencyChangeListener [[ItemRegistry.DependencyChangeListener.html]] {
+        {abstract} +fireEventDependencyResolved(Dto): void
+        {abstract} +fireEventDependencyDeregistered(Class<?>, EID): void
+        {abstract} +fireEventDependencyUpdated(Dto): void
+    }
+
+@enduml

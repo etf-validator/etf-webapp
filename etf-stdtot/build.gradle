@@ -1,0 +1,20 @@
+///////////////////////////////////////////////////////////////////////////////////////
+//
+// ETF-STDTOT
+//
+///////////////////////////////////////////////////////////////////////////////////////
+
+group = 'de.interactive_instruments.etf'
+description = 'ETF standard Test Object Types'
+
+dependencies {
+    implementation project(':etf-core')
+
+    compileOnly group: 'commons-collections', name: 'commons-collections', version: etf_commonsCollectionsVersion
+    compile group: 'in.jlibs', name: 'jlibs-xmldog', version: '2.2.2'
+    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.5.0'
+    compile group: 'net.minidev', name: 'json-smart', version: '2.4.1'
+
+    // Testing
+    testCompile group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.5.2'
+}

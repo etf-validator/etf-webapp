@@ -1,0 +1,26 @@
+<TestRunTemplate xmlns="http://www.interactive-instruments.de/etf/2.0"
+    id="EIDbef57b18-61e0-4097-a40f-c524dab04c36"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:etf="http://www.interactive-instruments.de/etf/2.0">
+    <etf:itemHash>69667370836969767567778270848886727868787785816876708268878771858878808176666770</etf:itemHash>
+    <remoteResource>http://notset</remoteResource>
+    <localPath>/auto</localPath>
+    <etf:label>TESTRUNTEMPLATE.LABEL.1</etf:label>
+    <etf:description>TESTRUNTEMPLATE.DESCRIPTION.1</etf:description>
+    <etf:reference>TESTRUNTEMPLATE.REFERENCE.1</etf:reference>
+    <etf:version>1.0.0</etf:version>
+    <etf:author>TESTRUNTEMPLATE.AUTHOR.1</etf:author>
+    <etf:creationDate>2017-02-18T14:17:06</etf:creationDate>
+    <etf:lastEditor>TESTRUNTEMPLATE.LAST_EDITOR.1</etf:lastEditor>
+    <etf:lastUpdateDate>2017-02-06T14:17:06</etf:lastUpdateDate>
+    <etf:disabled>false</etf:disabled>
+    <Properties>
+        <property name="PROPERTY">VALUE</property>
+    </Properties>
+    <ParameterList>
+        <parameter name="PAREMETER.NAME"><defaultValue>DEFAULT VALUE</defaultValue></parameter>
+    </ParameterList>
+    <executableTestSuites>
+        <executableTestSuite ref="EIDd0b58f38-98ae-43a8-a787-9a5084c60267"/>
+    </executableTestSuites>
+</TestRunTemplate>

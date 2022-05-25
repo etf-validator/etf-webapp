@@ -1,0 +1,20 @@
+@startuml
+
+    interface TestObjectType [[TestObjectType.html]] {
+        +isInstanceOf(TestObjectType): boolean
+        +isInstanceOf(Collection<TestObjectType>): boolean
+        {abstract} +getLabel(): String
+        {abstract} +getDescription(): String
+        {abstract} +getParent(): TestObjectType
+        {abstract} +getSubTypes(): List<TestObjectTypeDto>
+        {abstract} +getFilenameExtensions(): List<String>
+        {abstract} +getMimeTypes(): List<String>
+        {abstract} +getDetectionExpression(): String
+        {abstract} +getDetectionExpressionType(): ExpressionType
+        {abstract} +getLabelExpression(): String
+        {abstract} +getLabelExpressionType(): ExpressionType
+        {abstract} +getDescriptionExpression(): String
+        {abstract} +getDescriptionExpressionType(): ExpressionType
+    }
+
+@enduml

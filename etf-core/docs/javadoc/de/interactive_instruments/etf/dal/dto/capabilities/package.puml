@@ -1,0 +1,168 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.dal.dto.capabilities {
+
+        class TestObjectTypeDto [[TestObjectTypeDto.html]] {
+            +TestObjectTypeDto()
+            +addSubType(TestObjectTypeDto): void
+            +getNamingConvention(): String
+            +setNamingConvention(String): void
+            +getFilenameExtensions(): List<String>
+            +setFilenameExtensions(List<String>): void
+            +setFilenameExtensions(String[]): void
+            +getMimeTypes(): List<String>
+            +setMimeTypes(List<String>): void
+            +setDetectionExpression(String, ExpressionType): void
+            +getDetectionExpression(): String
+            +getDetectionExpressionType(): ExpressionType
+            +setLabelExpression(String, ExpressionType): void
+            +setDefaultPathAndQuery(String): void
+            +getDefaultQuery(): Map<String, List<String>>
+            +getDefaultAccessPath(): String
+            +setUriDetectionExpression(String): void
+            +getUriDetectionExpression(): String
+            +getLabelExpression(): String
+            +getLabelExpressionType(): ExpressionType
+            +setDescriptionExpression(String, ExpressionType): void
+            +getDescriptionExpression(): String
+            +getDescriptionExpressionType(): ExpressionType
+            +createCopy(): TestObjectTypeDto
+        }
+
+        class TagDto [[TagDto.html]] {
+            +TagDto()
+            +getPriority(): int
+            +setPriority(int): void
+            +createCopy(): TagDto
+        }
+
+        class ResultStyleDto [[ResultStyleDto.html]] {
+            #resource: URI
+            +ResultStyleDto()
+            +getResource(): URI
+            +setResource(URI): void
+            +createCopy(): ResultStyleDto
+        }
+
+        class NamingConventionDto [[NamingConventionDto.html]] {
+            +NamingConventionDto()
+            +NamingConventionDto(NamingConventionDto)
+            +getRegex(): String
+            +setRegex(String): void
+            +createCopy(): NamingConventionDto
+        }
+
+        class ResourceDto [[ResourceDto.html]] {
+            +ResourceDto()
+            +ResourceDto(String, String)
+            +ResourceDto(String, URI)
+            +ResourceDto(String, String, CredentialDto)
+            +ResourceDto(String, URI, CredentialDto)
+            +getName(): String
+            +setName(String): void
+            +getUri(): URI
+            +setUri(URI): void
+            +setUri(String): void
+        }
+
+        class TestObjectDto [[TestObjectDto.html]] {
+            +TestObjectDto()
+            +properties(): Properties
+            +properties(Properties): void
+            +getResourceNames(): Set<String>
+            +getResources(): Map<String, ResourceDto>
+            +getResourcesSize(): int
+            +getResourceByName(String): URI
+            +setResources(Map<String, ResourceDto>): void
+            +addResource(ResourceDto): void
+            +addTestObjectType(TestObjectTypeDto): void
+            +ensureBasicValidity(): void
+            +createCopy(): TestObjectDto
+        }
+
+        class CredentialDto [[CredentialDto.html]] {
+            +CredentialDto()
+            +getApplicableTo(): ModelItemDto
+            +setApplicableTo(ModelItemDto): void
+            +getApplicableUri(): String
+            +setApplicableUri(String): void
+            +getCipher(): byte[]
+            +setCipher(byte[]): void
+            +createCopy(): CredentialDto
+        }
+
+        class TestRunTemplateDto [[TestRunTemplateDto.html]] {
+            +TestRunTemplateDto()
+            +getExecutableTestSuites(): List<ExecutableTestSuiteDto>
+            +setExecutableTestSuites(List<ExecutableTestSuiteDto>): void
+            +addExecutableTestSuite(ExecutableTestSuiteDto): void
+            +addTestObject(TestObjectDto): void
+            +properties(): Properties
+            +properties(Properties): void
+            +getParameters(): ParameterSet
+            +setParameters(ParameterSet): void
+            +ensureBasicValidity(): void
+            +createCopy(): Dto
+        }
+
+        class ComponentDto [[ComponentDto.html]] {
+            #vendor: String
+            #version: String
+            +ComponentDto()
+            +ComponentDto(ComponentInfo)
+            +getVendor(): String
+            +setVendor(String): void
+            +getVersion(): String
+            +setVersion(String): void
+            +createCopy(): ComponentDto
+        }
+
+        abstract class de.interactive_instruments.etf.dal.dto.MetaDataItemDto<T>
+        de.interactive_instruments.etf.dal.dto.MetaDataItemDto <|-- TestObjectTypeDto
+
+        interface de.interactive_instruments.etf.model.capabilities.TestObjectType {
+            {abstract} +getLabel(): String
+            {abstract} +getDescription(): String
+            {abstract} +getParent(): TestObjectType
+            {abstract} +getSubTypes(): List<TestObjectTypeDto>
+            {abstract} +getFilenameExtensions(): List<String>
+            {abstract} +getMimeTypes(): List<String>
+            {abstract} +getDetectionExpression(): String
+            {abstract} +getDetectionExpressionType(): ExpressionType
+            {abstract} +getLabelExpression(): String
+            {abstract} +getLabelExpressionType(): ExpressionType
+            {abstract} +getDescriptionExpression(): String
+            {abstract} +getDescriptionExpressionType(): ExpressionType
+        }
+        de.interactive_instruments.etf.model.capabilities.TestObjectType <|.. TestObjectTypeDto
+
+        de.interactive_instruments.etf.dal.dto.MetaDataItemDto <|-- TagDto
+
+        abstract class de.interactive_instruments.etf.dal.dto.RepositoryItemDto
+        de.interactive_instruments.etf.dal.dto.RepositoryItemDto <|-- ResultStyleDto
+
+        de.interactive_instruments.etf.dal.dto.MetaDataItemDto <|-- NamingConventionDto
+
+        de.interactive_instruments.etf.dal.dto.RepositoryItemDto <|-- TestObjectDto
+
+        de.interactive_instruments.etf.dal.dto.RepositoryItemDto <|-- CredentialDto
+
+        de.interactive_instruments.etf.dal.dto.RepositoryItemDto <|-- TestRunTemplateDto
+
+        de.interactive_instruments.etf.dal.dto.MetaDataItemDto <|-- ComponentDto
+
+        TestObjectTypeDto --> "*" TestObjectTypeDto: subTypes
+
+        ResourceDto --> CredentialDto: credential
+
+        TestObjectDto --> "*" TestObjectTypeDto: testObjectTypes
+
+        TestObjectDto --> TestObjectTypeDto: testObjectType
+
+        TestObjectDto --> "*" ResourceDto: resourceCollection
+
+        TestRunTemplateDto --> "*" TestObjectDto: testObjects
+
+    }
+
+@enduml

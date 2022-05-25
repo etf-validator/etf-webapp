@@ -1,0 +1,7 @@
+@startuml
+
+    interface TestResultCollectorInjector [[TestResultCollectorInjector.html]] {
+        {abstract} +setTestResultCollector(TestResultCollector): void
+    }
+
+@enduml

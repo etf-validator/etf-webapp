@@ -1,0 +1,227 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.model.capabilities {
+
+        interface CachedResource [[CachedResource.html]] {
+            {abstract} +getFromCache(): byte[]
+            {abstract} +recache(): byte[]
+            {abstract} +recacheIfModified(): boolean
+            {abstract} +createCopy(): CachedResource
+        }
+
+        class CachedRemoteResource [[CachedRemoteResource.html]] {
+            #CachedRemoteResource(CachedRemoteResource)
+            +getFromCache(): byte[]
+            +getFromCache(int): byte[]
+            +recache(): byte[]
+            +recache(int): byte[]
+            +openStream(): InputStream
+            +getName(): String
+            +getUri(): URI
+            +getContentLength(): long
+            +getBytes(): byte[]
+            +exists(): boolean
+            +openStream(int): InputStream
+            +getBytes(int): byte[]
+            +getModificationCheck(): UriModificationCheck
+            +isModificationCheckInitialized(): boolean
+            +recacheIfModified(): boolean
+            +release(): void
+            +createCopy(): CachedRemoteResource
+        }
+
+        interface TestObject [[TestObject.html]] {
+        }
+
+        class MutableSecuredRemoteResource [[MutableSecuredRemoteResource.html]] {
+            +setQueyParameters(Map<String, String>): boolean
+            +createCopy(): MutableSecuredRemoteResource
+        }
+
+        interface TestObjectType [[TestObjectType.html]] {
+            +isInstanceOf(TestObjectType): boolean
+            +isInstanceOf(Collection<TestObjectType>): boolean
+            {abstract} +getLabel(): String
+            {abstract} +getDescription(): String
+            {abstract} +getSubTypes(): List<TestObjectTypeDto>
+            {abstract} +getFilenameExtensions(): List<String>
+            {abstract} +getMimeTypes(): List<String>
+            {abstract} +getDetectionExpression(): String
+            {abstract} +getDetectionExpressionType(): ExpressionType
+            {abstract} +getLabelExpression(): String
+            {abstract} +getLabelExpressionType(): ExpressionType
+            {abstract} +getDescriptionExpression(): String
+            {abstract} +getDescriptionExpressionType(): ExpressionType
+        }
+
+        interface RemoteResource [[RemoteResource.html]] {
+            {abstract} +openStream(int): InputStream
+            {abstract} +getBytes(int): byte[]
+            {abstract} +getModificationCheck(): UriModificationCheck
+            {abstract} +isModificationCheckInitialized(): boolean
+            {abstract} +createCopy(): RemoteResource
+        }
+
+        class CachedLocalResource [[CachedLocalResource.html]] {
+            +getFromCache(): byte[]
+            +recache(): byte[]
+            +recacheIfModified(): boolean
+            +createCopy(): CachedLocalResource
+        }
+
+        class SecuredRemoteResource [[SecuredRemoteResource.html]] {
+            #uri: URI
+            +SecuredRemoteResource(String, Credentials, URI)
+            +SecuredRemoteResource(Resource)
+            +isModificationCheckInitialized(): boolean
+            +getName(): String
+            +getUri(): URI
+            +getContentLength(): long
+            +openStream(): InputStream
+            +openStream(int): InputStream
+            +getBytes(): byte[]
+            +getBytes(int): byte[]
+            +exists(): boolean
+            +getModificationCheck(): UriModificationCheck
+            +release(): void
+            +createCopy(): SecuredRemoteResource
+        }
+
+        class MutableCachedRemoteResource [[MutableCachedRemoteResource.html]] {
+            +setQueyParameters(Map<String, String>): boolean
+            +createCopy(): MutableCachedRemoteResource
+        }
+
+        class StdRemoteResource [[StdRemoteResource.html]] {
+            +StdRemoteResource(String, URI)
+            +StdRemoteResource(String, String)
+            +StdRemoteResource(Resource)
+            +StdRemoteResource(StdRemoteResource)
+            +getName(): String
+            +getUri(): URI
+            +getContentLength(): long
+            +openStream(): InputStream
+            +openStream(int): InputStream
+            +getBytes(): byte[]
+            +getBytes(int): byte[]
+            +exists(): boolean
+            +getModificationCheck(): UriModificationCheck
+            +isModificationCheckInitialized(): boolean
+            +release(): void
+            +createCopy(): StdRemoteResource
+        }
+
+        interface Resource [[Resource.html]] {
+            {static} +create(String, URI, Credentials): Resource
+            {static} +create(String, URI): Resource
+            {static} +toCached(Resource): CachedResource
+            {static} +toCached(RemoteResource): CachedRemoteResource
+            {static} +toCached(MutableRemoteResource): MutableCachedRemoteResource
+            {static} +toCached(LocalResource): CachedLocalResource
+            {static} +toMutable(RemoteResource): MutableRemoteResource
+            {static} +toImmutable(Resource): Resource
+            {abstract} +getName(): String
+            {abstract} +getUri(): URI
+            {abstract} +getContentLength(): long
+            {abstract} +openStream(): InputStream
+            {abstract} +getBytes(): byte[]
+            {abstract} +exists(): boolean
+        }
+
+        class StdCachedResource [[StdCachedResource.html]] {
+            +StdCachedResource(Resource)
+            +getFromCache(): byte[]
+            +recache(): byte[]
+            +recacheIfModified(): boolean
+            +openStream(): InputStream
+            +getName(): String
+            +getUri(): URI
+            +getContentLength(): long
+            +getBytes(): byte[]
+            +exists(): boolean
+            +release(): void
+            +createCopy(): StdCachedResource
+        }
+
+        class LocalResource [[LocalResource.html]] {
+            #file: IFile
+            +LocalResource(String, IFile)
+            +LocalResource(LocalResource)
+            +getName(): String
+            +getUri(): URI
+            +getFile(): IFile
+            +getContentLength(): long
+            +openStream(): InputStream
+            +getBytes(): byte[]
+            +exists(): boolean
+            +release(): void
+            +createCopy(): LocalResource
+        }
+
+        interface MutableRemoteResource [[MutableRemoteResource.html]] {
+            {abstract} +setQueyParameters(Map<String, String>): boolean
+        }
+
+        Resource <|.. CachedResource
+
+        CachedResource <|.. CachedRemoteResource
+
+        RemoteResource <|.. CachedRemoteResource
+
+        interface de.interactive_instruments.etf.model.EidHolder {
+            {abstract} +getId(): EID
+        }
+        de.interactive_instruments.etf.model.EidHolder <|.. TestObject
+
+        interface de.interactive_instruments.Initializable {
+            {abstract} +init(): void
+            {abstract} +isInitialized(): boolean
+        }
+        de.interactive_instruments.Initializable <|.. TestObject
+
+        SecuredRemoteResource <|-- MutableSecuredRemoteResource
+
+        MutableRemoteResource <|.. MutableSecuredRemoteResource
+
+        de.interactive_instruments.etf.model.EidHolder <|.. TestObjectType
+
+        interface de.interactive_instruments.etf.model.EidHolderWithParent<T>
+        de.interactive_instruments.etf.model.EidHolderWithParent <|.. TestObjectType
+
+        Resource <|.. RemoteResource
+
+        LocalResource <|-- CachedLocalResource
+
+        CachedResource <|.. CachedLocalResource
+
+        RemoteResource <|.. SecuredRemoteResource
+
+        CachedRemoteResource <|-- MutableCachedRemoteResource
+
+        MutableRemoteResource <|.. MutableCachedRemoteResource
+
+        RemoteResource <|.. StdRemoteResource
+
+        interface de.interactive_instruments.Releasable {
+            {abstract} +release(): void
+        }
+        de.interactive_instruments.Releasable <|.. Resource
+
+        interface de.interactive_instruments.Copyable<T> {
+            {abstract} +createCopy(): T
+        }
+        de.interactive_instruments.Copyable <|.. Resource
+
+        CachedResource <|.. StdCachedResource
+
+        Resource <|.. LocalResource
+
+        RemoteResource <|.. MutableRemoteResource
+
+        CachedRemoteResource --> RemoteResource: wrapped
+
+        TestObjectType --> TestObjectType: parent
+
+    }
+
+@enduml

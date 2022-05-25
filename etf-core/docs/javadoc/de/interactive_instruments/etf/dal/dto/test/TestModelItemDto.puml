@@ -1,0 +1,14 @@
+@startuml
+
+    abstract class TestModelItemDto [[TestModelItemDto.html]] {
+        #children: EidMap<TestModelItemDto>
+        #TestModelItemDto()
+        #TestModelItemDto(TestModelItemDto)
+        +getChildren(): List<?>
+        +getChildrenAsMap(): EidMap<?>
+        +addChild(TestModelItemDto): void
+        +setChildren(List<?>): void
+        +toString(): String
+    }
+
+@enduml

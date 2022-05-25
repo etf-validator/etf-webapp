@@ -1,0 +1,158 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.dal.dto.result {
+
+        class TestAssertionResultDto [[TestAssertionResultDto.html]] {
+            +TestAssertionResultDto()
+            +getArguments(): Arguments
+            +setArguments(Arguments): void
+            +getMessages(): List<TranslationArgumentCollectionDto>
+            +setMessages(List<TranslationArgumentCollectionDto>): void
+            +addMessage(TranslationArgumentCollectionDto): void
+            +toString(): String
+            +createCopy(): TestAssertionResultDto
+        }
+
+        interface AttachmentDtoHolder [[AttachmentDtoHolder.html]] {
+        }
+
+        class TestCaseResultDto [[TestCaseResultDto.html]] {
+            +TestCaseResultDto()
+            +addTestStepResult(TestStepResultDto): void
+            +getArguments(): Arguments
+            +setArguments(Arguments): void
+            +createCopy(): TestCaseResultDto
+        }
+
+        class TestModuleResultDto [[TestModuleResultDto.html]] {
+            +TestModuleResultDto()
+            +addTestCaseResult(TestCaseResultDto): void
+            +createCopy(): TestModuleResultDto
+        }
+
+        class AttachmentDto [[AttachmentDto.html]] {
+            +AttachmentDto()
+            +getLabel(): String
+            +setLabel(String): void
+            +getEncoding(): String
+            +setEncoding(String): void
+            +getMimeType(): String
+            +setMimeType(String): void
+            +getType(): String
+            +setType(String): void
+            +getReferencedData(): URI
+            +setReferencedData(URI): void
+            +getEmbeddedData(): String
+            +setEmbeddedData(String): void
+            +createCopy(): AttachmentDto
+        }
+
+        abstract class ResultModelItemDto [[ResultModelItemDto.html]] {
+            #resultStatus: String
+            #startTimestamp: Date
+            #duration: long
+            #resultedFrom: MetaDataItemDto
+            #children: EidMap<ResultModelItemDto>
+            #ResultModelItemDto()
+            #ResultModelItemDto(ResultModelItemDto)
+            +getStartTimestamp(): Date
+            +setStartTimestamp(Date): void
+            +getDuration(): long
+            +setDuration(long): void
+            +getResultedFrom(): MetaDataItemDto
+            +setResultedFrom(MetaDataItemDto): void
+            +getChildren(): List<?>
+            +getChildrenAsMap(): EidMap<?>
+            +addChild(ResultModelItemDto): void
+            +setChildren(List<?>): void
+        }
+
+        enum TestResultStatus [[TestResultStatus.html]] {
+            {static} +PASSED
+            {static} +FAILED
+            {static} +SKIPPED
+            {static} +NOT_APPLICABLE
+            {static} +INFO
+            {static} +WARNING
+            {static} +UNDEFINED
+            {static} +PASSED_MANUAL
+            {static} +INTERNAL_ERROR
+            +value(): int
+            {static} +valueOf(int): TestResultStatus
+            {static} +toString(int): String
+            {static} +aggregateStatus(Collection<TestResultStatus>): TestResultStatus
+            {static} +aggregateStatus(TestResultStatus[]): TestResultStatus
+        }
+
+        class TestStepResultDto [[TestStepResultDto.html]] {
+            +TestStepResultDto()
+            +addTestAssertionResult(TestAssertionResultDto): void
+            +addAttachment(AttachmentDto): void
+            +addInvokedTestSteps(TestStepResultDto): void
+            +addInvokedTestCases(TestCaseResultDto): void
+            +getMessages(): List<TranslationArgumentCollectionDto>
+            +setMessages(List<TranslationArgumentCollectionDto>): void
+            +addMessage(TranslationArgumentCollectionDto): void
+            +createCopy(): TestStepResultDto
+        }
+
+        class TestTaskResultDto [[TestTaskResultDto.html]] {
+            +TestTaskResultDto()
+            +addTestModuleResult(TestModuleResultDto): void
+            +setInternalError(Exception): void
+            +getErrorMessage(): String
+            +addAttachment(AttachmentDto): void
+            +getAttachmentById(EID): AttachmentDto
+            +getTestObject(): TestObjectDto
+            +setTestObject(TestObjectDto): void
+            +toString(): String
+            +createCopy(): TestTaskResultDto
+        }
+
+        ResultModelItemDto <|-- TestAssertionResultDto
+
+        ResultModelItemDto <|-- TestCaseResultDto
+
+        ResultModelItemDto <|-- TestModuleResultDto
+
+        abstract class de.interactive_instruments.etf.dal.dto.Dto
+        de.interactive_instruments.etf.dal.dto.Dto <|-- AttachmentDto
+
+        abstract class de.interactive_instruments.etf.dal.dto.ModelItemDto<T>
+        de.interactive_instruments.etf.dal.dto.ModelItemDto <|-- ResultModelItemDto
+
+        interface de.interactive_instruments.etf.dal.dto.ModelItemTreeNode<T> {
+            {abstract} +getChildren(): List<?>
+            {abstract} +getChildrenAsMap(): EidMap<?>
+            {abstract} +addChild(T): void
+            {abstract} +setChildren(List<?>): void
+        }
+        de.interactive_instruments.etf.dal.dto.ModelItemTreeNode <|.. ResultModelItemDto
+
+        ResultModelItemDto <|-- TestStepResultDto
+
+        AttachmentDtoHolder <|.. TestStepResultDto
+
+        ResultModelItemDto <|-- TestTaskResultDto
+
+        TestCaseResultDto --> "*" TestStepResultDto: testStepResults
+
+        TestModuleResultDto --> "*" TestCaseResultDto: testCaseResults
+
+        ResultModelItemDto --> TestResultStatus: resultStatus
+
+        TestStepResultDto --> "*" TestAssertionResultDto: testAssertionResults
+
+        TestStepResultDto --> "*" AttachmentDto: attachments
+
+        TestStepResultDto --> "*" TestStepResultDto: invokedTestSteps
+
+        TestStepResultDto --> "*" TestCaseResultDto: invokedTestCases
+
+        TestTaskResultDto --> "*" TestModuleResultDto: testModuleResults
+
+        TestTaskResultDto --> "*" AttachmentDto: attachments
+
+    }
+
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+
+    interface PreparedDto<T> [[PreparedDto.html]] {
+        {abstract} +getDtoId(): EID
+        {abstract} +getDto(): T
+    }
+
+@enduml

@@ -1,0 +1,27 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.model.exceptions {
+
+        class IllegalEidException [[IllegalEidException.html]] {
+            +IllegalEidException(String)
+        }
+
+        class TestStepNotFoundException [[TestStepNotFoundException.html]] {
+            +TestStepNotFoundException(String)
+        }
+
+        class TestCaseNotFoundException [[TestCaseNotFoundException.html]] {
+            +TestCaseNotFoundException(String)
+        }
+
+        class java.lang.IllegalArgumentException
+        java.lang.IllegalArgumentException <|-- IllegalEidException
+
+        class java.lang.Exception
+        java.lang.Exception <|-- TestStepNotFoundException
+
+        java.lang.Exception <|-- TestCaseNotFoundException
+
+    }
+
+@enduml

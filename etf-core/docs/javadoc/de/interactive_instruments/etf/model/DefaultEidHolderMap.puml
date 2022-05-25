@@ -1,0 +1,18 @@
+@startuml
+
+    class DefaultEidHolderMap<V> [[DefaultEidHolderMap.html]] {
+        +DefaultEidHolderMap()
+        +DefaultEidHolderMap(Map<EID, V>)
+        +DefaultEidHolderMap(Collection<V>)
+        +DefaultEidHolderMap(V[])
+        +DefaultEidHolderMap(V)
+        +unmodifiable(): EidHolderMap<V>
+        +createCopy(): EidHolderMap<V>
+        +toSet(): EidSet<V>
+        +getAll(Collection<?>): EidHolderMap<V>
+        +add(V): V
+        +addAll(Collection<V>): void
+        {static} +singleton(V): EidHolderMap<V>
+    }
+
+@enduml

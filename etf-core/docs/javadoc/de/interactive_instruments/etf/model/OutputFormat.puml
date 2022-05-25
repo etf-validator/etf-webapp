@@ -1,0 +1,11 @@
+@startuml
+
+    interface OutputFormat [[OutputFormat.html]] {
+        +compareTo(OutputFormat): int
+        {abstract} +getId(): EID
+        {abstract} +getLabel(): String
+        {abstract} +getMediaTypeType(): MediaType
+        {abstract} +streamTo(PropertyHolder, InputStream, OutputStream): void
+    }
+
+@enduml

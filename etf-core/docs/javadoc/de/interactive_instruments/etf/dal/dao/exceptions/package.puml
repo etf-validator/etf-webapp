@@ -1,0 +1,24 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.dal.dao.exceptions {
+
+        class StoreException [[StoreException.html]] {
+            +StoreException(String)
+            +StoreException(Throwable)
+            +StoreException(String, Throwable)
+        }
+
+        class RetrieveException [[RetrieveException.html]] {
+            +RetrieveException(String)
+            +RetrieveException(Throwable)
+            +RetrieveException(String, Throwable)
+        }
+
+        class de.interactive_instruments.exceptions.StorageException
+        de.interactive_instruments.exceptions.StorageException <|-- StoreException
+
+        de.interactive_instruments.exceptions.StorageException <|-- RetrieveException
+
+    }
+
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+
+    interface StreamWriteDao<T> [[StreamWriteDao.html]] {
+        +add(InputStream): T
+        {abstract} +add(InputStream, StreamWriteDao.ChangeBeforeStoreHook<T>): T
+    }
+
+@enduml

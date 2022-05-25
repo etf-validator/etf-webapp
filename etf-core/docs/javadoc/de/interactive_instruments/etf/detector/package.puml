@@ -1,0 +1,81 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.detector {
+
+        class TestObjectTypeNotDetected [[TestObjectTypeNotDetected.html]] {
+            +TestObjectTypeNotDetected(TestObjectType)
+            +TestObjectTypeNotDetected()
+        }
+
+        class TestObjectTypeDetectorManager [[TestObjectTypeDetectorManager.html]] {
+            {static} +getTypes(String[]): EidMap<TestObjectTypeDto>
+            {static} +getTypes(Collection<EID>): EidMap<TestObjectTypeDto>
+            {static} +getSupportedTypes(): EidMap<TestObjectTypeDto>
+            {static} +detect(Resource): DetectedTestObjectType
+            {static} +detect(Resource, Set<EID>): DetectedTestObjectType
+        }
+
+        class TestObjectTypeDetectionNotUnambiguousException [[TestObjectTypeDetectionNotUnambiguousException.html]] {
+        }
+
+        interface TestObjectTypeDetector [[TestObjectTypeDetector.html]] {
+            +detectType(Resource): DetectedTestObjectType
+            +getPriority(): int
+            +compareTo(TestObjectTypeDetector): int
+            {abstract} +detectType(Resource, Set<EID>): DetectedTestObjectType
+            {abstract} +supportedTestObjectTypes(): EidMap<TestObjectTypeDto>
+        }
+
+        interface DetectedTestObjectType [[DetectedTestObjectType.html]] {
+            {abstract} +enrichAndNormalize(TestObjectDto): void
+            {abstract} +getNormalizedResource(): Resource
+            {abstract} +toTestObjectTypeDto(): TestObjectTypeDto
+        }
+
+        class IncompatibleTestObjectTypeException [[IncompatibleTestObjectTypeException.html]] {
+            +IncompatibleTestObjectTypeException(TestObjectType, DetectedTestObjectType)
+            +IncompatibleTestObjectTypeException(Collection<?>, DetectedTestObjectType)
+        }
+
+        class java.lang.Exception
+        java.lang.Exception <|-- TestObjectTypeNotDetected
+
+        interface de.interactive_instruments.Initializable {
+            {abstract} +init(): void
+            {abstract} +isInitialized(): boolean
+        }
+        de.interactive_instruments.Initializable <|.. TestObjectTypeDetector
+
+        interface de.interactive_instruments.Releasable {
+            {abstract} +release(): void
+        }
+        de.interactive_instruments.Releasable <|.. TestObjectTypeDetector
+
+        interface java.lang.Comparable<T> {
+            {abstract} +compareTo(T): int
+        }
+        java.lang.Comparable <|.. TestObjectTypeDetector
+
+        interface de.interactive_instruments.etf.model.capabilities.TestObjectType {
+            {abstract} +getLabel(): String
+            {abstract} +getDescription(): String
+            {abstract} +getParent(): TestObjectType
+            {abstract} +getSubTypes(): List<TestObjectTypeDto>
+            {abstract} +getFilenameExtensions(): List<String>
+            {abstract} +getMimeTypes(): List<String>
+            {abstract} +getDetectionExpression(): String
+            {abstract} +getDetectionExpressionType(): ExpressionType
+            {abstract} +getLabelExpression(): String
+            {abstract} +getLabelExpressionType(): ExpressionType
+            {abstract} +getDescriptionExpression(): String
+            {abstract} +getDescriptionExpressionType(): ExpressionType
+        }
+        de.interactive_instruments.etf.model.capabilities.TestObjectType <|.. DetectedTestObjectType
+
+        java.lang.Exception <|-- IncompatibleTestObjectTypeException
+
+        IncompatibleTestObjectTypeException --> de.interactive_instruments.etf.model.capabilities.TestObjectType: detectedTestObjectType
+
+    }
+
+@enduml

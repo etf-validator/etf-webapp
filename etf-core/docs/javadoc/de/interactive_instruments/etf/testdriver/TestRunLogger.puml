@@ -1,0 +1,6 @@
+@startuml
+
+    interface TestRunLogger [[TestRunLogger.html]] {
+    }
+
+@enduml

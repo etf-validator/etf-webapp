@@ -1,0 +1,185 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.dal.dto {
+
+        interface ModelItemTreeNode<T> [[ModelItemTreeNode.html]] {
+            {abstract} +getChildren(): List<?>
+            {abstract} +getChildrenAsMap(): EidMap<?>
+            {abstract} +addChild(T): void
+            {abstract} +setChildren(List<?>): void
+        }
+
+        abstract class RepositoryItemDto [[RepositoryItemDto.html]] {
+            #replacementReason: String
+            #itemHash: String
+            #version: String
+            #author: String
+            #creationDate: Date
+            #lastEditor: String
+            #lastUpdateDate: Date
+            #tagDtos: List<TagDto>
+            #remoteResource: String
+            #localPath: String
+            #disabled: boolean
+            #egaid: String
+            +RepositoryItemDto()
+            #RepositoryItemDto(RepositoryItemDto)
+            +getItemHash(): String
+            +setItemHash(String): void
+            +getVersionAsStr(): String
+            +getVersion(): Version
+            +setVersionFromStr(String): void
+            +setVersion(Version): void
+            +increaseVersion(): void
+            +getAuthor(): String
+            +setAuthor(String): void
+            +getCreationDate(): Date
+            +setCreationDate(Date): void
+            +setCreationDateNowIfNotSet(): void
+            +getLastEditor(): String
+            +setLastEditor(String): void
+            +getLastUpdateDate(): Date
+            +setLastUpdateDate(Date): void
+            +setLastUpdateDateNow(): void
+            +setReplacementReason(String): void
+            +getReplacementReason(): String
+            +getTags(): List<TagDto>
+            +setTags(List<TagDto>): void
+            +addTag(TagDto): void
+            +getRemoteResource(): URI
+            +setRemoteResource(URI): void
+            +getLocalPath(): String
+            +setLocalPath(String): void
+            +setDisabled(boolean): void
+            +isDisabled(): boolean
+            +getEgaId(): EGAID
+            +setEgaId(String): void
+            +getEgaIdRef(): String
+            +toString(): String
+            +getDescriptiveLabel(): String
+            +ensureBasicValidity(): void
+        }
+
+        class DtoValidityCheckUtils [[DtoValidityCheckUtils.html]] {
+            {static} +ensureNotNullOrEmpty(String, Collection): void
+            {static} +ensureNotNullOrEmpty(String, Map): void
+            {static} +ensureNotNullOrEmpty(String, String): void
+            {static} +ensureNotNullAndHasId(String, Dto): void
+            {static} +ensureNotNull(String, Object): void
+        }
+
+        class Arguments [[Arguments.html]] {
+            +Arguments(PropertyHolder)
+            +Arguments()
+            +Arguments(Map<String, String>)
+            +setValue(String, String): void
+            +argumentParameterSet(Parameterizable): Arguments.ArgumentParameterSet
+            +isEmpty(): boolean
+            +value(String): String
+            +values(): Map<String, String>
+        }
+
+        class de.interactive_instruments.etf.dal.dto.Arguments.Argument [[Arguments.Argument.html]] {
+            +Argument()
+            +Argument(String, String)
+            +getName(): String
+            +getValue(): String
+        }
+
+        class de.interactive_instruments.etf.dal.dto.Arguments.ArgumentParameterSet [[Arguments.ArgumentParameterSet.html]] {
+            +value(String): String
+            +values(): Map<String, String>
+        }
+
+        abstract class Dto [[Dto.html]] {
+            #id: EID
+            +getId(): EID
+            +setId(EID): void
+            +getTypeName(): String
+            +getDescriptiveLabel(): String
+            +ensureBasicValidity(): void
+        }
+
+        abstract class ModelItemDto<T> [[ModelItemDto.html]] {
+            #parent: T
+            +ModelItemDto()
+            +ModelItemDto(ModelItemDto<T>)
+            +getParent(): T
+            +setParent(T): void
+        }
+
+        abstract class MetaDataItemDto<T> [[MetaDataItemDto.html]] {
+            #label: String
+            #labelTranslationTemplate: LangTranslationTemplateCollectionDto
+            #description: String
+            #descriptionTranslationTemplate: LangTranslationTemplateCollectionDto
+            #reference: String
+            +MetaDataItemDto()
+            +MetaDataItemDto(MetaDataItemDto)
+            +getLabel(): String
+            +setLabel(String): void
+            +getDescription(): String
+            +setDescription(String): void
+            +getReference(): String
+            +setReference(String): void
+            +toString(): String
+            +getDescriptiveLabel(): String
+            +ensureBasicValidity(): void
+        }
+
+        class IncompleteDtoException [[IncompleteDtoException.html]] {
+            +IncompleteDtoException(String)
+            +IncompleteDtoException(String, Throwable)
+        }
+
+        interface de.interactive_instruments.etf.model.ModelItemWithParent<T> {
+            {abstract} +getParent(): T
+        }
+        de.interactive_instruments.etf.model.ModelItemWithParent <|.. ModelItemTreeNode
+
+        MetaDataItemDto <|-- RepositoryItemDto
+
+        interface de.interactive_instruments.etf.model.EgaidHolder {
+            {abstract} +getEgaId(): EGAID
+        }
+        de.interactive_instruments.etf.model.EgaidHolder <|.. RepositoryItemDto
+
+        interface de.interactive_instruments.etf.model.Disableable {
+            {abstract} +isDisabled(): boolean
+            {abstract} +setDisabled(boolean): void
+        }
+        de.interactive_instruments.etf.model.Disableable <|.. RepositoryItemDto
+
+        Arguments +-- de.interactive_instruments.etf.dal.dto.Arguments.Argument
+
+        Arguments +-- de.interactive_instruments.etf.dal.dto.Arguments.ArgumentParameterSet
+
+        interface java.lang.Comparable<T> {
+            {abstract} +compareTo(T): int
+        }
+        java.lang.Comparable <|.. Dto
+
+        interface de.interactive_instruments.etf.model.EidHolder {
+            {abstract} +getId(): EID
+        }
+        de.interactive_instruments.etf.model.EidHolder <|.. Dto
+
+        interface de.interactive_instruments.Copyable<T> {
+            {abstract} +createCopy(): T
+        }
+        de.interactive_instruments.Copyable <|.. Dto
+
+        Dto <|-- ModelItemDto
+
+        ModelItemDto <|-- MetaDataItemDto
+
+        class java.lang.Exception
+        java.lang.Exception <|-- IncompleteDtoException
+
+        RepositoryItemDto --> RepositoryItemDto: replacedBy
+
+        RepositoryItemDto --> ModelItemDto: replacedBy
+
+    }
+
+@enduml

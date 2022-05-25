@@ -1,0 +1,8 @@
+@startuml
+
+    interface TestResultCollectorFactory [[TestResultCollectorFactory.html]] {
+        {static} +getDefault(): TestResultCollectorFactory
+        {abstract} +createTestResultCollector(TestRunLogger, TestTaskDto): TestResultCollector
+    }
+
+@enduml

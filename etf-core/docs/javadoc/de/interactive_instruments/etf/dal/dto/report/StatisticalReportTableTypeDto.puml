@@ -1,0 +1,12 @@
+@startuml
+
+    class StatisticalReportTableTypeDto [[StatisticalReportTableTypeDto.html]] {
+        +StatisticalReportTableTypeDto()
+        +getColumnHeaderLabels(): List<String>
+        +setColumnHeaderLabels(List<String>): void
+        +getColumnExpressions(): List<String>
+        +setColumnExpressions(List<String>): void
+        +createCopy(): StatisticalReportTableTypeDto
+    }
+
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+
+    class NullItemRegistry [[NullItemRegistry.html]] {
+        {static} +instance(): ItemRegistry
+        +register(Collection<?>): void
+        +deregister(Collection<?>): void
+        +deregisterCallback(ItemRegistry.DependencyChangeListener): void
+        +update(Collection<?>): void
+        +lookupDependency(Collection<EID>, ItemRegistry.DependencyChangeListener): EidHolderMap<?>
+        +lookup(Collection<EID>): EidHolderMap<?>
+    }
+
+@enduml

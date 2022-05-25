@@ -1,0 +1,15 @@
+@startuml
+
+    class ComponentDto [[ComponentDto.html]] {
+        #vendor: String
+        #version: String
+        +ComponentDto()
+        +ComponentDto(ComponentInfo)
+        +getVendor(): String
+        +setVendor(String): void
+        +getVersion(): String
+        +setVersion(String): void
+        +createCopy(): ComponentDto
+    }
+
+@enduml

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="222px" preserveAspectRatio="none" style="width:272px;height:222px;" version="1.1" viewBox="0 0 272 222" width="272px" zoomAndPan="magnify"><defs><filter height="300%" id="fb094h54n8rm6" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--class WriteDao--><a target="_top" xlink:actuate="onRequest" xlink:href="WriteDao.html" xlink:show="new" xlink:title="WriteDao.html" xlink:type="simple"><rect fill="#FEFECE" filter="url(#fb094h54n8rm6)" height="203.4609" id="WriteDao" style="stroke: #A80036; stroke-width: 1.5;" width="252" x="6" y="8"/><ellipse cx="95.75" cy="24" fill="#B4A7E5" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M92.1777,20.2651 L92.1777,18.1069 L99.5571,18.1069 L99.5571,20.2651 L97.0918,20.2651 L97.0918,28.3418 L99.5571,28.3418 L99.5571,30.5 L92.1777,30.5 L92.1777,28.3418 L94.6431,28.3418 L94.6431,20.2651 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="52" x="116.25" y="28.5352">WriteDao</text><rect fill="#FFFFFF" height="16.1328" style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" width="10" x="251" y="5"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="8" x="252" y="17.6016">T</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="257" y1="40" y2="40"/><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="257" y1="48" y2="48"/><ellipse cx="17" cy="59.9775" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="65" x="26" y="62.6348">update(T): T</text><ellipse cx="17" cy="72.9326" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="83" x="26" y="75.5898">replace(T): void</text><ellipse cx="17" cy="85.8877" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="177" x="26" y="88.5449">deleteAllExisting(Set&lt;EID&gt;): void</text><ellipse cx="17" cy="98.8428" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="64" x="26" y="101.5">add(T): void</text><ellipse cx="17" cy="111.7979" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="150" x="26" y="114.4551">addAll(Collection&lt;T&gt;): void</text><ellipse cx="17" cy="124.7529" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="88" x="26" y="127.4102">update(T, EID): T</text><ellipse cx="17" cy="137.708" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="106" x="26" y="140.3652">replace(T, EID): void</text><ellipse cx="17" cy="150.6631" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="223" x="26" y="153.3203">updateAll(Collection&lt;T&gt;): Collection&lt;T&gt;</text><ellipse cx="17" cy="163.6182" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="86" x="26" y="166.2754">delete(EID): void</text><ellipse cx="17" cy="176.5732" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="134" x="26" y="179.2305">deleteAll(Set&lt;EID&gt;): void</text><ellipse cx="17" cy="189.5283" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="213" x="26" y="192.1855">registerListener(WriteDaoListener): void</text><ellipse cx="17" cy="202.4834" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="226" x="26" y="205.1406">deregisterListener(WriteDaoListener): void</text></a><!--
+@startuml
+
+    interface WriteDao<T> [[WriteDao.html]] {
+        +update(T): T
+        +replace(T): void
+        +deleteAllExisting(Set<EID>): void
+        {abstract} +add(T): void
+        {abstract} +addAll(Collection<T>): void
+        {abstract} +update(T, EID): T
+        {abstract} +replace(T, EID): void
+        {abstract} +updateAll(Collection<T>): Collection<T>
+        {abstract} +delete(EID): void
+        {abstract} +deleteAll(Set<EID>): void
+        {abstract} +registerListener(WriteDaoListener): void
+        {abstract} +deregisterListener(WriteDaoListener): void
+    }
+
+@enduml
+
+PlantUML version 1.2018.08(Sun Jun 24 14:31:00 CEST 2018)
+(APACHE source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.8.0_151-b12
+Operating System: Mac OS X
+OS Version: 10.14.2
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

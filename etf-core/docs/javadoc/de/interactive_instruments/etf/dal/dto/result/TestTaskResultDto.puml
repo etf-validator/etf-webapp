@@ -1,0 +1,20 @@
+@startuml
+
+    class TestTaskResultDto [[TestTaskResultDto.html]] {
+        +TestTaskResultDto()
+        +getTestModuleResults(): List<TestModuleResultDto>
+        +setTestModuleResults(List<TestModuleResultDto>): void
+        +addTestModuleResult(TestModuleResultDto): void
+        +getAttachments(): Collection<AttachmentDto>
+        +setAttachments(List<AttachmentDto>): void
+        +setInternalError(Exception): void
+        +getErrorMessage(): String
+        +addAttachment(AttachmentDto): void
+        +getAttachmentById(EID): AttachmentDto
+        +getTestObject(): TestObjectDto
+        +setTestObject(TestObjectDto): void
+        +toString(): String
+        +createCopy(): TestTaskResultDto
+    }
+
+@enduml

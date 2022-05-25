@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class>
+   <name>de.interactive_instruments.etf.dal.dto.ReferenceDto</name>
+   <modifier>1025</modifier>
+   <superclass-handle>
+      <type-name>java.lang.Object</type-name>
+   </superclass-handle>
+   <last-refresh-timestamp>2016-07-05T15:50:43.198+02:00</last-refresh-timestamp>
+   <methods>
+      <method>
+         <name>ReferenceDto</name>
+         <constructor>true</constructor>
+         <modifier>1</modifier>
+      </method>
+      <method>
+         <name>getDto</name>
+         <modifier>1025</modifier>
+         <return-type-declaration>
+            <type-handle>
+               <type-name>java.lang.Object</type-name>
+            </type-handle>
+         </return-type-declaration>
+      </method>
+      <method>
+         <name>setDto</name>
+         <modifier>1025</modifier>
+         <return-type-declaration>
+            <type-handle>
+               <type-name>void</type-name>
+            </type-handle>
+         </return-type-declaration>
+         <method-parameterSet>
+            <method-parameter>
+               <type-declaration>
+                  <type-handle>
+                     <type-name>java.lang.Object</type-name>
+                  </type-handle>
+               </type-declaration>
+            </method-parameter>
+         </method-parameterSet>
+      </method>
+   </methods>
+</class>

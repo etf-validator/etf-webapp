@@ -1,0 +1,54 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.dal.dto.translation {
+
+        class LangTranslationTemplateCollectionDto [[LangTranslationTemplateCollectionDto.html]] {
+            +getName(): String
+            +getByLanguage(String): TranslationTemplateDto
+            +getLanguages(): Set<String>
+        }
+
+        class TranslationTemplateDto [[TranslationTemplateDto.html]] {
+            +TranslationTemplateDto(String, String, String)
+            +getName(): String
+            +getLanguage(): String
+            +getStrWithTokens(): String
+        }
+
+        class TranslationTemplateBundleDto [[TranslationTemplateBundleDto.html]] {
+            +TranslationTemplateBundleDto()
+            +addTranslationTemplates(Collection<TranslationTemplateDto>): void
+            +getTranslationTemplateCollection(String): LangTranslationTemplateCollectionDto
+            +getTranslationTemplate(String, String): TranslationTemplateDto
+            +getSource(): URI
+            +setSource(URI): void
+            +createCopy(): TranslationTemplateBundleDto
+        }
+
+        class TranslationArgumentCollectionDto [[TranslationArgumentCollectionDto.html]] {
+            +TranslationArgumentCollectionDto()
+            +getTokenValues(): Map<String, TranslationArgumentCollectionDto.Argument>
+            +addTokenValue(String, String): void
+            +getRefTemplateName(): String
+            +setRefTemplateName(String): void
+            +createCopy(): TranslationArgumentCollectionDto
+        }
+
+        class de.interactive_instruments.etf.dal.dto.translation.TranslationArgumentCollectionDto.Argument [[TranslationArgumentCollectionDto.Argument.html]] {
+            +Argument()
+            +Argument(String, String)
+            +getToken(): String
+            +getValue(): String
+        }
+
+        abstract class de.interactive_instruments.etf.dal.dto.ModelItemDto<T>
+        de.interactive_instruments.etf.dal.dto.ModelItemDto <|-- TranslationTemplateBundleDto
+
+        abstract class de.interactive_instruments.etf.dal.dto.Dto
+        de.interactive_instruments.etf.dal.dto.Dto <|-- TranslationArgumentCollectionDto
+
+        TranslationArgumentCollectionDto +-- de.interactive_instruments.etf.dal.dto.translation.TranslationArgumentCollectionDto.Argument
+
+    }
+
+@enduml

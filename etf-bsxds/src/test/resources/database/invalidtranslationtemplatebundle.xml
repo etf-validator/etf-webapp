@@ -1,0 +1,28 @@
+<TranslationTemplateBundle xmlns="http://www.interactive-instruments.de/etf/2.0"
+						   id="EID1"
+						   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+						   xsi:schemaLocation="http://www.interactive-instruments.de/etf/2.0 http://resources.etf-validator.net/schema/v2/service/service.xsd">
+	<translationTemplateCollections>
+		<LangTranslationTemplateCollection name="TR.constraintViolation">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.constraintViolation">XML document
+					'{filename}', {featureType} '{gmlid}': The constraint '{constraint}' is
+					violated. {addtionalInfo}</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.brokenLink">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.brokenLink2">XML document '{filename}',
+					{featureType} '{gmlid}': The property '{property}' has a value '{value}' that
+					cannot be retrieved using HTTP.</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+		<LangTranslationTemplateCollection name="TR.constraintViolation">
+			<translationTemplates>
+				<TranslationTemplate language="en" name="TR.constraintViolation">XML document
+					'{filename}', {featureType} '{gmlid}': The constraint '{constraint}' is
+					violated. {addtionalInfo}</TranslationTemplate>
+			</translationTemplates>
+		</LangTranslationTemplateCollection>
+	</translationTemplateCollections>
+</TranslationTemplateBundle>

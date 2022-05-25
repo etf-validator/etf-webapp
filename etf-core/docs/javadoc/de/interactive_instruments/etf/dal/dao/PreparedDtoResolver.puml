@@ -1,0 +1,10 @@
+@startuml
+
+    interface PreparedDtoResolver<T> [[PreparedDtoResolver.html]] {
+        +getById(EID): PreparedDto<T>
+        +getByIds(Set<EID>): PreparedDtoCollection<T>
+        {abstract} +getById(EID, Filter): PreparedDto<T>
+        {abstract} +getByIds(Set<EID>, Filter): PreparedDtoCollection<T>
+    }
+
+@enduml

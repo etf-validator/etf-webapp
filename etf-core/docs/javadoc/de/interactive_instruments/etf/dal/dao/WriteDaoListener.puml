@@ -1,0 +1,7 @@
+@startuml
+
+    interface WriteDaoListener<T> [[WriteDaoListener.html]] {
+        {abstract} +writeOperationPerformed(WriteDaoListener.EventType, PreparedDto<T>): void
+    }
+
+@enduml

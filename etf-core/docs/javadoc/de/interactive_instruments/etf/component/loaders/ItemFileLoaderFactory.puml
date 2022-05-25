@@ -1,0 +1,9 @@
+@startuml
+
+    interface ItemFileLoaderFactory [[ItemFileLoaderFactory.html]] {
+        +getPriority(): int
+        {abstract} +couldHandle(Path): boolean
+        {abstract} +load(Path): ItemFileLoaderFactory.FileChangeListener
+    }
+
+@enduml

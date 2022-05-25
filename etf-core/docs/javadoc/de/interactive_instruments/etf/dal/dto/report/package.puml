@@ -1,0 +1,37 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.dal.dto.report {
+
+        class StatisticalReportTableDto [[StatisticalReportTableDto.html]] {
+            +StatisticalReportTableDto()
+            +createCopy(): StatisticalReportTableDto
+        }
+
+        class de.interactive_instruments.etf.dal.dto.report.StatisticalReportTableDto.Entry [[StatisticalReportTableDto.Entry.html]] {
+            +Entry(Object[])
+        }
+
+        class StatisticalReportTableTypeDto [[StatisticalReportTableTypeDto.html]] {
+            +StatisticalReportTableTypeDto()
+            +getColumnHeaderLabels(): List<String>
+            +setColumnHeaderLabels(List<String>): void
+            +getColumnExpressions(): List<String>
+            +setColumnExpressions(List<String>): void
+            +createCopy(): StatisticalReportTableTypeDto
+        }
+
+        abstract class de.interactive_instruments.etf.dal.dto.MetaDataItemDto<T>
+        de.interactive_instruments.etf.dal.dto.MetaDataItemDto <|-- StatisticalReportTableDto
+
+        StatisticalReportTableDto +-- de.interactive_instruments.etf.dal.dto.report.StatisticalReportTableDto.Entry
+
+        abstract class de.interactive_instruments.etf.dal.dto.RepositoryItemDto
+        de.interactive_instruments.etf.dal.dto.RepositoryItemDto <|-- StatisticalReportTableTypeDto
+
+        StatisticalReportTableDto --> StatisticalReportTableTypeDto: type
+
+        StatisticalReportTableDto --> "*" de.interactive_instruments.etf.dal.dto.report.StatisticalReportTableDto.Entry: entries
+
+    }
+
+@enduml

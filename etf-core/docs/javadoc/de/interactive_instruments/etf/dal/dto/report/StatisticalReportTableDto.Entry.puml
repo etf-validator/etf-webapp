@@ -1,0 +1,7 @@
+@startuml
+
+    class StatisticalReportTableDto.Entry [[StatisticalReportTableDto.Entry.html]] {
+        +Entry(Object[])
+    }
+
+@enduml

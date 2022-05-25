@@ -1,0 +1,34 @@
+@startuml
+
+    class ExecutableTestSuiteDto [[ExecutableTestSuiteDto.html]] {
+        +ExecutableTestSuiteDto()
+        +getTestDriver(): ComponentDto
+        +setTestDriver(ComponentDto): void
+        +getTranslationTemplateBundle(): TranslationTemplateBundleDto
+        +setTranslationTemplateBundle(TranslationTemplateBundleDto): void
+        +getSupportedTestObjectTypes(): List<TestObjectTypeDto>
+        +setSupportedTestObjectTypes(List<TestObjectTypeDto>): void
+        +addSupportedTestObjectType(TestObjectTypeDto): void
+        +setDependencies(List<ExecutableTestSuiteDto>): void
+        +setDependencies(EidHolderMap<ExecutableTestSuiteDto>): void
+        +addDependency(ExecutableTestSuiteDto): void
+        +getDependencies(): Collection<ExecutableTestSuiteDto>
+        +getConsumableResultTestObjectTypes(): List<TestObjectTypeDto>
+        +setConsumableResultTestObjectTypes(List<TestObjectTypeDto>): void
+        +getParameterizedTestCases(): List<TestCaseDto>
+        +setParameterizedTestCases(List<TestCaseDto>): void
+        +getParameters(): ParameterSet
+        +setParameters(ParameterSet): void
+        +getTestModules(): List<TestModuleDto>
+        +setTestModules(List<TestModuleDto>): void
+        +addTestModule(TestModuleDto): void
+        +getChildren(): List<?>
+        +getChildrenAsMap(): EidMap<?>
+        +addChild(TestModelItemDto): void
+        +setChildren(List<?>): void
+        +getLowestLevelItemSize(): long
+        +ensureBasicValidity(): void
+        +createCopy(): ExecutableTestSuiteDto
+    }
+
+@enduml

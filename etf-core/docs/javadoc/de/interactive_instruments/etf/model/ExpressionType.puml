@@ -1,0 +1,7 @@
+@startuml
+
+    enum ExpressionType [[ExpressionType.html]] {
+        {static} +XPATH
+    }
+
+@enduml

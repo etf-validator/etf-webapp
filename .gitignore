@@ -1,17 +1,58 @@
+*.class
 .DS_Store
 .gradle
-.idea
-etf-webapp.iml
-etf.log
-etf.*.log
-src/main/webapp/WEB-INF/etf/reportstyles/**
-src/main/webapp/ii/jquery*
-src/main/webapp/ii/webjars*
-src/main/webapp/ii/*runtfile*
-src/main/webapp/ii/images
-build
-src/main/webapp/help
-etf-*.log
-etf-*.zip
-hs_err_pid*.log
+hs_err_pid*
+*.log
+build/
+out/
+outputFileStates.bin
+*.licensed
 /build-dependencies.txt
+local.properties
+.env
+.venv
+coverage.xml
+!gradle/wrapper/gradle-wrapper.jar
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/
+
+### Eclipse ###
+.target
+.texlipse
+.cache-main
+.scala_dependencies
+.worksheet
+*.launch
+.project
+.settings
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### Scala ###
+target/
+boot/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+.metals
+.scala_dependencies

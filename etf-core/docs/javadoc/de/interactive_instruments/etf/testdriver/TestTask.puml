@@ -1,0 +1,10 @@
+@startuml
+
+    interface TestTask [[TestTask.html]] {
+        {abstract} +run(): void
+        {abstract} +setResulPersistor(TestTaskResultPersistor): void
+        {abstract} +getProgress(): TaskProgress
+        {abstract} +getLogger(): TestRunLogger
+    }
+
+@enduml

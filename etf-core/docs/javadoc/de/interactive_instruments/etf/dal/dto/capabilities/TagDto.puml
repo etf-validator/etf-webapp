@@ -1,0 +1,10 @@
+@startuml
+
+    class TagDto [[TagDto.html]] {
+        +TagDto()
+        +getPriority(): int
+        +setPriority(int): void
+        +createCopy(): TagDto
+    }
+
+@enduml

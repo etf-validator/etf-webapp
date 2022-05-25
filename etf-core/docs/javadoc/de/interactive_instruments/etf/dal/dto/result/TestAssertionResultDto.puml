@@ -1,0 +1,14 @@
+@startuml
+
+    class TestAssertionResultDto [[TestAssertionResultDto.html]] {
+        +TestAssertionResultDto()
+        +getArguments(): Arguments
+        +setArguments(Arguments): void
+        +getMessages(): List<TranslationArgumentCollectionDto>
+        +setMessages(List<TranslationArgumentCollectionDto>): void
+        +addMessage(TranslationArgumentCollectionDto): void
+        +toString(): String
+        +createCopy(): TestAssertionResultDto
+    }
+
+@enduml

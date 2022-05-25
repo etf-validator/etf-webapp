@@ -1,0 +1,9 @@
+@startuml
+
+    interface EidHolder [[EidHolder.html]] {
+        +compareTo(Object): int
+        {static} +getAllIds(Collection<?>): Set<EID>
+        {abstract} +getId(): EID
+    }
+
+@enduml

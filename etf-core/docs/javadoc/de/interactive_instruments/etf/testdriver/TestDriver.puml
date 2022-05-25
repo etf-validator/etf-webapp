@@ -1,0 +1,11 @@
+@startuml
+
+    interface TestDriver [[TestDriver.html]] {
+        {abstract} +getInfo(): ComponentInfo
+        {abstract} +setLoadingContext(LoadingContext): void
+        {abstract} +getExecutableTestSuites(): Collection<ExecutableTestSuiteDto>
+        {abstract} +getTestObjectTypes(): Collection<TestObjectTypeDto>
+        {abstract} +createTestTask(TestTaskDto): TestTask
+    }
+
+@enduml

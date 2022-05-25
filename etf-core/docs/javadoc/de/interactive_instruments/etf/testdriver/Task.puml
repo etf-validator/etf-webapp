@@ -1,0 +1,10 @@
+@startuml
+
+    interface Task<T> [[Task.html]] {
+        {abstract} +getId(): EID
+        {abstract} +getResult(): T
+        {abstract} +setFuture(Future<T>): void
+        {abstract} +waitForResult(): T
+    }
+
+@enduml

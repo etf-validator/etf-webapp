@@ -1,0 +1,11 @@
+@startuml
+
+    class NamingConventionDto [[NamingConventionDto.html]] {
+        +NamingConventionDto()
+        +NamingConventionDto(NamingConventionDto)
+        +getRegex(): String
+        +setRegex(String): void
+        +createCopy(): NamingConventionDto
+    }
+
+@enduml

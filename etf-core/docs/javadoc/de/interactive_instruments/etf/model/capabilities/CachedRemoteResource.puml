@@ -1,0 +1,25 @@
+@startuml
+
+    class CachedRemoteResource [[CachedRemoteResource.html]] {
+        #wrapped: RemoteResource
+        #CachedRemoteResource(CachedRemoteResource)
+        +getFromCache(): byte[]
+        +getFromCache(int): byte[]
+        +recache(): byte[]
+        +recache(int): byte[]
+        +openStream(): InputStream
+        +getName(): String
+        +getUri(): URI
+        +getContentLength(): long
+        +getBytes(): byte[]
+        +exists(): boolean
+        +openStream(int): InputStream
+        +getBytes(int): byte[]
+        +getModificationCheck(): UriModificationCheck
+        +isModificationCheckInitialized(): boolean
+        +recacheIfModified(): boolean
+        +release(): void
+        +createCopy(): CachedRemoteResource
+    }
+
+@enduml

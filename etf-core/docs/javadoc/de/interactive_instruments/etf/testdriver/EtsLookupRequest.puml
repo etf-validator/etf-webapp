@@ -1,0 +1,8 @@
+@startuml
+
+    interface EtsLookupRequest [[EtsLookupRequest.html]] {
+        {abstract} +getUnknownEtsIds(): Set<EID>
+        {abstract} +addKnownEts(EidSet<ExecutableTestSuiteDto>): void
+    }
+
+@enduml

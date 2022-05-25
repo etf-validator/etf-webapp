@@ -1,0 +1,12 @@
+@startuml
+
+    interface EidHolderMap<V> [[EidHolderMap.html]] {
+        {abstract} +unmodifiable(): EidHolderMap<V>
+        {abstract} +createCopy(): EidHolderMap<V>
+        {abstract} +toSet(): EidSet<V>
+        {abstract} +add(V): V
+        {abstract} +addAll(Collection<V>): void
+        {abstract} +getAll(Collection<?>): EidHolderMap<V>
+    }
+
+@enduml

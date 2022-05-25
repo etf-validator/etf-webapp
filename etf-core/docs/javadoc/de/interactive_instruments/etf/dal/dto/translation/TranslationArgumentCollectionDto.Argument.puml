@@ -1,0 +1,10 @@
+@startuml
+
+    class TranslationArgumentCollectionDto.Argument [[TranslationArgumentCollectionDto.Argument.html]] {
+        +Argument()
+        +Argument(String, String)
+        +getToken(): String
+        +getValue(): String
+    }
+
+@enduml

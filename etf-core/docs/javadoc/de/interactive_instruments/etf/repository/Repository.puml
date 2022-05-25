@@ -1,0 +1,14 @@
+@startuml
+
+    interface Repository [[Repository.html]] {
+        {static} +REPOSITORY_URI_PK: String
+        {static} +REPOSITORY_AUTH_PWD_PK: String
+        {static} +REPOSITORY_AUTH_USER_PK: String
+        {abstract} +getItemByLabel(String, ImmutableVersion): RepositoryItem
+        {abstract} +getLatestItemByLabel(String): RepositoryItem
+        {abstract} +hasNewerItemVersion(String, ImmutableVersion): boolean
+        {abstract} +getItemsForLabel(String): List<RepositoryItem>
+        {abstract} +getItems(): List<RepositoryItem>
+    }
+
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+
+    interface DataStorage [[DataStorage.html]] {
+        +getDao(Class<T>): Dao<T>
+        {abstract} +reset(): void
+        {abstract} +createBackup(): String
+        {abstract} +getBackupList(): List<String>
+        {abstract} +restoreBackup(String): void
+        {abstract} +getDaoMappings(): Map<Class<T>, Dao<T>>
+        {abstract} +cleanAndOptimize(): void
+    }
+
+@enduml

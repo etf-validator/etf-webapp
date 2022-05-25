@@ -1,0 +1,12 @@
+@startuml
+
+    class TranslationArgumentCollectionDto [[TranslationArgumentCollectionDto.html]] {
+        +TranslationArgumentCollectionDto()
+        +getTokenValues(): Map<String, TranslationArgumentCollectionDto.Argument>
+        +addTokenValue(String, String): void
+        +getRefTemplateName(): String
+        +setRefTemplateName(String): void
+        +createCopy(): TranslationArgumentCollectionDto
+    }
+
+@enduml

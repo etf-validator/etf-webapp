@@ -1,0 +1,11 @@
+@startuml
+
+    class TestModuleDto [[TestModuleDto.html]] {
+        +TestModuleDto()
+        +getTestCases(): List<TestCaseDto>
+        +setTestCases(List<TestCaseDto>): void
+        +addTestCase(TestCaseDto): void
+        +createCopy(): TestModuleDto
+    }
+
+@enduml

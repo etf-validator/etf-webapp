@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.interactive-instruments.de/etf/2.0"
+    targetNamespace="http://www.interactive-instruments.de/etf/2.0"
+    xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
+    elementFormDefault="qualified" version="1.0">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en"> capabilities.xsd. Created by Jon Herrmann, (c) 2016-2017
+            interactive instruments GmbH. This file is part of ETF which is licensed under the
+            Apache License Version 2.0 </xs:documentation>
+    </xs:annotation>
+
+    <!-- =============================================================== -->
+    <!-- ================== includes and imports ======================= -->
+    <!-- =============================================================== -->
+    <xs:include schemaLocation="../basic/basicTypes.xsd"/>
+    <xs:include schemaLocation="test.xsd"/>
+    <xs:include schemaLocation="run.xsd"/>
+    <xs:include schemaLocation="specification.xsd"/>
+    <!-- =============================================================== -->
+
+
+    <!-- =============================================================== -->
+    <xs:element name="TestObjectType">
+        <xs:annotation>
+            <xs:appinfo>
+                <xs:documentation>A Test Object Type describes a Test Object and may possess
+                    information how the type can be detected.</xs:documentation>
+                <etfAppinfo:cacheStrategy>permanent</etfAppinfo:cacheStrategy>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="MetaDataItemGroup"/>
+                <xs:element name="subTypes" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Sub Test Object Types</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="testObjectType" type="RefType" minOccurs="1"
+                                maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="filenameExtensions" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation> List of filename extensions used to determine the Test
+                            Object Type when a new Test Object is defined. </xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="filenameExtension" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="mimeTypes" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation> List of mime-types used to determine the Test Object Type
+                            when a new Test Object is defined. </xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="mimeType" type="MimeType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="labelExpression" type="ExpressionType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation> An expression to extract the label for the Test Object
+                            from a resource. </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="descriptionExpression" type="ExpressionType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation> An expression to extract the description for the Test
+                            Object from a resource. </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="detectionExpression" type="ExpressionType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation> An expression to detect the Test Object from a resource.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="uriDetectionExpression" type="xs:string" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A regular expression to detect the Test Object from an
+                            URI. In most cases the regualar expression is not version specific for
+                            Test Object Types that possess sub types, whereas version specific Test
+                            Object Types with a regular expression identifying the version not
+                            possess any sub types. </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="defaultPathAndQuery" type="xs:string" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The default path and query to access a remote resource.
+                            This is used as fallback information if an incomplete URI is provided by
+                            a client. Examples: 'serviceX', 'serviceX?request=GetCapabilities',
+                            '?request=GetCapabilities'</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="namingConvention" type="xs:string" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Not used yet.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:complexType name="ExpressionType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="type" type="xs:string" use="optional" default="xpath"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestObject">
+        <xs:annotation>
+            <xs:appinfo>
+                <etfAppinfo:cacheStrategy>evictable</etfAppinfo:cacheStrategy>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="RepositoryItemGroup"/>
+                <xs:element name="testObjectTypes">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="testObjectType" type="RefType" minOccurs="1"
+                                maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element ref="ResourceCollection"/>
+                <xs:element ref="Properties" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="ResourceCollection">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation> Collection of resources </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="resource" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="0">
+                            <xs:element name="credential" type="RefType">
+                                <xs:annotation>
+                                    <xs:documentation>Optional reference to credential that are used
+                                        to access the resource</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:normalizedString" use="required">
+                            <xs:annotation>
+                                <xs:documentation>A name for the resource which is used to
+                                    distinguish multiple resources</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute name="href" type="xs:anyURI" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="ResultStyle">
+        <xs:annotation>
+            <xs:appinfo>
+                <etfAppinfo:cacheStrategy>permanent</etfAppinfo:cacheStrategy>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation> Meta information of a result style used to transform/style a test
+                    result </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:group ref="RepositoryItemGroup"/>
+                <xs:element name="priority" type="xs:int"/>
+                <xs:element name="resource">
+                    <xs:complexType>
+                        <xs:attribute name="href" type="xs:anyURI"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element ref="ParameterList"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="Credential">
+        <xs:annotation>
+            <xs:appinfo>
+                <etfAppinfo:cacheStrategy>evictable</etfAppinfo:cacheStrategy>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="RepositoryItemGroup"/>
+                <xs:element name="applicableTo" type="RefType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation> Target can be e.g. a Test Object Type </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="applicableUri" type="xs:anyURI" minOccurs="0"/>
+                <xs:element name="cipher" type="xs:byte"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="Component">
+        <xs:annotation>
+            <xs:appinfo>
+                <etfAppinfo:cacheStrategy>permanent</etfAppinfo:cacheStrategy>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="MetaDataItemGroup"/>
+                <xs:element name="vendor" type="xs:string"/>
+                <xs:element name="version" type="VersionType"/>
+                <xs:element name="replacedBy" type="RefType" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="GroupAndArtifactIdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="Tag">
+        <xs:annotation>
+            <xs:appinfo>
+                <etfAppinfo:cacheStrategy>evictable</etfAppinfo:cacheStrategy>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="MetaDataItemGroup"/>
+                <xs:element name="priority" type="xs:nonNegativeInteger" minOccurs="0" default="64">
+                    <xs:annotation>
+                        <xs:documentation>Multiple Tags are ordered by their priority property and
+                            thereupon by their label</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="ExecutionEnvironment">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="nodeName" type="xs:string"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="TestRunTemplate">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation> A template to start one ore multiple Test Runs with a
+                    set of Executable Test Suites</xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:group ref="RepositoryItemGroup"/>
+                <xs:element ref="Properties" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Metainformation to describe the
+                            templat.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element ref="ParameterList">
+                    <xs:annotation>
+                        <xs:documentation>Parameters that overrider the (default) parameters in the
+                            Executable Test Suites.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="executableTestSuites">
+                    <xs:annotation>
+                        <xs:documentation>The Executable Test Suites that are executed with this
+                            template.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                            <xs:element name="executableTestSuite" type="RefType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="supportedTestObjectTypes" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Restricts the Test Object Types that can be used with this
+                            template. The passed Test Object Types must be compatible with the
+                            Executable Test Suites and the Test Object.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded">
+                            <xs:element name="testObjectType" type="RefType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="testObjects" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Binds the template to one or multiple Test
+                            Objects.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded">
+                            <xs:element name="testObject" type="RefType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

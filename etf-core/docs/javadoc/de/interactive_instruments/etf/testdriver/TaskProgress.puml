@@ -1,0 +1,11 @@
+@startuml
+
+    interface TaskProgress [[TaskProgress.html]] {
+        +getPercentStepsCompleted(): double
+        {abstract} +getMaxSteps(): long
+        {abstract} +getCurrentStepsCompleted(): long
+        {abstract} +getStartTimestamp(): Date
+        {abstract} +getLogReader(): TestRunLogReader
+    }
+
+@enduml

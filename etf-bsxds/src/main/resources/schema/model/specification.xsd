@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.interactive-instruments.de/etf/2.0"
+           targetNamespace="http://www.interactive-instruments.de/etf/2.0"
+           elementFormDefault="qualified"
+           version="1.0">
+     
+    <xs:annotation>
+        <xs:documentation xml:lang="en"> specification.xsd. Created by Jon Herrmann, (c) 2016-2017
+            interactive instruments GmbH. This file is part of ETF which is licensed under the
+            Apache License Version 2.0 </xs:documentation>
+    </xs:annotation>
+    
+    <!-- =============================================================== -->
+    <!-- ================== includes and imports ======================= -->
+    <!-- =============================================================== -->
+    <xs:include schemaLocation="../basic/basicTypes.xsd"/>
+    <!-- =============================================================== -->
+    
+    <!-- =============================================================== -->
+    <xs:element name="ConformanceClass">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:group ref="MetaDataItemGroup"/>
+            <xs:element name="executableTestSuite" type="RefType"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+    </xs:complexType>
+    </xs:element>
+    
+    <!-- =============================================================== -->
+    <xs:element name="AbstractTestSuite">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="RepositoryItemGroup"/>
+                <xs:element ref="ConformanceClass"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+    
+</xs:schema>

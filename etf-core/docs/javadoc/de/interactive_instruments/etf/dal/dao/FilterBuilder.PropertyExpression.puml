@@ -1,0 +1,12 @@
+@startuml
+
+    interface FilterBuilder.PropertyExpression [[FilterBuilder.PropertyExpression.html]] {
+        {abstract} +isLike(String): FilterBuilder.Conj
+        {abstract} +isEqual(String): FilterBuilder.Conj
+        {abstract} +isLessThan(String): FilterBuilder.Conj
+        {abstract} +isGreaterThan(String): FilterBuilder.Conj
+        {abstract} +exists(): FilterBuilder.Conj
+        {abstract} +name(): String
+    }
+
+@enduml

@@ -1,0 +1,72 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.repository {
+
+        interface RemoteRepositoryItem [[RemoteRepositoryItem.html]] {
+            {abstract} +makeAvailable(Path): IFile
+            {abstract} +getLocal(): IFile
+            {abstract} +isAvailable(): boolean
+            {abstract} +remove(): void
+        }
+
+        interface Repository [[Repository.html]] {
+            {static} +REPOSITORY_URI_PK: String
+            {static} +REPOSITORY_AUTH_PWD_PK: String
+            {static} +REPOSITORY_AUTH_USER_PK: String
+            {abstract} +getItemByLabel(String, ImmutableVersion): RepositoryItem
+            {abstract} +getLatestItemByLabel(String): RepositoryItem
+            {abstract} +hasNewerItemVersion(String, ImmutableVersion): boolean
+            {abstract} +getItemsForLabel(String): List<RepositoryItem>
+        }
+
+        interface RepositoryItem [[RepositoryItem.html]] {
+            +compareTo(Object): int
+            {abstract} +getLastModifiedDate(): Date
+            {abstract} +getItemHash(): byte[]
+            {abstract} +getUri(): URI
+        }
+
+        class RepositoryRegistry [[RepositoryRegistry.html]] {
+            {static} +getInstance(): RepositoryRegistry
+        }
+
+        RepositoryItem <|.. RemoteRepositoryItem
+
+        interface de.interactive_instruments.Releasable {
+            {abstract} +release(): void
+        }
+        de.interactive_instruments.Releasable <|.. RemoteRepositoryItem
+
+        interface de.interactive_instruments.model.std.RetrievableItem {
+            {abstract} +getId(): Id
+            {abstract} +getLabel(): String
+        }
+        de.interactive_instruments.model.std.RetrievableItem <|.. Repository
+
+        interface de.interactive_instruments.Configurable {
+            {abstract} +getConfigurationProperties(): ConfigPropertyHolder
+        }
+        de.interactive_instruments.Configurable <|.. Repository
+
+        de.interactive_instruments.Releasable <|.. Repository
+
+        de.interactive_instruments.model.std.RetrievableItem <|.. RepositoryItem
+
+        interface java.lang.Comparable<T> {
+            {abstract} +compareTo(T): int
+        }
+        java.lang.Comparable <|.. RepositoryItem
+
+        interface de.interactive_instruments.Versionable {
+            {abstract} +getVersion(): ImmutableVersion
+        }
+        de.interactive_instruments.Versionable <|.. RepositoryItem
+
+        abstract class de.interactive_instruments.model.std.ManagedItemRegistry<T>
+        de.interactive_instruments.model.std.ManagedItemRegistry <|-- RepositoryRegistry
+
+        Repository --> "*" RepositoryItem: items
+
+    }
+
+@enduml

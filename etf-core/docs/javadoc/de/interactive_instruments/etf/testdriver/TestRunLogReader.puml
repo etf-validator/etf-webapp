@@ -1,0 +1,9 @@
+@startuml
+
+    interface TestRunLogReader [[TestRunLogReader.html]] {
+        {abstract} +getLogFile(): File
+        {abstract} +getLogMessages(long): List<String>
+        {abstract} +streamLogMessagesTo(long, OutputStream): void
+    }
+
+@enduml

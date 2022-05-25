@@ -1,0 +1,7 @@
+@startuml
+
+    interface ModelItemWithParent<T> [[ModelItemWithParent.html]] {
+        {abstract} +getParent(): T
+    }
+
+@enduml

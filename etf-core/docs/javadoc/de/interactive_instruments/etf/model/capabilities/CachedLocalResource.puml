@@ -1,0 +1,10 @@
+@startuml
+
+    class CachedLocalResource [[CachedLocalResource.html]] {
+        +getFromCache(): byte[]
+        +recache(): byte[]
+        +recacheIfModified(): boolean
+        +createCopy(): CachedLocalResource
+    }
+
+@enduml

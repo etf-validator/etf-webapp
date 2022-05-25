@@ -1,0 +1,15 @@
+@startuml
+
+    class ParameterSet [[ParameterSet.html]] {
+        +ParameterSet()
+        +ParameterSet(ParameterSet)
+        +asNameDefaultValuePairs(): Collection<String[]>
+        +getParamTypeName(): String
+        +getParameters(): Collection<Parameterizable.Parameter>
+        +getParameter(String): Parameterizable.Parameter
+        +addParameter(String, String): void
+        +addParameter(Parameterizable.Parameter): void
+        +isEmpty(): boolean
+    }
+
+@enduml

@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.interactive-instruments.de/etf/2.0"
+    targetNamespace="http://www.interactive-instruments.de/etf/2.0"
+    xmlns:etf="http://www.interactive-instruments.de/etf/2.0"
+    xmlns:etfAppinfo="http://www.interactive-instruments.de/etf/appinfo/1.0"
+    elementFormDefault="qualified" version="1.0">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en"> basicTypes.xsd. Created by Jon Herrmann, (c) 2016-2017
+            interactive instruments GmbH. This file is part of ETF which is licensed under the
+            Apache License Version 2.0 </xs:documentation>
+    </xs:annotation>
+
+    <!-- =============================================================== -->
+    <!-- ================== includes and imports ======================= -->
+    <!-- =============================================================== -->
+    <xs:import namespace="http://www.interactive-instruments.de/etf/appinfo/1.0"
+        schemaLocation="../basic/appinfo.xsd"/>
+    <!-- =============================================================== -->
+
+    <!-- =============================================================== -->
+    <xs:element name="Properties">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="property" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:annotation>
+                                    <xs:documentation> Property value </xs:documentation>
+                                </xs:annotation>
+                                <xs:attribute name="name" type="xs:string" use="required">
+                                    <xs:annotation>
+                                        <xs:documentation>Property name</xs:documentation>
+                                    </xs:annotation>
+                                </xs:attribute>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="ArgumentList">
+        <xs:annotation>
+            <xs:documentation>One argument list may contain arguments for multiple parameter
+                lists</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="arguments" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="argument" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:annotation>
+                                                <xs:documentation> Argument value
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                            <xs:attribute name="name" type="xs:string"
+                                                use="required">
+                                                <xs:annotation>
+                                                  <xs:documentation>Parameter
+                                                  name</xs:documentation>
+                                                </xs:annotation>
+                                            </xs:attribute>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="parameterList" type="xs:string" use="optional">
+                            <xs:annotation>
+                                <xs:documentation>Target parameter list name</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="ParameterList">
+        <xs:annotation>
+            <xs:documentation>A parameter list specifies which parameterSet can be set for an
+                item.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="defaultValue" type="xs:string" minOccurs="0"/>
+                            <xs:element name="description" type="TranslationTemplateArgumentType"
+                                minOccurs="0"/>
+                            <xs:element name="allowedValues" type="xs:string" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Regular expression</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="type" type="xs:string" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Internal type</xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="required"/>
+                        <xs:attribute name="required" type="xs:boolean" default="false"/>
+                        <xs:attribute name="static" type="xs:boolean" default="false"/>
+                        <xs:attribute name="excludesParameters" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>Name parameters that may not be set if this
+                                    parameter is set</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="TranslationTemplateBundle">
+        <xs:annotation>
+            <xs:documentation> A collection of LangTranslationTemplateCollections
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:group ref="ModelItemGroup"/>
+                <xs:element name="translationTemplateCollections">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="LangTranslationTemplateCollection" minOccurs="1"
+                                maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+            <xs:attribute name="source" type="xs:anyURI">
+                <xs:annotation>
+                    <xs:documentation> Origin of the templates </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="LangTranslationTemplateCollection">
+        <xs:annotation>
+            <xs:documentation> A named collection which holds TranslationTemplates of one "message"
+                type in different languages </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="translationTemplates">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="TranslationTemplate" minOccurs="0"
+                                maxOccurs="unbounded">
+                                <xs:annotation>
+                                    <xs:documentation> Single translation template which is part of
+                                        a TranslationTemplateCollection and referenced by a
+                                        TranslationTemplateParameterType </xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="stringWithTokens">
+                                            <xs:attribute name="name" type="xs:string"
+                                                use="required">
+                                                <xs:annotation>
+                                                  <xs:documentation> Used by
+                                                  TranslationTemplateArgumentType to reference this
+                                                  translation template. This is not an ID type in
+                                                  the schema, as there may be multiple occurences
+                                                  for different languages.</xs:documentation>
+                                                </xs:annotation>
+                                            </xs:attribute>
+                                            <xs:attribute name="language" type="xs:language"
+                                                use="required"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:unique name="UniqueNameAndLanguageInTranslationTemplate">
+                        <xs:selector xpath="etf:TranslationTemplate"/>
+                        <xs:field xpath="@language"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="name" type="TranslationIdType">
+                <xs:annotation>
+                    <xs:documentation> Translation ID type, starting with 'TR.' </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+        <xs:key name="TranslationTemplateParentName">
+            <xs:selector xpath="."/>
+            <!-- Saxon warning can be ignored here! -->
+            <xs:field xpath="@name"/>
+        </xs:key>
+        <xs:keyref name="RefParentNameFromChild" refer="TranslationTemplateParentName">
+            <xs:selector xpath="etf:translationTemplates/etf:TranslationTemplate"/>
+            <xs:field xpath="@name"/>
+        </xs:keyref>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="stringWithTokens">
+        <xs:annotation>
+            <xs:documentation> May contain insertion points in this form: {$TOKEN_NAME}
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:complexType name="TranslationTemplateArgumentType">
+        <xs:annotation>
+            <xs:documentation> Collection of token/value pairs that are used to replace tokens in
+                TranslationTemplates </xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0">
+            <xs:element name="translationArguments">
+                <xs:complexType>
+                    <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                        <xs:element name="argument">
+                            <xs:complexType>
+                                <xs:simpleContent>
+                                    <xs:extension base="xs:string">
+                                        <xs:annotation>
+                                            <xs:documentation> Value for a token in a
+                                                TranslationTemplate</xs:documentation>
+                                        </xs:annotation>
+                                        <xs:attribute name="token" type="xs:string" use="required">
+                                            <xs:annotation>
+                                                <xs:documentation> Token identifier in a
+                                                  TranslationTemplate</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:attribute>
+                                    </xs:extension>
+                                </xs:simpleContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="ref" use="required">
+            <xs:annotation>
+                <xs:documentation> References TranslationTemplates by its name. In practise only one
+                    TranslationTemplate is referenced in a result based on the specified language.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="TR\.(([a-z]|[A-Z])([0-9]|[a-z]|[A-Z]|\.|-|_)).{5,85}"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <!-- =============================================================== -->
+    <xs:attribute name="urnBase">
+        <xs:simpleType>
+            <xs:annotation>
+                <xs:documentation> Urn beginning with "urn:" plus at least the namespace
+                </xs:documentation>
+            </xs:annotation>
+            <xs:restriction base="xs:token">
+                <xs:pattern value="(urn:)(\w+)"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="httpUriType">
+        <xs:annotation>
+            <xs:documentation> HTTP or HTTPS URLs </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:anyURI">
+            <xs:pattern value="https?://.+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="TranslationIdType">
+        <xs:annotation>
+            <xs:documentation>Translation ID, starting with 'TR.', at least 6 characters (including
+                [0-9] [a-z] [A-Z] . - _ ), max 85</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:ID">
+            <xs:pattern value="TR\.(([a-z]|[A-Z])([0-9]|[a-z]|[A-Z]|\.|-|_)).{5,85}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="IdType">
+        <xs:annotation>
+            <xs:documentation> ID, at least 6 characters, max 45</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:ID">
+            <xs:minLength value="6"/>
+            <xs:maxLength value="45"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="IdRefType">
+        <xs:annotation>
+            <xs:documentation> REFERENCE, at least 6 characters, max 45</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:IDREF">
+            <xs:minLength value="6"/>
+            <xs:maxLength value="45"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="ExternalUriType">
+        <xs:annotation>
+            <xs:documentation>URI to an external resource. The client is responsible to handle the
+                schema type.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:anyURI">
+            <xs:pattern value="(path|https?|urn|git|svn|ssh|sftp|ftp|file)(://).+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:complexType name="RefType">
+        <xs:annotation>
+            <xs:documentation> References a test model item by its ID.</xs:documentation>
+        </xs:annotation>
+    </xs:complexType>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="VersionType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([0-9]+\.[0-9]+\.[0-9]+(-SNAPSHOT)?)"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="MimeType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="(application|image|text|multipart|model)/.+(;\s*.+=.+)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:attributeGroup name="IdentifierAttributeGroup">
+        <xs:attribute name="id" type="IdType" use="required">
+            <xs:annotation>
+                <xs:documentation>An ETF model item instance possesses an unique ETF
+                    ID.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <!-- =============================================================== -->
+    <xs:attributeGroup name="GroupAndArtifactIdentifierAttributeGroup">
+        <xs:attribute name="egaid" type="EGAIDType">
+            <xs:annotation>
+                <xs:documentation> A model item instance that possesses a version property, may
+                    posses an EGAID (ETF Group and Artifact ID). The EGAID allows to reference a
+                    collection of different instances of the same model item type and the same
+                    EGAID. It also provides an alternative way to identify single items by their
+                    EGAID plus the version. </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attributeGroup ref="IdentifierAttributeGroup"/>
+    </xs:attributeGroup>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="EGAIDType">
+        <xs:annotation>
+            <xs:documentation> All characters must be lower-case and may contain '-'. At least one
+                group name ID is required followed by the artifact ID. Example:
+                de.interactive-instruments.ets.example where 'de.interactive-instruments.ets' is the
+                group name and 'example' the artifact ID. </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:annotation>
+                <xs:documentation> The regular expression can be used to extract the group name ID
+                    and the artifact ID: group name ID is in Group 1, the artifact ID in Group 2
+                </xs:documentation>
+            </xs:annotation>
+            <xs:pattern value="egaid\.([a-z][a-z1-9\-\.]*)\.([a-z][a-z1-9\-]*)"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="EGAIDRefType">
+        <xs:annotation>
+            <xs:documentation> The EGAIDRefType references exactly one model item instance with an
+                absolute URI. Must start with 'http' or 'https', contain 'egaid.' before the
+                lower-case EGAID and end with ':' plus the version or 'latest'. Example:
+                https://service/etf-webapp/v2/ExecutableTestSuites/egaid.de.interactive-instruments.ets.example:latest
+                where 'de.interactive-instruments.ets' references the group name, 'example' the
+                artifact ID and 'latest' the latest version. </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:annotation>
+                <xs:documentation> The regular expression can be used to extract the group name ID,
+                    artifact ID and version: group name ID is in Group 1 (starting from index 0),
+                    the artifact ID in Group 2, the version in Group 4 </xs:documentation>
+            </xs:annotation>
+            <xs:pattern
+                value="https?://.*/egaid\.([a-z][a-z1-9\-\.]*)\.([a-z][a-z1-9\-]*)(:([0-9]+\.[0-9]+\.[0-9]+(-SNAPSHOT)?|latest))?"
+            />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:group name="ModelItemGroup">
+        <xs:sequence>
+            <xs:element name="parent" type="RefType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation> Optional reference to parent model item</xs:documentation>
+                    <xs:appinfo>
+                        <etfAppinfo:replaceableByExternalRef>true</etfAppinfo:replaceableByExternalRef>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:group>
+
+    <!-- =============================================================== -->
+    <xs:attributeGroup name="TranslationTemplateRefAttributeGroup">
+        <xs:attribute name="bundleId" type="IdRefType" use="required">
+            <xs:annotation>
+                <xs:documentation> References the TranslationTemplateBundle by its id
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="templateName" type="IdRefType" use="required">
+            <xs:annotation>
+                <xs:documentation> References the TranslationTemplate by its name
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <!-- =============================================================== -->
+    <xs:element name="label">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:minLength value="4"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="translatableLabel">
+        <xs:complexType>
+            <xs:attributeGroup ref="TranslationTemplateRefAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="description" nillable="false" type="xs:string">
+        <xs:annotation>
+            <xs:documentation> A description of the item. HTML content is allowed but must be
+                encoded. </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="translatableDescription">
+        <xs:complexType>
+            <xs:attributeGroup ref="TranslationTemplateRefAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:element name="reference" nillable="false" type="xs:string">
+        <xs:annotation>
+            <xs:documentation> The reference property may provide a link to a resource that
+                describes the item in detail, in an human readable format or data are linked in a
+                machine readable format that are intrepreted by an ETF component.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <!-- =============================================================== -->
+    <xs:group name="MetaDataItemGroup">
+        <xs:sequence>
+            <xs:group ref="ModelItemGroup"/>
+
+            <!-- extended by service.xsd -->
+
+            <xs:element ref="reference" minOccurs="0"/>
+        </xs:sequence>
+    </xs:group>
+
+    <!-- =============================================================== -->
+    <xs:group name="RepositoryItemGroup">
+        <xs:sequence>
+            <xs:group ref="MetaDataItemGroup"/>
+            <xs:element name="replacedBy" minOccurs="0">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <etfAppinfo:replaceableByExternalRef>true</etfAppinfo:replaceableByExternalRef>
+                    </xs:appinfo>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="RefType">
+                            <xs:sequence>
+                                <xs:element name="reason" type="xs:string" minOccurs="0"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="version" type="etf:VersionType" minOccurs="1"/>
+            <xs:element name="author" type="xs:string" minOccurs="1"/>
+            <xs:element name="creationDate" type="xs:dateTime" minOccurs="1"/>
+            <xs:element name="lastEditor" type="xs:string" minOccurs="0"/>
+            <xs:element name="lastUpdateDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="disabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Default if absent: false</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="tags" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="tag" type="RefType" minOccurs="1" maxOccurs="unbounded">
+                            <xs:annotation>
+                                <xs:appinfo>
+                                    <etfAppinfo:replaceableByExternalRef>false</etfAppinfo:replaceableByExternalRef>
+                                </xs:appinfo>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:group>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="VerbosityType">
+        <xs:restriction base="xs:nonNegativeInteger">
+            <xs:enumeration value="0">
+                <xs:annotation>
+                    <xs:documentation>DEBUG</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="1">
+                <xs:annotation>
+                    <xs:documentation>INFO</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="2">
+                <xs:annotation>
+                    <xs:documentation>WARN</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="3">
+                <xs:annotation>
+                    <xs:documentation>ERROR</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="4">
+                <xs:annotation>
+                    <xs:documentation>FATAL</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="TestResultStatusType">
+        <xs:restriction base="xs:string">
+            <xs:annotation>
+                <xs:documentation>The derived resultStatus is an aggregated result from all
+                    contained TestAssertionResult objects. It is determined by the following rules,
+                    where the first rule that is met applies:</xs:documentation>
+            </xs:annotation>
+            <xs:enumeration value="PASSED">
+                <xs:annotation>
+                    <xs:documentation>PASSED, if all status values are PASSED</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="FAILED">
+                <xs:annotation>
+                    <xs:documentation>FAILED, if at least one status value is FAILED
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="SKIPPED">
+                <xs:annotation>
+                    <xs:documentation>SKIPPED, if at least one status value is SKIPPED because a
+                        test case depends on another test case which has the status FAILED
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="NOT_APPLICABLE">
+                <xs:annotation>
+                    <xs:documentation>NOT_APPLICABLE if at least one status value is NOT_APPLICABLE,
+                        in the case the test is skipped for instance because the test object does
+                        not provide the capabilities for executing the test </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="INFO">
+                <xs:annotation>
+                    <xs:documentation>INFO, if at least one status value is INFO</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="WARNING">
+                <xs:annotation>
+                    <xs:documentation>WARNING, if at least one status value is
+                        WARNING</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="UNDEFINED">
+                <xs:annotation>
+                    <xs:documentation>UNDEFINED, in all other cases</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="PASSED_MANUAL">
+                <xs:annotation>
+                    <xs:documentation>PASSED_MANUAL, if at least one status value is PASSED_MANUAL
+                        (if the test is not automated and the user has to validate results manually
+                        based on instructions in the report) and all others are values are
+                        PASSED</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="INTERNAL_ERROR">
+                <xs:annotation>
+                    <xs:documentation>INTERNAL_ERROR, if at least one status value is INTERNAL_ERROR
+                        in the case the test engine throws an unexpected error that forces the test
+                        run to stop</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

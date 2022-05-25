@@ -1,0 +1,57 @@
+@startuml
+
+    abstract class RepositoryItemDto [[RepositoryItemDto.html]] {
+        #replacedBy: RepositoryItemDto
+        #replacementReason: String
+        #itemHash: String
+        #version: String
+        #author: String
+        #creationDate: Date
+        #lastEditor: String
+        #lastUpdateDate: Date
+        #tagDtos: List<TagDto>
+        #remoteResource: String
+        #localPath: String
+        #disabled: boolean
+        #egaid: String
+        +RepositoryItemDto()
+        #RepositoryItemDto(RepositoryItemDto)
+        +getItemHash(): String
+        +setItemHash(String): void
+        +getVersionAsStr(): String
+        +getVersion(): Version
+        +setVersionFromStr(String): void
+        +setVersion(Version): void
+        +increaseVersion(): void
+        +getAuthor(): String
+        +setAuthor(String): void
+        +getCreationDate(): Date
+        +setCreationDate(Date): void
+        +setCreationDateNowIfNotSet(): void
+        +getLastEditor(): String
+        +setLastEditor(String): void
+        +getLastUpdateDate(): Date
+        +setLastUpdateDate(Date): void
+        +setLastUpdateDateNow(): void
+        +getReplacedBy(): ModelItemDto
+        +setReplacedBy(RepositoryItemDto): void
+        +setReplacementReason(String): void
+        +getReplacementReason(): String
+        +getTags(): List<TagDto>
+        +setTags(List<TagDto>): void
+        +addTag(TagDto): void
+        +getRemoteResource(): URI
+        +setRemoteResource(URI): void
+        +getLocalPath(): String
+        +setLocalPath(String): void
+        +setDisabled(boolean): void
+        +isDisabled(): boolean
+        +getEgaId(): EGAID
+        +setEgaId(String): void
+        +getEgaIdRef(): String
+        +toString(): String
+        +getDescriptiveLabel(): String
+        +ensureBasicValidity(): void
+    }
+
+@enduml

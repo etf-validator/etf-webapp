@@ -1,0 +1,8 @@
+@startuml
+
+    interface EID [[EID.html]] {
+        {abstract} +getId(): String
+        {abstract} +toUuid(): UUID
+    }
+
+@enduml

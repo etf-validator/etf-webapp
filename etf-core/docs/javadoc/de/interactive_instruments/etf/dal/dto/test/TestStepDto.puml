@@ -1,0 +1,15 @@
+@startuml
+
+    class TestStepDto [[TestStepDto.html]] {
+        +TestStepDto()
+        +getStatementForExecution(): String
+        +setStatementForExecution(String): void
+        +getType(): TestItemTypeDto
+        +setType(TestItemTypeDto): void
+        +getTestAssertions(): List<TestAssertionDto>
+        +setTestAssertions(List<TestAssertionDto>): void
+        +addTestAssertion(TestAssertionDto): void
+        +createCopy(): TestStepDto
+    }
+
+@enduml

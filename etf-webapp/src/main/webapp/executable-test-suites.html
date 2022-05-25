@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright ${year} interactive instruments GmbH
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <title>executable-test-suites.html (development view)</title>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.min.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.rep.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.wi.css" />
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" />
+    <script data-main="js/main-local-dev" src="//cdn.jsdelivr.net/requirejs/2.1.8/require.min.js"></script>
+
+</head>
+<body>
+
+<div tiles:fragment="executable-test-suites-page" id="executable-test-suites-page" data-role="page" data-title="Start Tests">
+    <div tiles:replace="header">
+        <!-- Header -->
+    </div>
+
+    <div role="main" class="ui-content">
+        <!-- Main -->
+        <a data-role="button" id="fadin-start-executable-test-suites-button" style="color: white; background-color: #38c; text-shadow: none; z-index: 99 !important; display: none; width: 150px; position: fixed; top: 150px; right: 32px;"  href="#">
+            Start
+        </a>
+
+        <div id="executable-test-suites-content">
+            <h2 th:text="#{l.ExecutableTestSuites}">Executable Test Suites</h2>
+            <p style="padding-right: 260px" th:text="#{l.ExecutableTestSuites.help}">Help text</p>
+
+            <div id="executable-test-suite-container">
+            <!-- Container for template -->
+            </div>
+
+        </div>
+    </div>
+
+    <div tiles:replace="footer">
+        <!-- Footer -->
+    </div>
+</div>
+
+
+<!-- Underscore Template -->
+<script tiles:fragment="executable-test-suites-page" id="executable-test-suite-items-template" type="text/template" th:inline="text">
+    <![CDATA[
+    <!-- guard comment -->
+
+    <% if (_.isEmpty(collection) && !_.isEmpty(testObjectId)) { %>
+    <p>Es ist kein Testprojekt verf&uuml;gbar, das mit dem Test Objekt <a href="#test-objects?id=<%= testObjectId %>" target="_new-etf-tab"><%= testObjectLabel %></a> kompatibel ist. Bitte pr&uuml;fen Sie die Testdaten und den Typ des Test Objekts. <a href="#executable-test-suites" th:text="#{l.Clear.selection}">[[#{l.Clear.selection}]]</a>.</p>
+    <% }else{ %>
+
+
+    <% if (!_.isEmpty(testObjectLabel)) { %>
+        <p>Es werden nur Testprojekte angezeigt, die mit dem Test Objekt <a href="#test-objects?id=<%= testObjectId %>" target="_blank" rel="noopener"><%= testObjectLabel %></a> kompatibel sind. <a href="#executable-test-suites" th:text="#{l.Clear.selection}">[[#{l.Clear.selection}]]</a>.</p>
+    <% }else{ %>
+        <br/>
+    <% } %>
+
+    <ul id="executable-test-suite-listview" data-role="listview"
+        data-inset="true" class="ui-listview-outer" data-filter="true" data-autodividers="true" data-filter-placeholder="[[#{l.Filter.Executable.Test.Suites}]]" th:attr="data-filter-placeholder=#{l.Filter.Executable.Test.Suites}">
+
+    <% v2.each( collection, function( executableTestSuite ) { %>
+
+    <%
+        var testObjectTypeClasses = [];
+        v2.each( _.keys(executableTestSuite.supportedTestObjectTypes), function( testObjectType ) {
+            testObjectTypeClasses.push("test-object-type-"+testObjectType);
+        });
+    %>
+
+    <li class="ii-collapsible-li" data-role="collapsible" data-iconpos="left" data-shadow="false" data-corners="false">
+        <h2>
+            <div style="line-height: 39px;">
+                <span style="vertical-align: sub; float: left" ><%= executableTestSuite.label %></span>
+                <span class="ii-stop-propagation" style="float: right">
+                    <select class="executable-test-suite-selection <%= testObjectTypeClasses.join(' ') %>" data-role="flipswitch" type="checkbox" data-mini="true">
+                        <option value="X">-</option>
+                        <option value="<%= executableTestSuite.id %>"></option>
+                    </select>
+                </span>
+            </div>
+        </h2>
+
+        <% if (!_.isUndefined(executableTestSuite.description)) { %>
+        <h3><span th:text="#{l.Description}">[[#{l.Description}]]</span>:</h3>
+        <span><%= executableTestSuite.description %></span>
+        <% } %>
+
+        <% if (!_.isUndefined(executableTestSuite.tags)) {  %>
+        <div class="tags">
+            <h3><span th:text="#{l.Tags}">[[#{l.Tags}]]</span>:</h3>
+            <% v2.each( executableTestSuite.tags, function( t ) { %>
+            <ul>
+                <li>
+                    <span class="Tag"><%= t.label %></span>
+                </li>
+            </ul>
+            <% }); %>
+        </div>
+        <% } %>
+
+        <div>
+            <h3><span>[[#{l.Applicable.to.Test.Object.Types}]]</span>: </h3>
+            <ul>
+                <% v2.each( executableTestSuite.supportedTestObjectTypes, function( testObjectType ) { %>
+                    <li><%= testObjectType.label %></li>
+                <% }); %>
+            </ul>
+        </div>
+
+        <div>
+            <h3><span>[[#{l.General}]]</span>: </h3>
+            <ul>
+                <li>[[#{l.Author}]]<span>: </span><%= executableTestSuite.author %></li>
+                <li>[[#{l.Date.created}]]<span>: </span><%= moment(executableTestSuite.creationDate).format('DD.MM.YYYY') %></li>
+                <li>[[#{l.Version}]]<span>: </span><%= executableTestSuite.version %></li>
+                <li>[[#{l.Last.editor}]]<span>: </span><%= executableTestSuite.lastEditor %></li>
+                <li>[[#{l.Last.update.date}]]<span>: </span><%= moment(executableTestSuite.lastUpdateDate).format('DD.MM.YYYY') %></li>
+                <% v2.each( executableTestSuite.Properties, function( p ) { %>
+                <li><%= _v2.beautifyNerdyStr(p.name) %><span>: </span><%= p.$ %></li>
+                <% }); %>
+            </ul>
+        </div>
+    </li>
+    <% }); %>
+
+    </ul>
+    <% } %>
+
+    <!-- ]]> -->
+</script>
+
+
+<div tiles:fragment="executable-test-suites-page" id="configure-run-with-executable-test-suites-dialog" data-role="dialog" data-title="Start Tests" th:attr="data-title=#{l.Configure.Test.Run}">
+    <div data-role="header" role="banner">
+        <h2 th:text="#{l.Configure.Test.Run}">Configure Test Run</h2>
+    </div>
+    <div role="main" class="ui-content">
+
+        <div id="configure-run-with-executable-test-suites-container">
+            <!-- Container for template -->
+        </div>
+
+    </div>
+
+    <div data-role="footer" style="text-align: center">
+        <div style="padding-top: 0.4em" id="test-object-fileupload-progress" class="ii-progress">
+            <div class="ii-progress-bar"></div>
+        </div>
+        <div id="test-object-fileupload-progress-info" style="display: none;">
+            <span th:text="#{l.upload.huge.file}">l.upload.huge.file</span>
+            <span id="test-object-fileupload-progress-info-remaining"></span></div>
+        <a id="show-selected-executable-test-suites-button" data-inline="true"
+           data-role="button" data-icon="eye" data-iconpos="right" href="#" th:text="#{l.ExecutableTestSuites}">Test Suites</a>
+        <a id="show-credentials-button" data-inline="true"
+           data-role="button" data-icon="gear" data-iconpos="right" href="#" th:text="#{l.Credentials}">Credentials</a>
+        <a id="show-ets-parameters-button" data-inline="true"
+           data-role="button" data-icon="gear" data-iconpos="right" href="#" th:text="#{l.Optional.Parameters}">Optional Parameterss</a>
+        <a id="start-tests-confirm" data-inline="true"
+           data-role="button" data-icon="arrow-r" data-iconpos="right" href="#">Start</a>
+    </div>
+
+</div>
+
+<div tiles:fragment="executable-test-suites-page" id="monitor-test-run-dialog" data-role="dialog" data-title="Monitor Test Run" th:attr="data-title=#{l.Monitor.Test.Run}">
+    <div data-role="header" role="banner">
+        <h2 th:text="#{l.Monitor.Test.Run}">Monitor Test Run</h2>
+    </div>
+    <div role="main" class="ui-content">
+        <!-- Main -->
+        <div class="progressbar">
+            <input type="range" id="monitor-test-run-progressbar" value="0" min="0" max="100" data-highlight="true" disabled="true"/>
+        </div>
+
+        <textarea data-role="none" id="monitor-log-area" style="width:100%; height: 285px;" disabled="true">Connecting to test runner and waiting for new messages...</textarea>
+
+        <hr/>
+        <div id="#monitor-test-run-container">
+            <!-- Container for template -->
+        </div>
+    </div>
+    <div data-role="footer" style="text-align: right">
+    <a id="cancel-test-run-button" data-icon="delete" data-role="button" data-inline="true" data-mini="true" href="#" th:text="#{l.cancel.testrun}">Cancel Test Run</a>
+    </div>
+</div>
+
+<!-- Underscore Template -->
+<script tiles:fragment="executable-test-suites-page" id="monitor-test-run-information-template" type="text/template">
+
+</script>
+
+</body>
+</html>
+

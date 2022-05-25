@@ -1,0 +1,7 @@
+@startuml
+
+    interface OutputFormatStreamable [[OutputFormatStreamable.html]] {
+        {abstract} +streamTo(OutputFormat, PropertyHolder, OutputStream): void
+    }
+
+@enduml

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.interactive-instruments.de/etf/2.0"
+    targetNamespace="http://www.interactive-instruments.de/etf/2.0"
+    xmlns:etf="http://www.interactive-instruments.de/etf/2.0" elementFormDefault="qualified"
+    version="1.0">
+
+    <xs:annotation>
+        <xs:documentation xml:lang="en"> service.xsd. Created by Jon Herrmann, (c) 2016-2017
+            interactive instruments GmbH. This file is part of ETF which is licensed under the
+            Apache License Version 2.0 </xs:documentation>
+    </xs:annotation>
+
+    <!-- =============================================================== -->
+    <!-- ================== includes and imports ======================= -->
+    <!-- =============================================================== -->
+    <xs:redefine schemaLocation="../basic/basicTypes.xsd">
+        <!-- 
+            Its important to redefine basic types first before importing other
+            types otherwise Saxon validator will complain about duplicate 
+            definitions.
+        -->
+
+        <!-- =============================================================== -->
+        <xs:group name="MetaDataItemGroup">
+            <xs:sequence>
+                <xs:choice>
+                    <xs:element ref="label"/>
+                    <xs:element ref="translatableLabel"/>
+                </xs:choice>
+                <xs:choice minOccurs="0">
+                    <xs:element ref="description"/>
+                    <xs:element ref="translatableDescription"/>
+                </xs:choice>
+                <xs:group ref="MetaDataItemGroup"/>
+            </xs:sequence>
+        </xs:group>
+
+        <!-- =============================================================== -->
+        <xs:group name="RepositoryItemGroup">
+            <xs:sequence>
+                <xs:element name="remoteResource" type="httpUriType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>
+                            The remote Http URI from where the item has been fetched
+                            and will be synchonized by the ETF, e.g. a git URL
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:group ref="RepositoryItemGroup"/>
+            </xs:sequence>
+        </xs:group>
+    </xs:redefine>
+    
+    <xs:include schemaLocation="../model/items.xsd"/>
+    <!-- =============================================================== -->
+
+    <!-- =============================================================== -->
+    <xs:complexType name="loc">
+        <xs:annotation>
+            <xs:documentation> Local reference to item in collection </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="RefType">
+                <xs:attribute name="ref" type="IdRefType" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <!-- =============================================================== -->
+    <xs:complexType name="ext">
+        <xs:annotation>
+            <xs:documentation> Reference to an external type</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="RefType">
+                <xs:attribute name="href" type="ExternalUriType" use="required"/>
+                <xs:attribute name="title" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation> Optional description </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!-- =============================================================== -->
+    <xs:complexType name="egaref">
+        <xs:annotation>
+            <xs:documentation> Reference to an external type </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="RefType">
+                <xs:attribute name="gaidref" type="EGAIDRefType" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <!-- =============================================================== -->
+    <xs:element name="EtfItemCollection">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="previous" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation> URL to the previous page</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:attribute name="href" type="etf:httpUriType" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="ref" minOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation> URL to this response</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:attribute name="href" type="etf:httpUriType" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="next" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation> URL to the next page</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:attribute name="href" type="etf:httpUriType" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:choice>
+                    <xs:element ref="components"/>
+                    <xs:element ref="testCases"/>
+                    <xs:element ref="testAssertions"/>
+                    <xs:element ref="testItemTypes"/>
+                    <xs:element ref="executableTestSuites"/>
+                    <xs:element ref="testObjects"/>
+                    <xs:element ref="testObjectTypes"/>
+                    <xs:element ref="credentials"/>
+                    <xs:element ref="users"/>
+                    <xs:element ref="tags"/>
+                    <xs:element ref="translationTemplateBundles"/>
+                    <xs:element ref="resultStyles"/>
+                    <xs:element ref="abstractTestSuites"/>
+                    <xs:element ref="testRunTemplates"/>
+                    <xs:element ref="testRuns"/>
+                    <xs:element ref="testTaskResults"/>
+                </xs:choice>
+                <xs:element name="referencedItems" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="components" minOccurs="0"/>
+                            <xs:element ref="testCases" minOccurs="0"/>
+                            <xs:element ref="testAssertions" minOccurs="0"/>
+                            <xs:element ref="testItemTypes" minOccurs="0"/>
+                            <xs:element ref="executableTestSuites" minOccurs="0"/>
+                            <xs:element ref="testObjects" minOccurs="0"/>
+                            <xs:element ref="testObjectTypes" minOccurs="0"/>
+                            <xs:element ref="credentials" minOccurs="0"/>
+                            <xs:element ref="users" minOccurs="0"/>
+                            <xs:element ref="tags" minOccurs="0"/>
+                            <xs:element ref="translationTemplateBundles" minOccurs="0"/>
+                            <xs:element ref="resultStyles" minOccurs="0"/>
+                            <xs:element ref="abstractTestSuites" minOccurs="0"/>
+                            <xs:element ref="testRunTemplates" minOccurs="0"/>
+                            <xs:element ref="testRuns" minOccurs="0"/>
+                            <xs:element ref="testTaskResults" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="position" type="xs:nonNegativeInteger" use="optional">
+                <xs:annotation>
+                    <xs:documentation>Position of this page in relation to the complete set of unpaginated items.</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="returnedItems" type="xs:nonNegativeInteger" use="required">
+                <xs:annotation>
+                    <xs:documentation>Number of returned items in this page -not
+                        including the referenced items</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="version" use="required">
+                <xs:annotation>
+                    <xs:documentation> The service version in the form MAJOR.MINOR</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="2\.[0-9]+"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+        <xs:unique name="UniqueEGAIDandVersionCombinationsInCollection">
+            <xs:annotation>
+                <xs:documentation>
+                    Each combination of EGAID and a Version must be unique. 
+                    Note: only referenced model items can be checked with XSD 1.0.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="*/referencedItems/*"/>
+            <xs:field xpath="@egaid"/>
+            <xs:field xpath="version"/>
+        </xs:unique>
+        <xs:key name="TranslationMessageName">
+            <xs:selector xpath="etf:referencedItems/etf:translationTemplateBundles/etf:TranslationTemplateBundle/etf:translationTemplateCollections/etf:LangTranslationTemplateCollection"></xs:selector>
+            <xs:field xpath="@name"></xs:field>
+        </xs:key>
+        <xs:keyref name="AssertionMessageTranslationReference" refer="TranslationMessageName">
+            <xs:selector xpath="etf:referencedItems/etf:testTaskResults/etf:TestTaskResult/etf:testModuleResults/etf:TestModuleResult/etf:testCaseResults/etf:TestCaseResult/etf:testStepResults/etf:TestStepResult/etf:testAssertionResults/etf:TestAssertionResult/etf:messages/etf:message"></xs:selector>
+            <xs:field xpath="@ref"></xs:field>
+        </xs:keyref>
+        <xs:keyref name="TestStepMessageTranslationReference" refer="TranslationMessageName">
+            <xs:selector xpath="etf:referencedItems/etf:testTaskResults/etf:TestTaskResult/etf:testModuleResults/etf:TestModuleResult/etf:testCaseResults/etf:TestCaseResult/etf:testStepResults/etf:TestStepResult/etf:messages/etf:message"></xs:selector>
+            <xs:field xpath="@ref"></xs:field>
+        </xs:keyref>
+    </xs:element>
+
+</xs:schema>

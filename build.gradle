@@ -1,16 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 //
-// ETF-WebApp
+// ETF
 //
 ///////////////////////////////////////////////////////////////////////////////////////
 
 buildscript {
     repositories {
         maven {
-            url "http://services.interactive-instruments.de/etfdev-af/plugins-releases-local"
+            url "https://af.etf.interactive-instruments.de/repository/gradle-plugins"
             credentials {
                 username 'ii-bda'
-                password '6ozhS683'
+                password 'AP7mb4WA6F1ckdZkaE8Qx8GSowt'
             }}
         maven {
             url "https://plugins.gradle.org/m2/"
@@ -18,11 +18,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version:'[1.0.30,1.0.99]'
-        classpath "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
-
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE"
-        classpath 'org.springframework:springloaded:1.2.6.RELEASE'
+        classpath group: 'de.interactive_instruments.bda', name: 'etf-bda', version: '[2.0.17,2.0.99]'
     }
     dependencies {
         ant.unjar src: configurations.classpath.files.find {it.path.contains('etf')}, dest: 'build/gradle'
@@ -33,190 +29,59 @@ apply from: 'build/gradle/ii-bda.gradle'
 ///////////////////////////////////////////////////////////////////////////////////////
 
 group = 'de.interactive_instruments.etf'
-description = 'ETF Presentation and Controller Layer'
+description = 'ETF'
 
-apply plugin: 'war'
-apply from: 'jetty.gradle'
-// apply from: 'gretty.gradle'
-import groovy.json.JsonSlurper
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
 
-apply plugin: 'idea'
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
 
-ext.springSecurityVersion = "4.2.3.RELEASE"
-ext.springSecurityOAuth2Version = "2.2.1.RELEASE"
-ext.springVersion = "4.3.13.RELEASE"
-ext.springBootTestVersion = "1.5.5.RELEASE"
-ext.jacksonVersion = "2.8.11"
-ext.springfoxSwaggerVersion = "2.6.1"
-
-configurations {
-    compile.exclude group:'xalan'
-    testdriver
-}
-
-repositories {
-    maven {
-        url "http://files.basex.org/maven"
-    }
-    maven {
-        url "https://services.interactive-instruments.de/etfdev-af/ext-deegree-cache"
-        credentials {
-            username gradle.rootProject.ext.r_user
-            password gradle.rootProject.ext.r_pwd
+    configurations {
+        all {
+            exclude group: 'com.thoughtworks.xstream', module: 'xstream'
+            exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
+            exclude group: 'log4j', module: 'log4j'
+            exclude group: 'org.jdom', module: 'jdom'
+            exclude group: 'org.reflections', module: 'reflections'
         }
     }
+
+    task preTagCommit(overwrite: true) {}
+    task createReleaseTag(overwrite: true) {}
+    task updateVersion(overwrite: true) {}
+    task commitNewVersion(overwrite: true) {}
+    task unSnapshotVersion(overwrite: true) {}
+    task updateVersion(overwrite: true) {}
+    task commitNewVersion(overwrite: true) {}
 }
 
-// http://docs.spring.io/spring-boot/docs/current/reference/html/howto-hotswapping.html
-idea {
-    module {
-        inheritOutputDirs = false
-        outputDir = file("$buildDir/classes/main/")
-    }
-}
+subprojects {
 
-dependencies {
+    apply plugin: 'java'
+    apply plugin: 'maven'
 
-    compile group: 'net.sf.saxon', name: 'Saxon-HE', version: '9.7.0-21'
-
-    compile group: 'de.interactive_instruments', name: 'ii-commons-util', version: '3.0.0' + project.snapshotSuffix
-    compile group: 'de.interactive_instruments.etf', name: 'etf-core', version: '1.1.0' + project.snapshotSuffix
-    compile group: 'de.interactive_instruments.etf', name: 'etf-spi', version: '1.0.1' + project.snapshotSuffix
-    compile group: 'de.interactive_instruments.etf', name: 'etf-stdtot', version: '1.0.1' + project.snapshotSuffix
-
-    // TODO remove in future versions, use SPI
-    compile group: 'de.interactive_instruments.etf', name: 'etf-bsxds', version: '2.0.1' + project.snapshotSuffix
-
-    // Prepackaged test drivers
-    // TODO download in future versions
-    testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-suitd', version: '2.0.1' + project.snapshotSuffix
-    testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-bsxtd', version: '2.0.1' + project.snapshotSuffix
-    testdriver group: 'de.interactive_instruments.etf.testdriver', name: 'etf-tetd', version: '1.0.1' + project.snapshotSuffix
-
-    // Bean validation
-    // compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.0.1.Final'
-
-    compile("xerces:xercesImpl:"+etf_xercesVersion){
-        force = true
-    }
-    compile("xml-apis:xml-apis:"+etf_xmlApisVersion){
-        force = true
-    }
-
-    compile group: 'commons-logging', name: 'commons-logging', version:'1.1.1'
-    compile group: 'commons-codec', name: 'commons-codec', version: etf_commonsCodecVersion
-    compile group: 'commons-fileupload', name: 'commons-fileupload', version:'1.3.3'
-    compile group: 'commons-io', name: 'commons-io', version: etf_commonsIoVersion
-    compile group: 'commons-lang', name: 'commons-lang', version:'2.6'
-
-    // aligned with gradle
-    compile 'org.codehaus.groovy:groovy-all:2.4.10'
-
-    compile group: 'org.jsoup', name: 'jsoup', version: '1.9.1'
-
-    compile group: 'org.slf4j', name: 'slf4j-api', version: etf_slf4jApiVersion
-
-    // Conditional logback config file processing
-    compile group: 'org.codehaus.janino', name: 'janino', version: '2.7.8'
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: etf_logbackVersion
-
-
-	// Spring dependencies
-	//////////////////////////////////
-
-    // JSON
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jacksonVersion
-
-    compile(group: 'org.springframework', name: 'spring-webmvc', version: springVersion ) {
-        exclude(module: 'commons-logging')
-    }
-
-    // Include nekohtml for thymeleaf
-    compile('net.sourceforge.nekohtml:nekohtml:1.9.22') {
-        exclude group: 'xerces', module: 'xercesImpl'
-    }
-
-    compile "org.springframework.security:spring-security-config:$springSecurityVersion",
-            "org.springframework.security:spring-security-web:$springSecurityVersion",
-            "org.springframework.security.oauth:spring-security-oauth2:$springSecurityOAuth2Version",
-
-            "javax.validation:validation-api:1.1.0.Final",
-
-            "org.thymeleaf:thymeleaf-spring4:2.1.6.RELEASE",
-            "org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.3.RELEASE",
-            "org.thymeleaf.extras:thymeleaf-extras-conditionalcomments:2.1.2.RELEASE"
-
-    compile("org.thymeleaf.extras:thymeleaf-extras-tiles2-spring4:2.1.1.RELEASE") {
-        exclude group: "org.slf4j", module: "jcl-over-slf4j"
-    }
-
-    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.1.0'
-    providedCompile group: 'javax.servlet.jsp', name: 'jsp-api', version:'2.2'
-    compile group: 'javax.servlet', name: 'jstl', version:'1.2'
-    compile group: 'joda-time', name: 'joda-time', version:'2.9.9'
-    runtime group: 'joda-time', name: 'joda-time-jsptags', version:'1.1.1'
-
-    // Testing
-    testCompile group: 'junit', name: 'junit', version: etf_junitTestVersion
-    testCompile group: 'de.interactive_instruments.etf.test', name: 'etf-unittest', version:'1.0.0'+project.snapshotSuffix
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootTestVersion
-
-    // todo: Xalan (not xerces) is required by selenium tests "java.lang.NoClassDefFoundError: org/apache/xml/utils/PrefixResolver"
-    // but blocked to not interfere with Saxon. Not solved in selenium 3.4
-    testCompile group: 'org.seleniumhq.selenium', name: 'selenium-htmlunit-driver', version:'2.52.0'
-    testCompile group: 'org.seleniumhq.selenium', name: 'selenium-support', version:'2.53.1'
-
-    // API
-    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: springfoxSwaggerVersion
-    compile group: 'io.springfox', name: 'springfox-swagger2', version: springfoxSwaggerVersion
-    // compile group: 'io.springfox', name: 'springfox-staticdocs', version: '2.4.0'
-
-    compile group: 'ognl', name: 'ognl', version: '3.0.21'
-
-
-    compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
-
-    // Upgrade Thymeleaf dependency, see https://nvd.nist.gov/vuln/detail/CVE-2016-3093
-    compile group: 'ognl', name: 'ognl', version: '3.0.21'
-
-    // Upgrade Thymeleaf, Tiles dependency, see https://nvd.nist.gov/vuln/detail/CVE-2014-0114
-    compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
-
-
-}
-
-def findRuntimeJar(prefix) {
-    configurations.runtime.filter { it.name.startsWith(prefix) }
-}
-
-// war.dependsOn(generateRebel)
-
-
-war {
-    doFirst {
-        manifest {
-            attributes(
-                    'Implementation-Title': project.name,
-                    'Implementation-Vendor': 'interactive instruments GmbH',
-                    'Implementation-Vendor-Id': 'de.interactive_instruments',
-                    'Implementation-Version': project.version,
-                    'Built-By': System.getProperty('user.name'),
-                    'Build-Host': java.net.InetAddress.getLocalHost().getHostName(),
-                    'Build-JDK': System.getProperty('java.version'),
-                    'Build-Time': new Date().format("yyyyMMdd'T'HHmm"),
-                    'Source-Compatibility': project.sourceCompatibility,
-                    'Target-Compatibility': project.targetCompatibility
-            )
+	dependencies {
+        if(Integer.valueOf(org.gradle.internal.jvm.Jvm.current().getJavaVersion().getMajorVersion())>8) {
+            implementation('javax.xml.bind:jaxb-api:2.3.1')
+            implementation('javax.activation:activation:1.1')
+            implementation('org.glassfish.jaxb:jaxb-runtime:2.3.6')
         }
+        
+		implementation group: 'de.interactive_instruments', name: 'ii-commons-util', version: '4.0.1' + project.snapshotSuffix
 
-        archiveName 'etf-webapp.war'
+        testImplementation group: 'org.slf4j', name: 'slf4j-api', version: etf_slf4jApiVersion
+        testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: etf_slf4jApiVersion
+        testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: etf_junitTestVersion
+	}
+
+	version = rootProject.version
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
     }
-
-    from(configurations.testdriver) {
-        include 'etf-*td*.jar'
-        into('testdrivers')
-    }
-
 }

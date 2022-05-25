@@ -1,0 +1,23 @@
+///////////////////////////////////////////////////////////////////////////////////////
+//
+// etf-core
+//
+///////////////////////////////////////////////////////////////////////////////////////
+
+group = 'de.interactive_instruments.etf'
+description = 'ETF Core'
+
+dependencies {
+    compileOnly group: 'commons-collections', name: 'commons-collections', version: etf_commonsCollectionsVersion
+
+    compileOnly group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.5.2'
+
+    compileOnly group: 'org.slf4j', name: 'slf4j-api', version: etf_slf4jApiVersion
+
+    compile group: 'xerces', name: 'xercesImpl', version: etf_xercesVersion
+    compile group: 'xml-apis', name: 'xml-apis', version: etf_xmlApisVersion
+}
+
+jar {
+    enabled = true
+}

@@ -1,0 +1,7 @@
+@startuml
+
+    class TestStepNotFoundException [[TestStepNotFoundException.html]] {
+        +TestStepNotFoundException(String)
+    }
+
+@enduml

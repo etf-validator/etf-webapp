@@ -1,0 +1,8 @@
+@startuml
+
+    class TestItemTypeDto [[TestItemTypeDto.html]] {
+        +TestItemTypeDto()
+        +createCopy(): TestItemTypeDto
+    }
+
+@enduml

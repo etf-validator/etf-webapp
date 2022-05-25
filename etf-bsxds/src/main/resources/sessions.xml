@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sessions version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <session xsi:type="database-session">
+        <name>de.interactive_instruments.etf.dal.bsx.moxy</name>
+        <event-listener-classes/>
+        <logging xsi:type="eclipselink-log"/>
+        <primary-project xsi:type="xml">eclipselink/etf-ds.xml</primary-project>
+        <login xsi:type="xml-login"/>
+    </session>
+</sessions>

@@ -1,0 +1,8 @@
+@startuml
+
+    interface DtoResolver<T> [[DtoResolver.html]] {
+        {abstract} +getById(EID): T
+        {abstract} +getByIds(Set<EID>): Collection<T>
+    }
+
+@enduml

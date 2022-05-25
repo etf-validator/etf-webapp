@@ -1,0 +1,14 @@
+@startuml
+
+    class Arguments [[Arguments.html]] {
+        +Arguments(PropertyHolder)
+        +Arguments()
+        +Arguments(Map<String, String>)
+        +setValue(String, String): void
+        +argumentParameterSet(Parameterizable): Arguments.ArgumentParameterSet
+        +isEmpty(): boolean
+        +value(String): String
+        +values(): Map<String, String>
+    }
+
+@enduml

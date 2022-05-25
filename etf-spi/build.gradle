@@ -1,0 +1,21 @@
+///////////////////////////////////////////////////////////////////////////////////////
+//
+// ETF-SPI
+//
+///////////////////////////////////////////////////////////////////////////////////////
+
+group = 'de.interactive_instruments.etf'
+description = 'ETF Service provider interface'
+
+dependencies {
+    implementation project(':etf-core')
+
+    compileOnly group: 'commons-collections', name: 'commons-collections', version: etf_commonsCollectionsVersion
+
+    testImplementation project(':etf-unittest')
+}
+
+
+jar {
+    enabled = true
+}

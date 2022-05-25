@@ -1,0 +1,14 @@
+@startuml
+
+    interface EGAID [[EGAID.html]] {
+        {static} +EGAID: Pattern
+        {static} +EGAID_WP: Pattern
+        {static} +EGAID_REF: Pattern
+        +getEgaIdRef(): String
+        +compareTo(Object): int
+        {abstract} +getArtifactId(): String
+        {abstract} +getGroupId(): String
+        {abstract} +getEgaId(): String
+    }
+
+@enduml

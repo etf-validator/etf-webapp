@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:tiles="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <title>Header</title>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.min.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.rep.css" />
+    <link rel="stylesheet" type="text/css"
+          href="css/de.interactive-instruments.wi.css" />
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" />
+    <script data-main="js/main-local-dev" src="//cdn.jsdelivr.net/requirejs/2.1.8/require.min.js"></script>
+
+</head>
+<body>
+
+<div tiles:fragment="test-objects-page" id="test-objects-page" data-role="page" data-title="Test Objects" th:inline="text">
+    <div tiles:replace="header">
+        <!-- Header -->
+    </div>
+
+    <div role="main" class="ui-content">
+        <!-- Main -->
+        <h2 th:text="#{l.Testobjects}">Test Objects</h2>
+
+        <a  style="float: right" data-role="button" data-inline="true" data-mini="true" href="#create-test-object" th:text="#{l.Create.Test.Object}">[[#{l.Create.Test.Object}]]</a>
+        <p style="padding-right: 260px" th:text="#{l.Test.Object.help}">Help text</p>
+        <br/>
+
+        <ul id="test-object-item-listview-container" data-role="listview" data-inset="true" class="ui-listview-outer" data-filter="true" th:attr="data-filter-placeholder=#{l.Filter.Test.Objects}">
+            <!-- Container for template -->
+        </ul>
+    </div>
+
+    <div tiles:replace="footer">
+        <!-- Footer -->
+    </div>
+</div>
+
+<!-- Underscore Template that is used to display Test Objects -->
+<script tiles:fragment="test-objects-page" id="test-object-items-template" type="text/template" th:inline="text">
+    <![CDATA[
+    <!-- guard comment -->
+
+    <% v2.jeach( collection, function( testObject ) { %>
+    <li class="ii-collapsible-li" id="test-object-item-<%= testObject.id %>" data-role="collapsible" data-iconpos="left" data-shadow="false" data-corners="false">
+        <h2>
+            <%= testObject.label %>
+        </h2>
+        <div>
+            <h3><span th:text="#{l.Description}">[[#{l.Description}]]</span>:</h3>
+                <span><%= testObject.description %></span>
+
+            <h3><span th:text="#{l.Resource}">[[#{l.Resource}]]</span>:</h3>
+            <% v2.jeach( testObject.ResourceCollection.resource, function( resource ) { %>
+                <% if (resource.href.indexOf('http')===0) {  %>
+                    <a href="<%= resource.href %>" target="<%= testObject.label %>" >Link</a>
+                <% } else if (resource.name.indexOf('upload')===0) { %>
+                    <span th:text="#{l.File.upload}">[[#{l.File.upload}]]</span>
+                <% } else { %>
+                    <span th:text="#{l.File.mount.point}">[[#{l.File.mount.point}]]</span>
+                <% } %>
+            <% }); %>
+
+            <h3><span th:text="#{l.Date.created}">[[#{l.Date.created}]]</span>:</h3>
+                <span><%= moment(testObject.creationDate).format('DD.MM.YYYY - HH:mm') %></span>
+
+            <h3><span th:text="#{l.Version}">[[#{l.Version}]]</span>:</h3>
+                <span><%= testObject.version.split('.')[2] %></span>
+
+            <% if (!_.isNil(testObject.lastUpdateDate)) { %>
+                <h3><span th:text="#{l.Change.detected}">[[#{l.Change.detected}]]</span>:</h3>
+                <span><%= moment(testObject.lastUpdateDate).format('DD.MM.YYYY - HH:mm') %></span>
+            <% } %>
+
+            <% if (!_.isNil(testObject.testObjectTypes)) {  %>
+            <div>
+                <h3><span th:text="#{l.Test.Object.Types}">[[#{l.Test.Object.Types}]]</span>: </h3>
+                <% v2.jeach( testObject.testObjectTypes, function( testObjectType ) { %>
+                <ul>
+                    <li><%= testObjectType.label %></li>
+                </ul>
+                <% }); %>
+            </div>
+            <% } %>
+
+            <% if (!_.isNil(testObject.Properties)) {  %>
+            <div>
+                    <h3><span th:text="#{l.Internal.Properties}">[[#{l.Internal.Properties}]]</span>: </h3>
+                    <% v2.jeach( testObject.Properties.property, function( property ) { %>
+                    <ul>
+                        <li><%= v2.beautifyNerdyStr(property.name) %> = <%= property.$ %></li>
+                    </ul>
+                    <% }); %>
+                </div>
+            <% } %>
+
+            <p>
+                <a data-icon="action" data-role="button" data-inline="true" data-mini="true"
+                   href="#test-classes?testObjectId=<%= testObject.id %>" th:text="#{l.Use.With.Test.Class}">[[#{l.Use.With.Test.Class}]]</a>
+                <a data-icon="action" data-role="button" data-inline="true" data-mini="true"
+                   href="#executable-test-suites?testObjectId=<%= testObject.id %>" th:text="#{l.Use.With.Executable.Test.Suite}">[[#{l.Use.With.Executable.Test.Suite}]]</a>
+                <a class="delete-button-to" data-icon="delete" data-role="button" data-inline="true" data-mini="true"
+                   href="#remove-test-object?id=<%= testObject.id %>" th:text="#{l.remove.testobject}">[[#{l.remove.testobject}]]</a>
+            </p>
+        </div>
+    </li>
+
+    <% }); %>
+    <!-- ]]> -->
+</script>
+
+<div tiles:fragment="test-objects-page" id="delete-testobject-dialog" data-role="dialog" data-title="Delete Test Object?" th:inline="text">
+    <div data-role="header">
+        <h1 th:text="#{l.question.delete.testobject}">Delete Test Object?</h1>
+    </div>
+    <div role="main" class="ui-content">
+        <!-- Main -->
+        <p th:text="#{l.confirm.delete.testobject}">Remove test object?</p>
+    </div>
+    <div data-role="footer" style="text-align: center">
+        <a id="test-object-delete-confirm" data-inline="true"
+           data-role="button" data-icon="alert" data-iconpos="right"
+           href="#" data-direction="reverse" data-transition="pop" th:text="#{l.OK}">OK</a>
+        <a id="test-object-delete-cancel" data-inline="true"
+           data-role="button" data-icon="back" data-iconpos="right"
+           href="#test-objects" data-direction="reverse" data-transition="pop" th:text="#{l.Cancel}">Cancel</a>
+    </div>
+</div>
+
+<div tiles:fragment="test-objects-page" id="create-testobject-dialog" data-role="dialog" data-title="Start Tests" th:attr="data-title=#{l.Create.Test.Object}">
+    <div data-role="header" role="banner">
+        <h2 th:text="#{l.Create.Test.Object}">Create Test Object</h2>
+    </div>
+    <div role="main" class="ui-content">
+
+
+        <div id="create-testobject-container">
+            <!-- Container for template -->
+        </div>
+
+    </div>
+
+    <div data-role="footer" style="text-align: center">
+        <a id="create-testobject-confirm" data-inline="true"
+           data-role="button" data-icon="arrow-u" data-iconpos="right" href="#" th:text="#{l.Create}">Create</a>
+    </div>
+
+</div>
+
+!-- Underscore Template -->
+<script tiles:fragment="test-objects-page" id="create-testobject-dialog-template"  type="text/template" th:inline="text">
+    <![CDATA[
+    <!-- guard comment -->
+
+    <div id="create-test-object-source-selection-container" class="ui-field-contain" >
+        <div class="ui-field-contain">
+            <label for="create-test-object-source-selection" class="select" th:text="#{l.Data.source}">[[#{l.Data.source}]]:</label>
+            <select data-inline="true" name="create-test-object-source-selection" id="create-test-object-source-selection">
+                <option value="file" th:text="#{l.File.upload}">[[#{l.File.upload}]]</option>
+                <option value="url" th:text="#{l.Service}">[[#{l.Service}]]</option>
+            </select>
+        </div>
+        <div id="create-test-object-file-based" style="display: none" class="ui-field-contain">
+            <label><span th:text="#{l.LocalGeoSpatialFile}" for="create-test-object-fileupload">[[#{l.LocalGeoSpatialFile}]] </span> <span class="question" help="[[#{l.help.upload.test.object.data( ${maxUploadSizeHr} )}]]"> ?</span></label>
+            <input class="testObjectResourceInput" id="create-test-object-fileupload" type="file" accept="application/zip,text/xml,text/csv,application/xml+gml,.gml,.shp" name="files[]" multiple>
+        </div>
+        <div id="create-test-object-url-based" style="display: none" class="ui-field-contain">
+            <label><span th:text="#{l.Service.Url}" for="create-test-object-source-service-endpoint">[[#{l.Service.Url}]] </span> <span class="question" help="[[#{l.Service.Url.help}]]"> ?</span></label>
+            <input class="testObjectResourceInput" data-validation="url" type="url" id="create-test-object-source-service-endpoint" placeholder="http(s)://" required/>
+        </div>
+    </div>
+
+    <div class="ui-field-contain">
+        <label for="testObjectLabel">
+            [[#{l.Label}]]:
+            <span class="question" help="[[#{l.help.Test.Object.Label}]]"> ?</span>
+        </label>
+        <input data-inline="true" id="testObjectLabel" type="text" title="[[#{l.help.Test.Object.Label}]]" required/>
+    </div>
+
+    <div class="ui-field-contain">
+        <label for="testObjectDescription">
+            [[#{l.Description}]]:
+            <span class="question" help="[[#{l.enter.testobject.description}]]"> ?</span>
+        </label>
+        <input data-inline="true" id="testObjectDescription" type="text" title="[[#{l.enter.description}]]" required/>
+    </div>
+
+    <!-- ]]> -->
+</script>
+
+</body>
+</html>
+

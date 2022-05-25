@@ -1,0 +1,23 @@
+@startuml
+
+    class TestStepResultDto [[TestStepResultDto.html]] {
+        +TestStepResultDto()
+        +getTestAssertionResults(): List<TestAssertionResultDto>
+        +setTestAssertionResults(List<TestAssertionResultDto>): void
+        +addTestAssertionResult(TestAssertionResultDto): void
+        +getAttachments(): List<AttachmentDto>
+        +setAttachments(List<AttachmentDto>): void
+        +addAttachment(AttachmentDto): void
+        +getInvokedTestSteps(): List<TestStepResultDto>
+        +setInvokedTestSteps(List<TestStepResultDto>): void
+        +addInvokedTestSteps(TestStepResultDto): void
+        +getInvokedTestCases(): List<TestCaseResultDto>
+        +setInvokedTestCases(List<TestCaseResultDto>): void
+        +addInvokedTestCases(TestCaseResultDto): void
+        +getMessages(): List<TranslationArgumentCollectionDto>
+        +setMessages(List<TranslationArgumentCollectionDto>): void
+        +addMessage(TranslationArgumentCollectionDto): void
+        +createCopy(): TestStepResultDto
+    }
+
+@enduml

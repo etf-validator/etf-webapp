@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.interactive-instruments.de/etfws/1.0"
+    targetNamespace="http://www.interactive-instruments.de/etfws/1.0"
+    xmlns:etf="http://www.interactive-instruments.de/etf/2.0" elementFormDefault="qualified"
+    version="1.0">
+
+    <xs:annotation>
+        <!-- Author: Jon Herrmann (interactive instruments) -->
+        <xs:documentation xml:lang="en">run-monitoring.xsd, (c) 2016 interactive instruments, part
+            of ETF, licensed under the Apache License Version 2.0 </xs:documentation>
+    </xs:annotation>
+
+    <!-- =============================================================== -->
+    <!-- ================== includes and imports ======================= -->
+    <!-- =============================================================== -->
+    <xs:import namespace="http://www.interactive-instruments.de/etf/2.0"
+        schemaLocation="../basic/basicTypes.xsd"/>
+    <!-- =============================================================== -->
+
+    <!-- ======================== elements ============================= -->
+    <xs:element name="TMesg" type="TaskMessageType"/>
+    <xs:element name="TStructDesc" type="TaskStructureDescriptionType"/>
+    <xs:element name="TStructUpdt" type="TaskStructureUpdateType"/>
+    <xs:element name="ProgressEventLog" type="ProgressEventLogType"/>
+    <xs:element name="Progress" type="ProgressType">
+        <xs:unique name="SequenceNumber">
+            <xs:selector xpath="./*/*"/>
+            <xs:field xpath="@seq"/>
+        </xs:unique>
+    </xs:element>
+    <!-- =============================================================== -->
+
+    <!-- =============================================================== -->
+    <xs:attributeGroup name="MonitoringAttributeGroup">
+        <xs:attribute name="seq" type="xs:nonNegativeInteger" use="required">
+            <xs:annotation>
+                <xs:documentation>Sequence number</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="ts" type="xs:dateTime" use="required">
+            <xs:annotation>
+                <xs:documentation>Timestamp</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <!-- =============================================================== -->
+    <xs:simpleType name="TaskStructureType">
+        <xs:restriction base="xs:nonNegativeInteger">
+            <xs:enumeration value="1">
+                <xs:annotation>
+                    <xs:documentation>ETS</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="2">
+                <xs:annotation>
+                    <xs:documentation>Test Suite </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="3">
+                <xs:annotation>
+                    <xs:documentation>Test Case </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="4">
+                <xs:annotation>
+                    <xs:documentation>Test Step</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="5">
+                <xs:annotation>
+                    <xs:documentation>Test Assertion</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- =============================================================== -->
+    <xs:complexType name="TaskStructureDescriptionType">
+        <xs:sequence>
+            <xs:element name="label" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Label</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="desc" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Description</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="etf:IdType" use="required">
+            <xs:annotation>
+                <xs:documentation>ID of structure</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="lvl" type="TaskStructureType" use="required">
+            <xs:annotation>
+                <xs:documentation>Level</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="prid" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>Id of parent</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attributeGroup ref="MonitoringAttributeGroup"/>
+    </xs:complexType>
+
+
+    <!-- =============================================================== -->
+    <xs:complexType name="TaskStructureUpdateType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Message</xs:documentation>
+                </xs:annotation>
+                <xs:attribute name="s" type="etf:TestResultStatusType" use="required">
+                    <xs:annotation>
+                        <xs:documentation>Status</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="ref" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>ID of the structured item that is updated
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attributeGroup ref="MonitoringAttributeGroup"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!-- =============================================================== -->
+    <xs:complexType name="TaskMessageType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="v" type="etf:VerbosityType">
+                    <xs:annotation>
+                        <xs:documentation>Verbosity</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attributeGroup ref="MonitoringAttributeGroup"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <!-- =============================================================== -->
+    <xs:complexType name="ProgressEventLogType">
+        <xs:sequence>
+            <xs:choice maxOccurs="unbounded" minOccurs="1">
+                <xs:element ref="TMesg"/>
+                <xs:element ref="TStructDesc"/>
+                <xs:element ref="TStructUpdt"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- =============================================================== -->
+    <xs:complexType name="ProgressType">
+        <xs:sequence>
+            <xs:group ref="etf:ModelItemGroup"/>
+            <xs:choice>
+                <xs:element ref="ProgressEventLog"/>
+                <xs:element name="next">
+                    <xs:annotation>
+                        <xs:documentation> Link to the next progress if multiple test tasks in a
+                            test run exist and this progress has been finished</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:attribute name="href" type="etf:httpUriType"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="result">
+                    <xs:annotation>
+                        <xs:documentation> Link to result if all test tasks in a test run have ended
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:attribute name="href" type="etf:httpUriType"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="lastSequenceNumber" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+
+</xs:schema>

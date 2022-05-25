@@ -1,0 +1,22 @@
+@startuml
+
+    class StdRemoteResource [[StdRemoteResource.html]] {
+        +StdRemoteResource(String, URI)
+        +StdRemoteResource(String, String)
+        +StdRemoteResource(Resource)
+        +StdRemoteResource(StdRemoteResource)
+        +getName(): String
+        +getUri(): URI
+        +getContentLength(): long
+        +openStream(): InputStream
+        +openStream(int): InputStream
+        +getBytes(): byte[]
+        +getBytes(int): byte[]
+        +exists(): boolean
+        +getModificationCheck(): UriModificationCheck
+        +isModificationCheckInitialized(): boolean
+        +release(): void
+        +createCopy(): StdRemoteResource
+    }
+
+@enduml

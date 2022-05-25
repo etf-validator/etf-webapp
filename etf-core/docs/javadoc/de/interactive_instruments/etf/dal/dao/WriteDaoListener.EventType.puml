@@ -1,0 +1,9 @@
+@startuml
+
+    enum WriteDaoListener.EventType [[WriteDaoListener.EventType.html]] {
+        {static} +ADD
+        {static} +UPDATE
+        {static} +DELETE
+    }
+
+@enduml

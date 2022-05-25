@@ -1,0 +1,9 @@
+@startuml
+
+    class RetrieveException [[RetrieveException.html]] {
+        +RetrieveException(String)
+        +RetrieveException(Throwable)
+        +RetrieveException(String, Throwable)
+    }
+
+@enduml

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="92px" preserveAspectRatio="none" style="width:402px;height:92px;" version="1.1" viewBox="0 0 402 92" width="402px" zoomAndPan="magnify"><defs><filter height="300%" id="f1r7pxjtmqw6ke" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--class StreamWriteDao--><a target="_top" xlink:actuate="onRequest" xlink:href="StreamWriteDao.html" xlink:show="new" xlink:title="StreamWriteDao.html" xlink:type="simple"><rect fill="#FEFECE" filter="url(#f1r7pxjtmqw6ke)" height="73.9102" id="StreamWriteDao" style="stroke: #A80036; stroke-width: 1.5;" width="382" x="6" y="8"/><ellipse cx="140.75" cy="24" fill="#B4A7E5" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M137.1777,20.2651 L137.1777,18.1069 L144.5571,18.1069 L144.5571,20.2651 L142.0918,20.2651 L142.0918,28.3418 L144.5571,28.3418 L144.5571,30.5 L137.1777,30.5 L137.1777,28.3418 L139.6431,28.3418 L139.6431,20.2651 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="92" x="161.25" y="28.5352">StreamWriteDao</text><rect fill="#FFFFFF" height="16.1328" style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" width="10" x="381" y="5"/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="8" x="382" y="17.6016">T</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="387" y1="40" y2="40"/><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="387" y1="48" y2="48"/><ellipse cx="17" cy="59.9775" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="106" x="26" y="62.6348">add(InputStream): T</text><ellipse cx="17" cy="72.9326" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="356" x="26" y="75.5898">add(InputStream, StreamWriteDao.ChangeBeforeStoreHook&lt;T&gt;): T</text></a><!--
+@startuml
+
+    interface StreamWriteDao<T> [[StreamWriteDao.html]] {
+        +add(InputStream): T
+        {abstract} +add(InputStream, StreamWriteDao.ChangeBeforeStoreHook<T>): T
+    }
+
+@enduml
+
+PlantUML version 1.2018.08(Sun Jun 24 14:31:00 CEST 2018)
+(APACHE source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.8.0_151-b12
+Operating System: Mac OS X
+OS Version: 10.14.2
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

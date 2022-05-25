@@ -1,0 +1,13 @@
+@startuml
+
+    class TestCaseResultDto [[TestCaseResultDto.html]] {
+        +TestCaseResultDto()
+        +getTestStepResults(): List<TestStepResultDto>
+        +setTestStepResults(List<TestStepResultDto>): void
+        +addTestStepResult(TestStepResultDto): void
+        +getArguments(): Arguments
+        +setArguments(Arguments): void
+        +createCopy(): TestCaseResultDto
+    }
+
+@enduml

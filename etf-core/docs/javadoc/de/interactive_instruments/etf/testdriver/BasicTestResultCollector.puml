@@ -1,0 +1,18 @@
+@startuml
+
+    interface BasicTestResultCollector [[BasicTestResultCollector.html]] {
+        {abstract} +startTestTask(String, long): String
+        {abstract} +startTestModule(String, long): String
+        {abstract} +startTestCase(String, long): String
+        {abstract} +startTestStep(String, long): String
+        {abstract} +startTestAssertion(String, long): String
+        {abstract} +end(String, int, long): String
+        {abstract} +end(String, long): String
+        {abstract} +addMessage(String): void
+        {abstract} +addMessage(String, Map<String, String>): void
+        {abstract} +addMessage(String, String[]): void
+        {abstract} +currentModelType(): int
+        {abstract} +registerTestTaskEndListener(TestTaskEndListener): void
+    }
+
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+
+    interface LoadingContext [[LoadingContext.html]] {
+        {abstract} +getItemRegistry(): ItemRegistry
+        {abstract} +getItemFileObserverRegistry(): ItemFileObserverRegistry
+    }
+
+@enduml

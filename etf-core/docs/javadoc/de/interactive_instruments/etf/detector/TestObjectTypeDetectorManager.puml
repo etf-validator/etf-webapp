@@ -1,0 +1,11 @@
+@startuml
+
+    class TestObjectTypeDetectorManager [[TestObjectTypeDetectorManager.html]] {
+        {static} +getTypes(String[]): EidMap<TestObjectTypeDto>
+        {static} +getTypes(Collection<EID>): EidMap<TestObjectTypeDto>
+        {static} +getSupportedTypes(): EidMap<TestObjectTypeDto>
+        {static} +detect(Resource): DetectedTestObjectType
+        {static} +detect(Resource, Set<EID>): DetectedTestObjectType
+    }
+
+@enduml

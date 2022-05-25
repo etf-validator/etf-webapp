@@ -1,0 +1,18 @@
+@startuml
+
+    class LocalResource [[LocalResource.html]] {
+        #file: IFile
+        +LocalResource(String, IFile)
+        +LocalResource(LocalResource)
+        +getName(): String
+        +getUri(): URI
+        +getFile(): IFile
+        +getContentLength(): long
+        +openStream(): InputStream
+        +getBytes(): byte[]
+        +exists(): boolean
+        +release(): void
+        +createCopy(): LocalResource
+    }
+
+@enduml

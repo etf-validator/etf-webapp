@@ -1,0 +1,20 @@
+@startuml
+
+    class AttachmentDto [[AttachmentDto.html]] {
+        +AttachmentDto()
+        +getLabel(): String
+        +setLabel(String): void
+        +getEncoding(): String
+        +setEncoding(String): void
+        +getMimeType(): String
+        +setMimeType(String): void
+        +getType(): String
+        +setType(String): void
+        +getReferencedData(): URI
+        +setReferencedData(URI): void
+        +getEmbeddedData(): String
+        +setEmbeddedData(String): void
+        +createCopy(): AttachmentDto
+    }
+
+@enduml

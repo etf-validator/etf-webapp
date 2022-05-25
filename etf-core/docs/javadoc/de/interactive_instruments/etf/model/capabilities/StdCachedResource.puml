@@ -1,0 +1,18 @@
+@startuml
+
+    class StdCachedResource [[StdCachedResource.html]] {
+        +StdCachedResource(Resource)
+        +getFromCache(): byte[]
+        +recache(): byte[]
+        +recacheIfModified(): boolean
+        +openStream(): InputStream
+        +getName(): String
+        +getUri(): URI
+        +getContentLength(): long
+        +getBytes(): byte[]
+        +exists(): boolean
+        +release(): void
+        +createCopy(): StdCachedResource
+    }
+
+@enduml

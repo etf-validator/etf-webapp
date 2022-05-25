@@ -1,0 +1,31 @@
+@startuml
+
+    interface TestResultCollector [[TestResultCollector.html]] {
+        +startTestTask(String): String
+        +startTestModule(String): String
+        +startTestCase(String): String
+        +startTestStep(String): String
+        +startTestAssertion(String): String
+        +end(String, int): String
+        +end(String): String
+        +markAttachment(String, String, String, String): String
+        +info(String): void
+        +error(String): void
+        +debug(String): void
+        {abstract} +getTestTaskResultId(): String
+        {abstract} +endWithSkippedIfTestCasesFailed(String[]): boolean
+        {abstract} +status(String): TestResultStatus
+        {abstract} +statusEqualsAny(String, String[]): boolean
+        {abstract} +isErrorLimitExceeded(): boolean
+        {abstract} +markAttachment(String, String, String, String, String): String
+        {abstract} +saveAttachment(Reader, String, String, String): String
+        {abstract} +saveAttachment(InputStream, String, String, String): String
+        {abstract} +saveAttachment(String, String, String, String): String
+        {abstract} +getTempDir(): File
+        {abstract} +internalError(String, Map<String, String>, Throwable): void
+        {abstract} +internalError(Throwable): void
+        {abstract} +internalError(String, byte[], String): String
+        {abstract} +getLogger(): TestRunLogger
+    }
+
+@enduml

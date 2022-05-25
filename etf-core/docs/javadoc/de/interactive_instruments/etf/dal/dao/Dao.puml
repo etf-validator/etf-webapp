@@ -1,0 +1,14 @@
+@startuml
+
+    interface Dao<T> [[Dao.html]] {
+        +available(EID): boolean
+        {abstract} +getId(): String
+        {abstract} +getDtoType(): Class<T>
+        {abstract} +getAll(Filter): PreparedDtoCollection<T>
+        {abstract} +exists(EID): boolean
+        {abstract} +isDisabled(EID): boolean
+        {abstract} +getOutputFormats(): EidMap<OutputFormat>
+        {abstract} +getLastModificationDate(): long
+    }
+
+@enduml

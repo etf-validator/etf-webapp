@@ -1,0 +1,25 @@
+@startuml
+
+    enum TaskState.STATE [[TaskState.STATE.html]] {
+        {static} +CREATED
+        {static} +INITIALIZING
+        {static} +INITIALIZED
+        {static} +RUNNING
+        {static} +COMPLETED
+        {static} +FINALIZING
+        {static} +FAILED
+        {static} +CANCELING
+        {static} +CANCELED
+        +isRunning(): boolean
+        +isCompleted(): boolean
+        +isFailed(): boolean
+        +isCanceling(): boolean
+        +isCanceled(): boolean
+        +isRunningOrInitializing(): boolean
+        +isAtLeastInitialized(): boolean
+        +isFinalizing(): boolean
+        +isCompletedFailedOrCanceled(): boolean
+        +isCompletedFailedCanceledOrFinalizing(): boolean
+    }
+
+@enduml

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="183px" preserveAspectRatio="none" style="width:308px;height:183px;" version="1.1" viewBox="0 0 308 183" width="308px" zoomAndPan="magnify"><defs><filter height="300%" id="f18xp9izjg1isb" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--class TestStepDto--><a target="_top" xlink:actuate="onRequest" xlink:href="TestStepDto.html" xlink:show="new" xlink:title="TestStepDto.html" xlink:type="simple"><rect fill="#FEFECE" filter="url(#f18xp9izjg1isb)" height="164.5957" id="TestStepDto" style="stroke: #A80036; stroke-width: 1.5;" width="291" x="6" y="8"/><ellipse cx="112.25" cy="24" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M114.7231,30.1431 Q114.1421,30.4419 113.5029,30.5913 Q112.8638,30.7407 112.1582,30.7407 Q109.6514,30.7407 108.3315,29.0889 Q107.0117,27.437 107.0117,24.3159 Q107.0117,21.1865 108.3315,19.5347 Q109.6514,17.8828 112.1582,17.8828 Q112.8638,17.8828 113.5112,18.0322 Q114.1587,18.1816 114.7231,18.4805 L114.7231,21.2031 Q114.0923,20.6221 113.4988,20.3523 Q112.9053,20.0825 112.2744,20.0825 Q110.9297,20.0825 110.2449,21.1492 Q109.5601,22.2158 109.5601,24.3159 Q109.5601,26.4077 110.2449,27.4744 Q110.9297,28.541 112.2744,28.541 Q112.9053,28.541 113.4988,28.2712 Q114.0923,28.0015 114.7231,27.4204 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="70" x="132.75" y="28.5352">TestStepDto</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="296" y1="40" y2="40"/><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="296" y1="48" y2="48"/><ellipse cx="17" cy="59.9775" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="73" x="26" y="62.6348">TestStepDto()</text><ellipse cx="17" cy="72.9326" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="187" x="26" y="75.5898">getStatementForExecution(): String</text><ellipse cx="17" cy="85.8877" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="209" x="26" y="88.5449">setStatementForExecution(String): void</text><ellipse cx="17" cy="98.8428" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="148" x="26" y="101.5">getType(): TestItemTypeDto</text><ellipse cx="17" cy="111.7979" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="170" x="26" y="114.4551">setType(TestItemTypeDto): void</text><ellipse cx="17" cy="124.7529" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="243" x="26" y="127.4102">getTestAssertions(): List&lt;TestAssertionDto&gt;</text><ellipse cx="17" cy="137.708" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="265" x="26" y="140.3652">setTestAssertions(List&lt;TestAssertionDto&gt;): void</text><ellipse cx="17" cy="150.6631" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="226" x="26" y="153.3203">addTestAssertion(TestAssertionDto): void</text><ellipse cx="17" cy="163.6182" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="140" x="26" y="166.2754">createCopy(): TestStepDto</text></a><!--
+@startuml
+
+    class TestStepDto [[TestStepDto.html]] {
+        +TestStepDto()
+        +getStatementForExecution(): String
+        +setStatementForExecution(String): void
+        +getType(): TestItemTypeDto
+        +setType(TestItemTypeDto): void
+        +getTestAssertions(): List<TestAssertionDto>
+        +setTestAssertions(List<TestAssertionDto>): void
+        +addTestAssertion(TestAssertionDto): void
+        +createCopy(): TestStepDto
+    }
+
+@enduml
+
+PlantUML version 1.2018.08(Sun Jun 24 14:31:00 CEST 2018)
+(APACHE source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.8.0_151-b12
+Operating System: Mac OS X
+OS Version: 10.14.2
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

@@ -1,0 +1,10 @@
+@startuml
+
+    interface CachedResource [[CachedResource.html]] {
+        {abstract} +getFromCache(): byte[]
+        {abstract} +recache(): byte[]
+        {abstract} +recacheIfModified(): boolean
+        {abstract} +createCopy(): CachedResource
+    }
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.component {
+
+        class ComponentNotLoadedException [[ComponentNotLoadedException.html]] {
+            +ComponentNotLoadedException(String)
+        }
+
+        interface ComponentInfo [[ComponentInfo.html]] {
+            {abstract} +getId(): EID
+            {abstract} +getName(): String
+            {abstract} +getVersion(): String
+            {abstract} +getVendor(): String
+            {abstract} +getDescription(): String
+        }
+
+        class ComponentLoadingException [[ComponentLoadingException.html]] {
+            +ComponentLoadingException(Path, Exception)
+            +ComponentLoadingException(Path, Throwable)
+            +ComponentLoadingException(String)
+        }
+
+        class java.lang.Throwable
+        java.lang.Throwable <|-- ComponentNotLoadedException
+
+        class de.interactive_instruments.exceptions.InitializationException
+        de.interactive_instruments.exceptions.InitializationException <|-- ComponentLoadingException
+
+    }
+
+@enduml

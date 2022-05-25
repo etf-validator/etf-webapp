@@ -1,0 +1,196 @@
+@startuml
+
+    namespace de.interactive_instruments.etf.dal.dao {
+
+        interface PreparedDtoCollection<T> [[PreparedDtoCollection.html]] {
+            +asCollection(): Collection<T>
+        }
+
+        interface Dao<T> [[Dao.html]] {
+            +available(EID): boolean
+            {abstract} +getId(): String
+            {abstract} +getDtoType(): Class<T>
+            {abstract} +getAll(Filter): PreparedDtoCollection<T>
+            {abstract} +exists(EID): boolean
+            {abstract} +isDisabled(EID): boolean
+            {abstract} +getLastModificationDate(): long
+        }
+
+        interface WriteDaoListener<T> [[WriteDaoListener.html]] {
+            {abstract} +writeOperationPerformed(WriteDaoListener.EventType, PreparedDto<T>): void
+        }
+
+        enum de.interactive_instruments.etf.dal.dao.WriteDaoListener.EventType [[WriteDaoListener.EventType.html]] {
+            {static} +ADD
+            {static} +UPDATE
+            {static} +DELETE
+        }
+
+        interface OutputFormatStreamable [[OutputFormatStreamable.html]] {
+            {abstract} +streamTo(OutputFormat, PropertyHolder, OutputStream): void
+        }
+
+        interface Filter [[Filter.html]] {
+            +levelOfDetail(): Filter.LevelOfDetail
+            +fields(): String
+            {abstract} +offset(): int
+            {abstract} +limit(): int
+        }
+
+        enum de.interactive_instruments.etf.dal.dao.Filter.LevelOfDetail [[Filter.LevelOfDetail.html]] {
+            {static} +SIMPLE
+            {static} +HISTORY
+            {static} +DETAILED_WITHOUT_HISTORY
+        }
+
+        interface PreparedDtoResolver<T> [[PreparedDtoResolver.html]] {
+            +getById(EID): PreparedDto<T>
+            +getByIds(Set<EID>): PreparedDtoCollection<T>
+            {abstract} +getById(EID, Filter): PreparedDto<T>
+            {abstract} +getByIds(Set<EID>, Filter): PreparedDtoCollection<T>
+        }
+
+        interface PreparedDto<T> [[PreparedDto.html]] {
+            {abstract} +getDtoId(): EID
+            {abstract} +getDto(): T
+        }
+
+        interface StreamWriteDao<T> [[StreamWriteDao.html]] {
+            +add(InputStream): T
+            {abstract} +add(InputStream, StreamWriteDao.ChangeBeforeStoreHook<T>): T
+        }
+
+        interface de.interactive_instruments.etf.dal.dao.StreamWriteDao.ChangeBeforeStoreHook<T> [[StreamWriteDao.ChangeBeforeStoreHook.html]] {
+            {abstract} +doChangeBeforeStore(T): T
+        }
+
+        interface WriteDao<T> [[WriteDao.html]] {
+            +update(T): T
+            +replace(T): void
+            +deleteAllExisting(Set<EID>): void
+            {abstract} +add(T): void
+            {abstract} +addAll(Collection<T>): void
+            {abstract} +update(T, EID): T
+            {abstract} +replace(T, EID): void
+            {abstract} +updateAll(Collection<T>): Collection<T>
+            {abstract} +delete(EID): void
+            {abstract} +deleteAll(Set<EID>): void
+            {abstract} +registerListener(WriteDaoListener): void
+            {abstract} +deregisterListener(WriteDaoListener): void
+        }
+
+        interface DtoResolver<T> [[DtoResolver.html]] {
+            {abstract} +getById(EID): T
+            {abstract} +getByIds(Set<EID>): Collection<T>
+        }
+
+        interface FilterBuilder [[FilterBuilder.html]] {
+            {abstract} +offset(int): FilterBuilder
+            {abstract} +limit(int): FilterBuilder
+            {abstract} +levelOfDetail(Filter.LevelOfDetail): FilterBuilder
+            {abstract} +fields(String[]): FilterBuilder
+            {abstract} +where(FilterBuilder.PropertyExpression): FilterBuilder
+            {abstract} +orderBy(FilterBuilder.Order, String[]): FilterBuilder
+            {abstract} +build(): Filter
+        }
+
+        interface de.interactive_instruments.etf.dal.dao.FilterBuilder.PropertyExpression [[FilterBuilder.PropertyExpression.html]] {
+            {abstract} +isLike(String): FilterBuilder.Conj
+            {abstract} +isEqual(String): FilterBuilder.Conj
+            {abstract} +isLessThan(String): FilterBuilder.Conj
+            {abstract} +isGreaterThan(String): FilterBuilder.Conj
+            {abstract} +exists(): FilterBuilder.Conj
+            {abstract} +name(): String
+        }
+
+        interface de.interactive_instruments.etf.dal.dao.FilterBuilder.Conj [[FilterBuilder.Conj.html]] {
+            {abstract} +and(): FilterBuilder.PropertyExpression
+            {abstract} +or(): FilterBuilder.PropertyExpression
+        }
+
+        enum de.interactive_instruments.etf.dal.dao.FilterBuilder.Order [[FilterBuilder.Order.html]] {
+            {static} +ASCENDING
+            {static} +DESCENDING
+        }
+
+        interface DataStorage [[DataStorage.html]] {
+            +getDao(Class<T>): Dao<T>
+            {abstract} +reset(): void
+            {abstract} +createBackup(): String
+            {abstract} +getBackupList(): List<String>
+            {abstract} +restoreBackup(String): void
+            {abstract} +getDaoMappings(): Map<Class<T>, Dao<T>>
+            {abstract} +cleanAndOptimize(): void
+        }
+
+        OutputFormatStreamable <|.. PreparedDtoCollection
+
+        interface java.lang.Iterable<T> {
+            {abstract} +iterator(): Iterator<T>
+        }
+        java.lang.Iterable <|.. PreparedDtoCollection
+
+        interface de.interactive_instruments.etf.model.EidMap<V> {
+            {abstract} +unmodifiable(): EidMap<V>
+            {abstract} +getAll(Collection<?>): EidMap<V>
+            {abstract} +removeAll(Collection<?>): void
+            {abstract} +_internalGet(Object): V
+            {abstract} +_internalRemove(Object): V
+            {abstract} +_internalContainsKey(Object): boolean
+        }
+        de.interactive_instruments.etf.model.EidMap <|.. PreparedDtoCollection
+
+        interface de.interactive_instruments.Releasable {
+            {abstract} +release(): void
+        }
+        de.interactive_instruments.Releasable <|.. PreparedDtoCollection
+
+        interface java.lang.Comparable<T> {
+            {abstract} +compareTo(T): int
+        }
+        java.lang.Comparable <|.. PreparedDtoCollection
+
+        PreparedDtoResolver <|.. Dao
+
+        interface de.interactive_instruments.Configurable {
+            {abstract} +getConfigurationProperties(): ConfigPropertyHolder
+        }
+        de.interactive_instruments.Configurable <|.. Dao
+
+        interface de.interactive_instruments.Initializable {
+            {abstract} +init(): void
+            {abstract} +isInitialized(): boolean
+        }
+        de.interactive_instruments.Initializable <|.. Dao
+
+        de.interactive_instruments.Releasable <|.. Dao
+
+        WriteDaoListener +-- de.interactive_instruments.etf.dal.dao.WriteDaoListener.EventType
+
+        Filter +-- de.interactive_instruments.etf.dal.dao.Filter.LevelOfDetail
+
+        OutputFormatStreamable <|.. PreparedDto
+
+        java.lang.Comparable <|.. PreparedDto
+
+        WriteDao <|.. StreamWriteDao
+
+        StreamWriteDao +-- de.interactive_instruments.etf.dal.dao.StreamWriteDao.ChangeBeforeStoreHook
+
+        Dao <|.. WriteDao
+
+        FilterBuilder +-- de.interactive_instruments.etf.dal.dao.FilterBuilder.PropertyExpression
+
+        FilterBuilder +-- de.interactive_instruments.etf.dal.dao.FilterBuilder.Conj
+
+        FilterBuilder +-- de.interactive_instruments.etf.dal.dao.FilterBuilder.Order
+
+        de.interactive_instruments.Configurable <|.. DataStorage
+
+        de.interactive_instruments.Releasable <|.. DataStorage
+
+        Dao --> de.interactive_instruments.etf.model.EidMap: outputFormats
+
+    }
+
+@enduml

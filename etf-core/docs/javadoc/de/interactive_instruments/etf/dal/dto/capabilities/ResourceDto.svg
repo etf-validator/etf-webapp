@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="222px" preserveAspectRatio="none" style="width:270px;height:222px;" version="1.1" viewBox="0 0 270 222" width="270px" zoomAndPan="magnify"><defs><filter height="300%" id="fhujed94bdyzr" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--class ResourceDto--><a target="_top" xlink:actuate="onRequest" xlink:href="ResourceDto.html" xlink:show="new" xlink:title="ResourceDto.html" xlink:type="simple"><rect fill="#FEFECE" filter="url(#fhujed94bdyzr)" height="203.4609" id="ResourceDto" style="stroke: #A80036; stroke-width: 1.5;" width="253" x="6" y="8"/><ellipse cx="91.75" cy="24" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M94.2231,30.1431 Q93.6421,30.4419 93.0029,30.5913 Q92.3638,30.7407 91.6582,30.7407 Q89.1514,30.7407 87.8315,29.0889 Q86.5117,27.437 86.5117,24.3159 Q86.5117,21.1865 87.8315,19.5347 Q89.1514,17.8828 91.6582,17.8828 Q92.3638,17.8828 93.0112,18.0322 Q93.6587,18.1816 94.2231,18.4805 L94.2231,21.2031 Q93.5923,20.6221 92.9988,20.3523 Q92.4053,20.0825 91.7744,20.0825 Q90.4297,20.0825 89.7449,21.1492 Q89.0601,22.2158 89.0601,24.3159 Q89.0601,26.4077 89.7449,27.4744 Q90.4297,28.541 91.7744,28.541 Q92.4053,28.541 92.9988,28.2712 Q93.5923,28.0015 94.2231,27.4204 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="73" x="112.25" y="28.5352">ResourceDto</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="258" y1="40" y2="40"/><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="258" y1="48" y2="48"/><ellipse cx="17" cy="59.9775" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="77" x="26" y="62.6348">ResourceDto()</text><ellipse cx="17" cy="72.9326" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="147" x="26" y="75.5898">ResourceDto(String, String)</text><ellipse cx="17" cy="85.8877" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="133" x="26" y="88.5449">ResourceDto(String, URI)</text><ellipse cx="17" cy="98.8428" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="227" x="26" y="101.5">ResourceDto(String, String, CredentialDto)</text><ellipse cx="17" cy="111.7979" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="213" x="26" y="114.4551">ResourceDto(String, URI, CredentialDto)</text><ellipse cx="17" cy="124.7529" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="160" x="26" y="127.4102">getCredential(): CredentialDto</text><ellipse cx="17" cy="137.708" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="182" x="26" y="140.3652">setCredential(CredentialDto): void</text><ellipse cx="17" cy="150.6631" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="93" x="26" y="153.3203">getName(): String</text><ellipse cx="17" cy="163.6182" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="115" x="26" y="166.2754">setName(String): void</text><ellipse cx="17" cy="176.5732" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="65" x="26" y="179.2305">getUri(): URI</text><ellipse cx="17" cy="189.5283" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="87" x="26" y="192.1855">setUri(URI): void</text><ellipse cx="17" cy="202.4834" fill="#84BE84" rx="3" ry="3" style="stroke: #038048; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="101" x="26" y="205.1406">setUri(String): void</text></a><!--
+@startuml
+
+    class ResourceDto [[ResourceDto.html]] {
+        +ResourceDto()
+        +ResourceDto(String, String)
+        +ResourceDto(String, URI)
+        +ResourceDto(String, String, CredentialDto)
+        +ResourceDto(String, URI, CredentialDto)
+        +getCredential(): CredentialDto
+        +setCredential(CredentialDto): void
+        +getName(): String
+        +setName(String): void
+        +getUri(): URI
+        +setUri(URI): void
+        +setUri(String): void
+    }
+
+@enduml
+
+PlantUML version 1.2018.08(Sun Jun 24 14:31:00 CEST 2018)
+(APACHE source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.8.0_151-b12
+Operating System: Mac OS X
+OS Version: 10.14.2
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

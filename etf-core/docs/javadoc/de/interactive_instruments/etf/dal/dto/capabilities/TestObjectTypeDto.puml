@@ -1,0 +1,32 @@
+@startuml
+
+    class TestObjectTypeDto [[TestObjectTypeDto.html]] {
+        +TestObjectTypeDto()
+        +getSubTypes(): List<TestObjectTypeDto>
+        +setSubTypes(List<TestObjectTypeDto>): void
+        +addSubType(TestObjectTypeDto): void
+        +getNamingConvention(): String
+        +setNamingConvention(String): void
+        +getFilenameExtensions(): List<String>
+        +setFilenameExtensions(List<String>): void
+        +setFilenameExtensions(String[]): void
+        +getMimeTypes(): List<String>
+        +setMimeTypes(List<String>): void
+        +setDetectionExpression(String, ExpressionType): void
+        +getDetectionExpression(): String
+        +getDetectionExpressionType(): ExpressionType
+        +setLabelExpression(String, ExpressionType): void
+        +setDefaultPathAndQuery(String): void
+        +getDefaultQuery(): Map<String, List<String>>
+        +getDefaultAccessPath(): String
+        +setUriDetectionExpression(String): void
+        +getUriDetectionExpression(): String
+        +getLabelExpression(): String
+        +getLabelExpressionType(): ExpressionType
+        +setDescriptionExpression(String, ExpressionType): void
+        +getDescriptionExpression(): String
+        +getDescriptionExpressionType(): ExpressionType
+        +createCopy(): TestObjectTypeDto
+    }
+
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+
+    class TestRunTemplateDto [[TestRunTemplateDto.html]] {
+        +TestRunTemplateDto()
+        +getExecutableTestSuites(): List<ExecutableTestSuiteDto>
+        +setExecutableTestSuites(List<ExecutableTestSuiteDto>): void
+        +addExecutableTestSuite(ExecutableTestSuiteDto): void
+        +getTestObjects(): List<TestObjectDto>
+        +setTestObjects(List<TestObjectDto>): void
+        +addTestObject(TestObjectDto): void
+        +properties(): Properties
+        +properties(Properties): void
+        +getParameters(): ParameterSet
+        +setParameters(ParameterSet): void
+        +ensureBasicValidity(): void
+        +createCopy(): Dto
+    }
+
+@enduml
