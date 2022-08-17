@@ -12,6 +12,7 @@ apply plugin: 'war'
 ext.springVersion = "4.3.28.RELEASE"
 ext.jacksonVersion = "2.13.2"
 ext.springfoxSwaggerVersion = "2.9.2"
+project.ext.set('ii.license.header', "eupl-12-license-eu-ii-copy-header")
 
 configurations {
     compile.exclude group:'xalan'

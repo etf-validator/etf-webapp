@@ -9,6 +9,7 @@ description = "ETF BaseX data source"
 
 ext.basexVersion = '9.4.6'
 ext.moxyVersion = '2.7.4'
+gradle.ext.set('ii.license.header', "eupl-12-license-eu-ii-copy-header")
 
 ext.testDataStorageDir = project.hasProperty('etf.ds.dir') ?
         project.getProperty('etf.ds.dir') :
