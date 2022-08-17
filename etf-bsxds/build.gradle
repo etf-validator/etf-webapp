@@ -54,5 +54,7 @@ jar {
 
 test {
     environment "ETF_DS_DIR", testDataStorageDir
+    systemProperty "user.timezone", "Europe/Berlin"
+    forkEvery = 1
     dependsOn = ["cleanTest", "compileTestJava"]
 }
