@@ -53,5 +53,5 @@ jar {
 
 test {
     environment "ETF_DS_DIR", testDataStorageDir
-    dependsOn = ["compileTestJava"]
+    dependsOn = ["cleanTest", "compileTestJava"]
 }
