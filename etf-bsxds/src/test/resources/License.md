@@ -1,4 +1,5 @@
-The test resources in this directory are licensed under the EUPL Version 1.2.
+The test resources in this directory and subdirectories are licensed under 
+EUPL version 1.2.
 
 Copyright 2017-2022 European Union, interactive instruments GmbH
 
